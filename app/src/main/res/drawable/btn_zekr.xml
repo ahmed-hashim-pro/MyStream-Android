@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- Drop Shadow Stack -->
+    <item>
+        <shape android:shape="oval">
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
+
+            <solid android:color="#00CCCCCC" />
+
+            <corners android:radius="3dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <padding
+                android:bottom="1dp"
+                android:left="1dp"
+                android:right="1dp"
+                android:top="1dp" />
+
+            <solid android:color="#10CCCCCC" />
+
+            <corners android:radius="3dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <padding
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="2dp" />
+
+            <solid android:color="#20CCCCCC" />
+
+            <corners android:radius="3dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <padding
+                android:bottom="3dp"
+                android:left="3dp"
+                android:right="3dp"
+                android:top="3dp" />
+
+            <solid android:color="#30CCCCCC" />
+
+            <corners android:radius="3dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <padding
+                android:bottom="4dp"
+                android:left="4dp"
+                android:right="4dp"
+                android:top="4dp" />
+
+            <solid android:color="#50CCCCCC" />
+
+            <corners android:radius="3dp" />
+        </shape>
+    </item>
+
+    <item android:state_pressed="true">
+        <shape  android:shape="oval">
+            <solid android:color="@color/black" />
+
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
+    <!-- Background -->
+    <!--<item android:state_pressed="false">
+        <shape android:shape="oval">
+            <solid android:color="@color/primary" />
+
+            <corners android:radius="20dp" />
+        </shape>
+    </item>-->
+    <item >
+        <inset android:insetBottom="7dp" >
+            <selector>
+                <item android:state_pressed="false">
+                    <shape android:shape="oval">
+                        <corners android:radius="10dp"/>
+                        <solid android:color="@color/primary" />
+                    </shape>
+                </item>
+
+                <item  android:state_pressed="true">
+                    <shape android:shape="oval">
+                        <corners android:radius="10dp"/>
+                        <solid android:color="#3B8FCF" />
+                    </shape>
+                </item>
+            </selector>
+        </inset>
+        <!--<inset android:insetBottom="3dp" >
+            <selector>
+                <item  android:state_pressed="true">
+                    <shape android:shape="oval">
+                        <corners android:radius="20dp"/>
+                        <solid android:color="#3B8FCF" />
+                    </shape>
+                </item>
+
+            </selector>
+        </inset>-->
+    </item>
+    <!--<item >
+        <inset android:insetBottom="3dp" >
+            <selector>
+                <item  android:state_pressed="true">
+                    <shape android:shape="oval">
+                        <corners android:radius="20dp"/>
+                        <solid android:color="#3B8FCF" />
+                    </shape>
+                </item>
+
+            </selector>
+        </inset>
+    </item>-->
+
+
+
+</layer-list>

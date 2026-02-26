@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:installLocation="auto">
+
+    <queries>
+        <intent>
+            <action android:name="com.google.android.youtube.api.service.START" />
+        </intent>
+    </queries>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+    <uses-permission android:name="android.permission.MANAGE_MEDIA" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+    <permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+
+    <application
+        android:name=".QuranApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher_new_transparent9"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_new_transparent9_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:largeHeap="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".MyWebView"
+            android:exported="false"
+            android:label="@string/title_activity_web_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".admin.AdminDashboard"
+            android:exported="true"
+            android:label="@string/title_activity_admin_dashboard"
+            android:theme="@style/AppTheme.AdminNoActionBarTheme" />
+
+        <receiver
+            android:name=".AutoVideosNotificationReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".ThemesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NewYouTubePostActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.AyaList">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.MainActivity"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="mystream.com"
+                    android:scheme="http" />
+                <data
+                    android:host="mystream.com"
+                    android:scheme="https" />
+                <data
+                    android:host="web.app"
+                    android:scheme="https" />
+                <data
+                    android:host="web.app"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".hashimyoutubeplayer.YoutubePlayerViewActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.YoutubePlayerViewActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".hashimyoutubeplayer.PlayerControlsDemoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".hashimyoutubeplayer.VideoWallDemoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LiveStreamPlayer"
+            android:exported="false"
+            android:theme="@style/AppTheme.DetailActivity" />
+        <activity
+            android:name=".FragmentDemoActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:label="YouTube Fragment"
+            android:screenOrientation="nosensor">
+
+            <!-- <meta-data android:name="@string/minVersion" android:value="11"/> -->
+            <!-- <meta-data android:name="@string/isLaunchableActivity" android:value="true"/> -->
+            <meta-data
+                android:name="@string/isLaunchableActivity"
+                android:value="true" />
+        </activity>
+        <activity
+            android:name=".NewQuranPlayer"
+            android:exported="false"
+            android:fitsSystemWindows="true"
+            android:theme="@style/AppTheme.QuranMediaPlayer" />
+        <activity
+            android:name=".MediaPlayer"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBarTheme" />
+        <activity
+            android:name=".managerdb"
+            android:exported="false"
+            android:label="@string/title_activity_managerdb"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.subsetting" />
+        <activity
+            android:name=".SplashScreen"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AyaList"
+            android:exported="false"
+            android:label="@string/title_activity_aya_list"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.AyaList" />
+        <!--
+             ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
+        <activity
+            android:name=".Settings"
+            android:exported="false"
+            android:label="@string/action_settings"
+            android:theme="@style/AppTheme.Settings" />
+        <activity
+            android:name=".Downloads"
+            android:exported="false"
+            android:label="@string/downloads" />
+        <activity
+            android:name=".DownloadsPlayer"
+            android:exported="false" />
+        <activity
+            android:name=".invite"
+            android:exported="false" />
+        <activity
+            android:name=".DeepLink"
+            android:exported="false" />
+        <activity
+            android:name=".NotificationReturnSlot"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:taskAffinity="." />
+        <activity
+            android:name=".WelcomeActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar2" />
+        <activity
+            android:name=".NewPostActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarTheme"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity
+            android:name=".SignInActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.SignIn" />
+        <activity
+            android:name=".PostDetailActivity"
+            android:exported="false"
+            android:imeOptions="actionSend|flagNoEnterAction"
+            android:theme="@style/AppTheme.DetailActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize|adjustPan" />
+        <activity
+            android:name=".RewardVideo"
+            android:exported="false"
+            android:theme="@style/AppTheme.RewardVideo" />
+
+        <receiver
+            android:name=".SimBootDetector"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".AndroidServiceStartOnBoot"
+            android:exported="false" />
+        <!--
+     Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/mystreamwhite" />
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/fcm_notification_channel_id" />
+
+        <service
+            android:name=".MediaPlayerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".DownloadService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".MyFirebaseInstanceIDService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".QuranListenTimerService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name=".NotificationService"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".DownloadService$notificationButtonReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".TimePicker" />
+
+        <receiver
+            android:name=".setAlarmReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Taps"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar2" />
+        <activity
+            android:name=".UserInformation"
+            android:exported="false"
+            android:label="@string/completeyourprofile"
+            android:theme="@style/AppTheme.UserInformation" />
+        <activity
+            android:name=".test"
+            android:exported="false"
+            android:label="@string/title_activity_test"
+            android:theme="@style/AppTheme.NoActionBarTheme" />
+
+        <service
+            android:name=".MyDownloadService"
+            android:exported="false" />
+        <service
+            android:name=".MyUploadService"
+            android:exported="false" />
+        <service
+            android:name=".MyDownloadPostAudioVideo"
+            android:exported="false" />
+        <service
+            android:name=".MyUploadPostAudioVideo"
+            android:exported="false" />
+        <service
+            android:name=".MyDownloadThumb"
+            android:exported="false" />
+        <service
+            android:name=".MyUploadThumb"
+            android:exported="false" />
+
+        <activity
+            android:name=".UserPage"
+            android:exported="false"
+            android:label="@string/title_activity_user_bage"
+            android:theme="@style/AppTheme.NoActionBarTheme" />
+        <activity
+            android:name=".UbdateUserInfo"
+            android:exported="false" />
+        <activity
+            android:name=".UserPhotoView"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
+            android:label="@string/title_activity_user_photo_view"
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name=".AboutApp"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:exported="true"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".EditPost"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBarTheme" />
+        <activity
+            android:name=".ChatPage"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBarTheme" />
+        <activity
+            android:name=".UserList"
+            android:exported="false"
+            android:label="@string/title_activity_user_list"
+            android:theme="@style/AppTheme.NoActionBarTheme" />
+        <activity
+            android:name=".Messenger"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBarTheme" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/TranslucentBackground" />
+        <activity
+            android:name=".ui.RegisterActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/Translucent" />
+        <activity
+            android:name=".ui.ChatActivity"
+            android:exported="false"
+            android:parentActivityName=".Messenger"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.AddGroupActivity"
+            android:exported="false"
+            android:theme="@style/MyThemeNoActionbar" />
+
+        <service
+            android:name=".service.FriendChatService"
+            android:exported="false"
+            android:persistent="true" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-9350633918697995~2524775865" />
+
+        <activity
+            android:name=".RecentPosts"
+            android:exported="false" />
+        <activity
+            android:name=".TopPosts"
+            android:exported="false" />
+        <activity
+            android:name=".MyPosts"
+            android:exported="false" />
+
+        <receiver
+            android:name="androidx.mediarouter.media.MediaTransferReceiver"
+            android:exported="false" /> <!-- for quran app -->
+        <activity
+            android:name=".QuranDataActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:theme="@style/QuranToolBar">
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
+        <activity
+            android:name=".ShortcutsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.QuranActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".AboutUsActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity android:name=".HelpActivity" />
+        <activity
+            android:name=".ui.PagerActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/QuranToolBar.Overlay" />
+        <activity
+            android:name=".ui.TranslationManagerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false" />
+        <activity
+            android:name=".QuranPreferenceActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".QuranAdvancedPreferenceActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".SearchActivity"
+            android:exported="false"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".QuranForwarderActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="quran" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.AudioManagerActivity"
+            android:exported="false"
+            android:theme="@style/Quran" /> <!-- declare the default searchable Activity for the whole app -->
+        <meta-data
+            android:name="android.app.default_searchable"
+            android:value=".SearchActivity" /> <!-- provides search suggestions for verses. -->
+        <provider
+            android:name=".data.QuranDataProvider"
+            android:authorities="@string/authority"
+            android:exported="false" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="@string/file_authority"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <receiver
+            android:name="androidx.media.session.MediaButtonReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".QuranImportActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/json" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.backup"
+                    android:scheme="file" />
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\..*\\.backup"
+                    android:scheme="file" />
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\..*\\..*\\.backup"
+                    android:scheme="file" />
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\..*\\..*\\..*\\.backup"
+                    android:scheme="file" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".pageselect.PageSelectActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+
+        <service
+            android:name=".service.QuranDownloadService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".service.AudioService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".widget.BookmarksWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <receiver
+            android:name=".widget.BookmarksWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.quran.labs.androidquran.UPDATE_LIST" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/bookmarks_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".widget.SearchWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/search_widget_info" />
+        </receiver>
+
+        <activity
+            android:name=".widget.ShowJumpFragmentActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:theme="@style/QuranDialog" />
+        <activity
+            android:name=".ui.SheikhAudioManagerActivity"
+            android:exported="false" /> <!-- override WorkManager initialization -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            tools:node="remove" />
+    </application>
+
+</manifest>

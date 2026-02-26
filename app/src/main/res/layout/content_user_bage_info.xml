@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="110dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".UserPage"
+    android:layout_marginBottom="6dp"
+    tools:showIn="@layout/activity_user_bage">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:text="@string/info"/>
+
+    <TextView
+        android:id="@+id/name_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="user name"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/email_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="email"
+        android:textSize="15dp"
+        android:textStyle="italic" />
+    <Button
+        android:id="@+id/ubdateInfobtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        style="?metaButtonBarButtonStyle"
+        android:text="@string/ubdateInfo"/>
+</LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>

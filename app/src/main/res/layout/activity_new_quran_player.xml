@@ -1,0 +1,481 @@
+<RelativeLayout
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="ltr"
+    android:background="@color/quran_player_background"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".NewQuranPlayer">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/PlayerCard"
+        android:layout_below="@+id/layoutads"
+        android:gravity="center">
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/titleCard"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:focusableInTouchMode="true"
+            android:hapticFeedbackEnabled="true"
+            ads:cardBackgroundColor="@color/transparent"
+            app:cardElevation="200dp"
+            app:cardMaxElevation="300dp"
+            app:cardPreventCornerOverlap="true">
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:elevation="60dp"
+                android:transitionName="shared_surah_image"
+                android:background="@drawable/quran_circle_background"
+                ads:srcCompat="@drawable/quranpng" />
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/quran_toolbar_background"
+        android:minHeight="?attr/actionBarSize"
+        android:layoutDirection="locale"
+        android:theme="@style/AppTheme.QuranMediaPlayer">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageButton
+                android:id="@+id/backBTN"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@null"
+                android:onClick="BUClick"
+                android:tint="@color/toolbarTextColor"
+                ads:srcCompat="@drawable/outline_arrow_back_ios_24" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/songTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="15dp"
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:gravity="center"
+                    android:text="   "
+                    android:textColor="@color/toolbarTextColor"
+                    android:textSize="16dp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:transitionName="shared_surah" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/songrecite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:transitionName="shared_reciter"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="3dp"
+                android:gravity="center"
+                android:text="  "
+                android:textColor="@color/toolbarTextColor"
+                android:textSize="13dp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+        <!--<LinearLayout
+            android:id="@+id/player_header_bg"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_weight="0"
+            android:background="?attr/colorPrimary"
+            android:gravity="center_vertical"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:theme="@style/AppTheme.QuranMediaPlayer">
+
+            <ImageButton
+                android:id="@+id/back"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="@null"
+                android:onClick="BUClick"
+                android:src="@drawable/left" />
+
+            <TextView
+                android:id="@+id/songTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="fgdgfddfgdfgdfgdgfdgfgdfgdfgfg"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/songrecite"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text=" gfdgfdgdfgfd "
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/sound" />
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>-->
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/layoutads"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_below="@+id/toolbar2"
+        android:layout_weight="0"
+        android:orientation="horizontal">
+
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_ad_unit_id">
+
+        </com.google.android.gms.ads.AdView>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/AdContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutads"
+        android:background="@color/white"
+        android:elevation="@dimen/margin_2"
+        android:orientation="vertical">
+
+
+        <ImageButton
+            android:id="@+id/closeAd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@null"
+            android:focusableInTouchMode="true"
+            ads:srcCompat="@drawable/round_close_24" />
+
+        <FrameLayout
+            android:id="@+id/fl_adplaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/cb_start_muted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Start video ads muted" />
+
+            <Button
+                android:id="@+id/btn_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="Refresh Ad" />
+
+            <TextView
+                android:id="@+id/tv_video_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:text="Video status: "
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_SHOWAD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/AdContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/primary"
+        android:text="@string/show_ad"
+        android:textColor="@color/white" />
+    <!--equlizer and visulizer disabled by hashim-->
+
+    <ScrollView
+        android:id="@+id/scrollmanager"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_weight="0"
+        android:layout_below="@+id/layoutads"
+        android:visibility="gone"
+        android:paddingTop="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linearLayoutVisual"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"></LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/visulizer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/player_footer_bg"
+        android:layout_below="@+id/scrollmanager"
+        android:visibility="gone"
+        android:layout_weight="0">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linearLayoutEqual"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:orientation="vertical"></LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/PlayerCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="70dp"
+        app:cardMaxElevation="70dp"
+        app:cardBackgroundColor="@color/transparent"
+        app:cardPreventCornerOverlap="true"
+        android:focusableInTouchMode="true"
+        android:layout_alignParentBottom="true"
+        android:paddingTop="5dp"
+        >
+        <LinearLayout
+            android:id="@+id/player_footer_bg"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+
+
+            android:layout_weight="1"
+            android:background="@drawable/player_buttons_bar"
+            android:gravity="center"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/timerDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_weight="0"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/songCurrentDurationLabel"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <ProgressBar
+                    android:id="@+id/loadingBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:layout_weight="0.5" />
+
+                <TextView
+                    android:id="@+id/songTotalDurationLabel"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/songProgressBar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:progressDrawable="@drawable/seekbar_progress"
+                android:thumb="@drawable/seek_handler" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <!-- Repeat Button -->
+                <ImageButton
+                    android:id="@+id/btnRepeat"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@null"
+                    android:src="@drawable/btn_repeat" />
+
+                <ImageButton
+                    android:id="@+id/bookmark"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@null"
+                    android:onClick="BUBookmark"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="6dp"
+                    android:src="@drawable/round_bookmark_border_24" />
+
+                <!-- Shuffle Button -->
+                <ImageButton
+                    android:id="@+id/btnShuffle"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@null"
+                    android:src="@drawable/btn_shuffle" />
+
+            </LinearLayout>
+
+            <!-- Player Buttons -->
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:layout_marginBottom="20dp"
+                android:paddingRight="5dp">
+                <!-- Previous Button -->
+                <ImageButton
+                    android:id="@+id/btnPrevious"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    ads:srcCompat="@drawable/btn_previous" />
+                <!-- Backward Button -->
+                <ImageButton
+                    android:id="@+id/btnBackward"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_backward" />
+                <!-- Play Button -->
+                <ImageButton
+                    android:id="@+id/btnPlay"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    ads:srcCompat="@drawable/btn_play" />
+                <!-- Forward Button -->
+                <ImageButton
+                    android:id="@+id/btnForward"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_forward" />
+                <!-- Next Button -->
+                <ImageButton
+                    android:id="@+id/btnNext"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/btn_next" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</RelativeLayout>

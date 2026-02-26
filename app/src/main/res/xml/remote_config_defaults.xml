@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- START xml_defaults -->
+<defaultsMap>
+    <entry>
+        <key>loading_phrase</key>
+        <value>Fetching config…</value>
+    </entry>
+    <entry>
+        <key>new_ubdate</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>url</key>
+        <value>www.google.com</value>
+    </entry>
+    <entry>
+        <key>new_ubdate2</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>url2</key>
+        <value>www.google.com</value>
+    </entry>
+    <entry>
+        <key>new_ubdate3</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>url3</key>
+        <value>www.google.com</value>
+    </entry>
+    <entry>
+        <key>admin_post_photo_url</key>
+        <value>www.google.com</value>
+    </entry>
+    <entry>
+        <key>admin_post_text</key>
+        <value>www.google.com</value>
+    </entry>
+    <entry>
+        <key>admin_post_targrt_url</key>
+        <value>www.google.com</value>
+    </entry>
+    <entry>
+        <key>admin_post_show</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>ubdated_version</key>
+        <value>5.0.1961</value>
+    </entry>
+</defaultsMap>
+    <!-- END xml_defaults -->

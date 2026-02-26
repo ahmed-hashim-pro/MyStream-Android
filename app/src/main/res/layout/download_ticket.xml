@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorButtonNormal"
+    android:layoutDirection="rtl"
+    android:orientation="vertical"
+    android:paddingBottom="2dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingTop="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2pt"
+        android:background="@drawable/gradient4"
+        android:orientation="horizontal"
+
+        android:paddingBottom="4pt"
+        android:paddingTop="4pt">
+
+        <ImageView
+            android:id="@+id/imgchannel"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="7dp"
+            android:layout_weight="0"
+            android:background="@drawable/quran_recites"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:src="@drawable/quran_recites" />
+
+        <TextView
+
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignBottom="@+id/imgchannel"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/imgchannel"
+            android:layout_weight="1"
+
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:gravity="right"
+            android:paddingRight="7dp"
+            android:paddingTop="8dp"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="20dp"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:layout_weight="0"
+            android:background="@drawable/backirrow"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:paddingTop="5dp"
+
+            android:src="@drawable/backirrow" />
+    </LinearLayout>
+</LinearLayout>

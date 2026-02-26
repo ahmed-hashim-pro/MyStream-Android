@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_adminDashUsers"
+            android:icon="@drawable/outline_people_24"
+            android:title="@string/Users" />
+
+
+
+
+
+
+
+
+    </group>
+
+
+    <item android:title="@string/reporting">
+        <menu>
+            <group android:checkableBehavior="single" android:menuCategory="container">
+                <item
+                    android:id="@+id/nav_adminDashYouTubePostReporting"
+                    android:icon="@drawable/outline_report_24"
+                    android:title="@string/YouTubePostsReporting" />
+                <item
+                    android:id="@+id/nav_adminDashCommentReporting"
+                    android:icon="@drawable/outline_report_24"
+                    android:title="@string/CommentsReporting" />
+                <item
+                    android:id="@+id/nav_adminDashLocalPostReporting"
+                    android:icon="@drawable/outline_report_24"
+                    android:title="@string/LocalPostsReporting" />
+
+            </group>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/nav_adminDashReports"
+        android:icon="@drawable/outline_summarize_24"
+        android:title="@string/reports" />
+
+</menu>

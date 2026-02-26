@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.medoapps.www.onlinequran.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_adminDashUsers"
+        android:name="com.medoapps.www.onlinequran.admin.fragment.user.AdminDashUsers"
+        android:label="@string/Users"
+        tools:layout="@layout/fragment_admin_dash_users" />
+    <fragment
+        android:id="@+id/nav_adminDashYouTubePostReporting"
+        android:name="com.medoapps.www.onlinequran.admin.fragment.reporting.AdminDashYouTubeReporting"
+        android:label="@string/YouTubePostsReporting"
+        tools:layout="@layout/fragment_admin_dash_reporting" />
+    <fragment
+        android:id="@+id/nav_adminDashCommentReporting"
+        android:name="com.medoapps.www.onlinequran.admin.fragment.reporting.AdminDashCommentReporting"
+        android:label="@string/CommentsReporting"
+        tools:layout="@layout/fragment_admin_dash_comment_reporting" />
+    <fragment
+        android:id="@+id/nav_adminDashLocalPostReporting"
+        android:name="com.medoapps.www.onlinequran.admin.fragment.reporting.AdminDashLocalPostReporting"
+        android:label="@string/LocalPostsReporting"
+        tools:layout="@layout/fragment_admin_dash_local_post_reporting" />
+    <fragment
+        android:id="@+id/nav_adminDashReports"
+        android:name="com.medoapps.www.onlinequran.admin.fragment.report.AdminDashReports"
+        android:label="@string/reports"
+        tools:layout="@layout/fragment_admin_dash_reports" >
+        <action
+            android:id="@+id/action_nav_adminDashReports_to_adminDashReportsForUser"
+            app:destination="@id/adminDashReportsForUser"
+            app:launchSingleTop="true"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/adminDashReportsForUser"
+        android:name="com.medoapps.www.onlinequran.admin.fragment.report.AdminDashReportsForUser"
+        android:label="@string/UserReports"
+        tools:layout="@layout/fragment_admin_dash_reports_for_user">
+        <argument
+            android:name="userId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
+</navigation>

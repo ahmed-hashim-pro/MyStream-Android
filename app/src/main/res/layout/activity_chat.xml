@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorIndivateTab">
+
+    <RelativeLayout
+        android:id="@+id/layout_user"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/friend_photo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/mystream"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#FFFF8800"
+            />
+
+        <TextView
+            android:id="@+id/friend_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="70dp"
+            android:layout_marginStart="80dp"
+            android:gravity="center_horizontal"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+
+
+    </RelativeLayout>
+
+
+    <ImageButton
+        android:id="@+id/btnSend"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="#00000000"
+        android:padding="10dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_send" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_200"
+        android:layout_above="@id/btnSend"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerChat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/line"
+        android:layout_below="@+id/layout_user">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <EditText
+        android:id="@+id/editWriteMessage"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_toStartOf="@id/btnSend"
+        android:background="@drawable/edittext_boder"
+        android:drawablePadding="20dp"
+        android:inputType="textLongMessage"
+        android:maxLines="1"
+        android:paddingLeft="7dp"
+        android:paddingRight="7dp"
+        android:textColorHint="#aeafaf"
+        android:textSize="15sp" />
+
+</RelativeLayout>

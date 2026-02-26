@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="quranonlinesapp.onlines.com.quranonlinesapp.RecitesName">
+    <item android:id="@+id/search"
+    android:title="@string/search_title"
+    app:showAsAction="always"
+    app:actionViewClass="android.widget.SearchView" />
+
+
+    <item
+        android:id="@+id/download"
+        android:icon="@drawable/ic_file_download_black_24dp"
+        android:title="@string/downloads"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/shareapp"
+        android:title="@string/share"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/menu"
+        android:icon="@drawable/menu"
+        android:title="@string/menu"
+        app:showAsAction="always" />
+
+</menu>

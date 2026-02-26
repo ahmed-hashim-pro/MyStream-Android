@@ -1,0 +1,636 @@
+<resources>
+
+
+    <string name="app_name">My Stream</string>
+    <string name="title_activity_recites_name">القراء</string>
+     <string name="title_activity_aya_list">سور القارئ</string>
+    <string name="back"> رجوع</string>
+    <string name="menu">قائمة</string>
+    <string name="downlaod">تنزيل</string>
+<string name="title_activity_managerdb">استماع</string>
+    <string name="ad_APP_ID">ca-app-pub-9350633918697995~2524775865</string>
+    <string name="banner_ad_unit_id">ca-app-pub-9350633918697995/2452362817</string>
+    <string name="NATIVE_ADMOB_AD_UNIT_ID">ca-app-pub-9350633918697995/4826588176</string>
+    <string name="APPOPEN_ADMOB_AD_UNIT_ID">ca-app-pub-9350633918697995/1727695238</string>
+    <string name="REWARD_VIDEO_ADMOB_AD_UNIT_ID">ca-app-pub-9350633918697995/7533398267</string>
+
+    <string name="Pop_ad_unit_id">no</string>
+    <string name="Video_ad_unit_id">no</string>
+
+    <string name="search_title">بحث</string>
+    <string name="rateapp">قيم My Stream</string>
+    <string name="separeteapp">  شارك My Stream</string>
+    <string name="Languages"> اللغة</string>
+    <string name="sharemessage">My Stream: أريد أن أشارك معك تطبيق My Stream ، يمكنك الاستماع إلى القرآن الكريم من أكثر من 150 قارئًا ، والاستماع إلى قنوات الراديو طوال اليوم ، والتفاعل مع مقاطع فيديو youtube والمزيد. يمكنك التنزيل مجانًا الآن</string>
+    <string name="sharePart1"> لقد كنت أستمع إلى </string>
+    <string name="sharePart2"> من  </string>
+    <string name="sharePart3"> القارئ  </string>
+    <string name="sharePart4"> يمكنك الاستماع إليه من تطبيق ** My Stream **. تنزيل من google play.</string>
+    <string name="shareURL"> https://rebrand.ly/notfof70d </string>
+    <string name="ar"> عربي</string>
+    <string name="en"> انكليزي</string>
+    <string name="rateq"> هل تود تقييم التطبيق</string>
+    <string name="shareDesc">هل ترغب في مشاركة My Stream مع جميع الأصدقاء الذين تعرفهم؟</string>
+    <string name="shareNow">شارك الآن</string>
+    <string name="rateBtn">قيم الآن</string>
+
+    <string name="later">لاحقاً</string>
+    <string name="facebook">فيس بوك</string>
+    <string name="website">موقع الشركة علي الانترنيت</string>
+
+    <string name="invitation_title">Send App Invite To Your Friends</string>
+    <string name="invitation_message">Stream app : I want to share with you My stream app to share your moment and see how people react to it ( share your life now ) . you can download free now</string>
+    <string name="invitation_deep_link">https://rebrand.ly/notfof70d</string>
+    <string name="invitation_custom_image">https://drive.google.com/open?id=0B8SiY-GFCVIjRERpZzU5dmN5OTg</string>
+    <string name="invitation_cta">تثبيت الأن!</string>
+    <string name="invitation_subject">قم بتثبيت التطبيق الآن!</string>
+
+    <string name="deep_link_fmt" formatted="false">Deep Link: %s</string>
+    <string name="invitation_id_fmt" formatted="false">Invitation ID: %s</string>
+
+    <string name="sent_invitations_fmt" formatted="false">Sent %d invitations</string>
+    <string name="send_failed">فشل ارسال الدعوة</string>
+    <string name="invite_dialog_title">لقد حصلت علي دعوة لتثبيت التطبيق!</string>
+
+    <string name="google_play_services_error">Google Play Services Error</string>
+    <string name="custom_invite">دعوة مخصصة</string>
+    <string name="action_deep_link">
+        com.delaroystudios.appinvites.DEEP_LINK_ACTION
+    </string>
+
+    <string name="invite">إرسال دعوة الي جميع أصدقائك !</string>
+    <string name="welcome">إرسال الدعوات الي جميع أصدقائك</string>
+    <string name="referrer_hint">Deep link not provided</string>
+    <string name="deep_link_default">Deep link not set</string>
+    <string name="invitation_id_default">Invitation ID not set</string>
+    <string name="invite_friends">دعوة جميع الأصدقاء</string>
+    <string name="share">مشاركة بواسطة</string>
+
+    <string name="cancel">إلغاء</string>
+    <string name="Download_aya">القرآن الكريم-تنزيل</string>
+    <string name="aya_download_progress"> جاري التنزيل ...</string>
+    <string name="download_done">اكتمل التنزيل</string>
+    <string name="download_canceled">تم الغاء التنزيل</string>
+    <string name="downloads">التنزيلات</string>
+    <string name="sound">نوعية الصوت---</string>
+
+
+    <string name="next">التالي</string>
+    <string name="skip">تخطي</string>
+    <string name="start">انهاء</string>
+    <string name="slide_1_title">My Stream</string>
+    <string name="slide_1_desc">استمع للقرآن الكريم مع أو بدون الإنترنت</string>
+    <string name="slide_2_title">شارك ما يحب ان يراه ويسمعه الناس </string>
+    <string name="slide_2_desc">يمكنك مشاركة ما تحب من لحظاتك المهمة وشاهد كيف يتفاعل معها الناس </string>
+    <string name="slide_3_title">مشغل الوسائط الحديث </string>
+    <string name="slide_3_desc">بالضغط علي السورة التي تود سماعها ، تبدأ السورة تلقائيا وفي الخلفية </string>
+    <string name="slide_4_title">الآن أنت مستعد لاستخدام التطبيق </string>
+    <string name="slide_4_desc">سوف يقوم التطبيق بعمل تذكير تلقائي ويومي من أجل تذكيرك بالاستماع وقراءة القرءان الكريم ، اضغط علي اعدادات التذكير لتعيين الوقت الخاص بك ، بعدها يمكنك بدأ استخدام التطبيق </string>
+    <string name="settime">اعدادات التذكير</string>
+    <string name="set">هنا يمكنك تحديد الوقت المناسب لك لتذكيرك بالقراءة والاستماع للقرءان الكريم  </string>
+    <string name="prescolored">اضغط علي النص الملون لتحديد الوقت</string>
+    <string name="selecttime">اضغط لتحديد الوقت...</string>
+    <string name="set_time">التذكير</string>
+    <string name="reminder_started">التذكير يعمل</string>
+    <string name="new_ubdate">يتوفر اصدار جديد من التطبيق</string>
+    <string name="newVersion">يتوفر اصدار جديد من التطبيق ، اضغط علي تحديث الآن للتحديث</string>
+    <string name="ubdate">تحديث الآن</string>
+    <string name="remind_switch">التذكير</string>
+    <string name="lastrecite">آخر تلاوة</string>
+    <string name="history">هل تريد الذهاب الي آخر سورة كنت تسمعها ؟</string>
+    <string name="last_history">الذهاب الي العلامة</string>
+    <string name="nohistory">لا يوجد علامة</string>
+    <string name="hint_dob">دخل عمرك</string>
+    <string name="hint_password">الباسوورد</string>
+    <string name="hint_email">الايميل</string>
+    <string name="hint_gender">انا</string>
+    <string name="male">ذكر</string>
+    <string name="female">أنثي</string>
+    <string name="btn_sign_up">تسجيل !!</string>
+    <string name="err_msg_name">من فضلك ادخل اسمك</string>
+    <string name="err_msg_required">مطلوب</string>
+    <string name="err_msg_email">الايميل من فضلك </string>
+    <string name="err_msg_password">ادخل الباساوورد</string>
+    <string name="err_msg_dob">Enter a valid D.O.B</string>
+    <string name="btn_login">الدخول</string>
+    <string name="btn_link_signup">ليس لديك حساب بعد . قم بالتسجيل</string>
+    <string name="btn_link_login">لديك حساب بالفعل . دخول !!</string>
+
+
+    <string name="sign_in">تسجيل الدخول</string>
+    <string name="sign_out">تسجيل الخروج</string>
+    <string name="verify_email">Verify Email</string>
+    <string name="loading">جاري التحميل…</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec condimentum ante, quis mattis mi. Proin ut rhoncus libero, ac euismod neque. Ut suscipit, enim a facilisis consequat, orci lacus venenatis orci, at ultricies orci nulla sed ex. In condimentum viverra velit, eget feugiat libero imperdiet vel. Aenean pretium, lectus vitae bibendum bibendum, diam turpis convallis eros, quis tristique leo sapien at ipsum. Praesent eu odio id nulla lobortis auctor. Donec eget dolor eget nisl euismod commodo vel a lacus. Quisque ut justo vitae urna pharetra accumsan. Etiam dignissim neque iaculis mauris viverra, blandit rhoncus odio porttitor. Phasellus nibh arcu.</string>
+    <string name="title_activity_test">test</string>
+    <string name="heading_recent">الأحدث</string>
+    <string name="heading_my_posts">منشوراتي</string>
+    <string name="heading_my_top_posts">الأكثر اعجابا</string>
+    <string name="sign_up">ليس لديك حساب؟ انشئ حساب جديد</string>
+    <string name="menu_logout">Log out</string>
+    <string name="progress_downloading">تنزيل…</string>
+    <string name="progress_uploading">جاري الرفع…</string>
+    <string name="progress_auth">تسجيل الدخول…</string>
+
+    <string name="upload_success">انتهي الرفع</string>
+    <string name="upload_failure">فشل الؤفع</string>
+    <string name="Press_Add">من فضلك اضغط علي الاعلان بالأسفل للاستمرار</string>
+
+    <string name="download_success">اكتمل التنزيل</string>
+    <string name="download_failure">فشل التنزيل</string>
+    <string name="first_name">الاسم الأول</string>
+    <string name="last_Name">الاسم الأخير</string>
+    <string name="get_information">انهاء التسجيل</string>
+    <string name="upload_Audio">حدد ملف الصوت أو الفيديو</string>
+    <string name="upload_Thumb">حدد الصورة التوضيحية</string>
+    <string name="Upload_file_recquired">يجب عليك تحديد ملف صوتي أو فيديو أولا</string>
+    <string name="Upload_Thumb">يجب عليك تحديد الصورة التوضيحية أولا</string>
+    <string name="Upload_User_Photo">حدد الصورة الشخصية</string>
+    <string name="WriteComment">اترك تعليق...</string>
+    <string name="Share">قم بمشاركة ما يحب الناس سماعه أو مشاهدته..!!!</string>
+    <string name="HolyQuran">القرآن الكريم</string>
+    <string name="impossible_game">عداد الأذكار</string>
+    <string name="press">إضغط علي الزر  لبدء العد مع كل ذكر</string>
+    <string name="retry_button_text">أذكر الله</string>
+    <string name="watch_video_button_text">شاهد الإعلان</string>
+    <string name="default_coin_text">Coins: 0</string>
+    <string name="zekr">عداد الأذكار البسيط</string>
+    <string name="explain_signin">من السهل جدا تسجيل الدخول أو انشاء حساب جديد , فقط اكتب الايميل والباسوورد واضغط علي (ليس لديك حساب؟ انشئ حساب جديد) لإنشاء حساب جديد لأول مرة أو اضغط علي (تسجيل الدخول) للدخول الي حسابك   </string>
+    <string name="notifyLohOut">تسجيل الخروج</string>
+    <string name="abortLogOut">هل أنت متأكد!!!</string>
+    <string name="choosePhoto">اختر صورتك</string>
+    <string name="showVideo">مشاهدة الفيديو</string>
+    <string name="Views">المشاهدات</string>
+    <string name="newPost">تم رفع فيديو جديد || اضغط لاكنشافه الآن </string>
+    <string name="signingoogle">تسجيل الدخول بحساب جوجل</string>
+    <string name="orby">أو باستخدام </string>
+    <string name="info">بياناتي</string>
+    <string name="ubdateInfo">تحديث البيانات</string>
+    <string name="save">حفظ</string>
+    <string name="dummy_button">تغيير الصورة الشخصية</string>
+    <string name="about">حول البرنامج</string>
+    <string name="aboutDescription">My Stream برنامج\n تمت البرمجه بواسطة   \n **م/أحمد هاشم** \n وهذا البرنامج يخص \n **منظمة APPS CODER للبرمجيات**\n
+      **\n </string>
+    <string name="aboutDescription2">شكرا لاستخدامك البرنامج</string>
+
+    <string name="uploadTypeVideo">فيديو</string>
+    <string name="uploadTypeAudio">ملف صوتي</string>
+    <string name="titlePost">عنوان المنشور</string>
+    <string name="desPost">اكتب الوصف هنا...</string>
+    <string name="recommand">انصح به</string>
+    <string name="facebook_app_id">380383209206681</string>
+    <string name="fb_login_protocol_scheme">fb380383209206681</string>
+    <string name="menu_edit">تعديل</string>
+    <string name="menu_delete">حذف المنشور</string>
+    <string name="recites_list">قائمة القراء</string>
+    <string name="channel_name">Hashim My Stream</string>
+    <string name="channel_description">Hashim Notification description</string>
+    <string name="channel_name_2">Hashim My Stream Player</string>
+    <string name="channel_name_3">Hashim My Stream Downlaoder</string>
+    <string name="channel_description_2">Hashim Notification description My Stream Player</string>
+    <string name="channel_description_3">Hashim Notification description My Stream Downloader</string>
+    <string name="ahmed_hashim">أحمد هاشم</string>
+    <string name="powered_by">Powered By</string>
+    <string name="action_settings">الاعدادات</string>
+    <string name="radio_list">قائمة الراديو</string>
+    <string name="All">الكل</string>
+    <string name="BatteryOptimizationDialog">لضمان تشغيل الصوت دون فقد الاتصال ، نفضل السماح بتعطيل تحسين البطارية.</string>
+    <string name="BatteryOptimizationTitle">معلومات تحسين البطارية</string>
+    <string name="Radio">راديو</string>
+    <string name="OtherCategories">أخري</string>
+    <string name="telawatelharamen">تلاوات الحرمين</string>
+    <string name="telawatelharamElmakee">تلاوات الحرم المكي</string>
+    <string name="telawatelharamElmadany">تلاوات الحرم المدني</string>
+    <string name="livestrem">البث المرئي المباشر</string>
+    <string name="qurankaremchannel">قناة القرآن الكريم</string>
+    <string name="alsunnaalnbweyachannel">قناة السنة النبوية</string>
+    <string name="youtube">يوتيوب</string>
+    <string name="error_thumbnail_view">خطأ</string>
+    <string name="play">تشغيل</string>
+<!--    <string name="pause">إيقاف مؤقت</string>-->
+    <string name="skip_to">تخطي إلى</string>
+    <string name="seconds">ثواني</string>
+    <string name="AddVideo">أضف فيديو</string>
+    <string name="add_youtube_videos">أضف فيديوهات يوتيوب</string>
+    <string name="youtube_url_here">رابط يوتيوب هنا ...</string>
+    <string name="YouTube">يوتيوب</string>
+    <string name="seemore">شاهد المزيد</string>
+    <string name="post">نشر</string>
+    <string name="no_posts_here">لا توجد منشورات هنا</string>
+    <string name="watch">شاهد</string>
+    <string name="ListLanguages">لغة القوائم </string>
+    <string name="show_ad">إظهار الإعلان</string>
+    <string name="DownloadAllTitle">"تحميل الكل "</string>
+    <string name="StoragePermissionTitle">"طلب الإذن "</string>
+    <string name="DownloadAllMessage">هل تريد تحميل كل القائمة لهذا القارئ؟</string>
+    <string name="AskStaragePermissionMessage">لديك سورة تم تنزيلها في جهازك سابقًا ، نريد إذنًا حتى نتمكن من تشغيلها </string>
+
+    <string name="download_all_list">تنزيل كل القائمة</string>
+    <string name="needPermissionTitle">بحاجة الى اذن</string>
+    <string name="needSstoragePermissionDescription">يحتاج تطبيق My Straem إلى إذن تخزين لحفظ ملفات الصوت في هاتفك للاستماع إليها في وضع عدم الاتصال ،</string>
+    <string name="completeyourprofile">أكمل ملفك الشخصي</string>
+    <string name="not_available">هذه الخاصية غير متوفرة حاليا</string>
+    <string name="language_take_effect">ستدخل التغييرات حيز التنفيذ بعد إعادة تشغيل التطبيق</string>
+    <string name="RateApp">قيم My Stream</string>
+    <string name="StartupSound">صوت بدء التشغيل</string>
+    <string name="sign_in_with_email">تسجيل الدخول بالبريد الإلكتروني</string>
+    <string name="version_number">رقم الإصدار :</string>
+    <string name="DarkMode">الوضع الداكن</string>
+    <string name="ChooseTheme">اختر الموضوع أو السمة الخاصة بك</string>
+    <string name="apply">تطبيق</string>
+    <string name="network_error">خطأ في الشبكة</string>
+    <string name="slide_4_desc_theme">يمكنك اختيار نظام الألوان المفضل لديك</string>
+    <string name="default_mode">الوضع الافتراضي</string>
+    <string name="manually">يدويا</string>
+    <string name="dynamicLinkShareTitle">يمكنك الاستماع الآن على My Stream</string>
+    <string name="dynamicLinkShareImage"><![CDATA[https://firebasestorage.googleapis.com/v0/b/online-quran-3b07c.appspot.com/o/mystream.png?alt=media&token=7ffa0c77-84f0-4436-90f3-42369880d9f5]]></string>
+    <string name="surah">سورة</string>
+    <string name="forreciter">للقارئ</string>
+    <string name="radiostation">إذاعة</string>
+    <string name="dynamicLinkRadioShareImage"><![CDATA[https://firebasestorage.googleapis.com/v0/b/online-quran-3b07c.appspot.com/o/mystreamwithradio.png?alt=media&token=71b4016e-178b-4589-8d9b-9d32ebf9f96d]]></string>
+    <string name="edit_comment">تعديل التعليق</string>
+    <string name="delete_comment">حذف التعليق</string>
+    <string name="report_comment">أبلغ عن</string>
+    <string name="update">تحديث</string>
+    <string name="reason">السبب</string>
+    <string name="ReportAdded">تمت إضافة التبليغ</string>
+    <string name="flag_as_inappropriate">تعليم كفيديو غير لائق</string>
+    <string name="Flagged">تم الإبلاغ عنه</string>
+    <string name="admin_panel">لوحة الادارة</string>
+    <string name="Users">المستخدمون</string>
+    <string name="loadmore">تحميل المزيد</string>
+    <string name="loaded">تم تحميله</string>
+    <string name="all">الكل</string>
+    <string name="menu_reports">الإبلاغ</string>
+    <string name="no_Users_here">لا يوجد مستخدمين</string>
+    <string name="reporting">البلاغات</string>
+    <string name="no_reporting_here">لا توجد بلاغات</string>
+    <string name="CommentsReporting">بلاغات التعليقات</string>
+    <string name="LocalPostsReporting">بلاغات المنشورات المحلية</string>
+    <string name="YouTubePostsReporting">بلاغات اليوتيوب</string>
+    <string name="complete_your_profile">أكمل ملفك الشخصي</string>
+    <string name="reports">التقارير</string>
+    <string name="UserReports">تقارير المستخدم</string>
+    <string name="getPermission">الحصول على إذن</string>
+    <string name="fcm_notification_channel_id">HASHIM-FCM</string>
+
+
+
+<!--    <string name="app_name">قرآن</string>-->
+    <string name="downloadPrompt_title">حمل الملفات المطلوبه؟</string>
+    <string name="downloadPrompt"> لكي يعمل التطبيق بنجاح تحتاج لتحميل بعض الملفات الان. إن لم يتم التحميل الان قد لا يعمل التطبيق بشكل صحيح و ستحتاج للاتصال بالنت للقراءة.هل تود التحميل الان؟</string>
+    <string name="downloadImportantPrompt">هناك تحديث هام صغير على ملفات الصور على هاتفكم. هل تود  تحميل الملف حالا؟</string>
+    <string name="downloadPrompt_ok">نعم</string>
+    <string name="downloadPrompt_no">لا</string>
+    <string name="downloading_title">جاري التحميل....</string>
+    <string name="downloading_message">يرجى الإنتظار حتى نهاية التحميل</string>
+    <string name="extracting_title">تجهيز…</string>
+    <string name="menu_about">عنا</string>
+    <string name="menu_other_apps">تطبيقات أخرى‎</string>
+    <string name="menu_settings">الإعدادات</string>
+    <string name="menu_jump_last_page">الصفحة الأخيرة</string>
+    <string name="menu_bookmarks">المرجعيات</string>
+    <string name="menu_bookmarks_page">مرجعيات الصفحات</string>
+    <string name="menu_bookmarks_ayah">مرجعيات الآيات</string>
+    <string name="menu_sort">تغيير الترتيب</string>
+    <string name="menu_sort_date">تاريخ الإضافة</string>
+    <string name="menu_sort_location">موقعها في القرآن</string>
+    <string name="menu_translation">التفسير/الترجمة</string>
+    <string name="menu_back_to_page">إلى التلاوة</string>
+    <string name="menu_help">مساعدة</string>
+    <string name="menu_search">بحث</string>
+    <string name="menu_get_translations">حمل التفاسير/التراجم</string>
+    <string name="menu_jump">انتقال سريع</string>
+    <string name="gotoPage">أدخل رقم الصفحة</string>
+<!--    <string name="cancel">إلغاء</string>-->
+
+    <string name="help_title">الأسئلة المتداولة</string>
+    <string name="help">
+        &lt;b&gt;كيف يتمّ تشغيل الصّوت؟&lt;/b&gt;
+        &lt;br/&gt;
+        افتح صفحة القرآن ، انقر على الصفحة مرّةً واحدة. في أسفل الصّفحة ستجد زر تشغيل الصّوت و اسم القارئ الذي تودّ تحميله. لاختيار القارئ انقر على اسم القارئ الموجود لتظهر لك باقي قائمة القراء. ولتحميل الصّوت اضغط على زر التّشغيل للتّحميل وللاستماع للصّفحة التي أنت عليها أو لتحميل السّورة
+        &lt;br/&gt;
+        &lt;br/&gt;&lt;b&gt;كيف أحصل على التّرجمة؟&lt;/b&gt;
+        &lt;br/&gt;افتح صفحةً من المصحف، انقر على الشّاشة مرّةً واحدةً، سيظهر لك شريطٌ بالأعلى ، ستجد أيقونةً بالأعلى على شكل كرةٍ أرضيّةٍ (وقد تجد أيقونة التّرجمة في بعض الأجهزة مدرجةً تحت زر القائمة الموجود بالشّريط العُلوي الذي على شكل ثلاث نقاطٍ بالطّول )، بالنّقر عليها ستذهب بك لصفحةٍ يمكنك من خلالها اختيار وتحميل التّرجمة التي تودّ تحميلها وبعد التّحميل عُد مرّةً أخرى وانقر على أيقونة الكرة الأرضيّة لترى التّرجمة التي تمّ تحميلها.
+        &lt;br/&gt;
+        &lt;br/&gt;&lt;b&gt;كيف يتمّ إضافة صفحةٍ للمرجعيّات؟&lt;/b&gt;
+        &lt;br/&gt;انقر على الصفحة التي تودّ إضافتها للمرجعيّات، سيظهر لك شريطٌ بالأعلى وعلى يمين الشّريط ستجد أيقونةً على شكل نجمةٍ بالنّقر عليها سيتمّ تغيير شكلها إلى شكلٍ مُصمتٍ وبالتّالي يكون تمّ حفظ الصّفحة للمرجعيّات. ولحذف تلك الصّفحة من المرجعيّات قم مرّةً أخرى بالذَّهاب لتلك الصّفحة وانقر مرّةً أخرى على النّجمة لإلغاء كونها من المرجعيّات
+        &lt;br/&gt;
+        &lt;br/&gt;&lt;b&gt;كيف يُمْكنني تكبير الخط؟&lt;/b&gt;
+        &lt;br/&gt; للصّفحات العربي يُمكنك وضع جهازك على الوضع الأُفقي، فيُمكنك من خلال ذلك الحصول على حجمٍ أكبر للخط. وللتّرجمة اذهب للإعدادات و اختر حجم التّرجمة.
+        &lt;br/&gt;
+        &lt;br/&gt;&lt;b&gt;كيف يُمكنني إرسال آيةٍ؟&lt;/b&gt;
+        &lt;br/&gt;
+         أثناء قراءتك اضغط على الآية ضغطةً طويلةً ستظهر لك قائمةٌ بها عِدّة اختياراتٍ منها الإرسال ومنها تسجيل الآية في المرجعيّات، نسخ الآية، و تفسير الآية.
+    </string>
+
+    <string name="search_hint">بحث في القرآن</string>
+    <string name="quranSearchType">آيات القرآن</string>
+    <string name="search_full_results">نتائج كاملة</string>
+    <string name="search_entire_mushaf">ابحث في المصحف بأكمله</string>
+
+    <plurals name="files_downloaded">
+        <item quantity="zero">لم يتم تحميل سور بعد‎</item>
+        <item quantity="one">تم تحميل سورة واحده</item>
+        <item quantity="two">تم تحميل سورتان</item>
+        <item quantity="few">تم تحميل %1$d سور</item>
+        <item quantity="many">تم تحميل %1$d سورة</item>
+        <item quantity="other">تم تحميل %1$d سورة</item>
+    </plurals>
+
+    <!-- Shown above search results when we receive a search request. -->
+    <plurals name="search_results">
+        <item quantity="zero">لا توجد نتائج في البحث عن \"%1$s\"</item>
+        <item quantity="one">نتيجة واحده في البحث عن \"%1$s\"</item>
+        <item quantity="two">نتيجتان في البحث عن \"%1$s\"</item>
+        <item quantity="few">%2$d نتائج في البحث عن \"%1$s\"</item>
+        <item quantity="many">%2$d نتيجة في البحث عن \"%1$s\"</item>
+        <item quantity="other">%2$d نتيجة في البحث عن \"%1$s\"</item>
+    </plurals>
+
+    <!-- Search messages -->
+    <string name="found_in_sura">سورة %1$s: %2$d (صفحة %3$d)</string>
+    <string name="no_results">لا توجد نتائج ل \"%s\"</string>
+    <string name="no_arabic_search_available">لتفعيل البحث بالعربية يجب تحميل قاعدة البيانات.. هل ترغب في ذلك ؟</string>
+    <string name="get_arabic_search_db">حمل قاعدة البيانات</string>
+
+    <!-- Quran Preference Activity -->
+    <string name="prefs_volume_key_navigation_title">تصفح بمفاتيح الصوت</string>
+    <string name="prefs_volume_key_navigation_summary">استخدم مفاتيح الصوت للتصفح بين الصفحات</string>
+    <string name="prefs_category_reading">إعدادات القراءة</string>
+    <string name="prefs_category_translation">إعدادات التفسير والترجمة</string>
+    <string name="prefs_category_display_settings">إعدادات العرض</string>
+    <string name="prefs_new_background_title">الخلفية الجديدة</string>
+    <string name="prefs_lock_orientation_title">اﻹبقاء على وضع العرض</string>
+    <string name="prefs_lock_orientation_summary_on">وضع العرض سيتم الحفاظ عليه</string>
+    <string name="prefs_lock_orientation_summary_off">وضع العرض يتغير تلقائيا</string>
+    <string name="prefs_landscape_orientation_title">الوضع اﻷفقي</string>
+    <string name="prefs_landscape_orientation_summary_on">سيتم استخدام الوضع اﻷفقي</string>
+    <string name="prefs_landscape_orientation_summary_off">سيتم استخدام الوضع الرأسي</string>
+    <string name="prefs_night_mode_title">القراءة الليلية</string>
+    <string name="prefs_night_mode_summary">الخلفية باللون اﻷسود والخطوط باللون اﻷبيض</string>
+    <string name="prefs_night_mode_text_brightness_title">إضاءة الخط</string>
+    <string name="prefs_night_mode_text_brightness_summary">إضاءة الخط عند تفعيل القراءة الليلية</string>
+    <string name="prefs_night_mode_background_brightness_title">إضاءة الخلفية</string>
+    <string name="prefs_night_mode_background_brightness_summary">إضاءة الصفحة عند تفعيل القراءة الليلية</string>
+    <string name="prefs_overlay_page_info_title">عرض بيانات الصفحة</string>
+    <string name="prefs_overlay_page_info_summary">عرض رقم الصفحة، اسم السورة، ورقم الجزء أثناء القراءة</string>
+    <string name="prefs_display_marker_title">التنبيه</string>
+    <string name="prefs_display_marker_summary">عرض تنبيه عند الوصول إلى بداية الربع أو الجزء</string>
+    <string name="prefs_highlight_bookmarks_title">تعليم المرجعيات</string>
+    <string name="prefs_highlight_bookmarks_summary">علم الآيات التي وضعت في المرجعيات</string>
+    <string name="prefs_translation_text_title">خط التفسير والترجمة</string>
+    <string name="prefs_translations">التفسير والترجمة</string>
+    <string name="prefs_translations_summary">حمّل واختر التفاسير والتراجم</string>
+    <string name="prefs_ayah_before_translation_title">عرض اﻵية مع التفسير</string>
+    <string name="prefs_ayah_before_translation_summary">اختر لعرض الآية مع التفسير</string>
+    <string name="prefs_category_download">خيارات التحميل</string>
+    <string name="prefs_streaming_title">استماع عبر اﻻنترنت</string>
+    <string name="prefs_streaming_summary">" سيتم تشغيل الصوت عبر اﻻنترنت (لن يتم تنزيل الملفات على الجهاز)"</string>
+    <string name="prefs_download_amount_title">كم التحميل</string>
+    <string name="prefs_download_amount_summary">كم التحميل للتلاوات غير المتصلة</string>
+    <string name="prefs_audio_manager_summary">تحميل وإدارة الملفات الصوتية</string>
+    <string name="prefs_app_location_title">مكان التطبيق</string>
+    <string name="prefs_app_location_summary">اختر الذاكرة التي سيتم تخزين الملفات عليها</string>
+    <string name="prefs_sdcard_internal">الذاكرة الداخلية</string>
+    <string name="prefs_sdcard_external">الذاكرة الخارجية %1$d</string>
+    <string name="prefs_app_size">مساحة التطبيق</string>
+    <string name="prefs_calculating_app_size">جاري حساب مساحة التطبيق</string>
+    <string name="prefs_copying_app_files">جاري نسخ ملفات التطبيق</string>
+    <string name="prefs_err_moving_app_files">حدث خطأ اثناء نقل ملفات التطبيق</string>
+    <string name="prefs_no_enough_space_to_move_files">لا يوجد مساحة كافية لنقل ملفات التطبيق</string>
+    <string name="prefs_dual_page_mode_title">وضع الصفحتين المتجاورتين</string>
+    <string name="prefs_dual_page_mode_enabled">عرض صفحتين متجاورتين في الوضع الأفقي</string>
+    <string name="prefs_dual_page_mode_disabled">عرض صفحة واحدة في الوضع الأفقي</string>
+    <string name="prefs_import_title">استيراد</string>
+    <string name="prefs_import_summary">استيراد الإشارات المرجعية والعلامات</string>
+    <string name="prefs_send_logs_title">إرسال السجلات</string>
+    <string name="prefs_send_logs_summary">إرسال سجلات التصحيح للمطور</string>
+    <string name="prefs_sura_translated_name_summary">إظهار أسماء السور مترجمة</string>
+    <string name="prefs_sura_translated_name_title">ترجمة أسماء السور</string>
+    <!-- Preferences End -->
+
+    <string name="downloaded_translations">الملفات المحملة</string>
+    <string name="available_translations">الملفات المتاحة للتحميل</string>
+    <string name="remove_button">احذف</string>
+    <string name="dialog_ok">موافق</string>
+
+    <!-- tafaseer -->
+    <string name="see_tafseer_of_verse">تفسير الآية تابع للآية %d (انقر للعرض).</string>
+
+    <!-- translation updates -->
+    <string name="update_available">هناك تحديثات</string>
+    <string name="translation_updates_available">هناك تحديثات للتراجم والتفاسير. هل ترغب في تحميلها الآن؟</string>
+    <string name="translation_dialog_yes">نعم</string>
+    <string name="translation_dialog_later">لاحقا</string>
+
+    <string name="quran_rob3">ربع</string>
+    <string name="quran_nos">نصف</string>
+    <string name="quran_talt_arb3">ثلاثة أرباع</string>
+    <string name="quran_hizb">الحزب</string>
+    <string name="quran_juz2">الجزء</string>
+    <string name="quran_page">الصفحة</string>
+    <string name="quran_sura">سورة</string>
+    <string name="quran_ayah">آية %1$d</string>
+    <string name="quran_ayah_details">%1$s - آية %2$s، جزء %3$s</string>
+    <string name="quran_sura_title">سُورَةُ %1$s</string>
+
+    <string name="sura_ayah_notification_str">سورة %1$s، آية %2$d</string>
+    <string name="sura_ayah_sharing_str">سُورَةُ %1$s: %2$d</string>
+
+    <string name="index_loading">جاري التحميل…</string>
+
+    <string name="canceling">جاري إلغاء اﻷمر…</string>
+    <string name="juz2_description">الجزء %1$s</string>
+    <string name="page_description">صفحة %1$s، جزء %2$s</string>
+    <string name="highlighting_database">جاري تحميل الملفات المطلوبة</string>
+    <string name="timing_database">جاري تحميل الملفات المطلوبة</string>
+
+    <!-- download statuses and errors -->
+    <string name="download_successful">تم التحميل</string>
+    <string name="download_processing">جاري تجهيز الملفات…</string>
+    <string name="download_error_general">لم يتم تحميل الملفات</string>
+    <string name="download_error_disk">لا توجد مساحة كافية للتخزين</string>
+    <string name="download_error_network">لا يمكن اﻻتصال بالانترنت</string>
+    <string name="download_error_perms">الصلاحيات غير كافية لتحميل الملفات</string>
+    <string name="download_error_invalid_download">الملفات المحملة تالفة</string>
+    <string name="download_error_invalid_download_retry">هناك ملف تالف، جاري إعادة التحميل</string>
+    <string name="download_error_network_retry">لا يمكن اﻻتصال بالانترنت، جاري إعادة المحاولة…</string>
+    <string name="notification_download_canceled">تم إلغاء التحميل</string>
+    <string name="sdcard_error">لم يتم العثور على بطاقه الذاكرة الرقمية. أعد وضعها و حاول مرة أخرى.</string>
+
+    <!-- downloading dialogs -->
+    <string name="download_progress">تم تحميل %1$s / %2$s</string>
+    <string name="download_sura_progress">جاري التحميل من سورة %3$d - %1$s / %2$s</string>
+    <string name="download_sura_ayah_progress">جاري تحميل السورة %1$d الآية %2$d</string>
+    <string name="process_progress">جاري اﻹعداد %1$d / %2$d</string>
+    <string name="download_retry">أعد المحاولة</string>
+    <string name="download_cancel">إلغاء</string>
+    <string name="download_extra_data">لدعم الترجمة و المشاركة يجب تحميل بعض
+       الملفات .. حمل الأن؟</string>
+    <string name="download_non_wifi_prompt">أنت لست على واي فاي.  تحميل البيانات على أية حال؟</string>
+
+    <!-- translation database stuff -->
+    <string name="remove_dlg_title">امسح التفسير/الترجمة؟</string>
+    <string name="remove_dlg_msg">هل ترغب في حذف %1$s؟</string>
+    <string name="error_getting_translation_list">لم يتم تحميل الملف المطلوب، من فضلك أعد المحاولة</string>
+    <string name="search_data">بيانات البحث</string>
+    <string name="need_translation">لم يتم تحميل أي تفسير أو ترجمة</string>
+    <string name="get_translations">حمّل التفسير أو الترجمة</string>
+
+    <!-- help -->
+    <string name="email_us">إذا لم تجد إجابة سؤالكم بالأعلى فيمكنكم مراسلتنا على هذا البريد ahmedhashimpro@gmail.com للدعم. ونحيط بكم علما أنه تصلنا كثير من الأسئلة، ولهذا قد لا نرد على جميع الرسائل.‎</string>
+
+    <!-- sura metainfo -->
+    <string name="makki">مكية</string>
+    <string name="madani">مدنية</string>
+    <plurals name="verses">
+        <item quantity="zero">آية</item>
+        <item quantity="one">آية</item>
+        <item quantity="two">آيتان</item>
+        <item quantity="few">%s آيات</item>
+        <item quantity="many">%s آية</item>
+        <item quantity="other">%s آية</item>
+    </plurals>
+
+    <!-- ayah action panel -->
+    <string name="play_from">من</string>
+    <string name="play_to">إلى</string>
+    <string name="play_restrict_range">" شغل ما تم اختياره من الآيات فقط"</string>
+    <string name="play_verses_range">تشغيل مجموعة الآيات:</string>
+    <string name="play_each_verse">تشغيل كل آية:</string>
+    <string name="play_apply">تطبيق</string>
+    <string name="play_apply_and_play">تطبيق وتشغيل</string>
+
+    <string-array name="repeatValues">
+        <item>مرة واحدة</item>
+        <item>مرتان</item>
+        <item>ثلاث مرات</item>
+        <item>لانهائي</item>
+    </string-array>
+
+    <string name="playback_prompt_title">بدء التشغيل من:</string>
+    <string name="starting_page_label">أول الصفحة</string>
+
+    <!-- long press -->
+    <string name="ayah_copied_popup">تم نسخ الآية</string>
+
+    <!-- bookmarks & tags contextual action bar -->
+    <string name="tag_bookmark">تصنيف المرجعية</string>
+    <string name="delete_tag">حذف التصنيف</string>
+    <string name="edit_tag">تعديل الصنف</string>
+    <string name="new_tag">صنف جديد</string>
+    <string name="not_tagged">غير مصنف</string>
+
+    <!-- tag dialog -->
+    <string name="tag_dlg_title">صنف</string>
+    <string name="tag_name">اسم الصنف</string>
+
+    <!-- bookmark & tag list -->
+    <string name="bookmarks_list_empty">لا توجد أي مرجعيات</string>
+
+    <!-- audio manager -->
+    <string name="audio_manager">إدارة الصوتيات</string>
+    <string name="prefs_use_arabic_summary_on">سيتم تحويل التطبيق إلى اللغة العربية</string>
+    <string name="prefs_use_arabic_title">الوضع العربي</string>
+<!--    <string name="play">تشغيل</string>-->
+    <string name="stop">إيقاف</string>
+
+    <string name="downloadTabletPrompt">تم تحسين الصور الخاصه بالتابلت. هل تود تحميلها الان؟</string>
+    <string name="menu_sort_group_by_tags">رتب حسب التصنيفات</string>
+    <string name="about_description">هذا التطبيق مجاني. لا تنسونا من صالح دعائكم.</string>
+    <string name="about_data_sources">مصادر المعلومات</string>
+    <string name="about_images">الصور</string>
+    <string name="about_madani_images">صور صفحات القرآن الموجودة بالتطبيق مصدرها مجمع الملك فهد لطباعة المصحف الشريف بالمدينة المنورة</string>
+    <string name="about_naskh_images">صور صفحات القرآن الموجودة بتطبيق النسخ مأخوذه بتصريح من SHL Info Systems</string>
+    <string name="prefs_category_advanced">خيارات متقدمة</string>
+    <string name="prefs_category_advanced_summary">استيراد وتصدير المرجعيات وإعدادات أخرى</string>
+    <string name="prefs_export_title">تصدير</string>
+    <string name="prefs_export_summary">تصدير نسخة من المرجعيات و التصنيفات.</string>
+    <string name="prefs_page_type_title">نوع طباعة المصحف (تجريبي )</string>
+    <string name="prefs_page_type_summary">اختر نوع الصفحات</string>
+
+    <string name="import_data">استيراد البيانات</string>
+    <string name="import_data_and_override">"اذا قمت باستيراد هذا الملف، سيتم استبدال المرجعيات ب  %1$d مرجعيات و %2$d تصنيفات. استيراد؟"</string>
+    <string name="import_successful">تم الاستيراد بنجاح</string>
+    <string name="export_data_error">خطأ في استيراد البيانات.</string>
+    <string name="warning">تحذير</string>
+
+    <string name="recent_pages">آخر المتصفحات</string>
+
+    <plurals name="bookmark_tag_deleted">
+        <item quantity="zero">لم يتم حذف عناصر</item>
+        <item quantity="one">تم حذف عنصر واحد</item>
+        <item quantity="two">تم حذف عنصران</item>
+        <item quantity="few">تم حذف %d عناصر</item>
+        <item quantity="many">تم حذف %d عنصر</item>
+    </plurals>
+    <string name="undo">تراجع</string>
+    <string name="notification_channel_download">تحميل ملفات القرآن</string>
+    <string name="notification_channel_audio">تلاوة القرآن</string>
+    <string name="audio_manager_delete_selection">حذف التحديد</string>
+    <string name="audio_manager_download_selection">تحميل التحديد</string>
+    <string name="audio_manager_download_all">تحميل الكل</string>
+    <string name="audio_manager_surah_delete">حذف السورة</string>
+    <string name="audio_manager_surah_download">تحميل السورة</string>
+<!--    <string name="next">التالي</string>-->
+    <string name="previous">السابق</string>
+    <string name="tag_blank_tag_error">لا يمكن أن يكون اسم التصنيف فارغًا</string>
+    <string name="tag_duplicate_tag_error">التصنيف مكرر، اكتب تصنيفا جديدا</string>
+    <string name="more_translations">المزيد من الترجمات والتفاسير</string>
+    <string name="prefs_preview">معاينة</string>
+    <string name="menu_show_date">إظهار تاريخ الإضافة</string>
+    <string name="pause">وقف مؤقت</string>
+    <string name="prefs_category_dual_screen">تفضيلات الصفحتين المتجاورتين</string>
+    <string name="prefs_split_page_and_translation_title">عرض صفحة من المصحف وأخرى من الترجمة</string>
+    <string name="prefs_split_page_and_translation_summary">عند تفعيل الصفحتين المتجاورتين، تعرض صفحة المصحف والترجمة معا</string>
+    <string name="move_up">تحريك للأعلى</string>
+    <string name="move_down">تحريك للأسفل</string>
+    <string name="delete_translation">حذف الترجمة</string>
+    <string name="prefs_megabytes_int">%1$d م ب</string>
+    <string name="prefs_megabytes_str">%s م ب</string>
+    <string name="storage_permission_please_restart">يرجى إعادة تشغيل التطبيق لتفعيل الإذن</string>
+    <string name="storage_permission_rationale">تطبيق قرآن يحتاج إلى إذنك بالوصول إلى الذاكرة الخارجية. التطبيق سيعمل دون الإذن، لكن عند مسح البيانات أو حذف التطبيق، ستحذف جميع صفحات المصحف والبيانات والصوت. هل تريد الإذن لتطبيق قرآن؟</string>
+    <string name="about_contributors_summary">قائمة بأسماء المساهمين في تطوير تطبيق قرآن أندرويد</string>
+    <string name="about_contributors">المساهمون</string>
+    <string name="about_others">أخرى</string>
+    <string name="about_open_source">مشاريع مفتوحة المصدر</string>
+    <string name="about_furqan" translatable="false">الباحث القرآني (tafsir.app)</string>
+    <string name="about_quran_ksu">مشروع المصحف الإلكتروني</string>
+    <string name="about_quran_ksu_summary">مشروع المصحف الإلكتروني بجامعة الملك سعود هو مصدر عدد من التفاسير والترجمات المستخدمة في التطبيق. وهو أيضا مصدر تلاوة الشيخ أيمن سويد.</string>
+    <string name="about_quranicaudio_summary">التلاوات الصوتية المتصلة</string>
+    <string name="about_furqan_summary">النص العثماني والتفاسير العربية</string>
+    <string name="about_quran_enc" translatable="false">موسوعة القرآن الكريم</string>
+    <string name="about_quran_enc_summary">الترجمات لعدد من اللغات</string>
+    <string name="about_tanzil" translatable="false">تنزيل</string>
+    <string name="about_tanzil_summary">ترجمات لبعض اللغات</string>
+    <string name="please_wait">الرجاء الانتظار…</string>
+    <string name="exported_data">صدرت البيانات إلى %1$s</string>
+    <string name="audio_manager_remove_audio_title">حذف الملف الصوتي؟</string>
+    <string name="audio_manager_remove_audio_msg">سيتم حذف الملف الصوتي ل%1$s. متأكد؟</string>
+    <string name="about_noorhidayat_summary">خط نورحِرا وترجمة مفتي تقي</string>
+    <string name="about_qaloon_images">صور صفحات القرآن برواية قالون مأخوذة بتصريح من Nous-Mêmes Éditions Et Diffusion (تونس)</string>
+    <string name="audio_updated_title">تحديث الملفات الصوتية</string>
+    <string name="audio_updated_text">تم تحديث عدد من الملفات الصوتية. تطبيق قرآن حذف نسختك القديمة من هذه الملفات لتتمكن من تنزيل النسخ الجديدة عند تشغيلك لهذه الملفات في المرة القادمة.</string>
+    <string name="import_data_error">ملف النسخة الاحتياطية تالف (أو فشلت قراءة النسخة الاحتياطية)</string>
+    <string name="import_data_permissions_error">فشلت قراءة ملف النسخة الاحتياطية بسبب فقدان الإذن</string>
+    <string name="please_grant_permissions">رجاء امنح الإذن في الإعدادات</string>
+    <string name="about_noorhidayat" translatable="false">نور وهداية (Noorhidayat)</string>
+    <string name="kitkat_external_message">بسبب قيود الأندرويد، إذا اخترت تخزين ملفات قرآن على الذاكرة الخارجية ثم مسحت التطبيق أو بيانات قرآن أندرويد، ستحذف جميع صفحات المصحف والصوت ولابد من تحميلها مجددا. هل ترغب في استعمال الذاكرة الخارجية؟</string>
+    <string name="scoped_storage_message">بسبب القيود الجديدة في أندرويد 11، تخزين بيانات التطبيق في
+    مكان غير مجلد التطبيق الافتراضي قد يؤدي إلى عدم تمكن التطبيق من الوصول لملفاته في إصدارات أندرويد
+    القادمة، هل ترغب في نقل البيانات على أية حال؟
+  </string>
+    <string name="comma_with_spaces">" ، "</string>
+    <string name="TheHolyQuran">افتح المصحف</string>
+    <string name="acceptPolicy1">بالتسجيل أنت تقبل لدينا</string>
+    <string name="aceptPolicy2">وقد قرأت</string>
+    <string name="terms_amp_conditions"><![CDATA[الأحكام والشروط]]></string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="sign_up_with_email">تسجيل بالبريد الإلكتروني</string>
+    <string name="block_user">حظر المستخدم</string>
+    <string name="Blocked">تم حظر المستخدم</string>
+    <string name="TitlesAnimation">عناوين متحركة</string>
+</resources>

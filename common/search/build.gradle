@@ -1,0 +1,15 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+  namespace "com.medoapps.www.onlinequran.common.search"
+  compileSdkVersion deps.android.build.compileSdkVersion
+  defaultConfig {
+    minSdkVersion deps.android.build.minSdkVersion
+    targetSdkVersion deps.android.build.targetSdkVersion
+  }
+}
+
+dependencies {
+}

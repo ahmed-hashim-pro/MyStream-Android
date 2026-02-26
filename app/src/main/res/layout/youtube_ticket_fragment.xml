@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
+    android:orientation="vertical"
+    >
+
+
+    <!--<com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+        android:id="@+id/youtube_player_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+         />
+    -->
+    <!--<fragment
+        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+        android:id="@+id/youtube_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>-->
+    <!--<com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>-->
+
+    <!--<fragment
+        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+        android:id="@+id/youtubesupportfragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="Instantiatable" />-->
+
+    <!--<View
+        android:id="@+id/player"
+        android:layout_width="match_parent"
+        class="com.google.android.youtube.player.YouTubePlayerView"
+        android:layout_height="wrap_content" />-->
+
+    <!--<com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>-->
+
+    <!--<fragment
+        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragmentX"
+        android:id="@+id/youtube_fragment2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>-->
+</LinearLayout>

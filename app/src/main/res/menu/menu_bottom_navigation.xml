@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_quran"
+        android:checked="true"
+        android:icon="@drawable/holyquran"
+        android:title="@string/HolyQuran"
+        app:showAsAction="ifRoom" />
+    <!--<item
+        android:id="@+id/action_youtube"
+        android:checked="false"
+        android:icon="@drawable/outline_ondemand_video_24"
+        android:title="@string/YouTube"
+        app:showAsAction="ifRoom" />-->
+    <item
+        android:id="@+id/action_radio"
+        android:checked="false"
+        android:icon="@drawable/outline_radio_24"
+        android:title="@string/Radio"
+        app:showAsAction="ifRoom" />
+
+
+
+    <item
+        android:id="@+id/action_other"
+        android:checked="false"
+        android:icon="@drawable/outline_category_24"
+        android:title="@string/OtherCategories"
+        app:showAsAction="ifRoom" />
+
+
+    <!--<item
+        android:id="@+id/action_recent"
+        android:checked="false"
+        android:icon="@drawable/outline_play_circle_outline_24"
+        android:title="@string/heading_recent"
+        app:showAsAction="ifRoom" />-->
+    <!--<item
+        android:id="@+id/action_top_posts"
+        android:checked="false"
+        android:icon="@drawable/top_posts"
+        android:title="@string/heading_my_top_posts"
+        app:showAsAction="ifRoom" />-->
+</menu>

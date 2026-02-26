@@ -1,0 +1,107 @@
+{
+  "project_info": {
+    "project_number": "192321222383",
+    "firebase_url": "https://online-quran-3b07c.firebaseio.com",
+    "project_id": "online-quran-3b07c",
+    "storage_bucket": "online-quran-3b07c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192321222383:android:64cd549bdecf7bd1",
+        "android_client_info": {
+          "package_name": "com.onlines.quranonlinesapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192321222383-3uupssu62q1r7l2qk2414uonjfd2gihd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.onlines.quranonlinesapp",
+            "certificate_hash": "b1eaee5b7d00a0caa7cf4a2430e732990d4d58d1"
+          }
+        },
+        {
+          "client_id": "192321222383-jkm04gfavksc1i96h5i7islgkqa7oeus.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtVEtxVy5C186G0Tp0yO6-b5s_WybDSh0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192321222383-jkm04gfavksc1i96h5i7islgkqa7oeus.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192321222383:android:bc9dfdffcc528287",
+        "android_client_info": {
+          "package_name": "com.medoapps.www.onlinequran"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192321222383-7tneo2jilh3p3jaq1ul2vqivtaf5pep6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.medoapps.www.onlinequran",
+            "certificate_hash": "09582d6e3810f18bc4366342603369c960d13cc0"
+          }
+        },
+        {
+          "client_id": "192321222383-p45u5rdpqsh5f182q8n7fi5uc48u8ifd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.medoapps.www.onlinequran",
+            "certificate_hash": "b1eaee5b7d00a0caa7cf4a2430e732990d4d58d1"
+          }
+        },
+        {
+          "client_id": "192321222383-jkm04gfavksc1i96h5i7islgkqa7oeus.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtVEtxVy5C186G0Tp0yO6-b5s_WybDSh0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192321222383-jkm04gfavksc1i96h5i7islgkqa7oeus.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
