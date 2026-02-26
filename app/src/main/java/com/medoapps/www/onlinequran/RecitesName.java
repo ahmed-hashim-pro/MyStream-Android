@@ -397,7 +397,7 @@ public class RecitesName extends Fragment  {
 //        loadBannerAds(recyclerViewItems);
         MyListAdapter adapter = new MyListAdapter(recyclerViewItems);
 
-        lVRecites.setHasFixedSize(true);
+        lVRecites.setHasFixedSize(false);
         lVRecites.setLayoutManager(new LinearLayoutManager(getContext()));
         lVRecites.setAdapter(adapter);
 
@@ -437,9 +437,10 @@ public class RecitesName extends Fragment  {
 
                     for (int i = 2; i <= recyclerViewItems.size(); i += 15) {
 
-                        if (tempItemsIndex < mPosts)
-                        recyclerViewItems.add(i, tempItems.get(tempItemsIndex));
-                        tempItemsIndex = tempItemsIndex+1;
+                        if (tempItemsIndex < mPosts) {
+                            recyclerViewItems.add(i, tempItems.get(tempItemsIndex));
+                            tempItemsIndex = tempItemsIndex + 1;
+                        }
 
                     }
 

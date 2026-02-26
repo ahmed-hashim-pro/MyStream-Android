@@ -295,7 +295,9 @@ public class Settings extends AppCompatActivity {
     };
     private void logOut(){
         FirebaseAuth.getInstance().signOut();
-        MainActivity.instance8.finish();
+        if (MainActivity.instance8Ref != null && MainActivity.instance8Ref.get() != null) {
+            MainActivity.instance8Ref.get().finish();
+        }
         finish();
         StorageUtil storageUtil = new StorageUtil(this);
         storageUtil.storeProfileCompleted(false);

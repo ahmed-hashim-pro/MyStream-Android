@@ -12,7 +12,7 @@
         android:background="@color/grey_500"
         android:gravity="center|right"
         android:orientation="horizontal"
-        android:paddingRight="20dp">
+        android:paddingEnd="20dp">
 
         <ImageView
             android:layout_width="40dp"
@@ -54,11 +54,11 @@
             android:id="@+id/editGroupName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_weight="3"
             android:hint="@string/enter_group_name"
             android:paddingBottom="20dp"
-            android:paddingLeft="20dp" />
+            android:paddingStart="20dp" />
     </LinearLayout>
     <View
         android:id="@+id/line"

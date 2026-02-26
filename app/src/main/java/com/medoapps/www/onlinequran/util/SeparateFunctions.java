@@ -31,7 +31,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
-import com.google.android.play.core.tasks.Task;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.ShortDynamicLink;
@@ -288,8 +288,6 @@ public class SeparateFunctions {
 
 
 
-        Log.d(TAG, String.valueOf(dir));
-
         return dir;
     }
     public Uri getAudioCollection(){
@@ -396,7 +394,7 @@ public class SeparateFunctions {
 
                 // Set parameters
                 // ...
-                .buildShortDynamicLink(3)
+                .buildShortDynamicLink(ShortDynamicLink.Suffix.SHORT)
                 /*.addOnCompleteListener(activity, new OnCompleteListener<ShortDynamicLink>() {
                     @Override
                     public void onComplete(@NonNull com.google.android.gms.tasks.Task<ShortDynamicLink> task) {

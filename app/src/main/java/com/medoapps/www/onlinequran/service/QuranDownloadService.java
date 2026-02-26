@@ -2,6 +2,7 @@ package com.medoapps.www.onlinequran.service;
 
 import android.app.Service;
 import android.content.Context;
+import android.os.Build;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
@@ -290,8 +291,15 @@ public class QuranDownloadService extends Service implements
       notifier.resetNotifications();
 
       // get the start/end ayah info if it's a ranged download
-      SuraAyah startAyah = (SuraAyah) intent.getSerializableExtra(EXTRA_START_VERSE);
-      SuraAyah endAyah = (SuraAyah) intent.getSerializableExtra(EXTRA_END_VERSE);
+      SuraAyah startAyah;
+      SuraAyah endAyah;
+      if (Build.VERSION.SDK_INT >= 33) {
+        startAyah = intent.getSerializableExtra(EXTRA_START_VERSE, SuraAyah.class);
+        endAyah = intent.getSerializableExtra(EXTRA_END_VERSE, SuraAyah.class);
+      } else {
+        startAyah = (SuraAyah) intent.getSerializableExtra(EXTRA_START_VERSE);
+        endAyah = (SuraAyah) intent.getSerializableExtra(EXTRA_END_VERSE);
+      }
       boolean isGapless = intent.getBooleanExtra(EXTRA_IS_GAPLESS, false);
 
       String outputFile = intent.getStringExtra(EXTRA_OUTPUT_FILE_NAME);

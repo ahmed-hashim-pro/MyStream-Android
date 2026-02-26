@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -53,7 +54,7 @@ public class Downloads extends AppCompatActivity{
     public TextView songCurrentDurationLabel;
     public  TextView songTotalDurationLabel;
     public  Utilities utils;
-    public static Handler mHandler = new Handler();
+    public static Handler mHandler = new Handler(Looper.getMainLooper());
     final int[] save = {-1};
     public LinearLayout playerLayout;
 
@@ -294,17 +295,18 @@ public ArrayList<SongInfo> getAllSongs() {
         if (cursor != null ) {
             if (cursor.moveToFirst()) {
 
-                    String song_name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
-                    String songs = null;
-                    /*if (song_name.endsWith("mp3") && song_name.startsWith("Medo")) {
-
-                        songs = song_name;
-                    }*/
-                    String fullpath = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                    String album_name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                    String artist_name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                    String title_name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                    String duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
+                    int colName = cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME);
+                    int colData = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
+                    int colAlbum = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+                    int colArtist = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+                    int colTitle = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
+                    int colDuration = cursor.getColumnIndex(MediaStore.Audio.Media.DURATION);
+                    String song_name = colName >= 0 ? cursor.getString(colName) : "";
+                    String fullpath = colData >= 0 ? cursor.getString(colData) : "";
+                    String album_name = colAlbum >= 0 ? cursor.getString(colAlbum) : "";
+                    String artist_name = colArtist >= 0 ? cursor.getString(colArtist) : "";
+                    String title_name = colTitle >= 0 ? cursor.getString(colTitle) : "";
+                    String duration = colDuration >= 0 ? cursor.getString(colDuration) : "0";
 
                     SongsList.add(new SongInfo(fullpath, song_name, album_name, artist_name,title_name,duration));
 

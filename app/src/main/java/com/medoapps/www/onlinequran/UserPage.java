@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import androidx.core.content.IntentCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -174,8 +175,8 @@ public class UserPage extends AppCompatActivity {
     }
     private void onUploadResultIntent(Intent intent) {
         // Got a new intent from MyUploadService with a success or failure
-        mDownloadUrlUserPhoto = intent.getParcelableExtra(MyUploadService.EXTRA_DOWNLOAD_URL_UserPhoto);
-        mFileUriUserPhoto = intent.getParcelableExtra(MyUploadService.EXTRA_FILE_URI_UserPhoto);
+        mDownloadUrlUserPhoto = IntentCompat.getParcelableExtra(intent, MyUploadService.EXTRA_DOWNLOAD_URL_UserPhoto, Uri.class);
+        mFileUriUserPhoto = IntentCompat.getParcelableExtra(intent, MyUploadService.EXTRA_FILE_URI_UserPhoto, Uri.class);
 
         if (mDownloadUrlUserPhoto!=null){
             String u2 = "https://firebasestorage.googleapis.com/v0/b/online-quran-3b07c.appspot.com/o/photos%2Fimage%3A10205?alt=media&token=52f537ce-fb27-4aaa-9ba5-412b9e71d7f5";

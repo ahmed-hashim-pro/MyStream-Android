@@ -8,6 +8,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.pm.ServiceInfo;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -262,12 +263,16 @@ public class DownloadService extends Service  {
 //                .addAction(new NotificationCompat.Action(R.drawable.ic_cancel_white_18dp,getString(R.string.cancel),pendingIntent));
 
 
-        startForeground(NOTIFICATION_ID, mBuilder.build());
+        if (SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            startForeground(NOTIFICATION_ID, mBuilder.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+        } else {
+            startForeground(NOTIFICATION_ID, mBuilder.build());
+        }
 
 //        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
-    public class notificationButtonReceiver extends BroadcastReceiver {
+    public static class notificationButtonReceiver extends BroadcastReceiver {
         public static final String ACTION9 = "ACTION9";
 
         @Override
@@ -542,6 +547,7 @@ public class DownloadService extends Service  {
             }
             try {
                 Intent broadcastIntent = new Intent(Broadcast_LoadAya);
+                broadcastIntent.setPackage(getPackageName());
                 sendBroadcast(broadcastIntent);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -64,8 +64,18 @@ node_modules/
 
 # dotenv environment variables file
 .env
+local.properties
+
+# Signing keys and secrets
 /key/
+*.jks
+*.keystore
+*.pepk
+google-services.json
+
+# IDE
 /.idea/
 /feature/analytics-noop/build/
 */build/
 build
+.idea

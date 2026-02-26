@@ -6,12 +6,9 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.medoapps.www.onlinequran.QuranApplication.OnShowAdCompleteListener;
 import com.medoapps.www.onlinequran.models.Post;
 import com.medoapps.www.onlinequran.util.SeparateFunctions;
@@ -19,8 +16,7 @@ import com.medoapps.www.onlinequran.util.SeparateFunctions;
 import java.util.ArrayList;
 
 public class SplashScreen extends AppCompatActivity {
-    private static final String TAG = "SpalshScreen";
-    private AdView mAdView;
+    private static final String TAG = "SplashScreen";
     public ImageView splash;
     private static final long COUNTER_TIME = (long) 1;
     private PreferenceManager prefManager;
@@ -38,6 +34,7 @@ public class SplashScreen extends AppCompatActivity {
     CountDownTimer countDownTimer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
@@ -54,10 +51,6 @@ public class SplashScreen extends AppCompatActivity {
 
 
         splash=(ImageView) findViewById(R.id.imageView3);
-        //MobileAds.initialize(this, getString(R.string.ad_APP_ID));
-        mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-//        mAdView.loadAd(adRequest);
 
         //load interstial ad by atimer
         AdmobInterstitial.loadInterstitial(this);
@@ -106,8 +99,6 @@ public class SplashScreen extends AppCompatActivity {
         }
     }
     private void createTimer(long seconds) {
-        final TextView counterTextView = findViewById(R.id.timer);
-
         countDownTimer =
                 new CountDownTimer(seconds * 1000, 1000) {
                     @Override

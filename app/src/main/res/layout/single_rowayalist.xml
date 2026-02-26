@@ -12,10 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         app:cardElevation="10dp"
         app:cardMaxElevation="12dp"
@@ -32,9 +30,9 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_weight="0"
-                android:tint="@color/primary"
+                app:tint="@color/primary"
                 android:transitionName="shared_surah_image"
                 android:src="@drawable/btn_play" />
 
@@ -45,14 +43,13 @@
                 android:transitionName="shared_surah"
                 android:layout_alignBottom="@+id/imageView"
                 android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/imageView"
+                android:layout_toStartOf="@+id/imageView"
                 android:layout_toEndOf="@+id/button"
-                android:layout_toRightOf="@+id/button"
                 android:layout_weight="1"
 
                 android:paddingTop="5pt"
-                android:paddingRight="2dp"
-                android:paddingLeft="7dp"
+                android:paddingEnd="2dp"
+                android:paddingStart="7dp"
                 android:text="Large Text"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/black" />
@@ -73,7 +70,6 @@
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentTop="true"
                         android:background="@color/transparent"
                         android:text="@string/downlaod"
@@ -83,7 +79,6 @@
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentTop="true"
                         android:background="@color/transparent"
                         android:text="@string/downlaod"
@@ -98,14 +93,12 @@
                     android:gravity="center"
                     android:layout_below="@+id/button"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentLeft="true"
                     android:layout_toStartOf="@+id/textView1"
-                    android:layout_toLeftOf="@+id/textView1"
                     android:text="Medium Text"
                     android:textAlignment="center"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/black"
-                    android:textSize="9dp" />
+                    android:textSize="9sp" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -115,10 +108,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         app:cardBackgroundColor="@color/white"
         app:cardElevation="10dp"

@@ -28,9 +28,8 @@
                 layout="@layout/include_post_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/post_author_layout"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="5dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="5dp"
                 android:visibility="gone"
                 android:layout_marginTop="10dp" />
             <RelativeLayout
@@ -75,7 +74,7 @@
                                     android:id="@+id/imageView5"
                                     android:layout_width="match_parent"
                                     android:layout_height="810px"
-                                    android:layout_marginRight="-15dp"
+                                    android:layout_marginEnd="-15dp"
                                     android:scaleType="fitXY"
                                     app:srcCompat="@drawable/backgroundimage" />
 
@@ -142,7 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/two"
-                android:layout_marginLeft="7dp"
+                android:layout_marginStart="7dp"
                 android:layout_marginTop="5dp"
                 android:paddingTop="7px"
                 android:paddingBottom="10px"
@@ -153,7 +152,7 @@
                     layout="@layout/include_youtube_post_author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layoutDirection="ltr"
                     android:visibility="gone" />
 
@@ -172,11 +171,11 @@
                         android:id="@+id/textView13"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="7dp"
-                        android:paddingRight="7dp"
+                        android:paddingStart="7dp"
+                        android:paddingEnd="7dp"
                         android:text="Loading..."
                         android:textColor="@color/black"
-                        android:textSize="14dp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -184,9 +183,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
-                        android:paddingLeft="9dp"
+                        android:paddingStart="9dp"
                         android:paddingTop="4px"
-                        android:paddingRight="9dp"
+                        android:paddingEnd="9dp"
                         android:paddingBottom="4px"
                         android:text="" />
                 </LinearLayout>
@@ -198,7 +197,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/post_author_layout"
                     android:layout_alignBottom="@+id/post_author_layout"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -206,8 +205,8 @@
                         android:id="@+id/option"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="5dp"
                         android:background="?attr/selectableItemBackground"
                         android:onClick="showPopup"
                         android:src="@drawable/baseline_more_vert_24" />
@@ -221,9 +220,10 @@
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
+                android:orientation="horizontal"
                 android:layout_below="@+id/userArea"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginEnd="7dp"
                 android:background="@color/grey_300">
 
             </LinearLayout>
@@ -231,8 +231,8 @@
                 android:id="@+id/interact"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:layout_below="@+id/divider">
@@ -252,7 +252,7 @@
                         android:id="@+id/star"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_toRightOf="@+id/post_num_stars"
+                        android:layout_toEndOf="@+id/post_num_stars"
                         android:background="?attr/selectableItemBackground"
                         android:src="@drawable/ic_toggle_star_outline_24" />
 
@@ -260,8 +260,8 @@
                         android:id="@+id/post_num_stars"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="3dp"
                         android:gravity="center"
                         tools:text="75" />
 
@@ -293,7 +293,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="right"
+                    android:gravity="end"
                     android:layout_gravity="center"
                     android:visibility="invisible"
                     android:orientation="horizontal"
@@ -307,19 +307,18 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:gravity="center"
                         android:text="11"
                         android:textColor="@color/black"
                         android:textSize="14sp"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="10dp"
                         android:textStyle="bold" />
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="match_parent"
-                        android:layout_toLeftOf="@+id/views"
+                        android:layout_toStartOf="@+id/views"
                         android:src="@drawable/outline_visibility_24" />
                 </RelativeLayout>
             </LinearLayout>
@@ -355,7 +354,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="true"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:background="@null"
                 android:visibility="gone"
                 ads:srcCompat="@drawable/ic_close_black_18dp" />
@@ -392,8 +391,8 @@
                     android:id="@+id/tv_video_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:text="Video status: "
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
             </LinearLayout>

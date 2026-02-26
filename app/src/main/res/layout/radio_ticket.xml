@@ -5,8 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/transparent"
     android:orientation="vertical"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
+    android:paddingStart="5dp"
+    android:paddingEnd="5dp"
     >
 
     <androidx.cardview.widget.CardView
@@ -14,9 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
         app:cardElevation="20dp"
         android:layoutDirection="rtl"
@@ -30,8 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:focusable="false"
             android:focusableInTouchMode="false"
             >
@@ -42,25 +41,23 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginEnd="7dp"
                 android:layout_weight="0"
                 android:focusable="false"
                 android:layout_gravity="center"
                 android:focusableInTouchMode="false"
                 android:transitionName="shared_surah_image"
-                android:tint="@color/primary"
+                app:tint="@color/primary"
                 android:src="@drawable/btn_play" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/imgchannel"
+                android:layout_toStartOf="@+id/imgchannel"
                 android:layout_weight="1">
 
 
@@ -78,7 +75,7 @@
                         android:transitionName="shared_surah"
                         android:focusableInTouchMode="false"
                         android:gravity="center_vertical"
-                        android:paddingRight="7dp"
+                        android:paddingEnd="7dp"
                         android:text="Large Text"
                         android:singleLine="true"
                         android:ellipsize="marquee"
@@ -86,7 +83,7 @@
                         android:marqueeRepeatLimit="marquee_forever"
                         android:scrollHorizontally="true"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="15dp" />
+                        android:textSize="15sp" />
                     <TextView
                         android:id="@+id/txtRadioRewayah"
                         android:layout_width="match_parent"
@@ -95,8 +92,8 @@
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:gravity="center_vertical"
-                        android:paddingRight="7dp"
-                        android:paddingLeft="7dp"
+                        android:paddingEnd="7dp"
+                        android:paddingStart="7dp"
                         android:text="Large Text"
                         android:singleLine="true"
                         android:ellipsize="marquee"
@@ -105,7 +102,7 @@
                         android:scrollHorizontally="true"
                         android:textColor="@color/grey_500"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="11dp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
 
 
@@ -117,7 +114,6 @@
                 android:layout_width="40dp"
                 android:layout_height="30dp"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:background="@color/transparent"
                 android:text="@string/downlaod"
@@ -128,7 +124,6 @@
                 android:layout_width="20dp"
                 android:layout_height="25dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="center"
                 android:layout_weight="0"
@@ -145,10 +140,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
         app:cardBackgroundColor="@color/white"
         app:cardElevation="10dp"

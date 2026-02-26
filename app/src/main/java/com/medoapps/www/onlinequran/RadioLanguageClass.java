@@ -456,7 +456,7 @@ public class RadioLanguageClass {
             // the separate aya system
             for (int i = 0; i < ListRange.separatesAya.length; i++) {
                 try{
-                    Log.d("gdfgrgfdg", String.valueOf(ListRange.separatesAya[i]));
+                    // Log.d("gdfgrgfdg", String.valueOf(ListRange.separatesAya[i]));
                     String folder_main = "My Stream";
                     AuthorClass ac = new AuthorClass();
                     ac = ListAya.get(ListRange.separatesAya[i]);
@@ -472,11 +472,11 @@ public class RadioLanguageClass {
                     {
                         if (Rewayat!= null){
                             AYAPAth ="http://server"+  serverNumber (ReciteName) + ".mp3quran.net/" +ReciteName + "/"+ Rewayat + "/" +  ac.ServerName + ".mp3";
-                            Log.d("gdfgrgfdg", AYAPAth);
+                            // Log.d("gdfgrgfdg", AYAPAth);
 
                         }else {
                             AYAPAth ="http://server"+  serverNumber (ReciteName) + ".mp3quran.net/" +ReciteName + "/"+  ac.ServerName + ".mp3";
-//                            Log.d("gdfgrgfdg", AYAPAth);
+//                            // Log.d("gdfgrgfdg", AYAPAth);
 
                         }
 
@@ -508,11 +508,11 @@ public class RadioLanguageClass {
                     {
                         if (Rewayat!= null){
                             AYAPAth ="http://server"+  serverNumber (ReciteName) + ".mp3quran.net/" +ReciteName + "/"+ Rewayat + "/" +  ac.ServerName + ".mp3";
-                            Log.d("gdfgrgfdg", AYAPAth);
+                            // Log.d("gdfgrgfdg", AYAPAth);
 
                         }else {
                             AYAPAth ="http://server"+  serverNumber (ReciteName) + ".mp3quran.net/" +ReciteName + "/"+  ac.ServerName + ".mp3";
-                            Log.d("gdfgrgfdg", AYAPAth);
+                            // Log.d("gdfgrgfdg", AYAPAth);
 
                         }
 

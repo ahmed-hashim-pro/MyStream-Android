@@ -34,7 +34,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="?attr/actionBarSize"
                     android:background="@null"
-                    android:tint="@color/toolbarTextColor"
+                    android:contentDescription="@string/cd_back"
+                    app:tint="@color/toolbarTextColor"
                     ads:srcCompat="@drawable/outline_arrow_back_ios_24" />
 
 
@@ -55,7 +56,7 @@
                     android:gravity="center"
                     android:text="@string/title_activity_aya_list"
                     android:textColor="@color/toolbarTextColor"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />-->
 
                 <LinearLayout
@@ -75,7 +76,7 @@
                         android:paddingEnd="15dp"
                         android:text="Reciter"
                         android:textColor="@color/toolbarTextColor"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:singleLine="true"
                         android:ellipsize="marquee"
@@ -114,10 +115,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="5dp"
-                    android:layout_marginRight="5dp"
                     android:layout_marginBottom="5dp"
                     app:cardBackgroundColor="@color/white"
                     app:cardElevation="10dp"
@@ -135,12 +134,12 @@
                             android:id="@+id/textView3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
                             android:layout_weight="0"
-                            android:paddingLeft="5dp"
+                            android:paddingStart="5dp"
                             android:paddingTop="15dp"
-                            android:paddingRight="5pt"
+                            android:paddingEnd="5pt"
                             android:text="@string/downlaod"
                             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -163,10 +162,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_marginStart="5dp"
-                android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_marginRight="5dp"
                 android:layout_marginBottom="5dp"
                 app:cardBackgroundColor="@color/white"
                 app:cardElevation="40dp"
@@ -185,13 +182,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_alignParentLeft="true">
+                        android:layout_alignParentStart="true">
                         <ImageView
                             android:layout_width="50dp"
                             android:layout_height="30dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp"
                             android:background="@null"
+                            android:contentDescription="@string/cd_download"
                             ads:srcCompat="@drawable/downloadnew" />
                         <TextView
                             android:layout_width="match_parent"

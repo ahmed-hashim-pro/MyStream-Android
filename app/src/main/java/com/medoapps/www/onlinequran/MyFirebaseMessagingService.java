@@ -129,7 +129,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 PendingIntent.FLAG_IMMUTABLE);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(getNotificationIcon())
                 .setContentTitle(title)
                 .setContentText(messageBody)
@@ -239,7 +239,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .setLargeIcon(result)
                     .setStyle(new NotificationCompat.BigPictureStyle()
                             .bigPicture(result)
-                            .bigLargeIcon(null))
+                            .bigLargeIcon((android.graphics.Bitmap) null))
                     .setAutoCancel(true)
                     .setWhen(when)
                     .setContentIntent(createContentIntent(getApplicationContext()))

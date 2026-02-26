@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.IntentCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -352,8 +353,8 @@ public class NewPostActivity extends BaseActivity  {
 
     private void onUploadResultIntent(Intent intent) {
         // Got a new intent from MyUploadPostAudioVideo with a success or failure
-        mDownloadUrl = intent.getParcelableExtra(MyUploadPostAudioVideo.EXTRA_DOWNLOAD_URL_VideoAudio);
-        mFileUri = intent.getParcelableExtra(MyUploadPostAudioVideo.EXTRA_VideoAudio_URI);
+        mDownloadUrl = IntentCompat.getParcelableExtra(intent, MyUploadPostAudioVideo.EXTRA_DOWNLOAD_URL_VideoAudio, Uri.class);
+        mFileUri = IntentCompat.getParcelableExtra(intent, MyUploadPostAudioVideo.EXTRA_VideoAudio_URI, Uri.class);
         //Toast.makeText(this, mDownloadUrl.toString(), Toast.LENGTH_SHORT).show();
 
 
@@ -361,8 +362,8 @@ public class NewPostActivity extends BaseActivity  {
     }
     private void onUploadThumbResultIntent(Intent intent) {
         // Got a new intent from MyUploadThumb with a success or failure
-        mDownloadUrlThumb = intent.getParcelableExtra(MyUploadThumb.EXTRA_DOWNLOAD_URL_Thumb);
-        mThumbUri = intent.getParcelableExtra(MyUploadThumb.EXTRA_Thumb_URI);
+        mDownloadUrlThumb = IntentCompat.getParcelableExtra(intent, MyUploadThumb.EXTRA_DOWNLOAD_URL_Thumb, Uri.class);
+        mThumbUri = IntentCompat.getParcelableExtra(intent, MyUploadThumb.EXTRA_Thumb_URI, Uri.class);
         //Toast.makeText(this, mDownloadUrlThumb.toString(), Toast.LENGTH_SHORT).show();
 
         updateUI(mAuth.getCurrentUser());

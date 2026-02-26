@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import androidx.core.content.ContextCompat;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -141,7 +142,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         };
 
         IntentFilter intentFilter = new IntentFilter(ACTION_DELETE_FRIEND);
-        getContext().registerReceiver(deleteFriendReceiver, intentFilter);
+        ContextCompat.registerReceiver(getContext(), deleteFriendReceiver, intentFilter, ContextCompat.RECEIVER_NOT_EXPORTED);
 
         return layout;
     }
@@ -699,6 +700,7 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                                 .show();
 
                                         Intent intentDeleted = new Intent(FriendsFragment.ACTION_DELETE_FRIEND);
+                                        intentDeleted.setPackage(context.getPackageName());
                                         intentDeleted.putExtra("idFriend", idFriend);
                                         context.sendBroadcast(intentDeleted);
                                     }

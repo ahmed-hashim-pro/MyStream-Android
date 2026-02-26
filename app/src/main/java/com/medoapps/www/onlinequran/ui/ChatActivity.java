@@ -1,5 +1,6 @@
 package com.medoapps.www.onlinequran.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -151,6 +152,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         Intent result = new Intent();

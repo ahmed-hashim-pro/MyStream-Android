@@ -15,6 +15,7 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import androidx.core.content.ContextCompat;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -69,7 +70,7 @@ import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.BuildConfig;
+import com.medoapps.www.onlinequran.BuildConfig;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -612,7 +613,7 @@ public class AyaList extends AppCompatActivity {
         }
         IntentFilter filter = new IntentFilter(com.medoapps.www.onlinequran.AyaList.Broadcast_LoadAya);
         try {
-            registerReceiver(updateProgressBarReceiver, filter);
+            ContextCompat.registerReceiver(this, updateProgressBarReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
         } catch (Exception e) {
             e.printStackTrace();
         }

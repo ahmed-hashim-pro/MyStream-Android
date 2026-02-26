@@ -123,7 +123,7 @@ public class NotificationPanel {
         //listener 8
         Intent volume1 = new Intent(parent,NotificationReturnSlot.class);
         volume1.putExtra("DO", "volume");
-        PendingIntent btn6 = getActivity(parent, 5, volume1, 0);
+        PendingIntent btn6 = getActivity(parent, 5, volume1, PendingIntent.FLAG_IMMUTABLE);
         view.setOnClickPendingIntent(R.id.btn6, btn6);
 
 

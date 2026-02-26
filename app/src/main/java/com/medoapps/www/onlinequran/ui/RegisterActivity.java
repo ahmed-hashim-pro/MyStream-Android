@@ -1,6 +1,7 @@
 package com.medoapps.www.onlinequran.ui;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Build;
@@ -124,6 +125,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
         mAnimator.start();
     }
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         animateRevealClose();

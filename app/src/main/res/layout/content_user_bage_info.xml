@@ -26,18 +26,18 @@
         android:id="@+id/name_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:text="user name"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/email_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:text="email"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="italic" />
     <Button
         android:id="@+id/ubdateInfobtn"

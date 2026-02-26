@@ -70,7 +70,7 @@ public class youtube_list extends Fragment {
 //add ItemDecoration
 //        recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(200));
 
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         return view;

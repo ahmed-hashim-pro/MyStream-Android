@@ -307,6 +307,7 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="desPost">Write your post...</string>
     <string name="recommand">Recommend</string>
     <string name="facebook_app_id">380383209206681</string>
+    <string name="facebook_client_token">YOUR_CLIENT_TOKEN_HERE</string>
     <string name="fb_login_protocol_scheme">fb380383209206681</string>
     <string name="menu_edit">Edit post</string>
     <string name="menu_delete">Delete post</string>
@@ -882,5 +883,16 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="block_user">Block User</string>
     <string name="Blocked">User Blocked</string>
     <string name="TitlesAnimation">Titles Animations</string>
+
+    <!-- Accessibility content descriptions -->
+    <string name="new_post">New post</string>
+    <string name="cd_app_logo">App logo</string>
+    <string name="cd_user_photo">User photo</string>
+    <string name="cd_send_message">Send message</string>
+    <string name="cd_back">Go back</string>
+    <string name="cd_search">Search</string>
+    <string name="cd_download">Download</string>
+    <string name="cd_play">Play</string>
+    <string name="cd_pause">Pause</string>
 
 </resources>

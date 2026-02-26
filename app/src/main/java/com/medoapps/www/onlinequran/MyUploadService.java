@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.IBinder;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.IntentCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -57,7 +58,7 @@ public class MyUploadService extends MyBaseTaskService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand:" + intent + ":" + startId);
         if (ACTION_UPLOAD_UserPhoto.equals(intent.getAction())) {
-            Uri fileUri = intent.getParcelableExtra(EXTRA_FILE_URI_UserPhoto);
+            Uri fileUri = IntentCompat.getParcelableExtra(intent, EXTRA_FILE_URI_UserPhoto, Uri.class);
             uploadFromUri(fileUri);
         }
 

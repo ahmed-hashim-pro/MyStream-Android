@@ -133,8 +133,8 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private boolean playWhenReady = true;
 
 
-    private static final String AD_UNIT_ID = "ca-app-pub-9350633918697995/7533398267";
-    private static final String APP_ID = " ca-app-pub-9350633918697995~2524775865";
+    private static final String AD_UNIT_ID = BuildConfig.ADMOB_AD_UNIT_ID;
+    private static final String APP_ID = BuildConfig.ADMOB_APP_ID;
     private static final long COUNTER_TIME = 1;
     private CountDownTimer mCountDownTimer;
     //private InterstitialAd mInterstitialAd;

@@ -5,8 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/transparent"
     android:orientation="vertical"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
+    android:paddingStart="5dp"
+    android:paddingEnd="5dp"
     android:id="@+id/entireCardOtherCategory"
 
     >
@@ -15,9 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
         app:cardElevation="20dp"
         android:layoutDirection="rtl"
@@ -31,8 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:focusable="false"
             android:focusableInTouchMode="false"
             >
@@ -71,11 +70,11 @@
                             android:focusable="false"
                             android:focusableInTouchMode="false"
                             android:gravity="center"
-                            android:paddingRight="7dp"
+                            android:paddingEnd="7dp"
                             android:text="Large Text"
                             android:textAlignment="center"
                             android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textSize="11dp" />
+                            android:textSize="11sp" />
 
                     </RelativeLayout>
 
@@ -96,7 +95,7 @@
                 android:id="@+id/buttonShare"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_gravity="center"
                 android:padding="2dp"
                 android:background="@color/transparent"

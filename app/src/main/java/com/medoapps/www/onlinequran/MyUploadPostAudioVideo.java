@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.IntentCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.gms.tasks.Continuation;
@@ -75,7 +76,7 @@ public class MyUploadPostAudioVideo extends MyBaseTaskPostAudioVideo {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand:" + intent + ":" + startId);
         if (ACTION_UPLOAD_VideoAudio.equals(intent.getAction())) {
-            Uri fileUri = intent.getParcelableExtra(EXTRA_VideoAudio_URI);
+            Uri fileUri = IntentCompat.getParcelableExtra(intent, EXTRA_VideoAudio_URI, Uri.class);
             uploadFromUri(fileUri);
         }
 

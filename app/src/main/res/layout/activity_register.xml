@@ -11,15 +11,15 @@
         android:layout_centerInParent="true"
         android:paddingTop="30dp">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_add"
             android:layout_width="match_parent"
             android:layout_height="320dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            app:cardBackgroundColor="#2ea67f"
-            app:cardCornerRadius="6dp"
-            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/md_theme_light_primary"
+            app:cardCornerRadius="@dimen/spacing_md"
+            app:cardElevation="@dimen/card_elevation_default"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -33,21 +33,21 @@
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="50dp"
                     android:text="@string/register"
-                    android:textColor="#fff"
+                    android:textColor="@color/md_theme_light_onPrimary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/spacing_sm"
                     android:paddingEnd="30dp"
                     android:paddingStart="50dp">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="#f0f7f4"
+                        android:textColorHint="#F0F7F4"
                         android:theme="@style/TextLabel">
 
                         <EditText
@@ -58,7 +58,7 @@
                             android:hint="@string/Username"
                             android:inputType="textEmailAddress"
                             android:paddingBottom="2dp"
-                            android:textColor="#f0f7f4"
+                            android:textColor="#F0F7F4"
                             android:textCursorDrawable="@drawable/bg_input_cursor_2"
                             android:textSize="13sp" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -72,10 +72,9 @@
                     android:paddingStart="50dp">
 
                     <com.google.android.material.textfield.TextInputLayout
-
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="#f0f7f4"
+                        android:textColorHint="#F0F7F4"
                         android:theme="@style/TextLabel">
 
                         <EditText
@@ -86,7 +85,7 @@
                             android:hint="@string/Password"
                             android:inputType="textPassword"
                             android:paddingBottom="10dp"
-                            android:textColor="#f0f7f4"
+                            android:textColor="#F0F7F4"
                             android:textCursorDrawable="@drawable/bg_input_cursor_2"
                             android:textSize="13sp" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -100,10 +99,9 @@
                     android:paddingStart="50dp">
 
                     <com.google.android.material.textfield.TextInputLayout
-
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="#f0f7f4"
+                        android:textColorHint="#F0F7F4"
                         android:theme="@style/TextLabel">
 
                         <EditText
@@ -114,37 +112,35 @@
                             android:hint="@string/repeat_password"
                             android:inputType="textPassword"
                             android:paddingBottom="10dp"
-                            android:textColor="#f0f7f4"
+                            android:textColor="#F0F7F4"
                             android:textCursorDrawable="@drawable/bg_input_cursor_2"
                             android:textSize="13sp" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/bt_go"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="150dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/bt_shape_2"
-                    android:stateListAnimator="@drawable/state_list_animator_z"
-                    android:text="@string/go"
-                    android:textColor="#2fa881"
-                    android:onClick="clickRegister"/>
+                    android:layout_marginTop="@dimen/spacing_lg"
+                    android:onClick="clickRegister"
+                    android:text="@string/go" />
 
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
+            android:contentDescription="@string/cd_back"
             android:onClick="clickBackLogin"
             android:src="@drawable/plus_x"
             android:transitionName="loginFab"
             app:fabSize="normal" />
     </FrameLayout>
-
 
 </RelativeLayout>

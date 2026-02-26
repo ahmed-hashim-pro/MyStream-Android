@@ -162,6 +162,7 @@ public class MediaPlayer extends AppCompatActivity {
             //Service is active
             //Send a broadcast to the service -> PLAY_NEW_AUDIO
             Intent broadcastIntent = new Intent(Broadcast_PLAY_NEW_AUDIO);
+            broadcastIntent.setPackage(getPackageName());
             sendBroadcast(broadcastIntent);
         }
     }
@@ -178,10 +179,14 @@ public class MediaPlayer extends AppCompatActivity {
         if (cursor != null && cursor.getCount() > 0) {
             audioList = new ArrayList<>();
             while (cursor.moveToNext()) {
-                String data = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                int colData = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
+                int colTitle = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
+                int colAlbum = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+                int colArtist = cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+                String data = colData >= 0 ? cursor.getString(colData) : "";
+                String title = colTitle >= 0 ? cursor.getString(colTitle) : "";
+                String album = colAlbum >= 0 ? cursor.getString(colAlbum) : "";
+                String artist = colArtist >= 0 ? cursor.getString(colArtist) : "";
 
                 // Save to audioList
                 audioList.add(new Audio(data, title, album, artist));

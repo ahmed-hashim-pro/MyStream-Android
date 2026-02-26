@@ -49,7 +49,7 @@
                     android:elevation="200dp"
                     android:textAlignment="center"
                     android:layout_centerInParent="true"
-                    android:tint="@color/white"
+                    app:tint="@color/white"
                     app:srcCompat="@drawable/ic_media_play_dark" />
             </RelativeLayout>
 
@@ -62,8 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginBottom="8dp"
 
         app:cardBackgroundColor="@color/white"
@@ -85,9 +84,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="14dp"
-                android:paddingLeft="7dp"
-                android:paddingRight="7dp"
+                android:textSize="14sp"
+                android:paddingStart="7dp"
+                android:paddingEnd="7dp"
                 android:textStyle="bold"
                 android:text="Loading..." />
             <TextView
@@ -97,8 +96,8 @@
                 android:maxLines="2"
                 android:paddingTop="4px"
                 android:paddingBottom="4px"
-                android:paddingLeft="9dp"
-                android:paddingRight="9dp"
+                android:paddingStart="9dp"
+                android:paddingEnd="9dp"
                 android:text="" />
         </LinearLayout>
 

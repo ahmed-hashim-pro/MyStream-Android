@@ -180,8 +180,7 @@
     <string name="titlePost">عنوان المنشور</string>
     <string name="desPost">اكتب الوصف هنا...</string>
     <string name="recommand">انصح به</string>
-    <string name="facebook_app_id">380383209206681</string>
-    <string name="fb_login_protocol_scheme">fb380383209206681</string>
+    <!-- facebook_app_id and fb_login_protocol_scheme must not vary by locale; defined in values/strings.xml -->
     <string name="menu_edit">تعديل</string>
     <string name="menu_delete">حذف المنشور</string>
     <string name="recites_list">قائمة القراء</string>

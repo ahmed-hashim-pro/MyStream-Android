@@ -21,7 +21,7 @@ public abstract class MyBaseTaskPostAudioVideo extends Service {
     static final int PROGRESS_NOTIFICATION_ID = 7;
     static final int FINISHED_NOTIFICATION_ID = 8;
 
-    private static final String TAG = "MyBaseTaskPostAudioVideo";
+    private static final String TAG = "BaseTaskPostAudioVideo";
     private int mNumTasks = 0;
 
     public void taskStarted() {

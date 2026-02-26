@@ -98,6 +98,7 @@
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
+                android:orientation="horizontal"
                 android:layout_below="@+id/userArea"
                 android:layout_marginLeft="7dp"
                 android:layout_marginRight="7dp"

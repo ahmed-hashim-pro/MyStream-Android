@@ -18,6 +18,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -79,7 +80,7 @@ public class managerdb extends AppCompatActivity implements MediaPlayer.OnComple
     WifiManager.WifiLock wifiLock;
     public static Boolean isPlaying = false;
     // Handler to update UI timer, progress bar etc,.
-    public static Handler mHandler = new Handler();
+    public static Handler mHandler = new Handler(Looper.getMainLooper());
 
     public  SongsManager songManager;
     public  Utilities utils;
@@ -164,6 +165,7 @@ public class managerdb extends AppCompatActivity implements MediaPlayer.OnComple
             //service is active
             player.stopSelf();
         }
+        instance = null;
     }
 
     @Override

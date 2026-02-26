@@ -20,10 +20,11 @@ if (getGradle().getStartParameter().getTaskRequests().toString().contains("Relea
 }
 android {
     namespace "com.medoapps.www.onlinequran"
-    compileSdk 33
+    compileSdk 34
     lint {
-        checkReleaseBuilds false
+        checkReleaseBuilds true
         abortOnError false
+        warningsAsErrors false
 
         lintConfig file("lint.xml")
         enable "Interoperability"
@@ -32,12 +33,15 @@ android {
     defaultConfig {
         applicationId "com.medoapps.www.onlinequran"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 34
         versionCode 42
         versionName "12.4.1"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "com.medoapps.www.onlinequran.core.QuranTestRunner"
+
+        buildConfigField "String", "ADMOB_AD_UNIT_ID", "\"ca-app-pub-9350633918697995/7533398267\""
+        buildConfigField "String", "ADMOB_APP_ID", "\"ca-app-pub-9350633918697995~2524775865\""
     }
     flavorDimensions "pageType"
     productFlavors {
@@ -61,8 +65,9 @@ android {
 //            versionNameSuffix "-debug"
         }*/
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.cfg'
         }
     }
 
@@ -120,6 +125,7 @@ if (new File(rootDir, 'extras/extras.gradle').exists()) {
     apply from: 'pluggable.gradle'
 }
 dependencies {
+    // Project modules
     implementation project(path: ':common:analytics')
     implementation project(path: ':common:audio')
     implementation project(path: ':common:bookmark')
@@ -132,155 +138,131 @@ dependencies {
     implementation project(path: ':common:search')
     implementation project(path: ':common:toolbar')
     implementation project(path: ':common:upgrade')
-
     implementation project(path: ':feature:audio')
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.google.android.material:material:${materialComponentsVersion}"
-
-
-
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'androidx.arch.core:core-runtime:2.1.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
-//    implementation 'com.google.android.material:material:1.6.0-alpha03'
-    implementation 'com.github.yarolegovich:LovelyDialog:1.1.1'
-    implementation 'androidx.percentlayout:percentlayout:1.0.0'
-    implementation 'androidx.vectordrawable:vectordrawable:1.0.0'
-
-    implementation 'de.hdodenhof:circleimageview:2.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
-    implementation 'com.google.android.exoplayer:exoplayer:2.18.7'
-    implementation 'com.facebook.android:facebook-android-sdk:13.0.0'
-    implementation 'com.github.ethanhua:Skeleton:ff06517d46'
-    implementation 'io.supercharge:shimmerlayout:2.1.0'
-
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation files('libs/YouTubeAndroidPlayerApi.jar')
-    implementation 'com.google.firebase:firebase-auth:21.0.1'
-    implementation 'com.google.firebase:firebase-database:20.0.3'
-    implementation 'com.google.firebase:firebase-messaging:23.0.0'
-    implementation 'com.google.android.gms:play-services-auth:20.1.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
-    implementation files('libs/jaudiotagger-3.0.2-SNAPSHOT.jar')
-    implementation files('libs/jaudiotagger-2.2.3.jar')
-
-    implementation "com.android.billingclient:billing:4.1.0"
     implementation project(path: ':pages:madani')
     implementation project(path: ':feature:analytics-noop')
 
+    // Local JARs
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation files('libs/YouTubeAndroidPlayerApi.jar')
+    implementation files('libs/jaudiotagger-3.0.2-SNAPSHOT.jar')
+    implementation files('libs/jaudiotagger-2.2.3.jar')
 
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
-//    Feature module Support
-    def nav_version = "2.4.1"
-    implementation "androidx.navigation:navigation-fragment:$nav_version"
-    implementation "androidx.navigation:navigation-ui:$nav_version"
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+    // AndroidX
+    implementation "androidx.appcompat:appcompat:${androidxAppcompatVersion}"
+    implementation "androidx.recyclerview:recyclerview:${androidxRecyclerViewVersion}"
+    implementation 'androidx.arch.core:core-runtime:2.2.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+    implementation 'androidx.vectordrawable:vectordrawable:1.2.0'
+    implementation "androidx.media:media:${androidxMediaVersion}"
+    implementation "androidx.mediarouter:mediarouter:1.6.0"
+    implementation "androidx.localbroadcastmanager:localbroadcastmanager:${androidxLocalBroadcastVersion}"
+    implementation "androidx.preference:preference-ktx:${androidxPreferencesVersion}"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:${androidxSwipeRefreshVersion}"
+    implementation "androidx.annotation:annotation:${androidxAnnotationVersion}"
+    implementation 'androidx.percentlayout:percentlayout:1.0.0'
+    implementation "com.google.android.material:material:${materialComponentsVersion}"
+    implementation "androidx.core:core-splashscreen:1.0.1"
 
-  // Testing Navigation
-    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${lifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-process:${lifecycleVersion}"
+    implementation "androidx.lifecycle:lifecycle-runtime:${lifecycleVersion}"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:${lifecycleVersion}"
 
-    // Jetpack Compose Integration
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment:${navVersion}"
+    implementation "androidx.navigation:navigation-ui:${navVersion}"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:${navVersion}"
 
-
-
-
-//    testImplementation 'junit:junit:4.12'
-
-    // UiAutomatorTesting
-//    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test:rules:1.1.1'
-
-    androidTestImplementation 'androidx.annotation:annotation:1.0.0'
-
-    implementation 'androidx.mediarouter:mediarouter:1.0.0'
-    implementation "androidx.media:media:1.1.0"
-    implementation 'com.android.volley:volley:1.2.1'
-
-
-    implementation platform('com.google.firebase:firebase-bom:29.1.0')
+    // Firebase (BOM manages versions)
+    implementation platform('com.google.firebase:firebase-bom:32.7.0')
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-perf'
-
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.android.gms:play-services-ads:20.5.0'
-    implementation 'com.google.firebase:firebase-config:21.0.1'
-    implementation 'com.google.firebase:firebase-inappmessaging:20.1.1'
-    implementation 'com.google.firebase:firebase-inappmessaging-display:20.1.1'
-    implementation 'com.google.firebase:firebase-config:21.0.1'
-    implementation 'com.google.firebase:firebase-storage:20.0.0'
-    implementation 'com.firebaseui:firebase-ui-database:8.0.2'
+    implementation 'com.google.firebase:firebase-config'
+    implementation 'com.google.firebase:firebase-inappmessaging'
+    implementation 'com.google.firebase:firebase-inappmessaging-display'
+    implementation 'com.google.firebase:firebase-storage'
     implementation 'com.google.firebase:firebase-dynamic-links'
+    implementation 'com.firebaseui:firebase-ui-database:8.0.2'
 
-    implementation 'com.loopj.android:android-async-http:1.4.11'
-    def lifecycle_version = '2.3.1'
-    implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    // Google Play Services
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+    implementation 'com.google.android.gms:play-services-ads:22.6.0'
+    implementation 'com.google.android.play:review:2.0.1'
 
-    implementation "androidx.mediarouter:mediarouter:1.2.0-alpha02"
+    // Media
+    implementation 'com.google.android.exoplayer:exoplayer:2.18.7'
 
-    implementation 'com.google.android.play:core:1.10.3'
+    // Image loading
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    // Social
+    implementation 'com.facebook.android:facebook-android-sdk:16.3.0'
 
-//    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.4'
+    // UI
+    implementation 'com.github.yarolegovich:LovelyDialog:1.1.1'
+    implementation 'com.github.ethanhua:Skeleton:ff06517d46'
+    implementation 'io.supercharge:shimmerlayout:2.1.0'
+    implementation 'io.github.ShawnLin013:number-picker:2.4.13'
+    implementation "dev.chrisbanes:insetter-ktx:0.3.1"
 
+    // Networking
+    implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    implementation "com.squareup.retrofit2:converter-moshi:${retrofitVersion}"
+    implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+    implementation "com.squareup.okio:okio:${okioVersion}"
+    implementation 'com.android.volley:volley:1.2.1'
 
+    // JSON
+    implementation "com.squareup.moshi:moshi:${moshiVersion}"
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:${moshiVersion}")
 
-
-
-
+    // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${coroutinesVersion}"
 
-    implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
-    implementation "com.squareup.retrofit2:converter-moshi:${retrofitVersion}"
+    // RxJava
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.8'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
 
-    implementation "androidx.appcompat:appcompat:${androidxAppcompatVersion}"
-    implementation "androidx.media:media:${androidxMediaVersion}"
-    implementation "androidx.localbroadcastmanager:localbroadcastmanager:${androidxLocalBroadcastVersion}"
-    implementation "androidx.preference:preference-ktx:${androidxPreferencesVersion}"
-    implementation "androidx.recyclerview:recyclerview:${androidxRecyclerViewVersion}"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:${androidxSwipeRefreshVersion}"
-
-    // rx
-    implementation 'io.reactivex.rxjava3:rxjava:3.1.4'
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-
-    // dagger
+    // Dagger
     kapt deps.dagger.apt
     kaptAndroidTest deps.dagger.apt
     implementation deps.dagger.runtime
 
-    // workmanager
+    // WorkManager
     implementation "androidx.work:work-runtime-ktx:${workManagerVersion}"
 
-    implementation "com.squareup.okio:okio:${okioVersion}"
-    implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+    // Billing
+    implementation "com.android.billingclient:billing:6.1.0"
 
-    implementation "com.squareup.moshi:moshi:${moshiVersion}"
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:${moshiVersion}")
-
-    implementation "dev.chrisbanes:insetter-ktx:0.3.1"
+    // Logging
     implementation 'com.jakewharton.timber:timber:5.0.1'
-//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
-    implementation 'com.google.firebase:firebase-crashlytics:18.2.9'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.13'
 
+    // Testing
     testImplementation "junit:junit:${junitVersion}"
     testImplementation "com.google.truth:truth:${truthVersion}"
-    testImplementation "org.mockito:mockito-core:4.4.0"
+    testImplementation "org.mockito:mockito-core:5.8.0"
     testImplementation "com.squareup.okhttp3:mockwebserver:${okhttpVersion}"
 
     androidTestImplementation "androidx.test.espresso:espresso-core:${espressoVersion}"
     androidTestImplementation "androidx.test.espresso:espresso-intents:${espressoVersion}"
     androidTestImplementation "androidx.test.ext:junit:${androidxJunitExtVersion}"
+    androidTestImplementation "androidx.navigation:navigation-testing:${navVersion}"
+    androidTestImplementation 'androidx.test:rules:1.5.0'
 
-    errorprone 'com.google.errorprone:error_prone_core:2.13.0'
-
-    // Number Picker
-    implementation 'io.github.ShawnLin013:number-picker:2.4.13'
+    // ErrorProne
+    errorprone 'com.google.errorprone:error_prone_core:2.23.0'
 }
 repositories {
     mavenCentral()

@@ -1292,7 +1292,7 @@ public class LnaguageClass {
 
                         }else {
                             AYAPAth ="https://server"+  serverNumber (ReciteName) + ".mp3quran.net/" +ReciteName + "/"+  ac.ServerName + ".mp3";
-//                            Log.d("gdfgrgfdg", AYAPAth);
+//                            // Log.d("gdfgrgfdg", AYAPAth);
 
                         }
 
@@ -1327,11 +1327,11 @@ public class LnaguageClass {
                     {
                         if (Rewayat!= null){
                             AYAPAth ="https://server"+  serverNumber (ReciteName) + ".mp3quran.net/" +ReciteName + "/"+ Rewayat + "/" +  ac.ServerName + ".mp3";
-                            Log.d("gdfgrgfdg", AYAPAth);
+                            // Log.d("gdfgrgfdg", AYAPAth);
 
                         }else {
                             AYAPAth ="https://server"+  serverNumber (ReciteName) + ".mp3quran.net/" +ReciteName + "/"+  ac.ServerName + ".mp3";
-                            Log.d("gdfgrgfdg", AYAPAth);
+                            // Log.d("gdfgrgfdg", AYAPAth);
 
                         }
 

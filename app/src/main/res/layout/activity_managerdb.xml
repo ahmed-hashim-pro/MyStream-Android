@@ -20,19 +20,18 @@
         android:layout_width="fill_parent"
         android:layout_height="55dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_weight="0"
         android:background="@drawable/bg_player_header"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp">
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp">
 
         <ImageButton
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:background="@null"
             android:onClick="BUClick"
             android:src="@drawable/left" />
@@ -41,21 +40,21 @@
             android:id="@+id/songTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:paddingTop="6dp"
-            android:paddingRight="35dp"
+            android:paddingEnd="35dp"
             android:text="بدون عنوان"
             android:textColor="#04b3d2"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/songrecite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
             android:paddingTop="6dp"
@@ -73,7 +72,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:text="@string/sound" />
 
             <Spinner
@@ -173,8 +172,8 @@
             android:id="@+id/timerDisplay"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:layout_weight="0"
             android:orientation="horizontal">
 
@@ -183,7 +182,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="left"
+                android:gravity="start"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
@@ -192,7 +191,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="end"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -202,8 +201,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
+            android:paddingStart="3dp"
+            android:paddingEnd="3dp"
             android:progressDrawable="@drawable/seekbar_progress"
             android:thumb="@drawable/seek_handler" />
 
@@ -219,7 +218,7 @@
                 android:id="@+id/btnRepeat"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:background="@null"
                 android:src="@drawable/btn_repeat" />
 
@@ -228,8 +227,8 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:background="@null"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
                 android:paddingTop="6dp"
                 android:src="@drawable/ic_bookmark_border_black_24dp" />
 
@@ -238,7 +237,7 @@
                 android:id="@+id/btnShuffle"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:background="@null"
                 android:src="@drawable/btn_shuffle" />
 
@@ -253,9 +252,9 @@
             android:layout_weight="0"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="5dp"
+            android:paddingStart="5dp"
             android:layout_marginBottom="20dp"
-            android:paddingRight="5dp">
+            android:paddingEnd="5dp">
             <!-- Previous Button -->
             <ImageButton
                 android:id="@+id/btnPrevious"

@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.IntentCompat;
 import androidx.transition.Slide;
 
 import com.facebook.AccessToken;
@@ -717,8 +718,8 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
     }
     private void onUploadResultIntent(Intent intent) {
         // Got a new intent from MyUploadService with a success or failure
-        mDownloadUrl = intent.getParcelableExtra(MyUploadService.EXTRA_DOWNLOAD_URL_UserPhoto);
-        mFileUri = intent.getParcelableExtra(MyUploadService.EXTRA_FILE_URI_UserPhoto);
+        mDownloadUrl = IntentCompat.getParcelableExtra(intent, MyUploadService.EXTRA_DOWNLOAD_URL_UserPhoto, Uri.class);
+        mFileUri = IntentCompat.getParcelableExtra(intent, MyUploadService.EXTRA_FILE_URI_UserPhoto, Uri.class);
 
         //updateUI(mAuth.getCurrentUser());
     }

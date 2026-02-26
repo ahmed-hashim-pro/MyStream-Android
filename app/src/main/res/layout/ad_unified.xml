@@ -17,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:paddingTop="3dp">
 
             <LinearLayout
@@ -32,8 +32,7 @@
                     android:layout_height="40dp"
                     android:adjustViewBounds="true"
                     android:paddingBottom="5dp"
-                    android:paddingEnd="5dp"
-                    android:paddingRight="5dp"/>
+                    android:paddingEnd="5dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -83,7 +82,6 @@
                     android:id="@+id/ad_body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
                     android:layout_marginEnd="20dp"
                     
                     android:textSize="12sp" />
@@ -107,9 +105,7 @@
                         android:id="@+id/ad_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="5dp"
                         android:paddingStart="5dp"
-                        android:paddingRight="5dp"
                         android:paddingEnd="5dp"
                         
                         android:textSize="12sp" />
@@ -118,9 +114,7 @@
                         android:id="@+id/ad_store"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="5dp"
                         android:paddingStart="5dp"
-                        android:paddingRight="5dp"
                         android:paddingEnd="5dp"
                         
                         android:textSize="12sp" />

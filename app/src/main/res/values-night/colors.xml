@@ -1,189 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- ============================================================ -->
+    <!-- Material 3 Dark Theme Tokens (seed: green/teal #1B5E20)      -->
+    <!-- ============================================================ -->
+    <color name="md_theme_light_primary">#69DC6F</color>
+    <color name="md_theme_light_onPrimary">#00390B</color>
+    <color name="md_theme_light_primaryContainer">#005315</color>
+    <color name="md_theme_light_onPrimaryContainer">#A5D6A7</color>
+    <color name="md_theme_light_secondary">#B9CCB4</color>
+    <color name="md_theme_light_onSecondary">#253423</color>
+    <color name="md_theme_light_secondaryContainer">#3B4B38</color>
+    <color name="md_theme_light_onSecondaryContainer">#D5E8CF</color>
+    <color name="md_theme_light_tertiary">#A0CFD5</color>
+    <color name="md_theme_light_onTertiary">#00363B</color>
+    <color name="md_theme_light_tertiaryContainer">#1F4D52</color>
+    <color name="md_theme_light_onTertiaryContainer">#BCEBF1</color>
+    <color name="md_theme_light_error">#FFB4AB</color>
+    <color name="md_theme_light_onError">#690005</color>
+    <color name="md_theme_light_errorContainer">#93000A</color>
+    <color name="md_theme_light_onErrorContainer">#FFDAD6</color>
+    <color name="md_theme_light_background">#1A1C19</color>
+    <color name="md_theme_light_onBackground">#E2E3DD</color>
+    <color name="md_theme_light_surface">#1A1C19</color>
+    <color name="md_theme_light_onSurface">#E2E3DD</color>
+    <color name="md_theme_light_surfaceVariant">#424940</color>
+    <color name="md_theme_light_onSurfaceVariant">#C2C9BD</color>
+    <color name="md_theme_light_outline">#8C9388</color>
+    <color name="md_theme_light_outlineVariant">#424940</color>
+    <color name="md_theme_light_inverseSurface">#E2E3DD</color>
+    <color name="md_theme_light_inverseOnSurface">#2F312D</color>
+    <color name="md_theme_light_inversePrimary">#1B5E20</color>
+
+    <!-- ============================================================ -->
+    <!-- Legacy / backward-compat aliases (dark variants)             -->
+    <!-- ============================================================ -->
     <color name="colorPrimary">#381B61</color>
     <color name="colorPrimaryDark">#240C4A</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="colorPrimaryMainActivity">#212122</color>
-    <color name="colorPrimaryDarkMainActivity">#131313</color>
-
-
-    <!--    <color name="colorPrimaryMainActivity">#30475C</color>-->
-    <!--    <color name="colorPrimaryDarkMainActivity">#0066BD</color>-->
-
-
-    <!--    <color name="colorPrimaryMainActivity">#1C83C8</color>-->
-    <!--    <color name="colorPrimaryDarkMainActivity">#115F93</color>-->
-
-    <!--    <color name="colorPrimaryMainActivity">#30475C</color>-->
-    <!--    <color name="colorPrimaryDarkMainActivity">#115F93</color>-->
-
-    <color name="colorAccentMainActivity">#FF4081</color>
-
-
-
-    <color name="Black2">#FF040303</color>
-    <color name="colorIndivateTab">#FFFFFF</color>
-    <color name="transparent">#00000000</color>
-    <color name="colorCardView">#f7f7f7</color>
-    <color name="grey_200">#EEEEEE</color>
-    <color name="grey_500">#a4a4a4</color>
+    <!-- Greys (inverted for dark mode) -->
     <color name="grey_100">#232323</color>
+    <color name="grey_200">#EEEEEE</color>
+    <color name="grey_300">#1F1F1F</color>
+    <color name="grey_500">#A4A4A4</color>
     <color name="grey_800">#212121</color>
 
-    <color name="black_overlay">#66000000</color>
-    <item name="blue" type="color">#FF33B5E5</item>
-    <item name="purple" type="color">#FFAA66CC</item>
-    <item name="green" type="color">#FF99CC00</item>
-    <item name="orange" type="color">#FFFFBB33</item>
-    <item name="red" type="color">#FFFF4444</item>
-    <item name="darkblue" type="color">#FF0099CC</item>
-    <item name="darkpurple" type="color">#9933cc</item>
-    <item name="darkgreen" type="color">#FF669900</item>
-    <item name="darkorange" type="color">#FFFF8800</item>
-    <item name="darkred" type="color">#FFCC0000</item>
-    <item name="customeblue" type="color">#3b5998</item>
-    <item name="whiteeblue" type="color">#FF7693D1</item>
-    <item name="lowDarkfont" type="color">#5D070E07</item>
+    <!-- Neutrals (inverted) -->
+    <color name="black">#FBFCFC</color>
+    <color name="Black2">#FF040303</color>
     <item name="white" type="color">#000000</item>
-    <item name="whiteback" type="color">#f9f9f9</item>
-    <item name="textHint" type="color">#A8A4A4</item>
-    <item name="whitebackground" type="color">#60839c</item>
-    <item name="recitesnames" type="color">#60839c</item>
-    <item name="black" type="color">#fbfcfc</item>
-    <integer-array name="androidcolors">
-        <item>@color/blue</item>
-        <item>@color/purple</item>
-        <item>@color/green</item>
-        <item>@color/orange</item>
-        <item>@color/red</item>
-        <item>@color/darkblue</item>
-        <item>@color/darkpurple</item>
-        <item>@color/darkgreen</item>
-        <item>@color/darkorange</item>
-        <item>@color/darkred</item>
-        <item>@color/customeblue</item>
-        <item>@color/lowDarkfont</item>
-        <item>@color/white</item>
-    </integer-array>
+    <color name="transparent">#00000000</color>
+    <color name="black_overlay">#66000000</color>
 
-    <color name="cyan_500">#00BCD4</color>
-    <color name="softBlue">#cdf6f8</color>
+    <!-- ============================================================ -->
+    <!-- App-specific dark mode overrides                             -->
+    <!-- ============================================================ -->
 
+    <!-- Main activity toolbar (dark) -->
+    <color name="colorPrimaryMainActivity">#212122</color>
+    <color name="colorPrimaryDarkMainActivity">#131313</color>
+    <color name="colorAccentMainActivity">#FF4081</color>
+    <color name="colorPrimaryShadowMainActivity">#CA434242</color>
+    <color name="fragmentsMainBar">#212122</color>
+    <color name="colorIndivateTab">#FFFFFF</color>
 
-    <!-- Screens background color-->
-    <color name="bg_slider_screen1">#f4b241</color>
-    <color name="bg_slider_screen2">#1CF4A2</color>
-    <color name="bg_slider_screen3">#7B9FFF</color>
-    <color name="bg_slider_screen4">#C467F3</color>
-    <!-- dots inactive colors -->
-    <color name="dot_inactive_screen1">#01749A</color>
-    <color name="dot_inactive_screen2">#008c57</color>
-    <color name="dot_inactive_screen3">#0e1e49</color>
-    <color name="dot_inactive_screen4">#FFAA66CC</color>
-    <!-- dots active colors -->
-    <color name="dot_active_screen1">#ff0099cc</color>
-    <color name="dot_active_screen2">#74f7c5</color>
-    <color name="dot_active_screen3">#3a67e0</color>
-    <color name="dot_active_screen4">#FF9933CC</color>
-    <array name="array_dot_active">
-        <item>@color/dot_active_screen1</item>
-        <item>@color/dot_active_screen2</item>
-        <item>@color/dot_active_screen3</item>
-        <item>@color/dot_active_screen4</item>
-    </array>
-    <array name="array_dot_inactive">
-        <item>@color/dot_inactive_screen1</item>
-        <item>@color/dot_inactive_screen2</item>
-        <item>@color/dot_inactive_screen3</item>
-        <item>@color/dot_inactive_screen4</item>
-    </array>
-    <color name="cast_libraries_material_featurehighlight_outer_highlight_default_color">#0C385A</color>
-    <color name="cast_libraries_material_featurehighlight_text_body_color">#FFFFFFFF</color>
-    <color name="cast_libraries_material_featurehighlight_text_header_color">#FFFFFFFF</color>
-
-    <color name="edittextunderline">#B07D4A</color>
-    <color name="login_button_background">#B07D4A</color>
-    <color name="bg_login">#FAF9F7</color>
-    <color name="bg_register">#2e3237</color>
-    <color name="bg_main">#428bca</color>
-    <color name="input_login">#222222</color>
-    <color name="input_login_hint">#999999</color>
-    <color name="input_register">#888888</color>
-    <color name="input_register_bg">#3b4148</color>
-    <color name="input_register_hint">#5e6266</color>
-    <color name="btn_login">#26ae90</color>
-    <color name="btn_login_bg">#eceef1</color>
-    <color name="lbl_name">#333333</color>
-    <color name="btn_logut_bg">#ff6861</color>
-
-    <color name="grey_300">#1f1f1f</color>
-
-    <color name="exoplayer_background">#ff0000</color>
-
-    <color name="primary">#7E3FE4</color>
-    <color name="primary_dark">#6f37c9</color>
-    <color name="primary_darker">#5E1FC5</color>
-    <!--<color name="primary">#E43F3F</color>
-    <color name="primary_dark">#E12929</color>
-    <color name="primary_darker">#CC1D1D</color>
-    -->
-    <color name="accent">#FFFFFF</color>
-
-    <color name="jet">#222222</color>
-    <color name="oil">#333333</color>
-    <color name="monsoon">#777777</color>
-    <color name="jumbo">#888888</color>
-    <color name="aluminum">#999999</color>
-    <color name="base">#AAAAAA</color>
-    <color name="iron">#CCCCCC</color>
-    <color name="colorLine">#dfdfdf</color>
-    <color name="colorFontGreen">#388e3c</color>
-    <color name="tab_disable">#979797</color>
-    <color name="tab_enable">#FFFFFF</color>
+    <!-- Tabs (dark) -->
     <color name="tab_checked">#F3CD70</color>
     <color name="tab_unchecked">#FFFFFF</color>
 
-    <color name="primary_text">#212121</color>
-    <color name="secondary_text">#727272</color>
-    <color name="icons">#ffffff</color>
-    <color name="colorPrimaryShadowMainActivity">#CA434242</color>
-    <color name="fragmentsMainBar">#212122</color>
-    <color name="rewayahSpinnerBAckground">#3B3B3B</color>
+    <!-- Cards and surfaces (dark) -->
+    <color name="colorCardView">#F7F7F7</color>
     <color name="cardAackground">#434343</color>
+    <color name="colorLine">#DFDFDF</color>
 
+    <!-- Text (dark) -->
+    <color name="primary_text">#E2E3DD</color>
+    <color name="secondary_text">#B0B0B0</color>
+    <color name="toolbarTextColor">#FFFFFF</color>
+    <color name="icons">#FFFFFF</color>
+    <item name="textHint" type="color">#A8A4A4</item>
 
-    <color name="colorPrimarySignIn">#3f51b5</color>
-    <color name="primary_darkerSignIn">#250D4C</color>
+    <!-- Login / Register (dark) -->
+    <color name="bg_login">#FAF9F7</color>
+    <color name="bg_register">#2E3237</color>
 
-
-    <color name="colorPrimaryAyaList">#241835</color>
-    <color name="primary_darkerAyaList">#301064</color>
-
-    <color name="colorPrimaryUserInformation">#8046D1</color>
-    <color name="primary_darkerUserInformation">#5E1FC5</color>
-
-    <color name="colorPrimarySettings">#381B61</color>
-    <color name="primary_darkerSettings">#240C4A</color>
-
-    <color name="colorPrimaryQuranMediaPlayer">#05121D</color>
-    <color name="primary_darkerQuranMediaPlayer">#19042B</color>
-    <color name="toolbarTextColor">#ffffff</color>
-
-    <color name="colorPrimarySplashScreen">#3f51b5</color>
-    <color name="primary_darkerSplashScreen">#000000</color>
-    <color name="quran_player_toolbar_top">#103644</color>
-    <color name="quran_player_toolbar_bottom">#90000000</color>
-    <color name="quran_player_background">#2E2D2D</color>
-    <color name="unified_ad_title_color">#2196F3</color>
+    <!-- Slider screen (dark tweaks) -->
+    <color name="bg_slider_screen1">#F4B241</color>
+    <color name="bg_slider_screen2">#1CF4A2</color>
+    <color name="bg_slider_screen3">#7B9FFF</color>
+    <color name="bg_slider_screen4">#C467F3</color>
+    <color name="bg_slider_screen_desc">#E2A7FF</color>
     <color name="slide_screen_1_text">#00B5F1</color>
     <color name="slide_screen_1_text_inactive">#52B8DA</color>
 
-    <color name="bg_slider_screen_desc">#E2A7FF</color>
-    <color name="BottomSheetDialog">#353232</color>
+    <!-- Quran player (dark) -->
+    <color name="quran_player_toolbar_top">#103644</color>
+    <color name="quran_player_toolbar_bottom">#90000000</color>
+    <color name="quran_player_background">#2E2D2D</color>
 
-    <item name="rewardVideoBackground" type="color">#041E27</item>
+    <!-- Quran reader (dark) -->
+    <color name="cast_libraries_material_featurehighlight_outer_highlight_default_color">#0C385A</color>
+
+    <!-- Misc (dark) -->
+    <color name="rewayahSpinnerBAckground">#3B3B3B</color>
+    <color name="BottomSheetDialog">#353232</color>
+    <color name="softBlue">#CDF6F8</color>
+    <color name="exoplayer_background">#FF0000</color>
+
     <item name="reversedWhite" type="color">#FFFFFF</item>
+    <item name="rewardVideoBackground" type="color">#041E27</item>
+    <item name="whiteback" type="color">#F9F9F9</item>
+    <item name="recitesnames" type="color">#60839C</item>
+
+    <!-- Warnings (dark) -->
     <color name="warning">#615C2D</color>
     <color name="warning_text">#FFEB3B</color>
 

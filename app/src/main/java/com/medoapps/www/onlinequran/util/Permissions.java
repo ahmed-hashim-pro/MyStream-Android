@@ -14,7 +14,7 @@ import android.provider.Settings;
 
 import androidx.core.app.ActivityCompat;
 
-import com.google.firebase.BuildConfig;
+import com.medoapps.www.onlinequran.BuildConfig;
 import com.medoapps.www.onlinequran.R;
 
 public class Permissions {

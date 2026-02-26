@@ -34,7 +34,7 @@
         android:text="@string/report_comment"
         android:textColor="@color/black"
         android:layout_marginBottom="40dp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/Widget.Material3.Button.OutlinedButton"
         />
 
 

@@ -16,6 +16,7 @@
 
 package com.medoapps.www.onlinequran;
 
+import java.lang.ref.WeakReference;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -144,10 +145,10 @@ public  class  MainActivity extends BaseActivity {
     private ExtendedFloatingActionButton admin_fab ,quran_fab;
 
     boolean isAllFabsVisible = false;
-    static MainActivity instance8;
+    static WeakReference<MainActivity> instance8Ref;
     //private RewardedVideoAd mRewardedVideoAd;
-    private static final String AD_UNIT_ID = "ca-app-pub-9350633918697995/7533398267";
-    private static final String APP_ID = " ca-app-pub-9350633918697995~2524775865";
+    private static final String AD_UNIT_ID = BuildConfig.ADMOB_AD_UNIT_ID;
+    private static final String APP_ID = BuildConfig.ADMOB_APP_ID;
 
 
     private RelativeLayout AdminLayout ;
@@ -214,12 +215,12 @@ public  class  MainActivity extends BaseActivity {
         }
 
         setContentView(R.layout.activity_main);
-        instance8 =this;
+        instance8Ref = new WeakReference<>(this);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         youTubePosts=new YouTubePosts();
-        quranFragment=new RecitesName(instance8);
+        quranFragment=new RecitesName(this);
         radioFragment=new RadioFragment();
         otherCategoryFragment=new OtherCategoryFragment();
 //        recentFragment=new RecentPosts();
@@ -946,6 +947,7 @@ public  class  MainActivity extends BaseActivity {
             viewPager.setCurrentItem(1);
         }
     }
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         // Move the task containing the MainActivity to the back of the activity stack, instead of
@@ -1429,16 +1431,20 @@ public  class  MainActivity extends BaseActivity {
         final String TargetUrl = mFirebaseRemoteConfig.getString(admin_post_targrt_url);
         Boolean IsPostShow = mFirebaseRemoteConfig.getBoolean(admin_post_show);
 
-        if (IsPostShow==true) {
+        if (IsPostShow==true && AdminLayout != null) {
 
 
             AdminLayout.setVisibility(View.VISIBLE);
             try {
-                Glide.with(getApplicationContext()).load(photoUrl).into(adminPostPhoto);
+                if (adminPostPhoto != null) {
+                    Glide.with(getApplicationContext()).load(photoUrl).into(adminPostPhoto);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            AdminPostText.setText(PostText);
+            if (AdminPostText != null) {
+                AdminPostText.setText(PostText);
+            }
             AdminLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1451,12 +1457,10 @@ public  class  MainActivity extends BaseActivity {
 
 
 
-
-
             //mWelcomeTextView.setAllCaps(true);
         } else {
 
-            AdminLayout.setVisibility(View.GONE);
+            if (AdminLayout != null) AdminLayout.setVisibility(View.GONE);
             //mWelcomeTextView.setAllCaps(false);
         }
 
@@ -1528,5 +1532,11 @@ public  class  MainActivity extends BaseActivity {
         adapter.addFragment(recentFragment);*/
 //        adapter.addFragment(topPostsFragment);
         viewPager.setAdapter(mPagerAdapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        instance8Ref = null;
     }
 }

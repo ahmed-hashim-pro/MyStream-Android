@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_marginLeft="7dp"
+                android:layout_marginStart="7dp"
                 android:layout_marginBottom="2dp"
                 >
 
@@ -38,23 +38,23 @@
                     layout="@layout/include_youtube_post_author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layoutDirection="ltr" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10px"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="40dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="40dp"
                     android:orientation="vertical">
                     <TextView
                         android:id="@+id/user_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="14dp"
-                        android:paddingLeft="7dp"
-                        android:paddingRight="7dp"
+                        android:textSize="14sp"
+                        android:paddingStart="7dp"
+                        android:paddingEnd="7dp"
                         android:textStyle="bold"
                         android:text="Loading..." />
                     <TextView
@@ -64,8 +64,8 @@
                         android:maxLines="1"
                         android:paddingTop="4px"
                         android:paddingBottom="4px"
-                        android:paddingLeft="9dp"
-                        android:paddingRight="9dp"
+                        android:paddingStart="9dp"
+                        android:paddingEnd="9dp"
                         android:text="" />
                 </LinearLayout>
 
@@ -75,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/post_author_layout"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignTop="@+id/post_author_layout"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
@@ -84,8 +84,8 @@
                         android:id="@+id/option"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="5dp"
                         android:background="?attr/selectableItemBackground"
                         android:src="@drawable/baseline_more_vert_24" />
 
@@ -99,9 +99,10 @@
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
+                android:orientation="horizontal"
                 android:layout_below="@+id/userArea"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginEnd="7dp"
                 android:background="@color/grey_300">
 
             </LinearLayout>

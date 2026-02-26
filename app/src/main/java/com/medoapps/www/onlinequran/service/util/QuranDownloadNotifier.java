@@ -3,6 +3,8 @@ package com.medoapps.www.onlinequran.service.util;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.pm.ServiceInfo;
+import android.os.Build;
 import android.content.Context;
 import android.content.Intent;
 import androidx.core.app.NotificationCompat;
@@ -328,7 +330,11 @@ public class QuranDownloadNotifier {
 
     try {
       if (shouldForeground) {
-        service.startForeground(notificationId, builder.build());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+          service.startForeground(notificationId, builder.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+        } else {
+          service.startForeground(notificationId, builder.build());
+        }
         isForeground = true;
        } else {
         notificationManager.notify(notificationId, builder.build());

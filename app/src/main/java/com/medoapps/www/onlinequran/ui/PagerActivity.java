@@ -41,6 +41,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.IntentCompat;
 import androidx.core.util.Pair;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
@@ -1284,7 +1285,7 @@ public class PagerActivity extends AppCompatActivity implements
             AudioService.AudioUpdateIntent.STATUS, -1);
         int repeatCount = intent.getIntExtra(
             AudioService.AudioUpdateIntent.REPEAT_COUNT, -200);
-        AudioRequest request = intent.getParcelableExtra(AudioService.AudioUpdateIntent.REQUEST);
+        AudioRequest request = IntentCompat.getParcelableExtra(intent, AudioService.AudioUpdateIntent.REQUEST, AudioRequest.class);
         if (request != null) {
           lastAudioRequest = request;
         }

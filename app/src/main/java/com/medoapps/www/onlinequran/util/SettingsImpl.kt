@@ -14,8 +14,10 @@ class SettingsImpl @Inject constructor(private val quranSettings: QuranSettings)
     callbackFlow {
       val callback =
         SharedPreferences.OnSharedPreferenceChangeListener { _, pref ->
-          trySendBlocking(pref)
-            .onFailure {}
+          pref?.let {
+            trySendBlocking(it)
+              .onFailure {}
+          }
         }
       quranSettings.registerPreferencesListener(callback)
 

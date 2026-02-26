@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -22,10 +23,10 @@
             android:layout_height="45dp"
             android:src="@android:drawable/ic_media_play"
             android:layout_gravity="center_vertical"
-            android:tint="@color/colorAccent"
+            app:tint="@color/colorAccent"
             android:foregroundGravity="center_vertical"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
             android:backgroundTint="@color/icons" />
 
         <TextView

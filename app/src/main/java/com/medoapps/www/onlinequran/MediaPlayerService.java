@@ -12,6 +12,8 @@ import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.pm.ServiceInfo;
+import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -259,7 +261,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         Log.d(TAG, "onDestroysasd: " +"onDestroy" );
 
 //        destroyService();
-
+        instance = null;
     }
 
     private void destroyService(){
@@ -387,6 +389,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
 
         if (!mp.isPlaying() && storage.loadIsMediaStoppedFromUser()==false){
             Intent broadcastIntent = new Intent(Broadcast_updateProgressBarReceiver);
+            broadcastIntent.setPackage(getPackageName());
             sendBroadcast(broadcastIntent);
 
             playMedia();
@@ -536,8 +539,13 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
             headers.put("Status", "206");
             headers.put("Cache-control", "no-cache");
             // Set the data source to the mediaFile location
-            Uri uri = Uri.parse(activeAudio.getData());
-            mediaPlayer.setDataSource(this,uri,headers);
+            String dataSource = activeAudio.getData();
+            if (dataSource.startsWith("http://") || dataSource.startsWith("https://")) {
+                mediaPlayer.setDataSource(dataSource);
+            } else {
+                Uri uri = Uri.parse(dataSource);
+                mediaPlayer.setDataSource(this, uri, headers);
+            }
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
             //Set up MediaPlayer event listeners
@@ -846,7 +854,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     private void registerBecomingNoisyReceiver() {
         //register after getting audio focus
         IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
-        registerReceiver(becomingNoisyReceiver, intentFilter);
+        ContextCompat.registerReceiver(this, becomingNoisyReceiver, intentFilter, ContextCompat.RECEIVER_NOT_EXPORTED);
     }
 
     /**
@@ -1071,12 +1079,14 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, activeAudio.getTitle())
                 .build());
 
-        try {
-            mediaSession.setMetadata(new MediaMetadataCompat.Builder()
-                    .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, mediaPlayer.getDuration())
-                    .build());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (mediaPlayer != null) {
+            try {
+                mediaSession.setMetadata(new MediaMetadataCompat.Builder()
+                        .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, mediaPlayer.getDuration())
+                        .build());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -1177,7 +1187,11 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
 //        nManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 //        nManager.notify(NOTIFICATION_ID, nBuilder.build());
 
-        startForeground(NOTIFICATION_ID, nBuilder.build());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(NOTIFICATION_ID, nBuilder.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+        } else {
+            startForeground(NOTIFICATION_ID, nBuilder.build());
+        }
 //        activeAudio.getRecitesName();
         Log.d(TAG, "buildNotification: " + activeAudio.getRecitesName());
 
@@ -1320,7 +1334,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     private void register_playNewAudio() {
         //Register playNewMedia receiver
         IntentFilter filter = new IntentFilter(com.medoapps.www.onlinequran.NewQuranPlayer.Broadcast_PLAY_NEW_AUDIO);
-        registerReceiver(playNewAudio, filter);
+        ContextCompat.registerReceiver(this, playNewAudio, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
 
     }
     private int getNotificationIcon() {

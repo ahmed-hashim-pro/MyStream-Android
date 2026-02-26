@@ -93,9 +93,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ad_layout"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
                 android:background="#cc040303">
 
                 <androidx.cardview.widget.CardView
@@ -109,9 +109,9 @@
                     android:layoutDirection="ltr"
                     app:cardPreventCornerOverlap="true"
                     android:focusableInTouchMode="true"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
                     >
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -121,9 +121,9 @@
                         <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
                             android:layout_gravity="center"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
                             android:orientation="horizontal"
                             >
                             <TextView
@@ -132,8 +132,8 @@
                                 android:layout_height="match_parent"
                                 android:gravity="center"
                                 android:text="11"
-                                android:layout_toRightOf="@+id/eye"
-                                android:layout_marginLeft="10dp"
+                                android:layout_toEndOf="@+id/eye"
+                                android:layout_marginStart="10dp"
                                 android:textColor="@color/toolbarTextColor"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
@@ -143,7 +143,7 @@
                                 android:layout_width="20dp"
                                 android:layout_height="match_parent"
                                 android:src="@drawable/outline_visibility_24"
-                                android:tint="@color/toolbarTextColor" />
+                                app:tint="@color/toolbarTextColor" />
 
                         </RelativeLayout>
 
@@ -151,17 +151,17 @@
                             android:id="@+id/option_layout2"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
                             android:orientation="horizontal">
 
                             <ImageView
                                 android:id="@+id/videoOption"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:paddingLeft="10dp"
-                                android:paddingRight="5dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="5dp"
                                 android:src="@drawable/baseline_more_vert_24"
-                                android:tint="@color/toolbarTextColor" />
+                                app:tint="@color/toolbarTextColor" />
 
 
                         </LinearLayout>
@@ -175,12 +175,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/Viewlayout"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="16dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:visibility="gone"
-                    android:paddingRight="@dimen/activity_horizontal_margin">
+                    android:paddingEnd="@dimen/activity_horizontal_margin">
 
 
                     <include
@@ -191,7 +191,7 @@
                         android:id="@+id/showVideo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:onClick="ShowVideo"
                         android:text="@string/showVideo"
                         android:visibility="gone" />
@@ -203,10 +203,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/postAuther"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="21dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="21dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginRight="16dp">
+                    android:layout_marginEnd="16dp">
 
                     <include
                         android:id="@+id/post_text_layout"
@@ -223,10 +223,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/postText"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:paddingLeft="@dimen/activity_horizontal_margin"
-                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:paddingEnd="@dimen/activity_horizontal_margin"
                     android:paddingBottom="30dp"
                     tools:listitem="@layout/item_comment" />
             </RelativeLayout>
@@ -255,8 +255,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:orientation="horizontal"
             >
 

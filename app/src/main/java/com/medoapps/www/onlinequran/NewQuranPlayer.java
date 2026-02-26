@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -19,6 +20,7 @@ import android.media.audiofx.Visualizer;
 import android.media.session.MediaSession;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -263,6 +265,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
                 storage.storeAudioIndex(audioIndex);
 
                 Intent broadcastIntent = new Intent(Broadcast_PLAY_NEW_AUDIO);
+                broadcastIntent.setPackage(getPackageName());
                 sendBroadcast(broadcastIntent);
                 /*if(isServiceNotFirstRun){
                     Toast.makeText(this, "play again over", Toast.LENGTH_SHORT).show();
@@ -286,6 +289,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
                 //Service is active
                 //Send a broadcast to the service -> PLAY_NEW_AUDIO
                 Intent broadcastIntent = new Intent(Broadcast_PLAY_NEW_AUDIO);
+                broadcastIntent.setPackage(getPackageName());
                 sendBroadcast(broadcastIntent);
             }
         }
@@ -327,12 +331,12 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
 
         try {
             unregisterReceiver(updateProgressBarReceiver);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IllegalArgumentException ignored) {
+            // Receiver was not registered yet, safe to ignore
         }
         IntentFilter filter = new IntentFilter(com.medoapps.www.onlinequran.NewQuranPlayer.Broadcast_updateProgressBarReceiver);
         try {
-            registerReceiver(updateProgressBarReceiver, filter);
+            ContextCompat.registerReceiver(this, updateProgressBarReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1515,8 +1519,13 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
 
                 @Override
                 public void onNotificationPosted(int notificationId, Notification notification, boolean ongoing) {
-                    if(ongoing)
-                        startForeground(notificationId,notification);
+                    if(ongoing) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            startForeground(notificationId, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+                        } else {
+                            startForeground(notificationId, notification);
+                        }
+                    }
                 }
             });
             player.addListener(new Player.EventListener() {
@@ -1648,7 +1657,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
             public PendingIntent createCurrentContentIntent(Player player) {
                 Intent intentForeground = new Intent(context, PlayerActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                return PendingIntent.getActivity(getApplicationContext(), 0, intentForeground, 0);
+                return PendingIntent.getActivity(getApplicationContext(), 0, intentForeground, PendingIntent.FLAG_IMMUTABLE);
             }
 
             @Override

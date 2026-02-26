@@ -28,14 +28,13 @@
                 android:id="@+id/dialogTitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:layout_toRightOf="@+id/imageContainer"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_toEndOf="@+id/imageContainer"
                 android:gravity="center_vertical"
                 android:text="title"
                 android:textColor="@color/black"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -53,7 +52,7 @@
         android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif"
         android:text="description"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_marginStart="15dp"
 
         />

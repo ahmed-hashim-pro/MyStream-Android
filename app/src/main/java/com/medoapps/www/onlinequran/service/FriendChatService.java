@@ -1,6 +1,8 @@
 package com.medoapps.www.onlinequran.service;
 
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.os.Build;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -37,7 +39,8 @@ import java.util.Map;
 
 
 public class FriendChatService extends Service {
-    private static String TAG = "FriendChatService";
+    private static final String TAG = "FriendChatService";
+    private static final String CHANNEL_ID = "CHAT_CHANNEL";
     // Binder given to clients
     public final IBinder mBinder = new LocalBinder();
     public Map<String, Boolean> mapMark;
@@ -56,6 +59,11 @@ public class FriendChatService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Chat", NotificationManager.IMPORTANCE_HIGH);
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            if (manager != null) manager.createNotificationChannel(channel);
+        }
         mapMark = new HashMap<>();
         mapQuery = new HashMap<>();
         mapChildEventListenerMap = new HashMap<>();
@@ -180,7 +188,7 @@ public class FriendChatService extends Service {
         Intent activityIntent = new Intent(this, Messenger.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, activityIntent, PendingIntent.FLAG_IMMUTABLE);
         NotificationCompat.Builder notificationBuilder = new
-                NotificationCompat.Builder(this)
+                NotificationCompat.Builder(this, CHANNEL_ID)
                 .setLargeIcon(icon)
                 .setContentTitle(name)
                 .setContentText(content)

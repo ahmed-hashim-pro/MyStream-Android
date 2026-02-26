@@ -23,6 +23,8 @@ package com.medoapps.www.onlinequran.service;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.pm.ServiceInfo;
+import android.os.Build;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -56,6 +58,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.SparseIntArray;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.IntentCompat;
 import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.media.app.NotificationCompat.MediaStyle;
@@ -299,9 +302,10 @@ public class AudioService extends Service implements OnCompletionListener,
 
     broadcastManager = LocalBroadcastManager.getInstance(appContext);
     noisyAudioStreamReceiver = new NoisyAudioStreamReceiver();
-    registerReceiver(
+    ContextCompat.registerReceiver(this,
         noisyAudioStreamReceiver,
-        new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
+        new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY),
+        ContextCompat.RECEIVER_NOT_EXPORTED);
 
     ComponentName receiver = new ComponentName(this, MediaButtonReceiver.class);
     mediaSession = new MediaSessionCompat(appContext, "QuranMediaSession", receiver, null);
@@ -409,7 +413,7 @@ public class AudioService extends Service implements OnCompletionListener,
         broadcastManager.sendBroadcast(updateIntent);
       }
     } else if (ACTION_PLAYBACK.equals(action)) {
-      AudioRequest playInfo = intent.getParcelableExtra(EXTRA_PLAY_INFO);
+      AudioRequest playInfo = IntentCompat.getParcelableExtra(intent, EXTRA_PLAY_INFO, AudioRequest.class);
       if (playInfo != null) {
         audioRequest = playInfo;
 
@@ -440,7 +444,7 @@ public class AudioService extends Service implements OnCompletionListener,
     } else if (ACTION_REWIND.equals(action)) {
       processRewindRequest();
     } else if (ACTION_UPDATE_REPEAT.equals(action)) {
-      final AudioRequest playInfo = intent.getParcelableExtra(EXTRA_PLAY_INFO);
+      final AudioRequest playInfo = IntentCompat.getParcelableExtra(intent, EXTRA_PLAY_INFO, AudioRequest.class);
       if (playInfo != null && audioQueue != null) {
         audioQueue = audioQueue.withUpdatedAudioRequest(playInfo);
         audioRequest = playInfo;
@@ -1247,7 +1251,11 @@ public class AudioService extends Service implements OnCompletionListener,
     notificationBuilder.setTicker(audioTitle);
     notificationBuilder.setContentText(audioTitle);
 
-    startForeground(NOTIFICATION_ID, notificationBuilder.build());
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      startForeground(NOTIFICATION_ID, notificationBuilder.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+    } else {
+      startForeground(NOTIFICATION_ID, notificationBuilder.build());
+    }
     isSetupAsForeground = true;
   }
 

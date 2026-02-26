@@ -38,7 +38,7 @@ import java.io.InputStream;
  */
 public class MyDownloadService extends MyBaseTaskService {
 
-    private static final String TAG = "Storage#DownloadServiceUserPhoto";
+    private static final String TAG = "DlServiceUserPhoto";
 
     /** Actions **/
     public static final String ACTION_DOWNLOAD_UserPhoto = "action_download_UserPhoto";

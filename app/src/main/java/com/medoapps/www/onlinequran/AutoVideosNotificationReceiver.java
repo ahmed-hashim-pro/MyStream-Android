@@ -163,7 +163,7 @@ public class AutoVideosNotificationReceiver extends BroadcastReceiver {
                     .setLargeIcon(result)
                     .setStyle(new NotificationCompat.BigPictureStyle()
                             .bigPicture(result)
-                            .bigLargeIcon(null))
+                            .bigLargeIcon((android.graphics.Bitmap) null))
                     .setAutoCancel(true)
                     .setWhen(when)
                     .setContentIntent(createContentIntent(getApplicationContext()))
