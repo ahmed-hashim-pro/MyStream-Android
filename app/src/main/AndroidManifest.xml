@@ -127,6 +127,7 @@
             android:name=".NewQuranPlayer"
             android:exported="false"
             android:fitsSystemWindows="true"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/AppTheme.QuranMediaPlayer" />
         <activity
             android:name=".MediaPlayer"
