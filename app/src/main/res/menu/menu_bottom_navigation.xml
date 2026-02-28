@@ -30,6 +30,13 @@
         android:title="@string/OtherCategories"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/action_mushaf"
+        android:checked="false"
+        android:icon="@drawable/ramadan_quran_24px"
+        android:title="@string/TheHolyQuran"
+        app:showAsAction="ifRoom" />
+
 
     <!--<item
         android:id="@+id/action_recent"

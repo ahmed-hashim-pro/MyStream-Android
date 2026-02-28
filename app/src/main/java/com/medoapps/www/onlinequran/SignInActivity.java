@@ -833,7 +833,7 @@ public class SignInActivity extends BaseActivity implements View.OnClickListener
 
         emailSignInTap.setCompoundDrawablesWithIntrinsicBounds(isEmail_Login_ContainerShow ?R.drawable.outline_email_24:0, 0, !isEmail_Login_ContainerShow ?R.drawable.outline_expand_less_24:R.drawable.outline_expand_more_24, 0);
 
-        emailSignInTap.setBackgroundColor(getResources().getColor(!isEmail_Login_ContainerShow ?R.color.grey_500:R.color.primary_dark));
+        emailSignInTap.setBackgroundColor(getResources().getColor(!isEmail_Login_ContainerShow ?R.color.grey_500:R.color.colorPrimaryDark));
         isEmail_Login_ContainerShow = !isEmail_Login_ContainerShow;
     }
 

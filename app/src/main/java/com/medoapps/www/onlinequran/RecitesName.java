@@ -45,6 +45,8 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -85,6 +87,8 @@ import com.medoapps.www.onlinequran.models.UserTypes;
 import com.medoapps.www.onlinequran.service.ReportService;
 import com.medoapps.www.onlinequran.util.SeparateFunctions;
 
+import io.supercharge.shimmerlayout.ShimmerLayout;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -123,6 +127,14 @@ public class RecitesName extends Fragment  {
     private List<Object> recyclerViewItems = new ArrayList<>();
 
     RecyclerView lVRecites;
+    ShimmerLayout reciterLoader;
+
+    private ImageButton toggleViewBTN;
+    private static final int VIEW_MODE_LIST = 0;
+    private static final int VIEW_MODE_GRID = 1;
+    private static final int VIEW_MODE_COMPACT = 2;
+    private int viewMode = VIEW_MODE_LIST;
+    private static final String PREF_VIEW_MODE = "reciter_view_mode";
 
     String RecitesName="";
     String Rewayat="";
@@ -182,7 +194,7 @@ public class RecitesName extends Fragment  {
             @Override
             public boolean onClose() {
                 recitelisttxt.setVisibility(View.VISIBLE);
-
+                toggleViewBTN.setVisibility(View.VISIBLE);
                 return false;
             }
         });
@@ -190,7 +202,7 @@ public class RecitesName extends Fragment  {
             @Override
             public void onClick(View view) {
                 recitelisttxt.setVisibility(View.GONE);
-
+                toggleViewBTN.setVisibility(View.GONE);
             }
         });
         //final Context co=this;
@@ -326,7 +338,19 @@ public class RecitesName extends Fragment  {
             getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }*/
         instance4 =this;
+        reciterLoader = (ShimmerLayout) getView().findViewById(R.id.reciterSkeletonLoader);
+        reciterLoader.startShimmerAnimation();
         recitelisttxt = (TextView) getView().findViewById(R.id.recitelisttxt);
+
+        viewMode = PreferenceManager.getDefaultSharedPreferences(getContext())
+                .getInt(PREF_VIEW_MODE, VIEW_MODE_LIST);
+        toggleViewBTN = (ImageButton) getView().findViewById(R.id.toggleViewBTN);
+        toggleViewBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showViewModeMenu(v);
+            }
+        });
 
         searchManager();
 
@@ -395,11 +419,12 @@ public class RecitesName extends Fragment  {
 
 //        addBannerAds(recyclerViewItems);
 //        loadBannerAds(recyclerViewItems);
-        MyListAdapter adapter = new MyListAdapter(recyclerViewItems);
 
         lVRecites.setHasFixedSize(false);
-        lVRecites.setLayoutManager(new LinearLayoutManager(getContext()));
-        lVRecites.setAdapter(adapter);
+        applyLayoutMode();
+
+        reciterLoader.stopShimmerAnimation();
+        reciterLoader.setVisibility(View.GONE);
 
         if(SettingSaved.OnTimeAds==false) {
             if(SettingSaved.IsRated==1){
@@ -409,10 +434,83 @@ public class RecitesName extends Fragment  {
 //        loadSomeYoutubePosts(7);
     }
 
+    private void showViewModeMenu(View anchor) {
+        PopupMenu popup = new PopupMenu(getContext(), anchor);
+        popup.getMenuInflater().inflate(R.menu.menu_view_mode, popup.getMenu());
+
+        int activeId;
+        switch (viewMode) {
+            case VIEW_MODE_GRID: activeId = R.id.view_mode_grid; break;
+            case VIEW_MODE_COMPACT: activeId = R.id.view_mode_compact; break;
+            default: activeId = R.id.view_mode_list; break;
+        }
+        popup.getMenu().findItem(activeId).setChecked(true);
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.view_mode_list) {
+                    viewMode = VIEW_MODE_LIST;
+                } else if (id == R.id.view_mode_grid) {
+                    viewMode = VIEW_MODE_GRID;
+                } else if (id == R.id.view_mode_compact) {
+                    viewMode = VIEW_MODE_COMPACT;
+                } else {
+                    return false;
+                }
+                PreferenceManager.getDefaultSharedPreferences(getContext())
+                        .edit().putInt(PREF_VIEW_MODE, viewMode).apply();
+                applyLayoutMode(true);
+                return true;
+            }
+        });
+        popup.show();
+    }
+
+    private void applyLayoutMode() {
+        applyLayoutMode(false);
+    }
+
+    private void applyLayoutMode(boolean animate) {
+        if (animate) {
+            lVRecites.animate().alpha(0f).setDuration(150).withEndAction(new Runnable() {
+                @Override
+                public void run() {
+                    swapLayoutManager();
+                    lVRecites.animate().alpha(1f).setDuration(150).start();
+                }
+            }).start();
+        } else {
+            swapLayoutManager();
+        }
+    }
+
+    private void swapLayoutManager() {
+        if (viewMode == VIEW_MODE_GRID) {
+            GridLayoutManager glm = new GridLayoutManager(getContext(), 2);
+            glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if (position < recyclerViewItems.size()) {
+                        Object item = recyclerViewItems.get(position);
+                        if (item instanceof AdView || item instanceof Post)
+                            return 2;
+                    }
+                    return 1;
+                }
+            });
+            lVRecites.setLayoutManager(glm);
+        } else {
+            lVRecites.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
+        lVRecites.setAdapter(new MyListAdapter(recyclerViewItems, viewMode));
+    }
+
     void loadAllBannerAds(){
         addBannerAds(recyclerViewItems);
         loadBannerAds(recyclerViewItems);
-        lVRecites.setAdapter(new MyListAdapter(recyclerViewItems));
+        swapLayoutManager();
     }
     void loadSomeYoutubePosts(int mPosts){
         Query ref = FirebaseDatabase.getInstance().getReference()
@@ -470,8 +568,13 @@ public class RecitesName extends Fragment  {
 
     public class MyListAdapter extends RecyclerView.Adapter<MyListAdapter.ViewHolder>{
         private List<Object> listrecitesLocalobject;
+        private int viewMode;
 
-
+        private static final int VIEW_TYPE_AD = 0;
+        private static final int VIEW_TYPE_YOUTUBE = 1;
+        private static final int VIEW_TYPE_RECITER_LIST = 2;
+        private static final int VIEW_TYPE_RECITER_GRID = 3;
+        private static final int VIEW_TYPE_RECITER_COMPACT = 4;
 
 
         YouTubeThumbnailView youTubeThumbnailView ;
@@ -479,7 +582,12 @@ public class RecitesName extends Fragment  {
 
 
         public MyListAdapter(List<Object> recyclerViewItems) {
+            this(recyclerViewItems, VIEW_MODE_LIST);
+        }
+
+        public MyListAdapter(List<Object> recyclerViewItems, int viewMode) {
             this.listrecitesLocalobject = recyclerViewItems;
+            this.viewMode = viewMode;
         }
 
         private void onShareYoutubeBy( String videoTitle,String videoDescriptiontxt,String YouTubeVideoId,String Thumb_Url, String postId, String postTitle) {
@@ -590,9 +698,36 @@ public class RecitesName extends Fragment  {
 
         }
         @Override
+        public int getItemViewType(int position) {
+            Object item = listrecitesLocalobject.get(position);
+            if (item instanceof AdView) {
+                return VIEW_TYPE_AD;
+            } else if (item instanceof Post) {
+                return VIEW_TYPE_YOUTUBE;
+            }
+            switch (viewMode) {
+                case VIEW_MODE_GRID: return VIEW_TYPE_RECITER_GRID;
+                case VIEW_MODE_COMPACT: return VIEW_TYPE_RECITER_COMPACT;
+                default: return VIEW_TYPE_RECITER_LIST;
+            }
+        }
+
+        @Override
         public MyListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            View listItem= layoutInflater.inflate(R.layout.recites_ticket, parent, false);
+            int layoutRes;
+            switch (viewType) {
+                case VIEW_TYPE_RECITER_GRID:
+                    layoutRes = R.layout.recites_ticket_grid;
+                    break;
+                case VIEW_TYPE_RECITER_COMPACT:
+                    layoutRes = R.layout.recites_ticket_compact;
+                    break;
+                default:
+                    layoutRes = R.layout.recites_ticket;
+                    break;
+            }
+            View listItem = layoutInflater.inflate(layoutRes, parent, false);
             ViewHolder viewHolder = new ViewHolder(listItem);
 
             return viewHolder;
@@ -609,32 +744,40 @@ public class RecitesName extends Fragment  {
         }
         @Override
         public void onBindViewHolder(MyListAdapter.ViewHolder holder, int  position) {
+            // Reset itemView to full size in case it was previously collapsed (e.g. unloaded ad)
+            holder.itemView.setVisibility(View.VISIBLE);
+            RecyclerView.LayoutParams resetLp = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+            resetLp.height = RecyclerView.LayoutParams.WRAP_CONTENT;
+            resetLp.width = RecyclerView.LayoutParams.MATCH_PARENT;
+            holder.itemView.setLayoutParams(resetLp);
 
             try {
                 if (listrecitesLocalobject.get(position) instanceof AdView){
                     AdView adView = (AdView) listrecitesLocalobject.get(position);
 
-                    if (listrecitesLocalobject.get(position) instanceof AdView){
-                        Log.d("sfssdfsddsf", "The interstitial wasn't loaded yet.");
-
-                    }
-
-
                     if(adView.getParent() != null) {
-                        ((ViewGroup)adView.getParent()).removeView(adView); // <- fix
+                        ((ViewGroup)adView.getParent()).removeView(adView);
                     }
-                    holder.cardview.addView(adView); //  <==========  ERROR IN THIS LINE DURING 2ND RUN
-                    holder.cardview.setVisibility(View.VISIBLE);
+                    holder.cardview.addView(adView);
                     holder.cardContent.setVisibility(View.GONE);
                     holder.youtubeCardContent.setVisibility(View.GONE);
 
-
-                    holder.entireCard.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                        }
-                    });
+                    if (Boolean.TRUE.equals(adView.getTag())) {
+                        holder.cardview.setVisibility(View.VISIBLE);
+                        holder.itemView.setVisibility(View.VISIBLE);
+                        RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+                        lp.height = RecyclerView.LayoutParams.WRAP_CONTENT;
+                        lp.width = RecyclerView.LayoutParams.MATCH_PARENT;
+                        holder.itemView.setLayoutParams(lp);
+                    } else {
+                        holder.cardview.setVisibility(View.GONE);
+                        holder.itemView.setVisibility(View.GONE);
+                        RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+                        lp.height = 0;
+                        lp.width = 0;
+                        lp.setMargins(0, 0, 0, 0);
+                        holder.itemView.setLayoutParams(lp);
+                    }
                 }else if (listrecitesLocalobject.get(position) instanceof Post)
                 {
                     holder.cardview.setVisibility(View.GONE);
@@ -892,7 +1035,7 @@ public class RecitesName extends Fragment  {
 
                     holder.txtRecitesName.setSelected(true);
                     holder.entireCard.setLayoutDirection(SettingSaved.LanguageSelect==1?View.LAYOUT_DIRECTION_RTL:View.LAYOUT_DIRECTION_LTR);
-                    holder.entireCard.setOnClickListener(new View.OnClickListener() {
+                    holder.cardContent.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             RecitesName = temp.ServerName;
@@ -1181,9 +1324,19 @@ public class RecitesName extends Fragment  {
     private void addBannerAds(List<Object> recyclerViewItems) {
         if (isSubscribedPremium)
             return;
+
+        // In grid mode (2 columns), ads must land after an even number of
+        // single-span items so every row is complete before the full-width ad.
+        int startPos = 5;
+        int adInterval = ITEMS_PER_AD;
+        if (viewMode == VIEW_MODE_GRID) {
+            if (startPos % 2 != 0) startPos++;       // 5 → 6
+            if ((adInterval - 1) % 2 != 0) adInterval++; // 20 → 21 (20 reciters between ads)
+        }
+
         // Loop through the items array and place a new banner ad in every ith position in
         // the items List.
-        for (int i = 5; i <= recyclerViewItems.size(); i += ITEMS_PER_AD) {
+        for (int i = startPos; i <= recyclerViewItems.size(); i += adInterval) {
             try {
                 final AdView adView = new AdView(requireContext());
                 adView.setAdSize(AdSize.BANNER);
@@ -1233,6 +1386,17 @@ public class RecitesName extends Fragment  {
                     @Override
                     public void onAdLoaded() {
                         super.onAdLoaded();
+                        adView.setTag(true);
+                        try {
+                            if (lVRecites != null && lVRecites.getAdapter() != null) {
+                                int pos = recyclerViewItems.indexOf(adView);
+                                if (pos >= 0) {
+                                    lVRecites.getAdapter().notifyItemChanged(pos);
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         // The previous banner ad loaded successfully, call this method again to
                         // load the next ad in the items list.
                         loadBannerAd(index + ITEMS_PER_AD, recyclerViewItems);
@@ -1760,7 +1924,8 @@ public class RecitesName extends Fragment  {
 
             final AuthorClass temp = listrecitesLocal.get(position);
             txtRecitesName.setText(temp.RealName);
-            entireCard.setOnClickListener(new View.OnClickListener() {
+            CardView cardContent = (CardView) myView.findViewById(R.id.cardContent);
+            cardContent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     RecitesName = temp.ServerName;
@@ -1910,6 +2075,8 @@ public class RecitesName extends Fragment  {
                     Intent intent= new Intent( getActivity(),managerdb.class);
                     intent.putExtra("RecitesName", SettingSaved.FinalRecite);
                     intent.putExtra("RecitesAYA", SettingSaved.FinalAya);
+                    intent.putExtra("Rewayat", SettingSaved.FinalRewayat);
+                    intent.putExtra("RealRecitesName", SettingSaved.FinalRealRecitesName);
                     startActivity(intent);
                     //Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
                 }

@@ -41,6 +41,8 @@ public class SettingSaved extends AppCompatActivity {
     public static int ReminderStart=1;
     public static String FinalRecite="";
     public static String FinalAya="";
+    public static String FinalRewayat="";
+    public static String FinalRealRecitesName="";
     public static String specnumber="No_Num";
     public static String mDownloadUrl=null;
     public static String mDownloadUrlThumb=null;
@@ -86,6 +88,8 @@ public class SettingSaved extends AppCompatActivity {
             editor.putInt("ReminderStart",ReminderStart);
             editor.putString("FinalRecite",FinalRecite);
             editor.putString("FinalAya",FinalAya);
+            editor.putString("FinalRewayat",FinalRewayat);
+            editor.putString("FinalRealRecitesName",FinalRealRecitesName);
             editor.putString("specnumber",specnumber);
             editor.putString("title",title);
             editor.putString("body",body);
@@ -146,6 +150,8 @@ public class SettingSaved extends AppCompatActivity {
         ReminderStart=sharedpreferences.getInt("ReminderStart",ReminderStart);
         FinalRecite=sharedpreferences.getString("FinalRecite","");
         FinalAya=sharedpreferences.getString("FinalAya","");
+        FinalRewayat=sharedpreferences.getString("FinalRewayat","");
+        FinalRealRecitesName=sharedpreferences.getString("FinalRealRecitesName","");
         title=sharedpreferences.getString("title",title);
         body=sharedpreferences.getString("body",body);
         mDownloadUrl=sharedpreferences.getString("mDownloadUrl",mDownloadUrl);

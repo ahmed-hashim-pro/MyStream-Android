@@ -92,4 +92,11 @@
     <!-- Card elevation (M3 standardized) -->
     <dimen name="card_elevation_default">2dp</dimen>
     <dimen name="card_elevation_raised">4dp</dimen>
+
+    <!-- Player (Spotify-inspired) -->
+    <dimen name="player_art_size">280dp</dimen>
+    <dimen name="player_control_size">56dp</dimen>
+    <dimen name="player_seekbar_height">4dp</dimen>
+    <dimen name="card_corner_radius">8dp</dimen>
+    <dimen name="playlist_item_height">48dp</dimen>
 </resources>

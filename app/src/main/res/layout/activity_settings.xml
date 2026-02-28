@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    android:background="@color/grey_100"
+    android:background="@color/background_main"
     tools:context="com.medoapps.www.onlinequran.Settings">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/background_app_bar"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/AppTheme.Settings">
 
@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@null"
-                app:tint="@color/toolbarTextColor"
+                app:tint="@color/icon_primary"
                 ads:srcCompat="@drawable/outline_arrow_back_ios_24" />
 
             <TextView
@@ -35,7 +35,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:gravity="center"
                 android:text="@string/action_settings"
-                android:textColor="@color/toolbarTextColor"
+                android:textColor="@color/text_primary"
                 android:textStyle="bold" />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
@@ -48,6 +48,8 @@
         android:layout_above="@+id/adView"
         android:layout_below="@+id/toolbar2"
         android:layout_centerHorizontal="true"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         android:horizontalSpacing="15dp" />
 <!--
     <com.google.android.gms.ads.NativeExpressAdView

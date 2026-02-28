@@ -1,155 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/transparent"
     android:orientation="vertical"
+    android:paddingBottom="2dp"
     android:paddingStart="5dp"
     android:paddingEnd="5dp"
-    >
+    android:paddingTop="2dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardContent"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        app:cardElevation="20dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        app:cardElevation="@dimen/card_elevation_default"
         android:layoutDirection="rtl"
-        app:cardMaxElevation="12dp"
+        app:cardMaxElevation="@dimen/card_elevation_raised"
+        app:cardCornerRadius="12dp"
+        app:cardBackgroundColor="@color/background_card"
         app:cardPreventCornerOverlap="true"
         android:focusableInTouchMode="true"
-        app:contentPadding="2dp">
+        app:contentPadding="12dp">
 
         <LinearLayout
             android:id="@+id/entireCard"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
+            android:gravity="center_vertical"
             android:focusable="false"
-            android:focusableInTouchMode="false"
-            >
-
+            android:focusableInTouchMode="false">
 
             <ImageView
                 android:id="@+id/imgchannel"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_marginStart="7dp"
                 android:layout_marginEnd="7dp"
-                android:layout_weight="0"
                 android:focusable="false"
-                android:layout_gravity="center"
                 android:focusableInTouchMode="false"
                 android:transitionName="shared_surah_image"
-                app:tint="@color/primary"
+                app:tint="@color/gold_accent"
                 android:src="@drawable/btn_play" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/imgchannel"
-                android:layout_weight="1">
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/txtRecitesName"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/txtRecitesName"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:paddingTop="7dp"
-                        android:focusable="false"
-                        android:transitionName="shared_surah"
-                        android:focusableInTouchMode="false"
-                        android:gravity="center_vertical"
-                        android:paddingEnd="7dp"
-                        android:text="Large Text"
-                        android:singleLine="true"
-                        android:ellipsize="marquee"
-                        android:fadingEdge="horizontal"
-                        android:marqueeRepeatLimit="marquee_forever"
-                        android:scrollHorizontally="true"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="15sp" />
-                    <TextView
-                        android:id="@+id/txtRadioRewayah"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:gravity="center_vertical"
-                        android:paddingEnd="7dp"
-                        android:paddingStart="7dp"
-                        android:text="Large Text"
-                        android:singleLine="true"
-                        android:ellipsize="marquee"
-                        android:fadingEdge="horizontal"
-                        android:marqueeRepeatLimit="marquee_forever"
-                        android:scrollHorizontally="true"
-                        android:textColor="@color/grey_500"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textSize="11sp" />
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:transitionName="shared_surah"
+                    android:focusableInTouchMode="false"
+                    android:paddingEnd="7dp"
+                    android:paddingStart="7dp"
+                    android:text="Large Text"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp" />
 
-
+                <TextView
+                    android:id="@+id/txtRadioRewayah"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:paddingEnd="7dp"
+                    android:paddingStart="7dp"
+                    android:paddingTop="2dp"
+                    android:text="Large Text"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
             </LinearLayout>
-
 
             <ImageButton
                 android:id="@+id/buttonShare"
-                android:layout_width="40dp"
-                android:layout_height="30dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="@color/transparent"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:text="@string/downlaod"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/btn_share" />
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="20dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_gravity="center"
-                android:layout_weight="0"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:rotationY="180"
-                android:visibility="gone"
-                android:src="@drawable/backirrow" />
+                app:srcCompat="@drawable/btn_share"
+                app:tint="@color/icon_secondary" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardviewad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardElevation="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:layoutDirection="rtl"
-        app:cardMaxElevation="12dp"
-        app:cardPreventCornerOverlap="true"
-        >
+        app:cardBackgroundColor="@color/background_card"
+        app:cardElevation="@dimen/card_elevation_default"
+        app:cardMaxElevation="@dimen/card_elevation_raised"
+        app:cardCornerRadius="12dp"
+        app:cardPreventCornerOverlap="true">
 
     </androidx.cardview.widget.CardView>
 
-</LinearLayout>
+</RelativeLayout>

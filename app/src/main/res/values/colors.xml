@@ -2,42 +2,42 @@
 <resources>
 
     <!-- ============================================================ -->
-    <!-- Material 3 Light Theme Tokens (seed: green/teal #1B5E20)     -->
+    <!-- Material 3 Light Theme Tokens (seed: gold #B8860B)           -->
     <!-- ============================================================ -->
-    <color name="md_theme_light_primary">#1B5E20</color>
+    <color name="md_theme_light_primary">#B8860B</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
-    <color name="md_theme_light_primaryContainer">#A5D6A7</color>
-    <color name="md_theme_light_onPrimaryContainer">#002204</color>
-    <color name="md_theme_light_secondary">#52634F</color>
+    <color name="md_theme_light_primaryContainer">#FFDEA0</color>
+    <color name="md_theme_light_onPrimaryContainer">#3E2700</color>
+    <color name="md_theme_light_secondary">#6D5D3F</color>
     <color name="md_theme_light_onSecondary">#FFFFFF</color>
-    <color name="md_theme_light_secondaryContainer">#D5E8CF</color>
-    <color name="md_theme_light_onSecondaryContainer">#101F10</color>
-    <color name="md_theme_light_tertiary">#39656B</color>
+    <color name="md_theme_light_secondaryContainer">#F7E0BB</color>
+    <color name="md_theme_light_onSecondaryContainer">#261A04</color>
+    <color name="md_theme_light_tertiary">#4E6542</color>
     <color name="md_theme_light_onTertiary">#FFFFFF</color>
-    <color name="md_theme_light_tertiaryContainer">#BCEBF1</color>
-    <color name="md_theme_light_onTertiaryContainer">#001F23</color>
+    <color name="md_theme_light_tertiaryContainer">#D0EBBE</color>
+    <color name="md_theme_light_onTertiaryContainer">#0C2004</color>
     <color name="md_theme_light_error">#BA1A1A</color>
     <color name="md_theme_light_onError">#FFFFFF</color>
     <color name="md_theme_light_errorContainer">#FFDAD6</color>
     <color name="md_theme_light_onErrorContainer">#410002</color>
-    <color name="md_theme_light_background">#FCFDF7</color>
-    <color name="md_theme_light_onBackground">#1A1C19</color>
-    <color name="md_theme_light_surface">#FCFDF7</color>
-    <color name="md_theme_light_onSurface">#1A1C19</color>
-    <color name="md_theme_light_surfaceVariant">#DEE5D9</color>
-    <color name="md_theme_light_onSurfaceVariant">#424940</color>
-    <color name="md_theme_light_outline">#72796F</color>
-    <color name="md_theme_light_outlineVariant">#C2C9BD</color>
-    <color name="md_theme_light_inverseSurface">#2F312D</color>
-    <color name="md_theme_light_inverseOnSurface">#F0F1EB</color>
-    <color name="md_theme_light_inversePrimary">#69DC6F</color>
+    <color name="md_theme_light_background">#FFF8F0</color>
+    <color name="md_theme_light_onBackground">#1E1B16</color>
+    <color name="md_theme_light_surface">#FFF8F0</color>
+    <color name="md_theme_light_onSurface">#1E1B16</color>
+    <color name="md_theme_light_surfaceVariant">#EDE0CF</color>
+    <color name="md_theme_light_onSurfaceVariant">#4D4639</color>
+    <color name="md_theme_light_outline">#7F7667</color>
+    <color name="md_theme_light_outlineVariant">#D0C5B4</color>
+    <color name="md_theme_light_inverseSurface">#33302A</color>
+    <color name="md_theme_light_inverseOnSurface">#F7F0E7</color>
+    <color name="md_theme_light_inversePrimary">#D4A44C</color>
 
     <!-- ============================================================ -->
     <!-- Legacy / backward-compat aliases (mapped to M3 tokens)       -->
     <!-- ============================================================ -->
     <color name="colorPrimary">@color/md_theme_light_primary</color>
-    <color name="colorPrimaryDark">#0D3E12</color>
-    <color name="colorAccent">#2E7D32</color>
+    <color name="colorPrimaryDark">#8B6508</color>
+    <color name="colorAccent">#D4A44C</color>
 
     <!-- Greys -->
     <color name="grey_100">#F5F5F5</color>
@@ -57,46 +57,46 @@
     <!-- App-specific colors                                          -->
     <!-- ============================================================ -->
 
-    <!-- Main activity toolbar (white/light) -->
+    <!-- Main activity toolbar -->
     <color name="colorPrimaryMainActivity">#FFFFFF</color>
-    <color name="colorPrimaryDarkMainActivity">#FFFFFF</color>
+    <color name="colorPrimaryDarkMainActivity">#FFF8F0</color>
     <color name="colorAccentMainActivity">@color/colorAccent</color>
-    <color name="colorPrimaryShadowMainActivity">#CABBBBBB</color>
+    <color name="colorPrimaryShadowMainActivity">#FFFFFF</color>
     <color name="fragmentsMainBar">#FFFFFF</color>
-    <color name="colorIndivateTab">#FFFFFF</color>
+    <color name="colorIndivateTab">#D4A44C</color>
 
     <!-- Tabs -->
     <color name="tab_disable">#979797</color>
     <color name="tab_enable">#FFFFFF</color>
-    <color name="tab_checked">#1B5E20</color>
-    <color name="tab_unchecked">#000000</color>
+    <color name="tab_checked">#D4A44C</color>
+    <color name="tab_unchecked">#B3B3B3</color>
 
     <!-- Cards and surfaces -->
-    <color name="colorCardView">#F7F7F7</color>
+    <color name="colorCardView">#FFFFFF</color>
     <color name="cardAackground">#FFFFFF</color>
-    <color name="colorLine">#DFDFDF</color>
+    <color name="colorLine">#383838</color>
 
     <!-- Text -->
-    <color name="primary_text">#212121</color>
-    <color name="secondary_text">#727272</color>
-    <color name="toolbarTextColor">#FFFFFF</color>
-    <color name="icons">#FFFFFF</color>
-    <color name="textHint">#A8A4A4</color>
-    <color name="colorFontGreen">#388E3C</color>
+    <color name="primary_text">#1C1B1F</color>
+    <color name="secondary_text">#49454E</color>
+    <color name="toolbarTextColor">#1C1B1F</color>
+    <color name="icons">#1C1B1F</color>
+    <color name="textHint">#7F7667</color>
+    <color name="colorFontGreen">#D4A44C</color>
 
     <!-- Login / Register -->
-    <color name="edittextunderline">@color/md_theme_light_primary</color>
-    <color name="login_button_background">@color/md_theme_light_primary</color>
-    <color name="bg_login">#FAF9F7</color>
-    <color name="bg_register">#2E3237</color>
-    <color name="input_login">#222222</color>
-    <color name="input_login_hint">#999999</color>
-    <color name="input_register">#888888</color>
-    <color name="input_register_bg">#3B4148</color>
-    <color name="input_register_hint">#5E6266</color>
+    <color name="edittextunderline">#B8860B</color>
+    <color name="login_button_background">#B8860B</color>
+    <color name="bg_login">#FFF8F0</color>
+    <color name="bg_register">#FFFFFF</color>
+    <color name="input_login">#1C1B1F</color>
+    <color name="input_login_hint">#7F7667</color>
+    <color name="input_register">#49454E</color>
+    <color name="input_register_bg">#FFFFFF</color>
+    <color name="input_register_hint">#7F7667</color>
     <color name="btn_login">@color/md_theme_light_primary</color>
-    <color name="btn_login_bg">#ECEEF1</color>
-    <color name="lbl_name">#333333</color>
+    <color name="btn_login_bg">#D4A44C</color>
+    <color name="lbl_name">#FFFFFF</color>
     <color name="btn_logut_bg">#FF6861</color>
 
     <!-- Slider / onboarding screens -->
@@ -215,14 +215,14 @@
     <color name="toast_text_color_night">#FFFFFFFF</color>
 
     <!-- Quran player -->
-    <color name="quran_player_toolbar_top">#FF33B5E5</color>
-    <color name="quran_player_toolbar_bottom">#90000000</color>
-    <color name="quran_player_background">#17673AB7</color>
+    <color name="quran_player_toolbar_top">#FFFFFF</color>
+    <color name="quran_player_toolbar_bottom">#FFF8F0</color>
+    <color name="quran_player_background">#FFF8F0</color>
 
     <!-- Media / Exoplayer -->
-    <color name="exoplayer_background">#FF0000</color>
+    <color name="exoplayer_background">#FFF8F0</color>
     <color name="BottomSheetDialog">#FFFFFF</color>
-    <color name="rewayahSpinnerBAckground">#DAD5D5</color>
+    <color name="rewayahSpinnerBAckground">#FFFFFF</color>
     <color name="softBlue">#CDF6F8</color>
     <color name="cyan_500">#00BCD4</color>
 
@@ -232,16 +232,53 @@
     <color name="primary_darker">@color/colorPrimaryDark</color>
     <color name="accent">@color/colorAccent</color>
     <color name="unified_ad_title_color">#0000FF</color>
-    <color name="bg_main">#428BCA</color>
+    <color name="bg_main">#FFF8F0</color>
+
+    <!-- Splash -->
+    <color name="splash_icon_background">#FFFFFF</color>
 
     <!-- Warnings -->
-    <color name="warning">#AEA44E</color>
-    <color name="warning_text">#454119</color>
+    <color name="warning">#FFF3D6</color>
+    <color name="warning_text">#B8860B</color>
 
     <!-- Cast -->
     <color name="cast_libraries_material_featurehighlight_outer_highlight_default_color">#2196F3</color>
     <color name="cast_libraries_material_featurehighlight_text_body_color">#FFFFFFFF</color>
     <color name="cast_libraries_material_featurehighlight_text_header_color">#FFFFFFFF</color>
 
+    <!-- ============================================================ -->
+    <!-- Semantic color tokens (theme-aware: light values)            -->
+    <!-- ============================================================ -->
+    <color name="background_main">#FFF8F0</color>
+    <color name="background_surface">#FFFFFF</color>
+    <color name="background_app_bar">#FFFFFF</color>
+    <color name="background_card">#FFFFFF</color>
+    <color name="background_splash">#FFF8F0</color>
+    <color name="background_bottom_nav">#FFF8F0</color>
+    <color name="bottom_nav_indicator">#FFDEA0</color>
+    <color name="bottom_nav_divider">#D0C5B4</color>
+    <color name="background_input_button">#E8E0D8</color>
+    <color name="color_status_bar">#FFF8F0</color>
+    <color name="color_nav_bar">#FFF8F0</color>
+    <color name="text_primary">#1C1B1F</color>
+    <color name="text_secondary">#49454E</color>
+    <color name="text_on_gold">#3E2700</color>
+    <color name="text_attribution">#999999</color>
+    <color name="text_hint">#7F7667</color>
+    <color name="gold_accent">#B8860B</color>
+    <color name="gold_accent_semi">#66B8860B</color>
+    <color name="gold_accent_faint">#26B8860B</color>
+    <color name="divider_gold">#66B8860B</color>
+    <color name="seekbar_background">#D0C5B4</color>
+    <color name="seekbar_progress">#B8860B</color>
+    <color name="progress_bar_background">#D0C5B4</color>
+    <color name="progress_bar_fill">#B8860B</color>
+    <color name="icon_primary">#1C1B1F</color>
+    <color name="icon_secondary">#49454E</color>
+    <color name="warning_banner_bg">#FFF3D6</color>
+    <color name="gradient_surface">#F0E8E0</color>
+
+    <!-- Skeleton loader -->
+    <color name="skeleton_bone">#E0D8D0</color>
 
 </resources>

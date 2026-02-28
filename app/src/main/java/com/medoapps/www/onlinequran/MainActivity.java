@@ -142,7 +142,7 @@ public  class  MainActivity extends BaseActivity {
     private User myAccount;
     private Context context;
     private FloatingActionButton fab_add, addBostBTN ,fab_new_youtube_post ;
-    private ExtendedFloatingActionButton admin_fab ,quran_fab;
+    private ExtendedFloatingActionButton admin_fab;
 
     boolean isAllFabsVisible = false;
     static WeakReference<MainActivity> instance8Ref;
@@ -195,23 +195,13 @@ public  class  MainActivity extends BaseActivity {
 
         lc.setLocale(loc);*/
 
-        switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
-            case Configuration.UI_MODE_NIGHT_YES:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    Window window = getWindow();
-                    window.setStatusBarColor(getResources()
-                            .getColor(R.color.white));
-                }
-                break;
-            case Configuration.UI_MODE_NIGHT_NO:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Window window = getWindow();
-                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                    window.setStatusBarColor(getResources().getColor(R.color.white));
-                    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                }
-                break;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            boolean isNightMode = (getResources().getConfiguration().uiMode
+                    & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+            if (!isNightMode) {
+                getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
         }
 
         setContentView(R.layout.activity_main);
@@ -278,6 +268,9 @@ public  class  MainActivity extends BaseActivity {
                             case R.id.action_other:
                                 viewPager.setCurrentItem(2);
                                 break;
+                            case R.id.action_mushaf:
+                                startActivity(new Intent(MainActivity.this, QuranDataActivity.class));
+                                return false;
 
                             /*case R.id.action_recent:
                                 viewPager.setCurrentItem(4);
@@ -324,7 +317,6 @@ public  class  MainActivity extends BaseActivity {
         setupViewPager(viewPager);
 
         admin_fab = (ExtendedFloatingActionButton) findViewById(R.id.admin_fab);
-        quran_fab = (ExtendedFloatingActionButton) findViewById(R.id.quran_fab);
         fab_add = (FloatingActionButton) findViewById(R.id.fab_add);
         addBostBTN = (FloatingActionButton) findViewById(R.id.fab_new_post);
         fab_new_youtube_post = (FloatingActionButton) findViewById(R.id.fab_new_youtube_post);
@@ -359,14 +351,6 @@ public  class  MainActivity extends BaseActivity {
 
             }
         });
-        quran_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent notificationIntent = new Intent(MainActivity.this, QuranDataActivity.class);
-                startActivity(notificationIntent);
-            }
-        });
-
         // Button launches NewPostActivity
         addBostBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -473,100 +457,6 @@ public  class  MainActivity extends BaseActivity {
         anim.setDuration(700);
 
         userImage.startAnimation(anim);
-
-        TranslateAnimation anim2 = new TranslateAnimation(0, 0, 100, 0);
-        anim2.setDuration(700);
-        anim2.setInterpolator(new LinearInterpolator());
-        //anim2.setRepeatCount(3);
-        //anim2.setDuration(700);
-
-        //quran_fab.startAnimation(anim2);
-        int locations[] = new int[2];
-
-
-
-        quran_fab.post(new Runnable() {
-            @Override
-            public void run() {
-                quran_fab.getLocationOnScreen(locations);
-
-            }
-        });
-
-
-
-
-//        quran_fab.bringToFront();
-        doBounceAnimation(quran_fab);
-
-        // to sop animation
-        //userImage.setAnimation(null);
-
-
-
-
-
-        quran_fab.setOnTouchListener(new OnSwipeTouchListener(this) {
-            float dX, dY ;
-
-            public void onSwipeTop() {
-//                Toast.makeText(getApplicationContext(), "top", Toast.LENGTH_SHORT).show();
-
-            }
-            public void onSwipeRight() {
-//                Toast.makeText(getApplicationContext(), "right", Toast.LENGTH_SHORT).show();
-            }
-            public void onSwipeLeft() {
-//                Toast.makeText(getApplicationContext(), "left", Toast.LENGTH_SHORT).show();
-            }
-            public void onSwipeBottom() {
-//                Toast.makeText(getApplicationContext(), "bottom", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Log.w("SWIPE_THRESHOLDdsdsar", String.valueOf(event.getY()));
-//            v.setY(event.getY());
-//            v.setX(event.getX());
-
-
-                switch (event.getAction()) {
-
-                    case MotionEvent.ACTION_DOWN:
-
-                        dX = v.getX() - event.getRawX();
-                        dY = v.getY() - event.getRawY();
-
-                        Log.w("ACTION_DOWNsssrX", String.valueOf(locations[0]));
-                        Log.w("ACTION_DOWNsssrY", String.valueOf(locations[1]));
-
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-
-                        v.animate()
-//                            .x(locations[0])
-                                .y( locations[1]-130 )
-                                .setDuration(100)
-                                .start();
-                        Intent notificationIntent = new Intent(MainActivity.this, QuranDataActivity.class);
-                        startActivity(notificationIntent);
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
-
-                        v.animate()
-//                            .x(event.getRawX() + dX)
-                                .y(event.getRawY() + dY)
-                                .setDuration(0)
-                                .start();
-                        break;
-                    default:
-                        return false;
-                }
-                return super.onTouch(v, event);
-            }
-        });
 
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override

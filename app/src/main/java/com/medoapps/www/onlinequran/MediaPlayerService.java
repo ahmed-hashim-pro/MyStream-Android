@@ -257,10 +257,9 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     public void onDestroy() {
         super.onDestroy();
 
-//        Toast.makeText(getApplicationContext(), "onDestroy service", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "onDestroysasd: " +"onDestroy" );
 
-//        destroyService();
+        destroyService();
         instance = null;
     }
 
@@ -1066,6 +1065,14 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
         }
 
     }
+    public String getData(){
+        try {
+            return  activeAudio.getData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
     private void updateMetaData() {
         Bitmap albumArt = BitmapFactory.decodeResource(getResources(),
@@ -1220,7 +1227,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
             openUI.putExtra(MusicPlayerActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION, description);
         }*/
         return PendingIntent.getActivity(getApplicationContext(), 159, openUI,
-                PendingIntent.FLAG_IMMUTABLE);
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 
     private PendingIntent playbackAction(int actionNumber) {
@@ -1358,9 +1365,26 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
     }
 
     @Override
-    public void onCallStateChanged(int i) {
-
-        Log.d(TAG, "onCallStateChangedsfdsf: " + i);
+    public void onCallStateChanged(int state) {
+        Log.d(TAG, "onCallStateChangedsfdsf: " + state);
+        switch (state) {
+            case TelephonyManager.CALL_STATE_OFFHOOK:
+            case TelephonyManager.CALL_STATE_RINGING:
+                if (mediaPlayer != null) {
+                    canContiueAfterFucus = mediaPlayer.isPlaying();
+                    PausePublic();
+                    ongoingCall = true;
+                }
+                break;
+            case TelephonyManager.CALL_STATE_IDLE:
+                if (mediaPlayer != null && ongoingCall) {
+                    ongoingCall = false;
+                    if (canContiueAfterFucus) {
+                        resumeMedia();
+                    }
+                }
+                break;
+        }
     }
 }
 

@@ -5,18 +5,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layoutDirection="ltr"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_main">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:background="@color/background_app_bar"
+        app:elevation="4dp">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_height="?attr/actionBarSize"
             android:layout_width="match_parent"
             android:background="@drawable/main_app_bar"
-            ads:layout_scrollFlags="scroll|enterAlways">
+            ads:layout_scrollFlags="scroll|enterAlways|snap">
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -26,8 +29,7 @@
                     android:id="@+id/user_photo_layout"
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    >
+                    android:layout_centerVertical="true">
 
                     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/user_photo"
@@ -35,8 +37,8 @@
                         android:layout_height="40dp"
                         android:layout_centerVertical="true"
                         android:src="@drawable/mystream"
-                        app:civ_border_color="#000000"
-                        app:civ_border_width="1dp" />
+                        app:civ_border_color="#D4A44C"
+                        app:civ_border_width="2dp" />
 
                     <ImageView
                         android:id="@+id/crown_photo"
@@ -48,11 +50,8 @@
                         android:layout_marginTop="-4dp"
                         android:layout_marginEnd="-2dp"
                         android:rotation="37"
-
                         android:src="@drawable/crown" />
                 </RelativeLayout>
-
-
 
                 <TextView
                     android:id="@+id/User_name"
@@ -63,7 +62,7 @@
                     android:layout_marginStart="60dp"
                     android:gravity="center_horizontal"
                     android:text="@string/app_name"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_primary"
                     android:textStyle="bold" />
 
                 <ImageButton
@@ -74,7 +73,7 @@
                     android:layout_marginEnd="12dp"
                     android:background="@null"
                     android:onClick="option"
-                    app:tint="@color/black"
+                    app:tint="@color/icon_primary"
                     ads:srcCompat="@drawable/outline_reorder_24" />
 
                 <ImageView
@@ -83,12 +82,10 @@
                     android:layout_height="20dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-
                     android:layout_marginEnd="47dp"
                     android:background="@null"
-                    app:tint="@color/black"
+                    app:tint="@color/gold_accent"
                     ads:srcCompat="@drawable/outline_emoji_events_24" />
-
 
                 <Button
                     android:layout_width="30dp"
@@ -109,13 +106,12 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginBottom="2dp"
-            ads:cardBackgroundColor="@color/warning"
+            ads:cardBackgroundColor="@color/warning_banner_bg"
             android:layout_below="@+id/watchtitleCard"
-            app:cardElevation="10dp"
-            app:cardMaxElevation="12dp"
+            app:cardElevation="0dp"
+            app:cardMaxElevation="0dp"
             app:cardPreventCornerOverlap="true"
             android:layoutDirection="locale"
-
             app:contentPadding="2dp">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -126,9 +122,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     ads:srcCompat="@drawable/outline_arrow_forward_ios_24"
-                    android:backgroundTint="@color/warning_text"
                     android:layout_alignParentEnd="true"
-                    ads:tint="@color/warning_text" />
+                    ads:tint="@color/gold_accent" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -137,7 +132,7 @@
                     android:gravity="center"
                     android:text="@string/complete_your_profile"
                     android:textAlignment="center"
-                    android:textColor="@color/warning_text"
+                    android:textColor="@color/gold_accent"
                     android:textStyle="bold" />
 
             </RelativeLayout>
@@ -147,13 +142,12 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginBottom="2dp"
-            ads:cardBackgroundColor="@color/warning"
+            ads:cardBackgroundColor="@color/warning_banner_bg"
             android:layout_below="@+id/watchtitleCard"
-            app:cardElevation="10dp"
-            app:cardMaxElevation="12dp"
+            app:cardElevation="0dp"
+            app:cardMaxElevation="0dp"
             app:cardPreventCornerOverlap="true"
             android:layoutDirection="locale"
-
             app:contentPadding="2dp">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -164,9 +158,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     ads:srcCompat="@drawable/outline_arrow_forward_ios_24"
-                    android:backgroundTint="@color/warning_text"
                     android:layout_alignParentEnd="true"
-                    ads:tint="@color/warning_text" />
+                    ads:tint="@color/gold_accent" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -175,7 +168,7 @@
                     android:gravity="center"
                     android:text="All Services Are Free, Want To Support App ?"
                     android:textAlignment="center"
-                    android:textColor="@color/warning_text"
+                    android:textColor="@color/gold_accent"
                     android:textStyle="bold" />
 
             </RelativeLayout>
@@ -187,8 +180,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:layout_marginBottom="55dp"
-
+        android:layout_marginBottom="80dp"
         ads:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <RelativeLayout
@@ -199,15 +191,15 @@
             android:layout_gravity="bottom"
             android:layout_marginBottom="0dp">
 
-
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@+id/adView"
                 android:layout_alignParentTop="true"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="-2dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
 
             <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/adView"
@@ -217,9 +209,7 @@
                 android:layout_centerHorizontal="true"
                 android:background="@color/transparent"
                 ads:adSize="BANNER"
-                ads:adUnitId="@string/banner_ad_unit_id"></com.google.android.gms.ads.AdView>
-
-
+                ads:adUnitId="@string/banner_ad_unit_id" />
 
         </RelativeLayout>
 
@@ -244,7 +234,8 @@
             android:src="@drawable/plus"
             android:stateListAnimator="@null"
             android:translationZ="2dp"
-            ads:backgroundTint="@color/colorPrimaryDark" />
+            ads:backgroundTint="@color/gold_accent"
+            app:tint="@color/text_on_gold" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_new_youtube_post"
@@ -258,43 +249,23 @@
             android:src="@drawable/outline_ondemand_video_24"
             android:stateListAnimator="@null"
             android:translationZ="2dp"
-            ads:backgroundTint="@color/primary" />
+            ads:backgroundTint="@color/gold_accent"
+            app:tint="@color/text_on_gold" />
     </LinearLayout>
 
-    <LinearLayout
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/admin_fab"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/adView"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="60dp"
-        android:elevation="2000dp"
-
-        >
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/quran_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:contentDescription="extended_fab_content_desc"
-            android:drawableStart="@drawable/ramadan_quran_24px"
-            android:text="@string/TheHolyQuran"
-            ads:iconSize="24dp"
-            app:elevation="10dp"
-            android:elevation="2000dp"
-
-            app:fabSize="mini" />
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/admin_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:contentDescription="extended_fab_content_desc"
-            android:text="@string/admin_panel"
-            app:icon="@drawable/outline_admin_panel_settings_24"/>
-
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="120dp"
+        android:layout_marginEnd="15dp"
+        android:contentDescription="extended_fab_content_desc"
+        android:text="@string/admin_panel"
+        app:backgroundTint="@color/gold_accent"
+        android:textColor="@color/text_on_gold"
+        app:iconTint="@color/text_on_gold"
+        app:icon="@drawable/outline_admin_panel_settings_24"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"
@@ -309,16 +280,23 @@
         android:layout_gravity="bottom|end"
         android:stateListAnimator="@null"
         android:translationZ="2dp"
-        ads:backgroundTint="@color/colorPrimaryDark" />
+        ads:backgroundTint="@color/gold_accent"
+        app:tint="@color/text_on_gold" />
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimaryMainActivity"
-        app:itemBackground="@color/colorPrimaryMainActivity"
+        android:background="@drawable/background_bottom_nav_bar"
+        app:elevation="@dimen/card_elevation_default"
         app:itemIconTint="@drawable/bottom_navigation_color_selector"
         app:itemTextColor="@drawable/bottom_navigation_color_selector"
+        app:itemActiveIndicatorStyle="@style/Widget.MyStream.BottomNav.ActiveIndicator"
+        app:itemTextAppearanceActive="@style/TextAppearance.MyStream.BottomNav.Active"
+        app:itemTextAppearanceInactive="@style/TextAppearance.MyStream.BottomNav.Inactive"
+        app:itemIconSize="26dp"
+        app:itemRippleColor="@color/gold_accent_faint"
+        app:labelVisibilityMode="labeled"
         android:layout_gravity="bottom|end"
         app:menu="@menu/menu_bottom_navigation" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

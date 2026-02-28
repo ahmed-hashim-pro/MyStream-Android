@@ -384,6 +384,7 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="watch">Watch</string>
     <string name="ListLanguages">Lists Language</string>
     <string name="show_ad">Show Ad</string>
+    <string name="playlist_header">قائمة السور</string>
     <string name="DownloadAllTitle">"Download All "</string>
     <string name="StoragePermissionTitle">"Ask for permission "</string>
     <string name="DownloadAllMessage">Do you want to download all list for this reciter?</string>

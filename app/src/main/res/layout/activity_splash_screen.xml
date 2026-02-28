@@ -1,52 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground"
+    android:background="@color/background_splash"
     tools:context="com.medoapps.www.onlinequran.SplashScreen">
 
+    <!-- Gold halo ring behind the logo -->
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
+        android:id="@+id/goldRing"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:layout_gravity="center"
+        android:alpha="0"
+        android:scaleX="0.6"
+        android:scaleY="0.6"
         android:importantForAccessibility="no"
-        android:src="@drawable/mystream" />
+        android:src="@drawable/splash_gold_ring" />
 
-    <ProgressBar
-        android:id="@+id/progressBar1"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:layout_centerInParent="true"
-        android:progressDrawable="@drawable/progress_bar"
-        android:indeterminateDrawable="@drawable/progress_bar"
-        android:indeterminate="true" />
-
+    <!-- Centered content group -->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/spacing_md"
-        android:gravity="center"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="@dimen/spacing_sm">
+        android:paddingBottom="40dp">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:alpha="0"
+            android:scaleX="0.9"
+            android:scaleY="0.9"
+            android:importantForAccessibility="no"
+            android:src="@drawable/mystream" />
+
+        <!-- Thin gold divider -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="48dp"
+            android:layout_height="1.5dp"
+            android:layout_marginTop="20dp"
+            android:alpha="0"
+            android:scaleX="0"
+            android:background="@color/divider_gold" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/appNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/spacing_xs"
-            android:text="@string/powered_by"
-            android:textAppearance="?attr/textAppearanceBodyMedium" />
+            android:layout_marginTop="14dp"
+            android:alpha="0"
+            android:fontFamily="sans-serif-light"
+            android:letterSpacing="0.20"
+            android:text="MY STREAM"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ahmed_hashim"
-            android:textAppearance="?attr/textAppearanceTitleSmall" />
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="20dp"
+            android:alpha="0"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/gold_accent" />
+
     </LinearLayout>
 
-</RelativeLayout>
+    <!-- Bottom attribution -->
+    <TextView
+        android:id="@+id/bottomAttribution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="32dp"
+        android:alpha="0"
+        android:fontFamily="sans-serif"
+        android:letterSpacing="0.10"
+        android:text="@string/ahmed_hashim"
+        android:textAllCaps="true"
+        android:textColor="@color/text_attribution"
+        android:textSize="11sp" />
+
+</FrameLayout>

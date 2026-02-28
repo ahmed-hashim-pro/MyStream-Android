@@ -15,31 +15,30 @@
         android:id="@+id/cardContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        app:cardElevation="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/ripple_card"
+        app:cardElevation="@dimen/card_elevation_default"
         android:layoutDirection="rtl"
-        app:cardMaxElevation="12dp"
+        app:cardMaxElevation="@dimen/card_elevation_raised"
+        app:cardCornerRadius="12dp"
+        app:cardBackgroundColor="@color/background_card"
         app:cardPreventCornerOverlap="true"
-        app:contentPadding="2dp">
+        app:contentPadding="12dp">
 
         <LinearLayout
             android:id="@+id/entireCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2pt"
             android:orientation="horizontal"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            android:paddingBottom="4pt"
-            android:paddingTop="4pt">
+            android:gravity="center_vertical">
 
             <ImageView
                 android:id="@+id/imgchannel"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="7dp"
@@ -47,7 +46,8 @@
                 android:layout_weight="0"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:src="@drawable/ramadan_quran" />
+                android:src="@drawable/ramadan_quran"
+                app:tint="@color/gold_accent" />
 
             <TextView
                 android:id="@+id/txtRecitesName"
@@ -68,19 +68,20 @@
                 android:fadingEdge="horizontal"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="15sp" />
+                android:textColor="@color/text_primary"
+                android:textSize="16sp" />
 
             <ImageButton
                 android:id="@+id/buttonShare"
-                android:layout_width="40dp"
-                android:layout_height="30dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:background="@color/transparent"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:text="@string/downlaod"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/btn_share" />
+                app:srcCompat="@drawable/btn_share"
+                app:tint="@color/icon_secondary" />
             <!--<ImageView
                 android:id="@+id/imageView"
                 android:layout_width="20dp"
@@ -102,14 +103,14 @@
         android:id="@+id/cardviewad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:layoutDirection="rtl"
-        app:cardBackgroundColor="@color/white"
-        app:cardElevation="10dp"
-        app:cardMaxElevation="12dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/background_card"
+        app:cardElevation="@dimen/card_elevation_default"
+        app:cardMaxElevation="@dimen/card_elevation_raised"
+        app:cardCornerRadius="12dp"
         app:cardPreventCornerOverlap="true">
 
     </androidx.cardview.widget.CardView>
@@ -119,8 +120,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        app:cardElevation="20dp"
-        app:cardMaxElevation="12dp"
+        android:foreground="@drawable/ripple_card"
+        app:cardElevation="@dimen/card_elevation_default"
+        app:cardMaxElevation="@dimen/card_elevation_raised"
+        app:cardBackgroundColor="@color/background_card"
+        app:cardCornerRadius="12dp"
         android:layoutDirection="ltr"
         app:cardPreventCornerOverlap="true"
         android:visibility="gone"
@@ -281,7 +285,7 @@
                         android:paddingStart="7dp"
                         android:paddingEnd="7dp"
                         android:text="Loading..."
-                        android:textColor="@color/black"
+                        android:textColor="@color/text_primary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -331,7 +335,7 @@
                 android:layout_below="@+id/userArea"
                 android:layout_marginStart="7dp"
                 android:layout_marginEnd="7dp"
-                android:background="@color/grey_300">
+                android:background="@color/divider_gold">
 
             </LinearLayout>
             <LinearLayout
@@ -416,7 +420,7 @@
                         android:layout_alignParentEnd="true"
                         android:gravity="center"
                         android:text="11"
-                        android:textColor="@color/black"
+                        android:textColor="@color/text_primary"
                         android:textSize="14sp"
                         android:layout_marginStart="2dp"
                         android:layout_marginEnd="10dp"

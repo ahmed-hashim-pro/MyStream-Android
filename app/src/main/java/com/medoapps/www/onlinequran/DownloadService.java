@@ -60,7 +60,9 @@ public class DownloadService extends Service  {
     public static final String ACTION_NEXT = "com.medoapps.www.onlinequran.ACTION_NEXT";
     public static final String ACTION_STOP = "com.medoapps.www.onlinequran.ACTION_STOP";
     public static final String ACTION_CLOSE_DOWNLOAD = "com.medoapps.www.onlinequran.download.ACTION_CLOSE_DOWNLOAD";
-
+    public static final String BROADCAST_DOWNLOAD_PROGRESS = "com.medoapps.www.onlinequran.DOWNLOAD_PROGRESS";
+    public static final String EXTRA_PROGRESS = "progress";
+    public static final String EXTRA_SURAH_NAME = "surah_name";
 
     //MediaSession
 
@@ -249,13 +251,16 @@ public class DownloadService extends Service  {
                 R.drawable.mystream);
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+        String progressText = progress > 0
+                ? getString(R.string.aya_download_progress) + " " + progress + "%"
+                : getString(R.string.aya_download_progress);
+
         mBuilder = new NotificationCompat.Builder(getApplicationContext(),CHANNEL_ID);
         mBuilder.setContentTitle(notificationContentText)
-                .setContentText(getString(R.string.aya_download_progress))
+                .setContentText(progressText)
                 .setSmallIcon(getNotificationIcon())
                 .setLargeIcon(largeIcon)
                 .setProgress(100, progress, false)
-                .setSmallIcon(getNotificationIcon())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .addAction(new NotificationCompat.Action(R.drawable.ic_cancel_white_18dp,getString(R.string.cancel),playbackAction(0)))
                 .setOnlyAlertOnce(true)
@@ -269,7 +274,18 @@ public class DownloadService extends Service  {
             startForeground(NOTIFICATION_ID, mBuilder.build());
         }
 
-//        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
+        // Broadcast progress to the activity
+        try {
+            Intent progressIntent = new Intent(BROADCAST_DOWNLOAD_PROGRESS);
+            progressIntent.setPackage(getPackageName());
+            progressIntent.putExtra(EXTRA_PROGRESS, progress);
+            if (activeDownload != null) {
+                progressIntent.putExtra(EXTRA_SURAH_NAME, activeDownload.RealName);
+            }
+            sendBroadcast(progressIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static class notificationButtonReceiver extends BroadcastReceiver {
@@ -586,19 +602,19 @@ public class DownloadService extends Service  {
         ISDonwloadingCanceled=true;
         try {
             Intent broadcastIntent = new Intent(Broadcast_LoadAya);
+            broadcastIntent.setPackage(getPackageName());
             sendBroadcast(broadcastIntent);
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        mBuilder.setContentText(getString(R.string.download_canceled));
-        // Removes the progress bar
-//        mBuilder.setProgress(0, 0, false);
-//        mBuilder.setOngoing(false);
-//        mNotifyManager.notify(NOTIFICATION_ID, mBuilder.build());
-//        mNotifyManager.cancel(NOTIFICATION_ID);
-//            LoadAya();
-//        Toast.makeText(getApplicationContext(), getString(R.string.download_canceled), Toast.LENGTH_LONG).show();
-
+        // Dismiss the download notification
+        try {
+            if (mNotifyManager != null) {
+                mNotifyManager.cancel(NOTIFICATION_ID);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     /*@Override
     public boolean onUnbind(Intent intent) {

@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +21,7 @@ import java.util.ArrayList;
 public class SplashScreen extends AppCompatActivity {
     private static final String TAG = "SplashScreen";
     public ImageView splash;
-    private static final long COUNTER_TIME = (long) 1;
+    private static final long COUNTER_TIME = 2;
     private PreferenceManager prefManager;
 
     String YouTubeVideoId ;
@@ -34,32 +37,93 @@ public class SplashScreen extends AppCompatActivity {
     CountDownTimer countDownTimer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
+        androidx.core.splashscreen.SplashScreen splashScreen =
+                androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        /*LnaguageClass lc = new LnaguageClass(this);
-        SettingSaved ss = new SettingSaved(this);
-        ss.LoadData();
-        lc.setAppLocale(SettingSaved.LanguageSelect==1?"ar":"en-US");*/
+        // Smooth fade-out for the native splash screen
+        splashScreen.setOnExitAnimationListener(splashScreenView -> {
+            splashScreenView.getView().animate()
+                    .alpha(0f)
+                    .setDuration(400)
+                    .setInterpolator(new DecelerateInterpolator())
+                    .withEndAction(splashScreenView::remove)
+                    .start();
+        });
+
         prefManager = new PreferenceManager(this);
         if (!prefManager.isFirstTimeLaunch()) {
             SeparateFunctions separateFunctions = new SeparateFunctions(SplashScreen.this);
             separateFunctions.changeAppThemeGlobally();
         }
 
+        ImageView goldRing = findViewById(R.id.goldRing);
+        splash = (ImageView) findViewById(R.id.imageView3);
+        View divider = findViewById(R.id.divider);
+        TextView appNameText = findViewById(R.id.appNameText);
+        View progressBar = findViewById(R.id.progressBar1);
+        TextView bottomAttribution = findViewById(R.id.bottomAttribution);
 
+        // Stage 1: Gold ring scale 0.6→1.0 + fade to 0.15
+        goldRing.animate()
+                .alpha(0.15f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(700)
+                .setStartDelay(200)
+                .setInterpolator(new DecelerateInterpolator(1.5f))
+                .start();
 
-        splash=(ImageView) findViewById(R.id.imageView3);
+        // Stage 2: Logo scale 0.9→1.0 + fade in
+        splash.animate()
+                .alpha(1f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(500)
+                .setStartDelay(350)
+                .setInterpolator(new DecelerateInterpolator(1.5f))
+                .start();
+
+        // Stage 3: Divider scaleX 0→1.0 + fade in (extends from center)
+        divider.setPivotX(divider.getWidth() / 2f);
+        divider.post(() -> divider.setPivotX(divider.getWidth() / 2f));
+        divider.animate()
+                .alpha(1f)
+                .scaleX(1f)
+                .setDuration(400)
+                .setStartDelay(600)
+                .setInterpolator(new DecelerateInterpolator(2f))
+                .start();
+
+        // Stage 4: App name fade in
+        appNameText.animate()
+                .alpha(1f)
+                .setDuration(400)
+                .setStartDelay(750)
+                .setInterpolator(new DecelerateInterpolator(1.5f))
+                .start();
+
+        // Stage 5: Progress spinner fade in
+        progressBar.animate()
+                .alpha(1f)
+                .setDuration(300)
+                .setStartDelay(850)
+                .setInterpolator(new DecelerateInterpolator(1.5f))
+                .start();
+
+        // Stage 6: Bottom attribution fade in
+        bottomAttribution.animate()
+                .alpha(1f)
+                .setDuration(400)
+                .setStartDelay(950)
+                .setInterpolator(new DecelerateInterpolator(1.5f))
+                .start();
 
         //load interstial ad by atimer
         AdmobInterstitial.loadInterstitial(this);
 
         createTimer(COUNTER_TIME);
-
-
-
-
     }
 
     private void checkPushNotificationData(){
@@ -103,21 +167,13 @@ public class SplashScreen extends AppCompatActivity {
                 new CountDownTimer(seconds * 1000, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
-//                        secondsRemaining = ((millisUntilFinished / 1000) + 1);
-//                        counterTextView.setText("App is done loading in: " + secondsRemaining);
                     }
 
                     @Override
                     public void onFinish() {
                         Log.d(TAG, "asdsdsadsadsa: " );
-//                        secondsRemaining = 0;
-//                        counterTextView.setText("Done.");
                         checkPushNotificationData();
                         checkOpenAd();
-
-//                        startWelcomeActivity();
-
-
                     }
                 };
         countDownTimer.start();
@@ -149,6 +205,7 @@ public class SplashScreen extends AppCompatActivity {
     public void startWelcomeActivity(){
         Intent intent = new Intent(this, WelcomeActivity.class);
         this.startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         if (countDownTimer!=null){
             countDownTimer.cancel();
         }
@@ -168,7 +225,6 @@ public class SplashScreen extends AppCompatActivity {
                     SettingSaved.SounlLoad=1;//sound load
 
                     checkOpenAd();
-//                    startWelcomeActivity();
 
 
                 } catch (InterruptedException e) {

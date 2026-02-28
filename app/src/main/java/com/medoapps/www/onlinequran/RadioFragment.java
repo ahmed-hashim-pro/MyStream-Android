@@ -853,6 +853,8 @@ public class RadioFragment extends Fragment implements  AdapterView.OnItemSelect
                     Intent intent= new Intent( getActivity(),managerdb.class);
                     intent.putExtra("RecitesName", SettingSaved.FinalRecite);
                     intent.putExtra("RecitesAYA", SettingSaved.FinalAya);
+                    intent.putExtra("Rewayat", SettingSaved.FinalRewayat);
+                    intent.putExtra("RealRecitesName", SettingSaved.FinalRealRecitesName);
                     startActivity(intent);
                     //Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
                 }

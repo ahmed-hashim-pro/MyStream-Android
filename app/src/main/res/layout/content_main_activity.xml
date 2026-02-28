@@ -89,12 +89,18 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="80dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimaryMainActivity"
-            app:itemBackground="@color/colorPrimaryMainActivity"
+            android:background="@drawable/background_bottom_nav_bar"
+            app:elevation="@dimen/card_elevation_default"
             app:itemIconTint="@drawable/bottom_navigation_color_selector"
             app:itemTextColor="@drawable/bottom_navigation_color_selector"
+            app:itemActiveIndicatorStyle="@style/Widget.MyStream.BottomNav.ActiveIndicator"
+            app:itemTextAppearanceActive="@style/TextAppearance.MyStream.BottomNav.Active"
+            app:itemTextAppearanceInactive="@style/TextAppearance.MyStream.BottomNav.Inactive"
+            app:itemIconSize="26dp"
+            app:itemRippleColor="@color/gold_accent_faint"
+            app:labelVisibilityMode="labeled"
             app:menu="@menu/menu_bottom_navigation" />
 
 

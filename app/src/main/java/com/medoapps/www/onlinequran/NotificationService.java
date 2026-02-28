@@ -146,6 +146,8 @@ public class NotificationService extends BroadcastReceiver {
                 Intent intentone = new Intent(context.getApplicationContext(), managerdb.class);
                 intentone.putExtra("RecitesName", SettingSaved.FinalRecite);
                 intentone.putExtra("RecitesAYA", SettingSaved.FinalAya);
+                intentone.putExtra("Rewayat", SettingSaved.FinalRewayat);
+                intentone.putExtra("RealRecitesName", SettingSaved.FinalRealRecitesName);
                 context.startActivity(intentone);
             } catch (Exception e) {
                 e.printStackTrace();

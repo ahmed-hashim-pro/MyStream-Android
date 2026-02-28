@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/view_mode_list"
+            android:icon="@drawable/outline_reorder_24"
+            android:title="@string/view_mode_list" />
+        <item
+            android:id="@+id/view_mode_grid"
+            android:icon="@drawable/ic_grid_view"
+            android:title="@string/view_mode_grid" />
+        <item
+            android:id="@+id/view_mode_compact"
+            android:icon="@drawable/ic_compact_view"
+            android:title="@string/view_mode_compact" />
+    </group>
+</menu>

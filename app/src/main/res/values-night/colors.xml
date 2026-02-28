@@ -2,52 +2,52 @@
 <resources>
 
     <!-- ============================================================ -->
-    <!-- Material 3 Dark Theme Tokens (seed: green/teal #1B5E20)      -->
+    <!-- Material 3 Dark Theme Tokens (seed: gold #D4A44C)            -->
     <!-- ============================================================ -->
-    <color name="md_theme_light_primary">#69DC6F</color>
-    <color name="md_theme_light_onPrimary">#00390B</color>
-    <color name="md_theme_light_primaryContainer">#005315</color>
-    <color name="md_theme_light_onPrimaryContainer">#A5D6A7</color>
-    <color name="md_theme_light_secondary">#B9CCB4</color>
-    <color name="md_theme_light_onSecondary">#253423</color>
-    <color name="md_theme_light_secondaryContainer">#3B4B38</color>
-    <color name="md_theme_light_onSecondaryContainer">#D5E8CF</color>
-    <color name="md_theme_light_tertiary">#A0CFD5</color>
-    <color name="md_theme_light_onTertiary">#00363B</color>
-    <color name="md_theme_light_tertiaryContainer">#1F4D52</color>
-    <color name="md_theme_light_onTertiaryContainer">#BCEBF1</color>
+    <color name="md_theme_light_primary">#D4A44C</color>
+    <color name="md_theme_light_onPrimary">#3E2700</color>
+    <color name="md_theme_light_primaryContainer">#5A3C00</color>
+    <color name="md_theme_light_onPrimaryContainer">#FFDEA0</color>
+    <color name="md_theme_light_secondary">#D9C4A0</color>
+    <color name="md_theme_light_onSecondary">#3C2E15</color>
+    <color name="md_theme_light_secondaryContainer">#54442A</color>
+    <color name="md_theme_light_onSecondaryContainer">#F7E0BB</color>
+    <color name="md_theme_light_tertiary">#B4CFA4</color>
+    <color name="md_theme_light_onTertiary">#213517</color>
+    <color name="md_theme_light_tertiaryContainer">#374C2C</color>
+    <color name="md_theme_light_onTertiaryContainer">#D0EBBE</color>
     <color name="md_theme_light_error">#FFB4AB</color>
     <color name="md_theme_light_onError">#690005</color>
     <color name="md_theme_light_errorContainer">#93000A</color>
     <color name="md_theme_light_onErrorContainer">#FFDAD6</color>
-    <color name="md_theme_light_background">#1A1C19</color>
-    <color name="md_theme_light_onBackground">#E2E3DD</color>
-    <color name="md_theme_light_surface">#1A1C19</color>
-    <color name="md_theme_light_onSurface">#E2E3DD</color>
-    <color name="md_theme_light_surfaceVariant">#424940</color>
-    <color name="md_theme_light_onSurfaceVariant">#C2C9BD</color>
-    <color name="md_theme_light_outline">#8C9388</color>
-    <color name="md_theme_light_outlineVariant">#424940</color>
-    <color name="md_theme_light_inverseSurface">#E2E3DD</color>
-    <color name="md_theme_light_inverseOnSurface">#2F312D</color>
-    <color name="md_theme_light_inversePrimary">#1B5E20</color>
+    <color name="md_theme_light_background">#121212</color>
+    <color name="md_theme_light_onBackground">#E9E1D9</color>
+    <color name="md_theme_light_surface">#121212</color>
+    <color name="md_theme_light_onSurface">#E9E1D9</color>
+    <color name="md_theme_light_surfaceVariant">#1E1E1E</color>
+    <color name="md_theme_light_onSurfaceVariant">#D0C5B4</color>
+    <color name="md_theme_light_outline">#998F80</color>
+    <color name="md_theme_light_outlineVariant">#4D4639</color>
+    <color name="md_theme_light_inverseSurface">#E9E1D9</color>
+    <color name="md_theme_light_inverseOnSurface">#33302A</color>
+    <color name="md_theme_light_inversePrimary">#B8860B</color>
 
     <!-- ============================================================ -->
     <!-- Legacy / backward-compat aliases (dark variants)             -->
     <!-- ============================================================ -->
-    <color name="colorPrimary">#381B61</color>
-    <color name="colorPrimaryDark">#240C4A</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#D4A44C</color>
+    <color name="colorPrimaryDark">#121212</color>
+    <color name="colorAccent">#D4A44C</color>
 
     <!-- Greys (inverted for dark mode) -->
-    <color name="grey_100">#232323</color>
-    <color name="grey_200">#EEEEEE</color>
-    <color name="grey_300">#1F1F1F</color>
-    <color name="grey_500">#A4A4A4</color>
-    <color name="grey_800">#212121</color>
+    <color name="grey_100">#1E1E1E</color>
+    <color name="grey_200">#282828</color>
+    <color name="grey_300">#333333</color>
+    <color name="grey_500">#B3B3B3</color>
+    <color name="grey_800">#E0E0E0</color>
 
     <!-- Neutrals (inverted) -->
-    <color name="black">#FBFCFC</color>
+    <color name="black">#FFFFFF</color>
     <color name="Black2">#FF040303</color>
     <item name="white" type="color">#000000</item>
     <color name="transparent">#00000000</color>
@@ -58,32 +58,32 @@
     <!-- ============================================================ -->
 
     <!-- Main activity toolbar (dark) -->
-    <color name="colorPrimaryMainActivity">#212122</color>
-    <color name="colorPrimaryDarkMainActivity">#131313</color>
-    <color name="colorAccentMainActivity">#FF4081</color>
-    <color name="colorPrimaryShadowMainActivity">#CA434242</color>
-    <color name="fragmentsMainBar">#212122</color>
-    <color name="colorIndivateTab">#FFFFFF</color>
+    <color name="colorPrimaryMainActivity">#1E1E1E</color>
+    <color name="colorPrimaryDarkMainActivity">#121212</color>
+    <color name="colorAccentMainActivity">#D4A44C</color>
+    <color name="colorPrimaryShadowMainActivity">#1E1E1E</color>
+    <color name="fragmentsMainBar">#1E1E1E</color>
+    <color name="colorIndivateTab">#D4A44C</color>
 
     <!-- Tabs (dark) -->
-    <color name="tab_checked">#F3CD70</color>
-    <color name="tab_unchecked">#FFFFFF</color>
+    <color name="tab_checked">#D4A44C</color>
+    <color name="tab_unchecked">#B3B3B3</color>
 
     <!-- Cards and surfaces (dark) -->
-    <color name="colorCardView">#F7F7F7</color>
-    <color name="cardAackground">#434343</color>
-    <color name="colorLine">#DFDFDF</color>
+    <color name="colorCardView">#282828</color>
+    <color name="cardAackground">#282828</color>
+    <color name="colorLine">#383838</color>
 
     <!-- Text (dark) -->
-    <color name="primary_text">#E2E3DD</color>
-    <color name="secondary_text">#B0B0B0</color>
+    <color name="primary_text">#FFFFFF</color>
+    <color name="secondary_text">#B3B3B3</color>
     <color name="toolbarTextColor">#FFFFFF</color>
     <color name="icons">#FFFFFF</color>
-    <item name="textHint" type="color">#A8A4A4</item>
+    <item name="textHint" type="color">#B3B3B3</item>
 
     <!-- Login / Register (dark) -->
-    <color name="bg_login">#FAF9F7</color>
-    <color name="bg_register">#2E3237</color>
+    <color name="bg_login">#121212</color>
+    <color name="bg_register">#1E1E1E</color>
 
     <!-- Slider screen (dark tweaks) -->
     <color name="bg_slider_screen1">#F4B241</color>
@@ -95,26 +95,61 @@
     <color name="slide_screen_1_text_inactive">#52B8DA</color>
 
     <!-- Quran player (dark) -->
-    <color name="quran_player_toolbar_top">#103644</color>
-    <color name="quran_player_toolbar_bottom">#90000000</color>
-    <color name="quran_player_background">#2E2D2D</color>
+    <color name="quran_player_toolbar_top">#1E1E1E</color>
+    <color name="quran_player_toolbar_bottom">#121212</color>
+    <color name="quran_player_background">#121212</color>
 
     <!-- Quran reader (dark) -->
     <color name="cast_libraries_material_featurehighlight_outer_highlight_default_color">#0C385A</color>
 
     <!-- Misc (dark) -->
-    <color name="rewayahSpinnerBAckground">#3B3B3B</color>
-    <color name="BottomSheetDialog">#353232</color>
+    <color name="rewayahSpinnerBAckground">#282828</color>
+    <color name="BottomSheetDialog">#1E1E1E</color>
     <color name="softBlue">#CDF6F8</color>
-    <color name="exoplayer_background">#FF0000</color>
+    <color name="exoplayer_background">#121212</color>
 
     <item name="reversedWhite" type="color">#FFFFFF</item>
-    <item name="rewardVideoBackground" type="color">#041E27</item>
-    <item name="whiteback" type="color">#F9F9F9</item>
-    <item name="recitesnames" type="color">#60839C</item>
+    <item name="rewardVideoBackground" type="color">#121212</item>
+    <item name="whiteback" type="color">#121212</item>
+    <item name="recitesnames" type="color">#B3B3B3</item>
 
     <!-- Warnings (dark) -->
-    <color name="warning">#615C2D</color>
-    <color name="warning_text">#FFEB3B</color>
+    <color name="warning">#332B00</color>
+    <color name="warning_text">#D4A44C</color>
+
+    <!-- ============================================================ -->
+    <!-- Semantic color tokens (theme-aware: dark values)             -->
+    <!-- ============================================================ -->
+    <color name="background_main">#121212</color>
+    <color name="background_surface">#1E1E1E</color>
+    <color name="background_app_bar">#1E1E1E</color>
+    <color name="background_card">#282828</color>
+    <color name="background_splash">#0D0D0D</color>
+    <color name="background_bottom_nav">#1E1E1E</color>
+    <color name="bottom_nav_indicator">#54442A</color>
+    <color name="bottom_nav_divider">#333333</color>
+    <color name="background_input_button">#333333</color>
+    <color name="color_status_bar">#121212</color>
+    <color name="color_nav_bar">#121212</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B3B3B3</color>
+    <color name="text_on_gold">#121212</color>
+    <color name="text_attribution">#555555</color>
+    <color name="text_hint">#B3B3B3</color>
+    <color name="gold_accent">#D4A44C</color>
+    <color name="gold_accent_semi">#66D4A44C</color>
+    <color name="gold_accent_faint">#26D4A44C</color>
+    <color name="divider_gold">#66D4A44C</color>
+    <color name="seekbar_background">#535353</color>
+    <color name="seekbar_progress">#D4A44C</color>
+    <color name="progress_bar_background">#2A2A2A</color>
+    <color name="progress_bar_fill">#D4A44C</color>
+    <color name="icon_primary">#FFFFFF</color>
+    <color name="icon_secondary">#B3B3B3</color>
+    <color name="warning_banner_bg">#332B00</color>
+    <color name="gradient_surface">#333333</color>
+
+    <!-- Skeleton loader -->
+    <color name="skeleton_bone">#3A3A3A</color>
 
 </resources>

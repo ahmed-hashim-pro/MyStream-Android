@@ -6,9 +6,12 @@ import static com.medoapps.www.onlinequran.NotificationPanel.*;
 import static com.medoapps.www.onlinequran.R.id.adView;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -27,6 +30,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.PersistableBundle;
 import android.os.PowerManager;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
@@ -49,8 +53,11 @@ import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
@@ -69,6 +76,7 @@ import com.google.android.gms.ads.nativead.NativeAdView;
 import com.medoapps.www.onlinequran.util.Config;
 import com.medoapps.www.onlinequran.util.SeparateFunctions;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,6 +104,11 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
     public SeekBar songProgressBar;
     public TextView songTitleLabel;
     public  TextView songReciteName;
+    public  TextView sourceLabel;
+    public  LinearLayout sourceBadge;
+    public  LinearLayout sourceRow;
+    public  ImageView sourceIcon;
+    public  ImageButton btnDeleteSurah;
     public  TextView songCurrentDurationLabel;
     public  TextView songTotalDurationLabel;
     public LinearLayout layoutads;
@@ -149,11 +162,16 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
     private MediaPlayerService player;
     private MediaPlayer serviceMediaPlayer;
     boolean serviceBound = false;
+    private boolean isBoundToService = false;
     ArrayList<Audio> audioList;
 
     ImageView collapsingImageView;
 
     int imageIndex = 0;
+
+    private RecyclerView miniPlaylistRecyclerView;
+    private MiniPlaylistAdapter miniPlaylistAdapter;
+    private LinearLayoutManager playlistLayoutManager;
 
 
     private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110";
@@ -182,6 +200,26 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
         serviceBound = savedInstanceState.getBoolean("serviceStatus");
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        Bundle b = intent.getExtras();
+        if (b != null && b.getBoolean("isStartFromNotification", false)) {
+            int storedIndex = new StorageUtil(getApplicationContext()).loadAudioIndex();
+            if (storedIndex >= 0 && songsList != null && storedIndex < songsList.size()) {
+                currentSongIndex = storedIndex;
+                numberOfTitleSet = 1;
+                if (miniPlaylistAdapter != null) {
+                    miniPlaylistAdapter.setCurrentPlayingIndex(storedIndex);
+                    miniPlaylistRecyclerView.post(() ->
+                        playlistLayoutManager.scrollToPositionWithOffset(
+                            storedIndex, miniPlaylistRecyclerView.getHeight() / 3));
+                }
+            }
+        }
+    }
+
     //Binding this Client to the AudioPlayer Service
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -201,10 +239,23 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
 
                 songTitleLabel.setText(player.getTitle());
                 songReciteName.setText(player.getArtist());
+                updateSourceLabel(player.getData());
 
+                // Sync mini-playlist to the service's actual track index
+                int serviceIndex = new StorageUtil(getApplicationContext()).loadAudioIndex();
+                if (serviceIndex >= 0 && serviceIndex < songsList.size()) {
+                    currentSongIndex = serviceIndex;
+                    if (miniPlaylistAdapter != null) {
+                        miniPlaylistAdapter.setCurrentPlayingIndex(serviceIndex);
+                    }
+                }
             }
 
-
+            if (player.playbackStatusPublic == PlaybackStatus.PLAYING) {
+                btnPlay.setImageResource(R.drawable.btn_pause);
+            } else {
+                btnPlay.setImageResource(R.drawable.btn_play);
+            }
 
             serviceBound = true;
             StorageUtil storage = new StorageUtil(getApplicationContext());
@@ -228,6 +279,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
         if (isStartFromNotification){
             Intent playerIntent = new Intent(this, MediaPlayerService.class);
             bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+            isBoundToService = true;
             updateProgressBar();
         }else{
             StorageUtil storageo = new StorageUtil(getApplicationContext());
@@ -250,6 +302,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
                 startService(playerIntent);
 
                 bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+                isBoundToService = true;
 
 
 
@@ -310,8 +363,25 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
                 loadingBar.setVisibility(View.GONE);
                 songTitleLabel.setText(player.getTitle());
                 songReciteName.setText(player.getArtist());
+                updateSourceLabel(player.getData());
                 batteryOptimizationCheck();
 
+                if (player.playbackStatusPublic == PlaybackStatus.PLAYING) {
+                    btnPlay.setImageResource(R.drawable.btn_pause);
+                } else {
+                    btnPlay.setImageResource(R.drawable.btn_play);
+                }
+
+                // Sync mini-playlist with service's current index
+                int serviceIndex = new StorageUtil(getApplicationContext()).loadAudioIndex();
+                if (serviceIndex != currentSongIndex && serviceIndex >= 0) {
+                    currentSongIndex = serviceIndex;
+                    numberOfTitleSet = 1;
+                    updateBookmarkIcon();
+                    if (miniPlaylistAdapter != null) {
+                        miniPlaylistAdapter.setCurrentPlayingIndex(serviceIndex);
+                    }
+                }
             }
 
 
@@ -364,33 +434,38 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (!isBoundToService) {
+            Intent playerIntent = new Intent(this, MediaPlayerService.class);
+            bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+            isBoundToService = true;
+        }
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-        try {
-            unbindService(serviceConnection);
-
-//            player.STATE_PLAYING_public();
-//            unregisterReceiver(updateProgressBarReceiver);
-//            unbindService(serviceConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (isBoundToService) {
+            try {
+                unbindService(serviceConnection);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            isBoundToService = false;
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mHandler.removeCallbacks(mUpdateTimeTask);
         if (nativeAd != null) {
             nativeAd.destroy();
         }
-//        unbindService(serviceConnection);
-//        unregisterReceiver(updateProgressBarReceiver);
-//        //Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
-        /*if (serviceBound) {
-            unbindService(serviceConnection);
-            //service is active
-            player.stopSelf();
-        }*/
+        try {
+            unregisterReceiver(updateProgressBarReceiver);
+        } catch (IllegalArgumentException ignored) {}
     }
 
 
@@ -668,6 +743,11 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
         songProgressBar = (SeekBar) findViewById( R.id.songProgressBar);
         songTitleLabel = (TextView) findViewById(R.id. songTitle);
         songReciteName = (TextView)findViewById(R.id.songrecite);
+        sourceLabel = (TextView) findViewById(R.id.sourceLabel);
+        sourceBadge = (LinearLayout) findViewById(R.id.sourceBadge);
+        sourceRow = (LinearLayout) findViewById(R.id.sourceRow);
+        sourceIcon = (ImageView) findViewById(R.id.sourceIcon);
+        btnDeleteSurah = (ImageButton) findViewById(R.id.btnDeleteSurah);
         songCurrentDurationLabel = (TextView) findViewById( R.id.songCurrentDurationLabel);
         songTotalDurationLabel = (TextView) findViewById( R.id.songTotalDurationLabel);
         scrollview = ((ScrollView) findViewById(R.id.scrollmanager));
@@ -678,6 +758,11 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
         songTitleLabel = lc.SetTextFont(songTitleLabel,"");
         songReciteName = lc.SetTextFont(songReciteName,"");
         songTitleLabel.setSelected(true);
+
+        // Set reciter name immediately from intent so header isn't empty while service connects
+        if (RealRecitesName != null && !RealRecitesName.isEmpty()) {
+            songReciteName.setText(RealRecitesName);
+        }
         if (IsRadio){
             btnRepeat.setVisibility(View.GONE);
             btnShuffle.setVisibility(View.GONE);
@@ -699,13 +784,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
 
 
         //chic for btnBookmark
-        if(SettingSaved.FinalRecite.equals(RecitesName)&&SettingSaved.FinalAya.equals(RecitesAYA)){
-            btnBookmark.setImageResource(R.drawable.ic_bookmark_border_black_pressed_24dp);
-        }else {
-            ////Toast.makeText(this, "no bookmark", Toast.LENGTH_SHORT).show();
-            // //Toast.makeText(this, SettingSaved.FinalRecite+ RecitesName, Toast.LENGTH_LONG).show();
-
-        }
+        updateBookmarkIcon();
 
 
         songManager = new SongsManager(NewQuranPlayer.this,NewQuranPlayer.this);
@@ -720,14 +799,44 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
         // By default play first song
         currentSongIndex=Integer.parseInt(  RecitesAYA);//-1 ;
 
+        // When reopening from notification, use the service's actual track index
+        if (isStartFromNotification) {
+            int storedIndex = new StorageUtil(getApplicationContext()).loadAudioIndex();
+            if (storedIndex >= 0 && storedIndex < songsList.size()) {
+                currentSongIndex = storedIndex;
+            }
+        }
+
         loadAudio();
         playAudio(currentSongIndex);
         btnPlay.setImageResource( R.drawable.btn_pause);
-        String songTitle = songsList.get(currentSongIndex).get("songTitle");
-        if (player != null){
-            songTitleLabel.setText(player.getTitle());
-            songReciteName.setText(player.getArtist());
+
+        // Set title immediately from songsList so header shows instantly
+        if (songsList != null && currentSongIndex < songsList.size()) {
+            String songTitle = songsList.get(currentSongIndex).get("songTitle");
+            String songPath = songsList.get(currentSongIndex).get("songPath");
+            if (songTitle != null) songTitleLabel.setText(songTitle);
+            updateSourceLabel(songPath);
         }
+
+        // Set up mini-playlist
+        miniPlaylistRecyclerView = findViewById(R.id.miniPlaylistRecyclerView);
+        playlistLayoutManager = new LinearLayoutManager(this);
+        miniPlaylistRecyclerView.setLayoutManager(playlistLayoutManager);
+        miniPlaylistRecyclerView.setNestedScrollingEnabled(false);
+
+        miniPlaylistAdapter = new MiniPlaylistAdapter(songsList, this, position -> {
+            onMiniPlaylistItemClicked(position);
+        });
+        miniPlaylistRecyclerView.setAdapter(miniPlaylistAdapter);
+        miniPlaylistAdapter.setCurrentPlayingIndex(currentSongIndex);
+
+        // Auto-scroll to current track
+        miniPlaylistRecyclerView.post(() -> {
+            playlistLayoutManager.scrollToPositionWithOffset(
+                currentSongIndex, miniPlaylistRecyclerView.getHeight() / 3);
+        });
+
         register_updateProgressBarReceiver();
 
         if (player != null){
@@ -934,16 +1043,39 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
         btnBookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SettingSaved.FinalRecite= ReciteNameText;
-                SettingSaved.FinalAya=RecitesAYA;
-                SettingSaved settingSaved=new SettingSaved(getApplicationContext());
+                String currentAya = String.valueOf(currentSongIndex);
+                boolean isAlreadyBookmarked = RecitesName.equals(SettingSaved.FinalRecite)
+                        && currentAya.equals(SettingSaved.FinalAya);
+
+                if (isAlreadyBookmarked) {
+                    SettingSaved.FinalRecite = "";
+                    SettingSaved.FinalAya = "";
+                    SettingSaved.FinalRewayat = "";
+                    SettingSaved.FinalRealRecitesName = "";
+                    btnBookmark.setImageResource(R.drawable.ic_bookmark_border_black_24dp);
+                } else {
+                    SettingSaved.FinalRecite = RecitesName;
+                    SettingSaved.FinalAya = currentAya;
+                    SettingSaved.FinalRewayat = Rewayat;
+                    SettingSaved.FinalRealRecitesName = RealRecitesName;
+                    btnBookmark.setImageResource(R.drawable.ic_bookmark_border_black_pressed_24dp);
+                }
+                SettingSaved settingSaved = new SettingSaved(getApplicationContext());
                 settingSaved.SaveData();
                 settingSaved.LoadData();
-                btnBookmark.setImageResource(R.drawable.ic_bookmark_border_black_pressed_24dp);
-
             }
         });
 
+    }
+
+    private void updateBookmarkIcon() {
+        String currentAya = String.valueOf(currentSongIndex);
+        if (RecitesName.equals(SettingSaved.FinalRecite)
+                && currentAya.equals(SettingSaved.FinalAya)) {
+            btnBookmark.setImageResource(R.drawable.ic_bookmark_border_black_pressed_24dp);
+        } else {
+            btnBookmark.setImageResource(R.drawable.ic_bookmark_border_black_24dp);
+        }
     }
 
     private void loadBannerAd() {
@@ -977,6 +1109,35 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
     public void loadAndPlayAudio(){
         loadAudio();
         playAudio(currentSongIndex);
+    }
+
+    private void onMiniPlaylistItemClicked(int position) {
+        if (position < 0 || position >= songsList.size()) return;
+        currentSongIndex = position;
+        loadingBar.setVisibility(View.VISIBLE);
+
+        // Update title and source label immediately
+        String songTitle = songsList.get(position).get("songTitle");
+        String songPath = songsList.get(position).get("songPath");
+        if (songTitle != null) songTitleLabel.setText(songTitle);
+        updateSourceLabel(songPath);
+
+        StorageUtil storage = new StorageUtil(getApplicationContext());
+        storage.storeAudioIndex(position);
+
+        if (player != null && player.CurrentServiceMediaPlayer() != null) {
+            Intent broadcastIntent = new Intent(Broadcast_PLAY_NEW_AUDIO);
+            broadcastIntent.setPackage(getPackageName());
+            sendBroadcast(broadcastIntent);
+        } else {
+            stopMediaPlayerService();
+            loadAndPlayAudio();
+        }
+
+        if (miniPlaylistAdapter != null) {
+            miniPlaylistAdapter.setCurrentPlayingIndex(position);
+        }
+        btnPlay.setImageResource(R.drawable.btn_pause);
     }
 
     @Override
@@ -1053,6 +1214,111 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
      * Function to play a song
      * @param songIndex - index of song
      * */
+    private void updateSourceLabel(String path) {
+        if (sourceLabel == null || sourceBadge == null || sourceIcon == null || sourceRow == null) return;
+        sourceRow.setVisibility(View.VISIBLE);
+        if (path != null && path.startsWith("http")) {
+            sourceLabel.setText(getString(R.string.source_streaming));
+            sourceLabel.setTextColor(getResources().getColor(R.color.gold_accent));
+            sourceIcon.setImageResource(R.drawable.ic_streaming);
+            sourceBadge.setBackgroundResource(R.drawable.badge_streaming);
+            btnDeleteSurah.setVisibility(View.GONE);
+        } else {
+            sourceLabel.setText(getString(R.string.source_offline));
+            sourceLabel.setTextColor(0xFF4CAF50);
+            sourceIcon.setImageResource(R.drawable.ic_offline);
+            sourceBadge.setBackgroundResource(R.drawable.badge_offline);
+            btnDeleteSurah.setVisibility(View.VISIBLE);
+            btnDeleteSurah.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    confirmDeleteCurrentSurah();
+                }
+            });
+        }
+    }
+
+    private void confirmDeleteCurrentSurah() {
+        if (songsList == null || currentSongIndex >= songsList.size()) return;
+        String songPath = songsList.get(currentSongIndex).get("songPath");
+        if (songPath == null || songPath.startsWith("http")) return;
+
+        String songTitle = songsList.get(currentSongIndex).get("songTitle");
+        new AlertDialog.Builder(this)
+            .setTitle(getString(R.string.audio_manager_surah_delete))
+            .setMessage(getString(R.string.audio_manager_remove_audio_msg, songTitle))
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    deleteCurrentSurah(songPath);
+                }
+            })
+            .setNegativeButton(android.R.string.no, null)
+            .show();
+    }
+
+    private void deleteCurrentSurah(String filePath) {
+        try {
+            File file = new File(filePath);
+            boolean deleted = false;
+            if (file.exists()) {
+                deleted = file.delete();
+            }
+
+            // Also remove from MediaStore on API 29+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                try {
+                    ContentResolver resolver = getContentResolver();
+                    String selection = MediaStore.Audio.Media.DATA + "=?";
+                    String[] selectionArgs = new String[]{filePath};
+                    resolver.delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, selection, selectionArgs);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (deleted || !file.exists()) {
+                // Build streaming URL to replace the local path
+                LnaguageClass lc = new LnaguageClass(NewQuranPlayer.this, NewQuranPlayer.this);
+                String serverName = "";
+                String fileName = file.getName();
+                if (fileName.endsWith(".mp3") && fileName.startsWith(RecitesName)) {
+                    serverName = fileName.substring(RecitesName.length(), fileName.length() - 4);
+                }
+
+                String streamUrl;
+                if (Rewayat != null && !Rewayat.isEmpty()) {
+                    streamUrl = "https://server" + lc.serverNumber(RecitesName) + ".mp3quran.net/" + RecitesName + "/" + Rewayat + "/" + serverName + ".mp3";
+                } else {
+                    streamUrl = "https://server" + lc.serverNumber(RecitesName) + ".mp3quran.net/" + RecitesName + "/" + serverName + ".mp3";
+                }
+
+                // Update the songsList entry
+                songsList.get(currentSongIndex).put("songPath", streamUrl);
+
+                // Rebuild audioList and restart playback from streaming URL
+                loadAudio();
+                StorageUtil storage = new StorageUtil(getApplicationContext());
+                storage.storeAudio(audioList);
+                storage.storeAudioIndex(currentSongIndex);
+
+                Intent broadcastIntent = new Intent(Broadcast_PLAY_NEW_AUDIO);
+                broadcastIntent.setPackage(getPackageName());
+                sendBroadcast(broadcastIntent);
+
+                // Update the source label
+                updateSourceLabel(streamUrl);
+
+                Toast.makeText(this, getString(R.string.surah_deleted), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.surah_delete_failed), Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, getString(R.string.surah_delete_failed), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public  void  playSong(int songIndex){
 
 
@@ -1073,10 +1339,13 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
 
             // Displaying Song title
             String songTitle = songsList.get(songIndex).get("songTitle");
+            String songPath = songsList.get(songIndex).get("songPath");
             songTitleLabel.setText(songTitle);
             notificationTitle=songTitle;
             ReciteNameText =RealRecitesName;
             songReciteName.setText(ReciteNameText);
+
+            updateSourceLabel(songPath);
             ubdateNotification();
 
 
@@ -1477,7 +1746,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
 
     }
     public void autoscroll(){
-
+        if (scrollview == null) return;
         scrollview.post(new Runnable() {
             @Override
             public void run() {
@@ -1589,7 +1858,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
                     playerView.setBackground();
                 }else{
                     playerView.setBackground(null);
-                    playerView.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+                    playerView.setBackgroundColor(Color.parseColor("#FF121212"));
                 }*//*
                 }
 

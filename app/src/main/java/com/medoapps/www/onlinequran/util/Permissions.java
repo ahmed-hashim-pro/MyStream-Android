@@ -38,9 +38,16 @@ public class Permissions {
 
 
     public Boolean checkStoragePermission(){
+        // On API 30+, MediaStore is used (scoped storage) — no legacy permission needed
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            return true;
+        }
         return askStoragePermission();
     }
     public Boolean checkStoragePermissionForService(){
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            return true;
+        }
         if ((int) SDK_INT >= 23)
         {
             if (
@@ -59,6 +66,9 @@ public class Permissions {
         }
     }
     public Boolean checkStoragePermissionWithoutAsk(){
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            return true;
+        }
         if ((int) SDK_INT >= 23)
         {
             if (

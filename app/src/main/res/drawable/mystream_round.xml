@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Gold ring halo (outer layer) -->
+    <item>
+        <shape android:shape="oval">
+            <stroke
+                android:width="1.5dp"
+                android:color="#40D4A44C" />
+            <size
+                android:width="240dp"
+                android:height="240dp" />
+        </shape>
+    </item>
+
+    <!-- Logo centered via equal insets: (240 - 144) / 2 = 48dp -->
+    <item
+        android:left="48dp"
+        android:top="48dp"
+        android:right="48dp"
+        android:bottom="48dp">
+        <bitmap
+            android:src="@drawable/mystream"
+            android:gravity="fill" />
+    </item>
+
+</layer-list>

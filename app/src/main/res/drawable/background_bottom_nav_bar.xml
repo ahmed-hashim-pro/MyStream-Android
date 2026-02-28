@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 1dp top divider line -->
+    <item android:drawable="@color/bottom_nav_divider" />
+    <!-- Background fill inset 1dp from top -->
+    <item android:top="1dp">
+        <color android:color="@color/background_bottom_nav" />
+    </item>
+</layer-list>
