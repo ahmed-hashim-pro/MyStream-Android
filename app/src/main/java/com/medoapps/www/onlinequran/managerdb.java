@@ -272,7 +272,7 @@ public class managerdb extends AppCompatActivity implements MediaPlayer.OnComple
                 .createWifiLock(WifiManager.WIFI_MODE_FULL, "mylock");
 
         wifiLock.acquire();*/
-        songManager = new SongsManager();
+        songManager = new SongsManager(this, this);
         utils = new Utilities();
 
         // Listeners
@@ -286,7 +286,12 @@ public class managerdb extends AppCompatActivity implements MediaPlayer.OnComple
         currentSongIndex=Integer.parseInt(  RecitesAYA);//-1 ;
 
 
-        playAudio(songsList.get(currentSongIndex).get("songPath"));
+        if (songsList != null && currentSongIndex < songsList.size()) {
+            playAudio(songsList.get(currentSongIndex).get("songPath"));
+        } else {
+            Toast.makeText(this, "لا يمكن تشغيل هذه التلاوة", Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
 //        playSong(currentSongIndex);
 
