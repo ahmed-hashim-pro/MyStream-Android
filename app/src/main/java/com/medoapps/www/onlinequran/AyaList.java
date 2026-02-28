@@ -3,6 +3,8 @@ package com.medoapps.www.onlinequran;
 import static android.os.Build.VERSION.SDK_INT;
 import static com.medoapps.www.onlinequran.util.Permissions.REQUEST_CODE_ASK_STORAGE_PERMISSIONS;
 
+import androidx.core.app.ActivityCompat;
+
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
@@ -42,10 +44,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+
+import io.supercharge.shimmerlayout.ShimmerLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,8 +61,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.NotificationCompat.Builder;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.preference.PreferenceManager;
 
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
@@ -97,8 +106,10 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 
 public class AyaList extends AppCompatActivity {
@@ -136,6 +147,7 @@ public class AyaList extends AppCompatActivity {
     public static final int ITEMS_PER_AD = 20;
 
     private boolean serviceBound;
+    private DownloadService downloadService;
     private RewardedAd rewardedAd;
     boolean isLoading;
 
@@ -150,7 +162,20 @@ public class AyaList extends AppCompatActivity {
     private String ServerNameForPermissionWait;
     private boolean downloadAllRequest;
 
-    private ProgressBar loader;
+    private boolean selectionMode = false;
+    private Set<Integer> selectedPositions = new HashSet<>();
+    private TextView downloadAllText;
+    private TextView selectAllBTN;
+    private View downloadAllArrow;
+
+    private ImageButton toggleViewBTN;
+    private static final int VIEW_MODE_LIST = 0;
+    private static final int VIEW_MODE_GRID = 1;
+    private static final int VIEW_MODE_COMPACT = 2;
+    private int viewMode = VIEW_MODE_LIST;
+    private static final String PREF_VIEW_MODE = "ayalist_view_mode";
+
+    private ShimmerLayout loader;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,7 +211,8 @@ public class AyaList extends AppCompatActivity {
 
 //        ActivityTitle = (TextView) findViewById(R.id.ActivityTitle);
         ActivityReciter = (TextView) findViewById(R.id.ActivityReciter);
-        loader = (ProgressBar) findViewById(R.id.loader);
+        loader = (ShimmerLayout) findViewById(R.id.skeletonLoader);
+        loader.startShimmerAnimation();
         LnaguageClass lc = new LnaguageClass(AyaList.this,AyaList.this);
 
         ActivityReciter = lc.SetTextFont(ActivityReciter,"");
@@ -195,13 +221,33 @@ public class AyaList extends AppCompatActivity {
 
         backBTN = (ImageButton) findViewById(R.id.backBTN);
         downloadAllBTN = (CardView) findViewById(R.id.downloadAllBTN);
+        downloadAllText = (TextView) findViewById(R.id.downloadAllText);
+        selectAllBTN = (TextView) findViewById(R.id.selectAllBTN);
+        downloadAllArrow = findViewById(R.id.downloadAllArrow);
+        selectAllBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleSelectAll();
+            }
+        });
         downloadAllBTN.setEnabled(false);
-        downloadAllBTN.setBackgroundColor(getResources().getColor(R.color.grey_300));
+        downloadAllBTN.setAlpha(0.5f);
         backBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 rateApp();
 //                finish();
+            }
+        });
+
+        viewMode = PreferenceManager.getDefaultSharedPreferences(this)
+                .getInt(PREF_VIEW_MODE, VIEW_MODE_LIST);
+        toggleViewBTN = (ImageButton) findViewById(R.id.toggleViewBTN);
+        updateToggleIcon();
+        toggleViewBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showViewModeMenu(view);
             }
         });
 
@@ -245,22 +291,29 @@ public class AyaList extends AppCompatActivity {
         //LoadAya();
         asyncLoadAya();
         listAya.setHasFixedSize(true);
-        listAya.setLayoutManager(new LinearLayoutManager(AyaList.this));
-        listAya.setAdapter(new VivzAdapter(recyclerViewItems));
+        applyLayoutMode();
         LayoutLoading=(LinearLayout)findViewById(R.id.LayoutLoading);
         progressBar=(ProgressBar)findViewById(R.id.progressBar);
         LayoutLoading.setVisibility(View.GONE);
+
+        findViewById(R.id.cancelDownloadBTN).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelDownload();
+            }
+        });
 //        getAppSpecificAlbumStorageDir(this,"My Stream2");
 
         downloadAllBTN.setEnabled(true);
+        downloadAllBTN.setAlpha(1.0f);
         downloadAllBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                startDownloadAll();
-
-//                separateFunctions.showNewCustomDialog(getString(R.string.DownloadAllTitle),getString(R.string.DownloadAllMessage),getString(android.R.string.yes),getString(android.R.string.no),showRewardedVideoRunnable,android.R.drawable.ic_dialog_info);
-
+                if (selectionMode) {
+                    startDownloadSelected();
+                } else {
+                    enterSelectionMode(-1);
+                }
             }
         });
         loadRewardedAd();
@@ -314,7 +367,8 @@ public class AyaList extends AppCompatActivity {
             }
 
 
-            listAya.setAdapter(new VivzAdapter(recyclerViewItems));
+            applyLayoutMode();
+            loader.stopShimmerAnimation();
             loader.setVisibility(View.GONE);
         }
 
@@ -409,7 +463,7 @@ public class AyaList extends AppCompatActivity {
                             Log.d(TAG, "onAdLoaded");
                             AyaList.this.isLoading = false;
                             downloadAllBTN.setEnabled(true);
-                            downloadAllBTN.setBackgroundColor(getResources().getColor(R.color.white));
+                            downloadAllBTN.setAlpha(1.0f);
 
 
                             /*Glide.with(AyaList.this).load(R.drawable.newgift).into(prize);
@@ -515,43 +569,250 @@ public class AyaList extends AppCompatActivity {
     }
     private  void startDownloadAll(){
         downloadAllRequest = true;
-        Permissions permissions = new Permissions(AyaList.this,AyaList.this);
 
-        if(!permissions.checkStoragePermission())
-            return;
-
-        listDownloadAya.clear();
-        //get list of recites
-        listrecitesAya.clear();
-        LnaguageClass lc = new LnaguageClass(AyaList.this,AyaList.this);
-        listrecitesAya = lc.GuranAya(RecitesName,Rewayat);
-        for (int i = 0; i < listrecitesAya.size(); ++i) {
-
-            AuthorClass temp = listrecitesAya.get(i);
-
-            if (temp.ImgUrl.contains("http")){
-
-                listDownloadAya.add(temp);
-//                        Log.d("fdsfds", String.valueOf(listDownloadAya));
-
+        // On API < 30, storage permission is needed for direct file access.
+        // On API 30+, DownloadService uses MediaStore (scoped storage) so permission is not required.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            Permissions permissions = new Permissions(AyaList.this, AyaList.this);
+            if (!permissions.checkStoragePermission()) {
+                return;
             }
-//                    recyclerViewItems.add(temp);
         }
-        StorageUtil storage = new StorageUtil(getApplicationContext());
-        storage.clearCacheDownloadslist();
 
-        storage.storeDownloadlist(listDownloadAya);
-        storage.storeDownloadIndex(0);
-        storage.storeDownloadRecitesName(RecitesName);
-        storage.storeDownloadRealRecitesName(RealRecitesName);
+        // Request notification permission for Android 13+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 200);
+            }
+        }
 
-        Intent downloaderIntent = new Intent(AyaList.this, DownloadService.class);
-        startService(downloaderIntent);
-        bindService(downloaderIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-        register_loadAyaReceiver();
+        try {
+            listDownloadAya.clear();
+            listrecitesAya.clear();
+            LnaguageClass lc = new LnaguageClass(AyaList.this, AyaList.this);
+            listrecitesAya = lc.GuranAya(RecitesName, Rewayat);
 
-//                bindService(downloaderIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+            for (int i = 0; i < listrecitesAya.size(); ++i) {
+                AuthorClass temp = listrecitesAya.get(i);
+                if (temp.ImgUrl != null && temp.ImgUrl.contains("http")) {
+                    listDownloadAya.add(temp);
+                }
+            }
+
+            if (listDownloadAya.isEmpty()) {
+                Toast.makeText(this, getString(R.string.no_items_to_download), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            StorageUtil storage = new StorageUtil(getApplicationContext());
+            storage.clearCacheDownloadslist();
+            storage.storeDownloadlist(listDownloadAya);
+            storage.storeDownloadIndex(0);
+            storage.storeDownloadRecitesName(RecitesName);
+            storage.storeDownloadRealRecitesName(RealRecitesName);
+
+            LayoutLoading.setVisibility(View.VISIBLE);
+            downloadAllBTN.setEnabled(false);
+            downloadAllBTN.setAlpha(0.5f);
+
+            Intent downloaderIntent = new Intent(AyaList.this, DownloadService.class);
+            startService(downloaderIntent);
+            bindService(downloaderIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+            register_loadAyaReceiver();
+
+            Toast.makeText(this, getString(R.string.download_started), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e(TAG, "startDownloadAll failed", e);
+            Toast.makeText(this, getString(R.string.download_failed), Toast.LENGTH_SHORT).show();
+        }
     }
+
+    private void enterSelectionMode(int initialPosition) {
+        selectionMode = true;
+        selectedPositions.clear();
+        if (initialPosition >= 0) {
+            selectedPositions.add(initialPosition);
+        }
+        updateDownloadCard();
+        if (listAya.getAdapter() != null) {
+            listAya.getAdapter().notifyDataSetChanged();
+        }
+    }
+
+    private void exitSelectionMode() {
+        selectionMode = false;
+        selectedPositions.clear();
+        updateDownloadCard();
+        if (listAya.getAdapter() != null) {
+            listAya.getAdapter().notifyDataSetChanged();
+        }
+    }
+
+    private void toggleSelection(int position) {
+        if (selectedPositions.contains(position)) {
+            selectedPositions.remove(position);
+        } else {
+            selectedPositions.add(position);
+        }
+        updateDownloadCard();
+        if (listAya.getAdapter() != null) {
+            listAya.getAdapter().notifyItemChanged(position);
+        }
+        if (selectedPositions.isEmpty()) {
+            exitSelectionMode();
+        }
+    }
+
+    private void updateDownloadCard() {
+        if (selectionMode && !selectedPositions.isEmpty()) {
+            downloadAllText.setText(String.format(getString(R.string.download_selected), selectedPositions.size()));
+        } else if (selectionMode) {
+            downloadAllText.setText(getString(R.string.select_surahs));
+        } else {
+            downloadAllText.setText(getString(R.string.download_all_list));
+        }
+
+        if (selectionMode) {
+            selectAllBTN.setVisibility(View.VISIBLE);
+            downloadAllArrow.setVisibility(View.GONE);
+            // Toggle label between select all / deselect all
+            int nonDownloadedCount = getNonDownloadedCount();
+            if (selectedPositions.size() >= nonDownloadedCount && nonDownloadedCount > 0) {
+                selectAllBTN.setText(getString(R.string.deselect_all));
+            } else {
+                selectAllBTN.setText(getString(R.string.select_all));
+            }
+        } else {
+            selectAllBTN.setVisibility(View.GONE);
+            downloadAllArrow.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private int getNonDownloadedCount() {
+        int count = 0;
+        for (int j = 0; j < recyclerViewItems.size(); j++) {
+            if (recyclerViewItems.get(j) instanceof AuthorClass) {
+                AuthorClass item = (AuthorClass) recyclerViewItems.get(j);
+                if (!item.StateName.equals(LnaguageClass.avalible())) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    private void toggleSelectAll() {
+        int nonDownloadedCount = getNonDownloadedCount();
+        if (selectedPositions.size() >= nonDownloadedCount && nonDownloadedCount > 0) {
+            // Deselect all
+            selectedPositions.clear();
+        } else {
+            // Select all non-downloaded
+            selectedPositions.clear();
+            for (int j = 0; j < recyclerViewItems.size(); j++) {
+                if (recyclerViewItems.get(j) instanceof AuthorClass) {
+                    AuthorClass item = (AuthorClass) recyclerViewItems.get(j);
+                    if (!item.StateName.equals(LnaguageClass.avalible())) {
+                        selectedPositions.add(j);
+                    }
+                }
+            }
+        }
+        updateDownloadCard();
+        if (listAya.getAdapter() != null) {
+            listAya.getAdapter().notifyDataSetChanged();
+        }
+    }
+
+    private void startDownloadSelected() {
+        downloadAllRequest = false;
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            Permissions permissions = new Permissions(AyaList.this, AyaList.this);
+            if (!permissions.checkStoragePermission()) {
+                return;
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 200);
+            }
+        }
+
+        try {
+            listDownloadAya.clear();
+            for (int pos : selectedPositions) {
+                if (pos < recyclerViewItems.size()
+                        && recyclerViewItems.get(pos) instanceof AuthorClass) {
+                    AuthorClass item = (AuthorClass) recyclerViewItems.get(pos);
+                    if (item.ImgUrl != null && item.ImgUrl.contains("http")) {
+                        listDownloadAya.add(item);
+                    }
+                }
+            }
+
+            if (listDownloadAya.isEmpty()) {
+                Toast.makeText(this, getString(R.string.no_items_to_download), Toast.LENGTH_SHORT).show();
+                exitSelectionMode();
+                return;
+            }
+
+            StorageUtil storage = new StorageUtil(getApplicationContext());
+            storage.clearCacheDownloadslist();
+            storage.storeDownloadlist(listDownloadAya);
+            storage.storeDownloadIndex(0);
+            storage.storeDownloadRecitesName(RecitesName);
+            storage.storeDownloadRealRecitesName(RealRecitesName);
+
+            LayoutLoading.setVisibility(View.VISIBLE);
+            downloadAllBTN.setEnabled(false);
+            downloadAllBTN.setAlpha(0.5f);
+
+            Intent downloaderIntent = new Intent(AyaList.this, DownloadService.class);
+            startService(downloaderIntent);
+            bindService(downloaderIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+            register_loadAyaReceiver();
+
+            Toast.makeText(this, getString(R.string.download_started), Toast.LENGTH_SHORT).show();
+            exitSelectionMode();
+        } catch (Exception e) {
+            Log.e(TAG, "startDownloadSelected failed", e);
+            Toast.makeText(this, getString(R.string.download_failed), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (selectionMode) {
+            exitSelectionMode();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void cancelDownload() {
+        try {
+            if (serviceBound && downloadService != null) {
+                downloadService.canceldownload();
+            }
+            if (serviceBound) {
+                unbindService(serviceConnection);
+                serviceBound = false;
+                downloadService = null;
+            }
+            stopService(new Intent(AyaList.this, DownloadService.class));
+        } catch (Exception e) {
+            Log.e(TAG, "cancelDownload failed", e);
+        }
+        LayoutLoading.setVisibility(View.GONE);
+        downloadAllBTN.setEnabled(true);
+        downloadAllBTN.setAlpha(1.0f);
+        Toast.makeText(this, getString(R.string.download_canceled), Toast.LENGTH_SHORT).show();
+    }
+
     public Void openFullStoragePermissionIntent(){
 
         try {
@@ -575,19 +836,14 @@ public class AyaList extends AppCompatActivity {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
             DownloadService.LocalBinder binder = (DownloadService.LocalBinder) service;
-//            player = binder.getService();
-
+            downloadService = binder.getService();
             serviceBound = true;
-
-
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            //Toast.makeText(getApplicationContext(), "onServiceDisconnected", Toast.LENGTH_SHORT).show();
+            downloadService = null;
             serviceBound = false;
         }
     };
@@ -595,30 +851,63 @@ public class AyaList extends AppCompatActivity {
     private BroadcastReceiver updateProgressBarReceiver  = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            LayoutLoading.setVisibility(View.GONE);
+            downloadAllBTN.setEnabled(true);
+            downloadAllBTN.setAlpha(1.0f);
             LoadAya();
+        }
+    };
 
-
+    private BroadcastReceiver downloadProgressReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int progress = intent.getIntExtra(DownloadService.EXTRA_PROGRESS, 0);
+            String surahName = intent.getStringExtra(DownloadService.EXTRA_SURAH_NAME);
+            progressBar.setProgress(progress);
+            if (surahName != null && !surahName.isEmpty()) {
+                ((TextView) findViewById(R.id.textView3)).setText(surahName + " - " + progress + "%");
+            }
         }
     };
 
     private void register_loadAyaReceiver() {
-        //Register playNewMedia receiver
-
-
         try {
             unregisterReceiver(updateProgressBarReceiver);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        IntentFilter filter = new IntentFilter(com.medoapps.www.onlinequran.AyaList.Broadcast_LoadAya);
+        try {
+            unregisterReceiver(downloadProgressReceiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        IntentFilter filter = new IntentFilter(Broadcast_LoadAya);
         try {
             ContextCompat.registerReceiver(this, updateProgressBarReceiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        IntentFilter progressFilter = new IntentFilter(DownloadService.BROADCAST_DOWNLOAD_PROGRESS);
+        try {
+            ContextCompat.registerReceiver(this, downloadProgressReceiver, progressFilter, ContextCompat.RECEIVER_NOT_EXPORTED);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try { unregisterReceiver(updateProgressBarReceiver); } catch (Exception ignored) {}
+        try { unregisterReceiver(downloadProgressReceiver); } catch (Exception ignored) {}
+        if (serviceBound) {
+            try { unbindService(serviceConnection); } catch (Exception ignored) {}
+            serviceBound = false;
+        }
+    }
+
     /**
      * Adds banner ads to the items list.
      * @param recyclerViewItems
@@ -845,6 +1134,83 @@ public class AyaList extends AppCompatActivity {
             return "guest_mode";
         }
     }
+    private void updateToggleIcon() {
+        // Fixed tune/sliders icon — mode is chosen from the popup menu
+    }
+
+    private void showViewModeMenu(View anchor) {
+        PopupMenu popup = new PopupMenu(this, anchor);
+        popup.getMenuInflater().inflate(R.menu.menu_view_mode, popup.getMenu());
+
+        // Mark the current mode
+        int activeId;
+        switch (viewMode) {
+            case VIEW_MODE_GRID: activeId = R.id.view_mode_grid; break;
+            case VIEW_MODE_COMPACT: activeId = R.id.view_mode_compact; break;
+            default: activeId = R.id.view_mode_list; break;
+        }
+        popup.getMenu().findItem(activeId).setChecked(true);
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.view_mode_list) {
+                    viewMode = VIEW_MODE_LIST;
+                } else if (id == R.id.view_mode_grid) {
+                    viewMode = VIEW_MODE_GRID;
+                } else if (id == R.id.view_mode_compact) {
+                    viewMode = VIEW_MODE_COMPACT;
+                } else {
+                    return false;
+                }
+                PreferenceManager.getDefaultSharedPreferences(AyaList.this)
+                        .edit().putInt(PREF_VIEW_MODE, viewMode).apply();
+                updateToggleIcon();
+                applyLayoutMode(true);
+                return true;
+            }
+        });
+        popup.show();
+    }
+
+    private void applyLayoutMode() {
+        applyLayoutMode(false);
+    }
+
+    private void applyLayoutMode(boolean animate) {
+        if (animate) {
+            listAya.animate().alpha(0f).setDuration(150).withEndAction(new Runnable() {
+                @Override
+                public void run() {
+                    swapLayoutManager();
+                    listAya.animate().alpha(1f).setDuration(150).start();
+                }
+            }).start();
+        } else {
+            swapLayoutManager();
+        }
+    }
+
+    private void swapLayoutManager() {
+        if (viewMode == VIEW_MODE_GRID) {
+            GridLayoutManager glm = new GridLayoutManager(this, 2);
+            glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if (position < recyclerViewItems.size()
+                            && recyclerViewItems.get(position) instanceof AdView)
+                        return 2;
+                    return 1;
+                }
+            });
+            listAya.setLayoutManager(glm);
+        } else {
+            listAya.setLayoutManager(new LinearLayoutManager(AyaList.this));
+        }
+        listAya.setAdapter(new VivzAdapter(recyclerViewItems, viewMode));
+    }
+
     public void LoadAya(){
         RecyclerView list =(RecyclerView) findViewById ( R.id.listView) ;
 
@@ -874,7 +1240,7 @@ public class AyaList extends AppCompatActivity {
         }
 
 
-        listAya.setAdapter(new VivzAdapter(recyclerViewItems));
+        applyLayoutMode();
 
 
     }
@@ -1005,6 +1371,13 @@ public class AyaList extends AppCompatActivity {
     /// file downlaod
     public void startDownload( String ImgUrl,String ServerName ) {
 
+        // Request notification permission for Android 13+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 200);
+            }
+        }
 
         listDownloadAya.clear();
         //get list of recites
@@ -1018,10 +1391,8 @@ public class AyaList extends AppCompatActivity {
             if (temp.ImgUrl.equalsIgnoreCase(ImgUrl)){
 
                 listDownloadAya.add(temp);
-//                        Log.d("fdsfds", String.valueOf(listDownloadAya));
 
             }
-//                    recyclerViewItems.add(temp);
         }
         StorageUtil storage = new StorageUtil(getApplicationContext());
         storage.clearCacheDownloadslist();
@@ -1031,17 +1402,12 @@ public class AyaList extends AppCompatActivity {
         storage.storeDownloadRecitesName(RecitesName);
         storage.storeDownloadRealRecitesName(RealRecitesName);
 
+        LayoutLoading.setVisibility(View.VISIBLE);
 
-        Handler mHandler=new Handler();
-        mHandler.post(new Runnable(){
-                          public void run(){
-                              Intent downloaderIntent = new Intent(AyaList.this, DownloadService.class);
-                              startService(downloaderIntent);
-                              bindService(downloaderIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-                              register_loadAyaReceiver();
-                          }
-
-                      });
+        Intent downloaderIntent = new Intent(AyaList.this, DownloadService.class);
+        startService(downloaderIntent);
+        bindService(downloaderIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        register_loadAyaReceiver();
         /*Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -1397,38 +1763,119 @@ public class AyaList extends AppCompatActivity {
 
         }
     }
+    private void deleteLocalSurah(AuthorClass item, VivzAdapter.ViewHolder holder) {
+        try {
+            String filePath = item.ImgUrl;
+            File file = new File(filePath);
+            boolean deleted = false;
+
+            // Delete the actual file
+            if (file.exists()) {
+                deleted = file.delete();
+            }
+
+            // Also remove from MediaStore on API 29+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                try {
+                    ContentResolver resolver = getContentResolver();
+                    String selection = MediaStore.Audio.Media.DATA + "=?";
+                    String[] selectionArgs = new String[]{filePath};
+                    resolver.delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, selection, selectionArgs);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (deleted || !file.exists()) {
+                // Rebuild the streaming URL
+                LnaguageClass lc = new LnaguageClass(AyaList.this, AyaList.this);
+                String streamUrl;
+                if (Rewayat != null && !Rewayat.isEmpty()) {
+                    streamUrl = "https://server" + lc.serverNumber(RecitesName) + ".mp3quran.net/" + RecitesName + "/" + Rewayat + "/" + item.ServerName + ".mp3";
+                } else {
+                    streamUrl = "https://server" + lc.serverNumber(RecitesName) + ".mp3quran.net/" + RecitesName + "/" + item.ServerName + ".mp3";
+                }
+
+                // Update the item in place
+                item.StateName = LnaguageClass.disavalible();
+                item.ImgUrl = streamUrl;
+
+                // Update UI immediately
+                holder.budownload.setVisibility(View.VISIBLE);
+                holder.budelete.setVisibility(View.GONE);
+                holder.cost.setText(item.StateName);
+                holder.statusIcon.setImageResource(R.drawable.ic_streaming);
+                holder.statusIcon.setVisibility(View.VISIBLE);
+
+                Toast.makeText(AyaList.this, getString(R.string.surah_deleted), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(AyaList.this, getString(R.string.surah_delete_failed), Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(AyaList.this, getString(R.string.surah_delete_failed), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     //=====================================
     class VivzAdapter extends RecyclerView.Adapter<VivzAdapter.ViewHolder>
     {
 
-
-
+        private static final int VIEW_TYPE_AD = 0;
+        private static final int VIEW_TYPE_SURAH_LIST = 1;
+        private static final int VIEW_TYPE_SURAH_GRID = 2;
+        private static final int VIEW_TYPE_SURAH_COMPACT = 3;
 
 //        ArrayList<AuthorClass> listrecitesLocal;
         private List<Object> listrecitesLocalobject;
+        private int viewMode;
 
 
         VivzAdapter(ArrayList<AuthorClass> listrecites) {
-
-//            listrecitesLocal = new ArrayList<AuthorClass>();
-//            listrecitesLocal = listrecites;
-
-//            listrecitesLocalobject = new List<Object>;
-//            listrecitesLocalobject = recyclerViewItems;
-
-
+            this(new ArrayList<Object>(listrecites), AyaList.this.viewMode);
         }
 
         public VivzAdapter(List<Object> recyclerViewItems) {
-            listrecitesLocalobject = recyclerViewItems;
+            this(recyclerViewItems, AyaList.this.viewMode);
         }
 
+        public VivzAdapter(List<Object> recyclerViewItems, int viewMode) {
+            listrecitesLocalobject = recyclerViewItems;
+            this.viewMode = viewMode;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (listrecitesLocalobject.get(position) instanceof AdView) {
+                return VIEW_TYPE_AD;
+            }
+            switch (viewMode) {
+                case VIEW_MODE_GRID:
+                    return VIEW_TYPE_SURAH_GRID;
+                case VIEW_MODE_COMPACT:
+                    return VIEW_TYPE_SURAH_COMPACT;
+                default:
+                    return VIEW_TYPE_SURAH_LIST;
+            }
+        }
 
         @NonNull
         @Override
         public VivzAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            View listItem= layoutInflater.inflate(R.layout.single_rowayalist, parent, false);
+            int layoutRes;
+            switch (viewType) {
+                case VIEW_TYPE_SURAH_GRID:
+                    layoutRes = R.layout.grid_item_ayalist;
+                    break;
+                case VIEW_TYPE_SURAH_COMPACT:
+                    layoutRes = R.layout.compact_item_ayalist;
+                    break;
+                default:
+                    layoutRes = R.layout.single_rowayalist;
+                    break;
+            }
+            View listItem = layoutInflater.inflate(layoutRes, parent, false);
             VivzAdapter.ViewHolder viewHolder = new VivzAdapter.ViewHolder(listItem);
 
             return viewHolder;
@@ -1494,121 +1941,175 @@ public class AyaList extends AppCompatActivity {
                 holder.cardContent.setVisibility(View.VISIBLE);
                 holder.cardContent.setLayoutDirection(SettingSaved.LanguageSelect==1?View.LAYOUT_DIRECTION_RTL:View.LAYOUT_DIRECTION_LTR);
 
-            /*
-            //check if SD availbel
-            Boolean isSDPresent = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+                boolean isDownloaded = temp.StateName.equals(LnaguageClass.avalible());
 
-            if(isSDPresent)
-            {
-                // yes SD-card is present
-               // budownload.setEnabled(true);
-                budownload.setVisibility(View.VISIBLE);
-            }
-            else
-            {  // No SD-card is present;
-                budownload.setVisibility(View.GONE);
-
-            }*/
-
-                //share
-                holder.ShareButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        onShareBy(temp.RealName,RealRecitesName,temp.ServerName);
+                // --- Selection mode handling ---
+                if (selectionMode) {
+                    if (holder.selectCheckBox != null) {
+                        holder.selectCheckBox.setVisibility(View.VISIBLE);
+                        holder.image.setVisibility(View.GONE);
+                        if (isDownloaded) {
+                            holder.selectCheckBox.setChecked(true);
+                            holder.selectCheckBox.setEnabled(false);
+                        } else {
+                            holder.selectCheckBox.setChecked(selectedPositions.contains(postion));
+                            holder.selectCheckBox.setEnabled(true);
+                        }
                     }
-                });
-                // if already dowload
-                if(temp.StateName.equals(LnaguageClass.avalible()))
-                    holder.budownload.setVisibility(View.INVISIBLE);
-                // downlaod file
-                holder.budownload.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                    // Hide action buttons in selection mode
+                    holder.ShareButton.setVisibility(View.GONE);
+                    holder.budownload.setVisibility(View.GONE);
+                    holder.budelete.setVisibility(View.GONE);
 
-                        if( ISDonwloading!=true){
-//                        checkPermission();
-                            Permissions permissions = new Permissions(AyaList.this,AyaList.this);
-                            if(permissions.checkStoragePermission()){
-                                startDownload(temp.ImgUrl,ServerName );
-
-                            }else {
-                                downloadAllRequest = false;
-                                tempImgUrlForPermissionWait = temp.ImgUrl;
-                                ServerNameForPermissionWait = ServerName;
+                    holder.image.setClickable(false);
+                    holder.title.setClickable(false);
+                    holder.cardContent.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (!isDownloaded) {
+                                toggleSelection(postion);
                             }
                         }
-                        Toast.makeText(AyaList.this, RecitesAYA, Toast.LENGTH_SHORT).show();
+                    });
+                    holder.cardContent.setOnLongClickListener(null);
+                } else {
+                    // --- Normal mode ---
+                    if (holder.selectCheckBox != null) {
+                        holder.selectCheckBox.setVisibility(View.GONE);
                     }
-                });
-                //=====================================================
-                holder.image.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                    holder.image.setVisibility(View.VISIBLE);
+                    holder.ShareButton.setVisibility(View.VISIBLE);
 
-                        //get aya
-                        //load full screan ad
-                    /*if (mInterstitialAd.isLoaded()) {
-                        mInterstitialAd.show();
+                    //share
+                    holder.ShareButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            onShareBy(temp.RealName,RealRecitesName,temp.ServerName);
+                        }
+                    });
+                    // if already downloaded: hide download, show delete
+                    if(isDownloaded) {
+                        holder.budownload.setVisibility(View.GONE);
+                        holder.budelete.setVisibility(View.VISIBLE);
                     } else {
-                        Log.d("TAG", "The interstitial wasn't loaded yet.");
-                    }*/
-                        if( ISDonwloading!=true)
-                            for (int i=0;i< listrecitesAya.size();i++) {
-                                if(listrecitesAya.get(i).RealName.equals(temp.RealName)){
-                                    RecitesAYA=String.valueOf(i);// ServerName;
-                                    surahName = listrecitesAya.get(i).RealName;
-                                    //save server name to play it out
-                                /*SettingSaved.FinalAya=RecitesAYA;
-                                SettingSaved settingSaved=new SettingSaved(getApplicationContext());
-                                settingSaved.SaveData();*/
-                                    AyaNameView = holder.title;
-
-                                    AyaImage = holder.image;
-                                    DisplayAya();
-                                    break;
-                                }
-
-                            }
-
+                        holder.budownload.setVisibility(View.VISIBLE);
+                        holder.budelete.setVisibility(View.GONE);
                     }
-                });
-                holder.title.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //load full screan ad
-                    /*if (mInterstitialAd.isLoaded()) {
-                        mInterstitialAd.show();
+                    // delete local file
+                    holder.budelete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new AlertDialog.Builder(AyaList.this)
+                                .setTitle(getString(R.string.audio_manager_surah_delete))
+                                .setMessage(getString(R.string.audio_manager_remove_audio_msg, temp.RealName))
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        deleteLocalSurah(temp, holder);
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, null)
+                                .show();
+                        }
+                    });
+                    // downlaod file
+                    holder.budownload.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if( ISDonwloading!=true){
+    //                        checkPermission();
+                                Permissions permissions = new Permissions(AyaList.this,AyaList.this);
+                                if(permissions.checkStoragePermission()){
+                                    startDownload(temp.ImgUrl,ServerName );
+
+                                }else {
+                                    downloadAllRequest = false;
+                                    tempImgUrlForPermissionWait = temp.ImgUrl;
+                                    ServerNameForPermissionWait = ServerName;
+                                }
+                            }
+                            Toast.makeText(AyaList.this, RecitesAYA, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    //=====================================================
+                    holder.image.setClickable(false);
+                    holder.title.setClickable(false);
+                    holder.cardContent.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if( ISDonwloading!=true)
+                                for (int i=0;i< listrecitesAya.size();i++) {
+                                    if(listrecitesAya.get(i).RealName.equals(temp.RealName)){
+                                        RecitesAYA=String.valueOf(i);
+                                        surahName = listrecitesAya.get(i).RealName;
+                                        AyaNameView = holder.title;
+                                        AyaImage = holder.image;
+                                        DisplayAya();
+                                        break;
+                                    }
+                                }
+                        }
+                    });
+
+                    // Quick long-press (200ms) to enter selection mode (only for non-downloaded surahs)
+                    if (!isDownloaded) {
+                        holder.cardContent.setOnTouchListener(new View.OnTouchListener() {
+                            private Handler handler = new Handler();
+                            private boolean longPressTriggered = false;
+                            private Runnable longPressRunnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    longPressTriggered = true;
+                                    if (!selectionMode) {
+                                        enterSelectionMode(postion);
+                                    }
+                                }
+                            };
+
+                            @Override
+                            public boolean onTouch(View v, android.view.MotionEvent event) {
+                                switch (event.getAction()) {
+                                    case android.view.MotionEvent.ACTION_DOWN:
+                                        longPressTriggered = false;
+                                        v.setPressed(true);
+                                        handler.postDelayed(longPressRunnable, 200);
+                                        break;
+                                    case android.view.MotionEvent.ACTION_UP:
+                                        handler.removeCallbacks(longPressRunnable);
+                                        if (!longPressTriggered) {
+                                            v.performClick();
+                                        }
+                                        v.setPressed(false);
+                                        break;
+                                    case android.view.MotionEvent.ACTION_CANCEL:
+                                        handler.removeCallbacks(longPressRunnable);
+                                        v.setPressed(false);
+                                        break;
+                                    case android.view.MotionEvent.ACTION_MOVE:
+                                        break;
+                                }
+                                return true;
+                            }
+                        });
+                        holder.cardContent.setOnLongClickListener(null);
                     } else {
-                        Log.d("TAG", "The interstitial wasn't loaded yet.");
-                    }*/
-                        //get aya
-                        if( ISDonwloading!=true)
-                            for (int i=0;i< listrecitesAya.size();i++) {
-                                if(listrecitesAya.get(i).RealName.equals(temp.RealName)){
-                                    RecitesAYA=String.valueOf(i);// ServerName;
-                                    surahName = listrecitesAya.get(i).RealName;
-
-
-                                    //save server name to play it out
-                               /* SettingSaved.FinalAya=RecitesAYA;
-                                SettingSaved settingSaved=new SettingSaved(getApplicationContext());
-                                settingSaved.SaveData();*/
-                                    AyaNameView = holder.title;
-                                    AyaImage = holder.image;
-
-                                    DisplayAya();
-                                    break;
-                                }
-
-                            }
+                        holder.cardContent.setOnTouchListener(null);
+                        holder.cardContent.setOnLongClickListener(null);
                     }
-                });
-
+                }
 
 //            budownload.setText(getResources().getString(R.string.downlaod));
                 holder.title.setText(temp.RealName);
                 holder.cost.setText(temp.StateName);// it updated
+
+                if (isDownloaded) {
+                    holder.statusIcon.setImageResource(R.drawable.ic_offline);
+                    holder.statusIcon.setVisibility(View.VISIBLE);
+                } else {
+                    holder.statusIcon.setImageResource(R.drawable.ic_streaming);
+                    holder.statusIcon.setVisibility(View.VISIBLE);
+                }
                 //image.setImageResource(temp.ImgUrl);
             }
 
@@ -1704,8 +2205,11 @@ public class AyaList extends AppCompatActivity {
             ImageView image ;
             ImageButton budownload ;
             ImageButton ShareButton ;
+            ImageButton budelete ;
+            ImageView statusIcon ;
             CardView cardview;
             CardView cardContent;
+            CheckBox selectCheckBox;
 
             public ViewHolder(View itemView) {
                 super(itemView);
@@ -1716,8 +2220,11 @@ public class AyaList extends AppCompatActivity {
                  image =(ImageView) itemView.findViewById( R.id.imageView);
                  budownload =(ImageButton) itemView.findViewById( R.id.button);
                  ShareButton =(ImageButton) itemView.findViewById( R.id.buttonShare);
+                 budelete =(ImageButton) itemView.findViewById( R.id.buttonDelete);
+                 statusIcon =(ImageView) itemView.findViewById( R.id.statusIcon);
                  cardview =(CardView) itemView.findViewById( R.id.cardviewad);
                  cardContent =(CardView) itemView.findViewById( R.id.cardContent);
+                 selectCheckBox =(CheckBox) itemView.findViewById( R.id.selectCheckBox);
 
             }
 

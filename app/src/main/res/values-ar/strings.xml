@@ -227,6 +227,10 @@
     <string name="AskStaragePermissionMessage">لديك سورة تم تنزيلها في جهازك سابقًا ، نريد إذنًا حتى نتمكن من تشغيلها </string>
 
     <string name="download_all_list">تنزيل كل القائمة</string>
+    <string name="download_selected">تنزيل المحدد (%d)</string>
+    <string name="select_surahs">اختر السور للتنزيل</string>
+    <string name="select_all">تحديد الكل</string>
+    <string name="deselect_all">إلغاء الكل</string>
     <string name="needPermissionTitle">بحاجة الى اذن</string>
     <string name="needSstoragePermissionDescription">يحتاج تطبيق My Straem إلى إذن تخزين لحفظ ملفات الصوت في هاتفك للاستماع إليها في وضع عدم الاتصال ،</string>
     <string name="completeyourprofile">أكمل ملفك الشخصي</string>

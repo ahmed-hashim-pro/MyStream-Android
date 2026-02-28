@@ -83,6 +83,13 @@
     <string name="aya_download_progress">Download in progress...</string>
     <string name="download_done">Download complete</string>
     <string name="download_canceled">Download canceled</string>
+    <string name="download_started">Downloading all surahs…</string>
+    <string name="download_failed">Download failed, please try again</string>
+    <string name="no_items_to_download">No surahs available to download</string>
+    <string name="source_streaming">Streaming</string>
+    <string name="source_offline">Offline</string>
+    <string name="surah_deleted">Surah deleted from device</string>
+    <string name="surah_delete_failed">Failed to delete surah</string>
     <string name="downloads">Downloads</string>
     <string name="sound">----Sound System</string>
 
@@ -382,6 +389,10 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="DownloadAllMessage">Do you want to download all list for this reciter?</string>
     <string name="AskStaragePermissionMessage">You have a downloaded Surahs into your device previously, We Want a permission to have an ability to play it </string>
     <string name="download_all_list">Download all list</string>
+    <string name="download_selected">Download selected (%d)</string>
+    <string name="select_surahs">Select surahs to download</string>
+    <string name="select_all">Select all</string>
+    <string name="deselect_all">Deselect all</string>
     <string name="needPermissionTitle">Need a permission</string>
     <string name="needSstoragePermissionDescription">My stream need Storage permission to save sound files into your phone for offline playing, Do you need to save files for offline playing?</string>
     <string name="completeyourprofile">Complete Your Profile</string>
@@ -894,5 +905,9 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="cd_download">Download</string>
     <string name="cd_play">Play</string>
     <string name="cd_pause">Pause</string>
+    <string name="cd_toggle_view">تبديل العرض</string>
+    <string name="view_mode_list">عرض قائمة</string>
+    <string name="view_mode_grid">عرض شبكي</string>
+    <string name="view_mode_compact">عرض مضغوط</string>
 
 </resources>
