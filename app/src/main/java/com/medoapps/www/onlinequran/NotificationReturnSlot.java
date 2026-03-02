@@ -10,7 +10,7 @@ import android.util.Log;
  */
 
 public class NotificationReturnSlot extends Activity {
-public managerdb manager;
+public NewQuranPlayer manager;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub

@@ -6,11 +6,9 @@ import static com.medoapps.www.onlinequran.R.id.adView;
 import android.Manifest;
 import android.app.ActivityOptions;
 import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -30,6 +28,9 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -56,6 +57,7 @@ import com.medoapps.www.onlinequran.models.Report;
 import com.medoapps.www.onlinequran.models.ReportType;
 import com.medoapps.www.onlinequran.models.User;
 import com.medoapps.www.onlinequran.service.ReportService;
+import com.medoapps.www.onlinequran.util.AppBottomSheet;
 import com.medoapps.www.onlinequran.util.SeparateFunctions;
 
 import java.util.ArrayList;
@@ -179,8 +181,6 @@ public class RadioFragment extends Fragment implements  AdapterView.OnItemSelect
         recitelisttxt = (TextView) getView().findViewById(R.id.recitelisttxt);
 
         searchManager();
-
-        chicLastRecite();
 
         loadad();//to load ads full screen
 
@@ -830,50 +830,68 @@ public class RadioFragment extends Fragment implements  AdapterView.OnItemSelect
 
     public void chicLastRecite(){
         SettingSaved settingSaved = new SettingSaved(getActivity());
-                settingSaved.LoadData();
+        settingSaved.LoadData();
 
-        if (SettingSaved.FinalRecite!=""){
-            //chec for ubdate
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-
-            // Setting Dialog Title
-            alertDialog.setTitle(R.string.lastrecite);
-
-            // Setting Dialog Message
-            alertDialog.setMessage(R.string.history);
-
-            // Setting Icon to Dialog
-            alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
-
-            // Setting Positive "Yes" Button
-            alertDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,int which) {
-
-                    // Write your code here to invoke YES event
-                    Intent intent= new Intent( getActivity(),managerdb.class);
-                    intent.putExtra("RecitesName", SettingSaved.FinalRecite);
-                    intent.putExtra("RecitesAYA", SettingSaved.FinalAya);
-                    intent.putExtra("Rewayat", SettingSaved.FinalRewayat);
-                    intent.putExtra("RealRecitesName", SettingSaved.FinalRealRecitesName);
-                    startActivity(intent);
-                    //Toast.makeText(getApplicationContext(), "", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            // Setting Negative "NO" Button
-            alertDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    // Write your code here to invoke NO event
-
-                    dialog.cancel();
-                }
-            });
-
-            // Showing Alert Message
-            alertDialog.show();
-
-
+        final JSONArray bookmarks = SettingSaved.getBookmarks();
+        if (bookmarks.length() == 0) {
+            Toast.makeText(getActivity(), getString(R.string.nohistory), Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        LnaguageClass lc = new LnaguageClass(getActivity(), getActivity());
+        String[] items = new String[bookmarks.length()];
+        for (int i = 0; i < bookmarks.length(); i++) {
+            try {
+                JSONObject obj = bookmarks.getJSONObject(i);
+                int ayaIndex = Integer.parseInt(obj.optString("aya", "0"));
+                String surah = lc.getSurahNameByIndex(ayaIndex);
+                String reciter = lc.getReciterDisplayName(obj.optString("recite", ""));
+                if (surah.isEmpty()) surah = obj.optString("surahTitle", "");
+                if (reciter.equals(obj.optString("recite", ""))) reciter = obj.optString("realName", "");
+                items[i] = surah + " — " + reciter;
+            } catch (Exception e) {
+                items[i] = "Bookmark " + (i + 1);
+            }
+        }
+
+        AppBottomSheet.showList(getActivity(),
+            getString(R.string.select_bookmark),
+            items,
+            (position) -> {
+                try {
+                    JSONObject obj = bookmarks.getJSONObject(position);
+                    LnaguageClass lc2 = new LnaguageClass(getActivity(), getActivity());
+                    String reciterName = lc2.getReciterDisplayName(obj.optString("recite", ""));
+                    if (reciterName.equals(obj.optString("recite", ""))) reciterName = obj.optString("realName", "");
+                    Intent intent = new Intent(getActivity(), NewQuranPlayer.class);
+                    intent.putExtra("RecitesName", obj.optString("recite"));
+                    intent.putExtra("RecitesAYA", obj.optString("aya"));
+                    intent.putExtra("Rewayat", obj.optString("rewayat"));
+                    intent.putExtra("RealRecitesName", reciterName);
+                    intent.putExtra("IsRadio", false);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            },
+            (position) -> {
+                AppBottomSheet.showConfirmation(getActivity(),
+                    "",
+                    getString(R.string.delete_bookmark_confirm),
+                    getString(android.R.string.yes),
+                    getString(android.R.string.no),
+                    () -> {
+                        try {
+                            JSONObject obj = bookmarks.getJSONObject(position);
+                            SettingSaved.removeBookmark(getActivity(),
+                                obj.optString("recite"), obj.optString("aya"));
+                            Toast.makeText(getActivity(), R.string.bookmark_removed, Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }, null);
+                return true;
+            });
     }
 
 }

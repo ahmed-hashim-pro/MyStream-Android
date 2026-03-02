@@ -32,6 +32,18 @@
                 app:tint="@color/icon_primary"
                 ads:srcCompat="@drawable/outline_arrow_back_ios_24" />
 
+            <ImageButton
+                android:id="@+id/bookmark"
+                android:layout_width="40dp"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="BUBookmark"
+                android:scaleType="fitCenter"
+                app:tint="@color/gold_accent"
+                android:src="@drawable/round_bookmark_border_24" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -303,27 +315,45 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp">
 
-            <!-- Seekbar -->
-            <SeekBar
-                android:id="@+id/songProgressBar"
+            <!-- Seekbar + loading bar overlay -->
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:paddingStart="0dp"
-                android:paddingEnd="0dp"
-                android:maxHeight="@dimen/player_seekbar_height"
-                android:minHeight="@dimen/player_seekbar_height"
-                android:progressDrawable="@drawable/seekbar_progress"
-                android:thumb="@drawable/seek_handler"
-                android:thumbTint="@color/icon_primary"
-                android:splitTrack="false" />
+                android:layout_height="wrap_content">
 
-            <!-- Time labels + loading bar -->
+                <SeekBar
+                    android:id="@+id/songProgressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:maxHeight="@dimen/player_seekbar_height"
+                    android:minHeight="@dimen/player_seekbar_height"
+                    android:progressDrawable="@drawable/seekbar_progress"
+                    android:thumb="@drawable/seekbar_thumb"
+                    android:thumbOffset="6dp"
+                    android:splitTrack="false" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/loadingBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:indeterminate="true"
+                    app:trackThickness="@dimen/player_seekbar_height"
+
+                    app:indicatorColor="@color/seekbar_progress"
+                    app:trackColor="@color/seekbar_background"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+
+            <!-- Time labels -->
             <LinearLayout
                 android:id="@+id/timerDisplay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
                 android:orientation="horizontal">
 
                 <TextView
@@ -334,14 +364,6 @@
                     android:gravity="start"
                     android:textColor="@color/text_secondary"
                     android:textSize="11sp" />
-
-                <ProgressBar
-                    android:id="@+id/loadingBar"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:indeterminate="true" />
 
                 <TextView
                     android:id="@+id/songTotalDurationLabel"
@@ -440,18 +462,6 @@
                     app:tint="@color/icon_secondary"
                     android:src="@drawable/btn_repeat" />
             </LinearLayout>
-
-            <!-- Bookmark button (subtle, standalone below controls) -->
-            <ImageButton
-                android:id="@+id/bookmark"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginBottom="12dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:onClick="BUBookmark"
-                android:scaleType="fitCenter"
-                app:tint="@color/icon_secondary"
-                android:src="@drawable/round_bookmark_border_24" />
 
         </LinearLayout>
 

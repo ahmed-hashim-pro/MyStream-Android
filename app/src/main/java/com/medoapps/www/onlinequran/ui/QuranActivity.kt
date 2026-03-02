@@ -3,15 +3,13 @@ package com.medoapps.www.onlinequran.ui
 import android.app.SearchManager
 import android.content.ComponentName
 import android.content.Context
-import android.content.DialogInterface
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AlertDialog.Builder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
@@ -41,6 +39,7 @@ import com.medoapps.www.onlinequran.ui.fragment.SuraListFragment
 import com.medoapps.www.onlinequran.ui.fragment.TagBookmarkDialog
 import com.medoapps.www.onlinequran.ui.fragment.TagBookmarkDialog.OnBookmarkTagsUpdateListener
 import com.medoapps.www.onlinequran.ui.helpers.JumpDestination
+import com.medoapps.www.onlinequran.util.AppBottomSheet
 import com.medoapps.www.onlinequran.util.AudioUtils
 import com.medoapps.www.onlinequran.util.QuranSettings
 import com.medoapps.www.onlinequran.util.QuranUtils
@@ -72,7 +71,7 @@ import kotlin.math.abs
 class QuranActivity : AppCompatActivity(),
     OnBookmarkTagsUpdateListener,
     JumpDestination {
-  private var upgradeDialog: AlertDialog? = null
+  private var upgradeDialog: Dialog? = null
   private var showedTranslationUpgradeDialog = false
   private var isRtl = false
   private var isPaused = false
@@ -292,26 +291,21 @@ class QuranActivity : AppCompatActivity(),
   private fun showTranslationsUpgradeDialog() {
     showedTranslationUpgradeDialog = true
 
-    val builder = Builder(this)
-    builder.setMessage(R.string.translation_updates_available)
-    builder.setCancelable(false)
-    builder.setPositiveButton(R.string.translation_dialog_yes) { dialog: DialogInterface, _: Int ->
-      dialog.dismiss()
-      upgradeDialog = null
-      launchTranslationActivity()
-    }
-
-    builder.setNegativeButton(R.string.translation_dialog_later) { dialog: DialogInterface, _: Int ->
-      dialog.dismiss()
-      upgradeDialog = null
-      // pretend we don't have updated translations.  we'll
-      // check again after 10 days.
-      settings.setHaveUpdatedTranslations(false)
-    }
-
-    val dialog = builder.create()
-    dialog.show()
-    upgradeDialog = dialog
+    upgradeDialog = AppBottomSheet.showConfirmation(
+        this,
+        "",
+        getString(R.string.translation_updates_available),
+        getString(R.string.translation_dialog_yes),
+        getString(R.string.translation_dialog_later),
+        {
+          upgradeDialog = null
+          launchTranslationActivity()
+        },
+        {
+          upgradeDialog = null
+          settings.setHaveUpdatedTranslations(false)
+        }
+    )
   }
 
   private fun launchTranslationActivity() {

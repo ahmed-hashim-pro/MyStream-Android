@@ -8,6 +8,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.Locale;
 
 /**
@@ -58,6 +61,7 @@ public class SettingSaved extends AppCompatActivity {
     public static int reportsNumberForShowSharingDialog =0;
     public static Boolean isSubscribedPremium=false;
     public static Boolean titlesTextAnimate=false;
+    public static String BookmarksList = "[]";
 
 
 
@@ -108,6 +112,7 @@ public class SettingSaved extends AppCompatActivity {
             editor.putInt("reportsNumberForShowSharingDialog",reportsNumberForShowSharingDialog);
             editor.putBoolean("isSubscribedPremium",isSubscribedPremium);
             editor.putBoolean("titlesTextAnimate",titlesTextAnimate);
+            editor.putString("BookmarksList",BookmarksList);
 
 
             editor.commit();
@@ -169,10 +174,71 @@ public class SettingSaved extends AppCompatActivity {
         reportsNumberForShowSharingDialog = sharedpreferences.getInt("reportsNumberForShowSharingDialog",reportsNumberForShowSharingDialog);
         isSubscribedPremium = sharedpreferences.getBoolean("isSubscribedPremium",isSubscribedPremium);
         titlesTextAnimate = sharedpreferences.getBoolean("titlesTextAnimate",titlesTextAnimate);
+        BookmarksList = sharedpreferences.getString("BookmarksList","[]");
 
 
 
 
 
+    }
+
+    public static JSONArray getBookmarks() {
+        try {
+            return new JSONArray(BookmarksList);
+        } catch (Exception e) {
+            return new JSONArray();
+        }
+    }
+
+    public static boolean isBookmarked(String recite, String aya) {
+        try {
+            JSONArray arr = getBookmarks();
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                if (obj.optString("recite").equals(recite) && obj.optString("aya").equals(aya)) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static void addBookmark(Context ctx, String recite, String aya, String rewayat, String realName, String surahTitle) {
+        if (isBookmarked(recite, aya)) return;
+        try {
+            JSONArray arr = getBookmarks();
+            JSONObject obj = new JSONObject();
+            obj.put("recite", recite);
+            obj.put("aya", aya);
+            obj.put("rewayat", rewayat);
+            obj.put("realName", realName);
+            obj.put("surahTitle", surahTitle);
+            arr.put(obj);
+            BookmarksList = arr.toString();
+            SettingSaved ss = new SettingSaved(ctx);
+            ss.SaveData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeBookmark(Context ctx, String recite, String aya) {
+        try {
+            JSONArray arr = getBookmarks();
+            JSONArray newArr = new JSONArray();
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                if (!(obj.optString("recite").equals(recite) && obj.optString("aya").equals(aya))) {
+                    newArr.put(obj);
+                }
+            }
+            BookmarksList = newArr.toString();
+            SettingSaved ss = new SettingSaved(ctx);
+            ss.SaveData();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

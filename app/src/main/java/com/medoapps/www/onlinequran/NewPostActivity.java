@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import com.medoapps.www.onlinequran.util.AppBottomSheet;
 import androidx.core.content.IntentCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -390,11 +390,7 @@ public class NewPostActivity extends BaseActivity  {
     }
 
     private void showMessageDialog(String title, String message) {
-        AlertDialog ad = new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .create();
-        ad.show();
+        AppBottomSheet.showMessage(this, title, message);
     }
 
     private void showProgressDialog(String caption) {

@@ -120,6 +120,10 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="history">Would you like to ًgo to last recite ?</string>
     <string name="last_history">Go to bookmark</string>
     <string name="nohistory">No Bookmark found</string>
+    <string name="select_bookmark">Select Bookmark</string>
+    <string name="bookmark_added">Bookmark added</string>
+    <string name="bookmark_removed">Bookmark removed</string>
+    <string name="delete_bookmark_confirm">Delete this bookmark?</string>
 
     <string name="hint_dob">Enter Age</string>
     <string name="hint_password">Password</string>

@@ -2,7 +2,6 @@ package com.medoapps.www.onlinequran.ui;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import androidx.core.content.ContextCompat;
@@ -14,7 +13,7 @@ import android.os.CountDownTimer;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AlertDialog;
+import com.medoapps.www.onlinequran.util.AppBottomSheet;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.InputType;
@@ -502,27 +501,19 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     public boolean onLongClick(View view) {
                         String friendName = (String)((ItemFriendViewHolder) holder).txtName.getText();
 
-                        new AlertDialog.Builder(context)
-                                .setTitle("Delete Friend")
-                                .setMessage("Are you sure want to delete "+friendName+ "?")
-                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.dismiss();
-                                        final String idFriendRemoval = listFriend.getListFriend().get(position).id;
-                                        dialogWaitDeleting.setTitle("Deleting...")
-                                                .setCancelable(false)
-                                                .setTopColorRes(R.color.colorAccent)
-                                                .show();
-                                        deleteFriend(idFriendRemoval);
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.dismiss();
-                                    }
-                                }).show();
+                        AppBottomSheet.showConfirmation(context,
+                                "Delete Friend",
+                                "Are you sure want to delete " + friendName + "?",
+                                context.getString(android.R.string.ok),
+                                context.getString(android.R.string.cancel),
+                                () -> {
+                                    final String idFriendRemoval = listFriend.getListFriend().get(position).id;
+                                    dialogWaitDeleting.setTitle("Deleting...")
+                                            .setCancelable(false)
+                                            .setTopColorRes(R.color.colorAccent)
+                                            .show();
+                                    deleteFriend(idFriendRemoval);
+                                }, null);
 
                         return true;
                     }

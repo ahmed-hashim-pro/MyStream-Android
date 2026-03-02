@@ -100,6 +100,10 @@
     <string name="history">هل تريد الذهاب الي آخر سورة كنت تسمعها ؟</string>
     <string name="last_history">الذهاب الي العلامة</string>
     <string name="nohistory">لا يوجد علامة</string>
+    <string name="select_bookmark">اختر علامة</string>
+    <string name="bookmark_added">تمت إضافة العلامة</string>
+    <string name="bookmark_removed">تم حذف العلامة</string>
+    <string name="delete_bookmark_confirm">هل تريد حذف هذه العلامة؟</string>
     <string name="hint_dob">دخل عمرك</string>
     <string name="hint_password">الباسوورد</string>
     <string name="hint_email">الايميل</string>

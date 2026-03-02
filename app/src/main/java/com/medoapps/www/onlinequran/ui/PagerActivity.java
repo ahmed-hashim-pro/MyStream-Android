@@ -35,8 +35,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
+import android.app.Dialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.medoapps.www.onlinequran.util.AppBottomSheet;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -185,7 +187,7 @@ public class PagerActivity extends AppCompatActivity implements
   private boolean showingTranslation = false;
   private DefaultDownloadReceiver downloadReceiver;
   private boolean needsPermissionToDownloadOver3g = true;
-  private AlertDialog promptDialog = null;
+  private Dialog promptDialog = null;
   private AyahToolBar ayahToolBar;
   private AudioRequest lastAudioRequest;
   private boolean isDualPages = false;
@@ -823,21 +825,16 @@ public class PagerActivity extends AppCompatActivity implements
     if (promptDialog != null) {
       return;
     }
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setMessage(R.string.download_extra_data)
-        .setPositiveButton(R.string.downloadPrompt_ok,
-            (dialog, option) -> {
-              downloadRequiredFiles();
-              dialog.dismiss();
-              promptDialog = null;
-            })
-        .setNegativeButton(R.string.downloadPrompt_no,
-            (dialog, option) -> {
-              dialog.dismiss();
-              promptDialog = null;
-            });
-    promptDialog = builder.create();
-    promptDialog.show();
+    promptDialog = AppBottomSheet.showConfirmation(this,
+        "",
+        getString(R.string.download_extra_data),
+        getString(R.string.downloadPrompt_ok),
+        getString(R.string.downloadPrompt_no),
+        () -> {
+            downloadRequiredFiles();
+            promptDialog = null;
+        },
+        () -> promptDialog = null);
   }
 
   private void downloadRequiredFiles() {
@@ -1895,19 +1892,20 @@ public class PagerActivity extends AppCompatActivity implements
       startingSuraList.add(0, startSura);
     }
 
-    AlertDialog.Builder builder = new AlertDialog.Builder(this)
-        .setTitle(getString(R.string.playback_prompt_title))
-        .setAdapter(adapter, (dialog, i) -> {
+    promptDialog = AppBottomSheet.showListWithAdapter(this,
+        getString(R.string.playback_prompt_title),
+        adapter,
+        (parent, view, i, id) -> {
           if (i == 0) {
             playFromAyah(page, startSura, startAyah);
           } else {
             playFromAyah(page, startingSuraList.get(i), 1);
           }
-          dialog.dismiss();
-          promptDialog = null;
+          if (promptDialog != null) {
+            promptDialog.dismiss();
+            promptDialog = null;
+          }
         });
-    promptDialog = builder.create();
-    promptDialog.show();
   }
 
   private class SlidingPanelListener implements SlidingUpPanelLayout.PanelSlideListener {

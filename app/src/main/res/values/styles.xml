@@ -209,6 +209,20 @@
         <item name="background">@color/black</item>
     </style>
 
+    <style name="AppBottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppBottomSheet</item>
+    </style>
+
+    <style name="AppBottomSheet" parent="Widget.Material3.BottomSheet">
+        <item name="shapeAppearance">@style/ShapeAppearance.MyStream.BottomSheet</item>
+        <item name="backgroundTint">@color/background_surface</item>
+    </style>
+
+    <style name="ShapeAppearance.MyStream.BottomSheet" parent="">
+        <item name="cornerSizeTopLeft">28dp</item>
+        <item name="cornerSizeTopRight">28dp</item>
+    </style>
+
     <!-- ============================================================ -->
     <!-- Button styles                                                -->
     <!-- ============================================================ -->

@@ -404,7 +404,7 @@ public class DownloadService extends Service  {
 
                     }
                     MetaDataEditorHashimUpdate metaDataEditor = new MetaDataEditorHashimUpdate(getApplicationContext());
-                    metaDataEditor.changeMetaData(SDPath + RecitesName + activeDownload.ServerName + ".mp3");
+                    metaDataEditor.changeMetaData(SDPath + "/AhmedHashim_" + RecitesName + activeDownload.ServerName + ".mp3");
 
                     output.flush();
                     output.close();
@@ -439,7 +439,7 @@ public class DownloadService extends Service  {
                         SDPath.mkdirs();
                     }
 
-                    output = new FileOutputStream(SDPath + RecitesName + activeDownload.ServerName + ".mp3");
+                    output = new FileOutputStream(SDPath + "/AhmedHashim_" + RecitesName + activeDownload.ServerName + ".mp3");
 
                     byte data[] = new byte[1024];
 
@@ -469,7 +469,7 @@ public class DownloadService extends Service  {
                     }
 
                     MetaDataEditor metaDataEditor = new MetaDataEditor(getApplicationContext());
-                    metaDataEditor.changeMetaData(SDPath + RecitesName + activeDownload.ServerName + ".mp3");
+                    metaDataEditor.changeMetaData(SDPath + "/AhmedHashim_" + RecitesName + activeDownload.ServerName + ".mp3");
                     output.flush();
                     output.close();
                     input.close();

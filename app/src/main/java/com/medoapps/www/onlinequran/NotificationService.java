@@ -3,8 +3,8 @@ package com.medoapps.www.onlinequran;
 import static com.medoapps.www.onlinequran.NotificationPanel.*;
 //import static com.medoapps.www.onlinequran.NotificationPanel.nManager;
 //import static com.medoapps.www.onlinequran.NotificationPanel.ubdateNotification;
-import static com.medoapps.www.onlinequran.managerdb.btnPlay;
-import static com.medoapps.www.onlinequran.managerdb.songsList;
+import static com.medoapps.www.onlinequran.NewQuranPlayer.btnPlay;
+import static com.medoapps.www.onlinequran.NewQuranPlayer.songsList;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,7 +12,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 public class NotificationService extends BroadcastReceiver {
-    public managerdb manager;
+    public NewQuranPlayer manager;
     public static final String ACTION1 = "ACTION1";
     public static final String ACTION2 = "ACTION2";
     public static final String ACTION3 = "ACTION3";
@@ -34,10 +34,10 @@ public class NotificationService extends BroadcastReceiver {
         if (ACTION1.equals(action)) {
             // do stuff...
             try {
-                if(managerdb.instance.mp.isPlaying()){
+                if(NewQuranPlayer.NewQuranPlayerInstance.mp.isPlaying()){
 
-                    if(managerdb.instance.mp!=null){
-                        managerdb.instance.mp.pause();
+                    if(NewQuranPlayer.NewQuranPlayerInstance.mp!=null){
+                        NewQuranPlayer.NewQuranPlayerInstance.mp.pause();
                         // Changing button image to play button
                         btnPlay.setImageResource( R.drawable.btn_play);
 
@@ -48,8 +48,8 @@ public class NotificationService extends BroadcastReceiver {
                 }else{
 
                     // Resume song
-                    if(managerdb.instance.mp!=null){
-                        managerdb.instance.mp.start();
+                    if(NewQuranPlayer.NewQuranPlayerInstance.mp!=null){
+                        NewQuranPlayer.NewQuranPlayerInstance.mp.start();
                         // Changing button image to pause button
                         btnPlay.setImageResource( R.drawable.btn_pause);
                         ubdateNotification();
@@ -66,13 +66,13 @@ public class NotificationService extends BroadcastReceiver {
             try {
                 // next action
                 // check if next song is there or not
-                if(managerdb.instance.currentSongIndex < (songsList.size() - 1)){
-                    managerdb.instance.playSong(managerdb.instance.currentSongIndex + 1);
-                    managerdb.instance.currentSongIndex = managerdb.instance.currentSongIndex + 1;
+                if(NewQuranPlayer.NewQuranPlayerInstance.currentSongIndex < (songsList.size() - 1)){
+                    NewQuranPlayer.NewQuranPlayerInstance.playSong(NewQuranPlayer.NewQuranPlayerInstance.currentSongIndex + 1);
+                    NewQuranPlayer.NewQuranPlayerInstance.currentSongIndex = NewQuranPlayer.NewQuranPlayerInstance.currentSongIndex + 1;
                 }else{
                     // play first song
-                    managerdb.instance.playSong(0);
-                    managerdb.instance.currentSongIndex = 0;
+                    NewQuranPlayer.NewQuranPlayerInstance.playSong(0);
+                    NewQuranPlayer.NewQuranPlayerInstance.currentSongIndex = 0;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -81,13 +81,13 @@ public class NotificationService extends BroadcastReceiver {
         } else if (ACTION3.equals(action)){
             try {
                 // preveous action
-                if(managerdb.instance.currentSongIndex > 0){
-                    managerdb.instance.playSong(managerdb.instance.currentSongIndex - 1);
-                    managerdb.instance.currentSongIndex = managerdb.instance.currentSongIndex - 1;
+                if(NewQuranPlayer.NewQuranPlayerInstance.currentSongIndex > 0){
+                    NewQuranPlayer.NewQuranPlayerInstance.playSong(NewQuranPlayer.NewQuranPlayerInstance.currentSongIndex - 1);
+                    NewQuranPlayer.NewQuranPlayerInstance.currentSongIndex = NewQuranPlayer.NewQuranPlayerInstance.currentSongIndex - 1;
                 }else{
                     // play last song
-                    managerdb.instance.playSong(songsList.size() - 1);
-                    managerdb.instance.currentSongIndex = songsList.size() - 1;
+                    NewQuranPlayer.NewQuranPlayerInstance.playSong(songsList.size() - 1);
+                    NewQuranPlayer.NewQuranPlayerInstance.currentSongIndex = songsList.size() - 1;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -99,15 +99,15 @@ public class NotificationService extends BroadcastReceiver {
             try {
                 //forawrd action
                 // get current song position
-                int currentPosition = managerdb.instance.mp.getCurrentPosition();
+                int currentPosition = NewQuranPlayer.NewQuranPlayerInstance.mp.getCurrentPosition();
                 // check if seekForward time is lesser than song duration
-                if(currentPosition + managerdb.instance.seekForwardTime <= managerdb.instance.mp.getDuration()){
+                if(currentPosition + NewQuranPlayer.NewQuranPlayerInstance.seekForwardTime <= NewQuranPlayer.NewQuranPlayerInstance.mp.getDuration()){
                     // forward song
-                    managerdb.instance.mp.seekTo(currentPosition + managerdb.instance.seekForwardTime);
+                    NewQuranPlayer.NewQuranPlayerInstance.mp.seekTo(currentPosition + NewQuranPlayer.NewQuranPlayerInstance.seekForwardTime);
                     Toast.makeText(context, "+5", Toast.LENGTH_SHORT).show();
                 }else{
                     // forward to end position
-                    managerdb.instance.mp.seekTo(managerdb.instance.mp.getDuration());
+                    NewQuranPlayer.NewQuranPlayerInstance.mp.seekTo(NewQuranPlayer.NewQuranPlayerInstance.mp.getDuration());
                 }
             } catch (IllegalStateException e) {
                 e.printStackTrace();
@@ -118,15 +118,15 @@ public class NotificationService extends BroadcastReceiver {
             try {
                 //backward action
                 // get current song position
-                int currentPosition = managerdb.instance.mp.getCurrentPosition();
+                int currentPosition = NewQuranPlayer.NewQuranPlayerInstance.mp.getCurrentPosition();
                 // check if seekBackward time is greater than 0 sec
-                if(currentPosition - managerdb.instance.seekBackwardTime >= 0){
+                if(currentPosition - NewQuranPlayer.NewQuranPlayerInstance.seekBackwardTime >= 0){
                     // forward song
-                    managerdb.instance.mp.seekTo(currentPosition - managerdb.instance.seekBackwardTime);
+                    NewQuranPlayer.NewQuranPlayerInstance.mp.seekTo(currentPosition - NewQuranPlayer.NewQuranPlayerInstance.seekBackwardTime);
                     Toast.makeText(context, "-5", Toast.LENGTH_SHORT).show();
                 }else{
                     // backward to starting position
-                    managerdb.instance.mp.seekTo(0);
+                    NewQuranPlayer.NewQuranPlayerInstance.mp.seekTo(0);
                 }
             } catch (IllegalStateException e) {
                 e.printStackTrace();
@@ -143,11 +143,12 @@ public class NotificationService extends BroadcastReceiver {
                 i.putExtra("RecitesAYA",SettingSaved.FinalAya);
                 context.startActivity(i);*/
 
-                Intent intentone = new Intent(context.getApplicationContext(), managerdb.class);
+                Intent intentone = new Intent(context.getApplicationContext(), NewQuranPlayer.class);
                 intentone.putExtra("RecitesName", SettingSaved.FinalRecite);
                 intentone.putExtra("RecitesAYA", SettingSaved.FinalAya);
                 intentone.putExtra("Rewayat", SettingSaved.FinalRewayat);
                 intentone.putExtra("RealRecitesName", SettingSaved.FinalRealRecitesName);
+                intentone.putExtra("IsRadio", false);
                 context.startActivity(intentone);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -159,11 +160,11 @@ public class NotificationService extends BroadcastReceiver {
                 //close notification
 
 
-                if(managerdb.instance.mp != null) {
+                if(NewQuranPlayer.NewQuranPlayerInstance.mp != null) {
                     nManager.cancel(500);
-                    if (managerdb.instance.mp.isPlaying()) {
+                    if (NewQuranPlayer.NewQuranPlayerInstance.mp.isPlaying()) {
                         btnPlay.setImageResource(R.drawable.btn_play);
-                        managerdb.instance.mp.pause();
+                        NewQuranPlayer.NewQuranPlayerInstance.mp.pause();
                         SettingSaved.isfullscreenadshow= false;
                         SettingSaved settingSaved=new SettingSaved(context);
                         settingSaved.SaveData();

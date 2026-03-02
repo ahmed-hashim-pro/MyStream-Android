@@ -7,8 +7,9 @@ import androidx.core.app.ActivityCompat;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
-import android.app.AlertDialog;
 import android.app.NotificationChannel;
+
+import com.medoapps.www.onlinequran.util.AppBottomSheet;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
@@ -398,8 +399,7 @@ public class AyaList extends AppCompatActivity {
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (downloadAllRequest){
                         startDownloadAll();
-                    }else{
-
+                    }else if (tempImgUrlForPermissionWait != null){
                         startDownload(tempImgUrlForPermissionWait,ServerNameForPermissionWait );
                     }
 
@@ -546,26 +546,12 @@ public class AyaList extends AppCompatActivity {
                 });
     }
     private void showUserDownloadAllDialog(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle(R.string.DownloadAllTitle);
-        alertDialog.setMessage(R.string.DownloadAllMessage);
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        // Setting Positive "Yes" Button
-        alertDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
-                showRewardedVideo();
-
-
-            }
-        });
-        // Setting Negative "NO" Button
-        alertDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-
-                dialog.cancel();
-            }
-        });
-        alertDialog.show();
+        AppBottomSheet.showConfirmation(this,
+            getString(R.string.DownloadAllTitle),
+            getString(R.string.DownloadAllMessage),
+            getString(android.R.string.yes),
+            getString(android.R.string.no),
+            () -> showRewardedVideo(), null);
     }
     private  void startDownloadAll(){
         downloadAllRequest = true;
@@ -1597,7 +1583,7 @@ public class AyaList extends AppCompatActivity {
 
                         }
                         MetaDataEditorHashimUpdate metaDataEditor = new MetaDataEditorHashimUpdate(AyaList.this);
-                        metaDataEditor.changeMetaData(SDPath + RecitesName + RecitesAYA + ".mp3");
+                        metaDataEditor.changeMetaData(SDPath + "/AhmedHashim_" + RecitesName + RecitesAYA + ".mp3");
 
 
                     } catch (IOException e) {
@@ -1641,7 +1627,7 @@ public class AyaList extends AppCompatActivity {
                         SDPath.mkdirs();
                     }
 
-                    output = new FileOutputStream(SDPath + RecitesName + RecitesAYA + ".mp3");
+                    output = new FileOutputStream(SDPath + "/AhmedHashim_" + RecitesName + RecitesAYA + ".mp3");
 
 
                /* try (BufferedInputStream in = new BufferedInputStream(new URL(aurl[0]).openStream());
@@ -1678,7 +1664,7 @@ public class AyaList extends AppCompatActivity {
                     }
 
                     MetaDataEditor metaDataEditor = new MetaDataEditor(AyaList.this);
-                    metaDataEditor.changeMetaData(SDPath + RecitesName + RecitesAYA + ".mp3");
+                    metaDataEditor.changeMetaData(SDPath + "/AhmedHashim_" + RecitesName + RecitesAYA + ".mp3");
 
                     output.flush();
                     output.close();
@@ -1766,27 +1752,37 @@ public class AyaList extends AppCompatActivity {
     private void deleteLocalSurah(AuthorClass item, VivzAdapter.ViewHolder holder) {
         try {
             String filePath = item.ImgUrl;
-            File file = new File(filePath);
             boolean deleted = false;
 
-            // Delete the actual file
-            if (file.exists()) {
-                deleted = file.delete();
-            }
-
-            // Also remove from MediaStore on API 29+
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (filePath.startsWith("content://")) {
+                // File was found via MediaStore content URI (e.g. after reinstall)
                 try {
                     ContentResolver resolver = getContentResolver();
-                    String selection = MediaStore.Audio.Media.DATA + "=?";
-                    String[] selectionArgs = new String[]{filePath};
-                    resolver.delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, selection, selectionArgs);
+                    deleted = resolver.delete(Uri.parse(filePath), null, null) > 0;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            } else {
+                // File path - try direct file delete
+                File file = new File(filePath);
+                if (file.exists()) {
+                    deleted = file.delete();
+                }
+
+                // Also remove from MediaStore on API 29+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    try {
+                        ContentResolver resolver = getContentResolver();
+                        String selection = MediaStore.Audio.Media.DATA + "=?";
+                        String[] selectionArgs = new String[]{filePath};
+                        resolver.delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, selection, selectionArgs);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
-            if (deleted || !file.exists()) {
+            if (deleted) {
                 // Rebuild the streaming URL
                 LnaguageClass lc = new LnaguageClass(AyaList.this, AyaList.this);
                 String streamUrl;
@@ -1999,17 +1995,12 @@ public class AyaList extends AppCompatActivity {
                     holder.budelete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            new AlertDialog.Builder(AyaList.this)
-                                .setTitle(getString(R.string.audio_manager_surah_delete))
-                                .setMessage(getString(R.string.audio_manager_remove_audio_msg, temp.RealName))
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        deleteLocalSurah(temp, holder);
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.no, null)
-                                .show();
+                            AppBottomSheet.showConfirmation(AyaList.this,
+                                getString(R.string.audio_manager_surah_delete),
+                                getString(R.string.audio_manager_remove_audio_msg, temp.RealName),
+                                getString(android.R.string.yes),
+                                getString(android.R.string.no),
+                                () -> deleteLocalSurah(temp, holder), null);
                         }
                     });
                     // downlaod file

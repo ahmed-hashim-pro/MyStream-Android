@@ -3,7 +3,7 @@ package com.medoapps.www.onlinequran
 import android.Manifest.permission
 import android.R.string
 import android.app.Activity
-import android.content.DialogInterface
+import android.app.Dialog
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -30,6 +30,7 @@ import com.medoapps.www.onlinequran.service.util.QuranDownloadNotifier.ProgressI
 import com.medoapps.www.onlinequran.service.util.ServiceIntentHelper
 import com.medoapps.www.onlinequran.ui.QuranActivity
 import com.medoapps.www.onlinequran.ui.util.ToastCompat
+import com.medoapps.www.onlinequran.util.AppBottomSheet
 import com.medoapps.www.onlinequran.util.QuranFileUtils
 import com.medoapps.www.onlinequran.util.QuranScreenInfo
 import com.medoapps.www.onlinequran.util.QuranSettings
@@ -75,9 +76,9 @@ class QuranDataActivity : Activity(), SimpleDownloadListener, OnRequestPermissio
 
   private lateinit var quranSettings: QuranSettings
 
-  private var errorDialog: AlertDialog? = null
-  private var promptForDownloadDialog: AlertDialog? = null
-  private var permissionsDialog: AlertDialog? = null
+  private var errorDialog: Dialog? = null
+  private var promptForDownloadDialog: Dialog? = null
+  private var permissionsDialog: Dialog? = null
   private var downloadReceiver: DefaultDownloadReceiver? = null
   private var quranDataStatus: QuranDataStatus? = null
   private var updateDialog: AlertDialog? = null
@@ -209,34 +210,29 @@ class QuranDataActivity : Activity(), SimpleDownloadListener, OnRequestPermissio
 
   private fun askIfCanRequestPermissions(fallbackFile: File?) {
     //show permission rationale dialog
-    val permissionsDialog = AlertDialog.Builder(this)
-        .setMessage(R.string.storage_permission_rationale)
-        .setCancelable(false)
-        .setPositiveButton(string.ok) { dialog: DialogInterface, _: Int ->
-          dialog.dismiss()
+    val bsDialog = AppBottomSheet.showConfirmation(
+        this,
+        "",
+        getString(R.string.storage_permission_rationale),
+        getString(android.R.string.ok),
+        getString(android.R.string.cancel),
+        {
           permissionsDialog = null
-
-          // request permissions
           requestExternalSdcardPermission()
-        }
-        .setNegativeButton(string.cancel) { dialog: DialogInterface, _: Int ->
-          // dismiss the dialog
-          dialog.dismiss()
+        },
+        {
           permissionsDialog = null
-
-          // fall back if we can
           if (fallbackFile != null) {
             quranSettings.appCustomLocation = fallbackFile.absolutePath
             checkPages()
           } else {
-            // set to null so we can try again next launch
             quranSettings.appCustomLocation = null
             runListViewWithoutPages()
           }
         }
-        .create()
-    this.permissionsDialog = permissionsDialog
-    permissionsDialog.show()
+    )
+    bsDialog?.setCancelable(false)
+    this.permissionsDialog = bsDialog
   }
 
   private fun migrateFromTo(destination: String) {
@@ -354,28 +350,26 @@ class QuranDataActivity : Activity(), SimpleDownloadListener, OnRequestPermissio
   }
 
   private fun showFatalErrorDialog(errorId: Int) {
-    val builder = AlertDialog.Builder(this)
-    builder.setMessage(errorId)
-    builder.setCancelable(false)
-    builder.setPositiveButton(
-        R.string.download_retry
-    ) { dialog: DialogInterface, _: Int ->
-      dialog.dismiss()
-      errorDialog = null
-      removeErrorPreferences()
-      downloadQuranImages(true)
-    }
-    builder.setNegativeButton(
-        R.string.download_cancel
-    ) { dialog: DialogInterface, _: Int ->
-      dialog.dismiss()
-      errorDialog = null
-      removeErrorPreferences()
-      quranSettings.setShouldFetchPages(false)
-      runListViewWithoutPages()
-    }
-    errorDialog = builder.create()
-    errorDialog!!.show()
+    val bsDialog = AppBottomSheet.showConfirmation(
+        this,
+        "",
+        getString(errorId),
+        getString(R.string.download_retry),
+        getString(R.string.download_cancel),
+        {
+          errorDialog = null
+          removeErrorPreferences()
+          downloadQuranImages(true)
+        },
+        {
+          errorDialog = null
+          removeErrorPreferences()
+          quranSettings.setShouldFetchPages(false)
+          runListViewWithoutPages()
+        }
+    )
+    bsDialog?.setCancelable(false)
+    errorDialog = bsDialog
   }
 
   private fun removeErrorPreferences() {
@@ -632,34 +626,29 @@ class QuranDataActivity : Activity(), SimpleDownloadListener, OnRequestPermissio
       // patch message if applicable
       message = R.string.downloadImportantPrompt
     }
-    val dialog = AlertDialog.Builder(this)
-    dialog.setMessage(message)
-    dialog.setCancelable(false)
-    dialog.setPositiveButton(
-        R.string.downloadPrompt_ok
-    ) { dialog1: DialogInterface, _: Int ->
-      dialog1.dismiss()
-      promptForDownloadDialog = null
-      quranSettings.setShouldFetchPages(true)
-      downloadQuranImages(true)
-    }
-    dialog.setNegativeButton(
-        R.string.downloadPrompt_no
-    ) { dialog12: DialogInterface, _: Int ->
-      dialog12.dismiss()
-      promptForDownloadDialog = null
-      val isPatch = dataStatus.patchParam?.isNotEmpty() == true
-      if (isPatch) {
-        // for patches, we have the pages, so we can just show the list no problem
-        runListView()
-      } else {
-        runListViewWithoutPages()
-      }
-    }
-    val promptForDownloadDialog = dialog.create()
-    promptForDownloadDialog.setTitle(R.string.downloadPrompt_title)
-    promptForDownloadDialog.show()
-    this.promptForDownloadDialog = promptForDownloadDialog
+    val bsDialog = AppBottomSheet.showConfirmation(
+        this,
+        getString(R.string.downloadPrompt_title),
+        getString(message),
+        getString(R.string.downloadPrompt_ok),
+        getString(R.string.downloadPrompt_no),
+        {
+          promptForDownloadDialog = null
+          quranSettings.setShouldFetchPages(true)
+          downloadQuranImages(true)
+        },
+        {
+          promptForDownloadDialog = null
+          val isPatch = dataStatus.patchParam?.isNotEmpty() == true
+          if (isPatch) {
+            runListView()
+          } else {
+            runListViewWithoutPages()
+          }
+        }
+    )
+    bsDialog?.setCancelable(false)
+    this.promptForDownloadDialog = bsDialog
   }
 
   private fun runListViewWithoutPages() {

@@ -16,7 +16,7 @@
 
 package com.medoapps.www.onlinequran;
 
-import android.app.AlertDialog;
+import com.medoapps.www.onlinequran.util.AppBottomSheet;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -533,11 +533,7 @@ public class UserInformation extends BaseActivity implements View.OnClickListene
     }
 
     private void showMessageDialog(String title, String message) {
-        AlertDialog ad = new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .create();
-        ad.show();
+        AppBottomSheet.showMessage(this, title, message);
     }
 
     private void showProgressDialog(String caption) {

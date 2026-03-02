@@ -2,9 +2,9 @@ package com.medoapps.www.onlinequran;
 
 import static android.app.PendingIntent.getActivity;
 import static android.os.Build.VERSION.SDK_INT;
-import static com.medoapps.www.onlinequran.managerdb.ReciteNameText;
-import static com.medoapps.www.onlinequran.managerdb.instance;
-import static com.medoapps.www.onlinequran.managerdb.notificationTitle;
+import static com.medoapps.www.onlinequran.NewQuranPlayer.ReciteNameText;
+import static com.medoapps.www.onlinequran.NewQuranPlayer.NewQuranPlayerInstance;
+import static com.medoapps.www.onlinequran.NewQuranPlayer.notificationTitle;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -136,11 +136,11 @@ public class NotificationPanel {
 
         remoteView.setTextViewText(R.id.aya,notificationTitle);
         remoteView.setTextViewText(R.id.recite, ReciteNameText);
-        if(instance.mp.isPlaying()){
+        if(NewQuranPlayerInstance.mp.isPlaying()){
 
-            if(instance.mp!=null){
+            if(NewQuranPlayerInstance.mp!=null){
 
-                instance.runAdAgain(true);
+                NewQuranPlayerInstance.runAdAgain(true);
                 remoteView.setImageViewResource(R.id.btn1, R.drawable.ic_pause_circle_filled_black_24dp);
                 //remoteView.setViewVisibility(R.id.btn1,View.INVISIBLE);
 
@@ -148,9 +148,9 @@ public class NotificationPanel {
         }else{
 
             // Resume song
-            if(instance.mp!=null){
+            if(NewQuranPlayerInstance.mp!=null){
 
-                instance.runAdAgain(false);
+                NewQuranPlayerInstance.runAdAgain(false);
                 remoteView.setImageViewResource(R.id.btn1, R.drawable.ic_play_circle_filled_white_24dp);
                 //remoteView.setViewVisibility(R.id.btn1,View.INVISIBLE);
 

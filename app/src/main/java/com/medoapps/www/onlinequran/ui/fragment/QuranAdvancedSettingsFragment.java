@@ -39,7 +39,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.appcompat.app.AlertDialog;
+import android.app.Dialog;
+import com.medoapps.www.onlinequran.util.AppBottomSheet;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
@@ -61,7 +62,7 @@ public class QuranAdvancedSettingsFragment extends PreferenceFragmentCompat {
   private int appSize;
   private boolean isPaused;
   private String internalSdcardLocation;
-  private AlertDialog dialog;
+  private Dialog dialog;
   private Context appContext;
   private Disposable exportSubscription = null;
   private Disposable logsSubscription;
@@ -365,20 +366,16 @@ public class QuranAdvancedSettingsFragment extends PreferenceFragmentCompat {
                                 @StringRes int message) {
     final Context context = getActivity();
     if (context != null) {
-      final AlertDialog.Builder b = new AlertDialog.Builder(context)
-          .setTitle(R.string.warning)
-          .setMessage(message)
-          .setPositiveButton(R.string.dialog_ok, (currentDialog, which) -> {
-            moveFiles(newLocation, storageLocation);
-            currentDialog.dismiss();
-            QuranAdvancedSettingsFragment.this.dialog = null;
-          })
-          .setNegativeButton(R.string.cancel, (currentDialog, which) -> {
-            currentDialog.dismiss();
-            QuranAdvancedSettingsFragment.this.dialog = null;
-          });
-      dialog = b.create();
-      dialog.show();
+      dialog = AppBottomSheet.showConfirmation(context,
+          context.getString(R.string.warning),
+          context.getString(message),
+          context.getString(R.string.dialog_ok),
+          context.getString(R.string.cancel),
+          () -> {
+              moveFiles(newLocation, storageLocation);
+              QuranAdvancedSettingsFragment.this.dialog = null;
+          },
+          () -> QuranAdvancedSettingsFragment.this.dialog = null);
     }
   }
 

@@ -38,15 +38,33 @@ public class Permissions {
 
 
     public Boolean checkStoragePermission(){
-        // On API 30+, MediaStore is used (scoped storage) — no legacy permission needed
+        if (SDK_INT >= 33) { // TIRAMISU — need READ_MEDIA_AUDIO
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                activity.requestPermissions(new String[]{
+                        Manifest.permission.READ_MEDIA_AUDIO
+                }, REQUEST_CODE_ASK_STORAGE_PERMISSIONS);
+                return false;
+            }
+            return true;
+        }
         if (SDK_INT >= Build.VERSION_CODES.R) {
+            // Android 11-12: READ_EXTERNAL_STORAGE still needed to read other apps' audio
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                activity.requestPermissions(new String[]{
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                }, REQUEST_CODE_ASK_STORAGE_PERMISSIONS);
+                return false;
+            }
             return true;
         }
         return askStoragePermission();
     }
     public Boolean checkStoragePermissionForService(){
+        if (SDK_INT >= 33) {
+            return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED;
+        }
         if (SDK_INT >= Build.VERSION_CODES.R) {
-            return true;
+            return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         }
         if ((int) SDK_INT >= 23)
         {
@@ -66,8 +84,11 @@ public class Permissions {
         }
     }
     public Boolean checkStoragePermissionWithoutAsk(){
+        if (SDK_INT >= 33) {
+            return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED;
+        }
         if (SDK_INT >= Build.VERSION_CODES.R) {
-            return true;
+            return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         }
         if ((int) SDK_INT >= 23)
         {
@@ -123,6 +144,15 @@ public class Permissions {
     }
 
     private boolean askStoragePermission(){
+        if (SDK_INT >= 33) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                activity.requestPermissions(new String[]{
+                        Manifest.permission.READ_MEDIA_AUDIO
+                }, REQUEST_CODE_ASK_STORAGE_PERMISSIONS);
+                return false;
+            }
+            return true;
+        }
         if ((int) SDK_INT >= 23)
         {
             if (
@@ -138,14 +168,6 @@ public class Permissions {
                             },
                             REQUEST_CODE_ASK_STORAGE_PERMISSIONS);
                 }
-                /*if (SDK_INT >= Build.VERSION_CODES.S) {
-                    requestPermissions(new String[]{
-                                    Manifest.permission.MANAGE_MEDIA,
-                            },
-                            REQUEST_CODE_ASK_STORAGE_PERMISSIONS);
-                }*/
-
-
 
                 return false;
             }else{

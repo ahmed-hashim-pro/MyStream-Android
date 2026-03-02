@@ -3,13 +3,13 @@ package com.medoapps.www.onlinequran.util;
 import static java.text.DateFormat.getDateTimeInstance;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ContentUris;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -17,11 +17,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -104,152 +99,27 @@ public class SeparateFunctions {
     }
 
     public void showNativeDialog(String title, String Message, final Runnable func){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-        alertDialog.setTitle(title);
-        alertDialog.setMessage(Message);
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
-        // Setting Positive "Yes" Button
-        alertDialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
-//                showRewardedVideo();
-                func.run();
-
-            }
-        });
-        // Setting Negative "NO" Button
-        alertDialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-
-                dialog.cancel();
-            }
-        });
-        alertDialog.show();
+        AppBottomSheet.showConfirmation(context, title, Message,
+                context.getString(android.R.string.yes),
+                context.getString(android.R.string.no),
+                func, null);
     }
     public void showNewCustomDialog(String title, String Message,String PositiveText,String NegativeText, final Runnable func , int icon){
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        View myView = inflater.inflate(R.layout.custom_dialog, null);
-
-        TextView dialogTitle = myView.findViewById(R.id.dialogTitle);
-        TextView dialogMessage = myView.findViewById(R.id.dialogDescription);
-        ImageView dialogIcon = myView.findViewById(R.id.dialogIcon);
-
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context,R.style.CustomAlertDialog);
-
-        alertDialog.setView(myView)
-                // Add action buttons
-                .setPositiveButton(PositiveText, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        func.run();
-                    }
-                })
-                .setNegativeButton(NegativeText, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-//                        LoginDialogFragment.this.getDialog().cancel();
-                    }
-                });
-
-        dialogTitle.setText(title);
-        dialogMessage.setText(Message);
-        dialogIcon.setImageResource(icon);
-
-        if(!((Activity) context).isFinishing())
-        {
-            AlertDialog alert11 = alertDialog.create();
-            alert11.show();
-
-//        alertDialog.show();
-            Button b = alert11.getButton(DialogInterface.BUTTON_POSITIVE);
-            b.setBackgroundColor(context.getResources().getColor(R.color.purple));
-            b.setTextColor(context.getResources().getColor(R.color.toolbarTextColor));
-        }
-
-
+        AppBottomSheet.showCustom(context, title, Message,
+                PositiveText, NegativeText, func, null, icon);
     }
     public void showNewCustomWithFinishDialog(String title, String Message,String PositiveText,String NegativeText, final Runnable func, final Runnable negativeFunc , int icon){
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        View myView = inflater.inflate(R.layout.custom_dialog, null);
-
-        TextView dialogTitle = myView.findViewById(R.id.dialogTitle);
-        TextView dialogMessage = myView.findViewById(R.id.dialogDescription);
-        ImageView dialogIcon = myView.findViewById(R.id.dialogIcon);
-
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context,R.style.CustomAlertDialog);
-
-        alertDialog.setView(myView)
-                // Add action buttons
-//                .setCustomTitle(dialogtitle)
-                .setPositiveButton(PositiveText, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
-                        func.run();
-                    }
-                })
-                .setNegativeButton(NegativeText, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-//                        LoginDialogFragment.this.getDialog().cancel();
-                        negativeFunc.run();
-                    }
-                });
-
-        dialogTitle.setText(title);
-        dialogMessage.setText(Message);
-        dialogIcon.setImageResource(icon);
-
-        AlertDialog alert11 = alertDialog.create();
-        alert11.show();
-
-//        alertDialog.show();
-        Button b = alert11.getButton(DialogInterface.BUTTON_POSITIVE);
-        b.setBackgroundColor(context.getResources().getColor(R.color.purple));
-        b.setTextColor(context.getResources().getColor(R.color.toolbarTextColor));
+        AppBottomSheet.showCustom(context, title, Message,
+                PositiveText, NegativeText, func, negativeFunc, icon);
     }
 
     public void showSharingDialog(String title, String Message,String PositiveText,String NegativeText, final Runnable func , int icon){
-
-
         try {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-            View myView = inflater.inflate(R.layout.custom_dialog, null);
-
-            TextView dialogTitle = myView.findViewById(R.id.dialogTitle);
-            TextView dialogMessage = myView.findViewById(R.id.dialogDescription);
-            ImageView dialogIcon = myView.findViewById(R.id.dialogIcon);
-
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context,R.style.CustomAlertDialog);
-
-            alertDialog.setView(myView)
-                    // Add action buttons
-    //                .setCustomTitle(dialogtitle)
-                    .setPositiveButton(PositiveText, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            // sign in the user ...
-                            func.run();
-                        }
-                    })
-                    .setNegativeButton(NegativeText, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-    //                        negativeFunc.run();
-                        }
-                    });
-
-            dialogTitle.setText(title);
-            dialogMessage.setText(Message);
-            dialogIcon.setImageResource(icon);
-
-            AlertDialog alert11 = alertDialog.create();
-            alert11.show();
-
-//        alertDialog.show();
-            Button b = alert11.getButton(DialogInterface.BUTTON_POSITIVE);
-            b.setBackgroundColor(context.getResources().getColor(R.color.purple));
-            b.setTextColor(context.getResources().getColor(R.color.toolbarTextColor));
-        } catch (Resources.NotFoundException e) {
+            AppBottomSheet.showCustom(context, title, Message,
+                    PositiveText, NegativeText, func, null, icon);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
     @Nullable
     public File getAppSpecificDownloadStorageDir(Context context,Activity activity) {
@@ -272,13 +142,11 @@ public class SeparateFunctions {
 
          File dir;
         if (Build.VERSION_CODES.Q > Build.VERSION.SDK_INT) {
-            dir = new File(Environment.getExternalStorageDirectory()+ "/" + "MyStream","AhmedHashim_"+"/");
+            dir = new File(Environment.getExternalStorageDirectory() + "/" + "MyStream");
 
         } else {
 
-//            dir = new File(Environment.getExternalStoragePublicDirectory(DIRECTORY_MUSIC).getPath() + "//MyStream//AhmedHashim_");
-            dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC),   "MyStream/AhmedHashim_");
-//            dir = new File(activity.getExternalFilesDir(Environment.DIRECTORY_MUSIC),   "MyStream/AhmedHashim_");
+            dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), "MyStream");
 
             if (!dir.exists()){
                 dir.mkdirs();
@@ -299,6 +167,28 @@ public class SeparateFunctions {
             audioCollection = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         }
         return audioCollection;
+    }
+
+    @Nullable
+    public String findAudioInMediaStore(String displayName) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return null;
+
+        Uri audioCollection = getAudioCollection();
+        String[] projection = { MediaStore.Audio.Media._ID };
+        String selection = MediaStore.Audio.Media.DISPLAY_NAME + "=? AND "
+                + MediaStore.Audio.Media.RELATIVE_PATH + "=?";
+        String[] selectionArgs = { displayName, Environment.DIRECTORY_MUSIC + "/MyStream/" };
+
+        try (Cursor cursor = context.getContentResolver().query(
+                audioCollection, projection, selection, selectionArgs, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                long id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+                return ContentUris.withAppendedId(audioCollection, id).toString();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void changeAppThemeGlobally(){

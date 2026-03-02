@@ -38,7 +38,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
+import com.medoapps.www.onlinequran.util.AppBottomSheet;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -354,26 +354,22 @@ public class TranslationManagerActivity extends AppCompatActivity
     final TranslationItem selectedItem =
         (TranslationItem) translationRowData;
     String msg = String.format(getString(R.string.remove_dlg_msg), selectedItem.name());
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle(R.string.remove_dlg_title)
-        .setMessage(msg)
-        .setPositiveButton(R.string.remove_button,
-            (dialog, id) -> {
-              if (removeTranslation(selectedItem.getTranslation().getFileName())) {
+    AppBottomSheet.showConfirmation(this,
+        getString(R.string.remove_dlg_title),
+        msg,
+        getString(R.string.remove_button),
+        getString(R.string.cancel),
+        () -> {
+            if (removeTranslation(selectedItem.getTranslation().getFileName())) {
                 TranslationItem updatedItem = selectedItem.withTranslationRemoved();
                 updateTranslationItem(updatedItem);
-
-                // remove from active translations
                 QuranSettings settings = QuranSettings.getInstance(this);
                 Set<String> activeTranslations = settings.getActiveTranslations();
                 activeTranslations.remove(selectedItem.getTranslation().getFileName());
                 settings.setActiveTranslations(activeTranslations);
                 generateListItems();
-              }
-            })
-        .setNegativeButton(R.string.cancel,
-            (dialog, i) -> dialog.dismiss());
-    builder.show();
+            }
+        }, null);
   }
 
   private List<TranslationItem> sortedDownloadedItems() {

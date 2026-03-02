@@ -1,20 +1,21 @@
 package com.medoapps.www.onlinequran
 
+import android.app.Dialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.medoapps.www.onlinequran.R
 import com.quran.data.model.bookmark.BookmarkData
 import com.medoapps.www.onlinequran.presenter.QuranImportPresenter
 import com.medoapps.www.onlinequran.ui.util.ToastCompat
+import com.medoapps.www.onlinequran.util.AppBottomSheet
 import javax.inject.Inject
 
 class QuranImportActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
 
-  private var alertDialog: AlertDialog? = null
+  private var alertDialog: Dialog? = null
 
   @Inject
   lateinit var presenter: QuranImportPresenter
@@ -59,15 +60,15 @@ class QuranImportActivity : AppCompatActivity(), ActivityCompat.OnRequestPermiss
       bookmarkData.bookmarks.size,
       bookmarkData.tags.size
     )
-    val builder = AlertDialog.Builder(this).apply {
-      setMessage(dialogMessage)
-      setPositiveButton(R.string.import_data) { _, _ ->
-        presenter.importData(bookmarkData)
-      }
-      setNegativeButton(android.R.string.cancel) { _, _ -> finish() }
-      setOnCancelListener { finish() }
-    }
-    alertDialog = builder.show()
+    alertDialog = AppBottomSheet.showConfirmation(
+        this,
+        "",
+        dialogMessage,
+        getString(R.string.import_data),
+        getString(android.R.string.cancel),
+        { presenter.importData(bookmarkData) },
+        { finish() }
+    )
   }
 
   fun showImportComplete() {
@@ -84,10 +85,6 @@ class QuranImportActivity : AppCompatActivity(), ActivityCompat.OnRequestPermiss
   }
 
   private fun showErrorInternal(@StringRes messageId: Int) {
-    val builder = AlertDialog.Builder(this).apply {
-      setMessage(messageId)
-      setPositiveButton(android.R.string.ok) { _, _ -> finish() }
-    }
-    alertDialog = builder.show()
+    alertDialog = AppBottomSheet.showMessage(this, "", getString(messageId))
   }
 }

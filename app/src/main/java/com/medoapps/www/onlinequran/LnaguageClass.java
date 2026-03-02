@@ -1275,29 +1275,30 @@ public class LnaguageClass {
                     //String SDPath = Environment.getExternalStorageDirectory().getPath() + "/";
 //                    File SDPath =  new File(Environment.getExternalStorageDirectory()+ "/" + folder_main,"Medo_"+"/");
 
-                    File SDPath =  new SeparateFunctions(context).getAppSpecificDownloadStorageDir(context,activity);
+                    SeparateFunctions sf = new SeparateFunctions(context);
+                    File SDPath = sf.getAppSpecificDownloadStorageDir(context,activity);
                     File SDPath2 =  new File(activity.getExternalFilesDir(null),   "MyStream/AhmedHashim_");
 
-
-                    AYAPAth =SDPath+  ReciteName+ ac.ServerName +".mp3";
+                    String displayName = "AhmedHashim_" + ReciteName + ac.ServerName + ".mp3";
+                    AYAPAth = SDPath + "/" + displayName;
 
                     //    String[] fmyFilemyFileiles = isoStore.GetFileNames(RealServerFolder + ListAya[i].ServerName + ".mp3");
                     File myFile = new File(AYAPAth);
-                    if (myFile.exists())
-                        ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName,  avalible(),  AYAPAth,Rewayat  ));
-                    else
-                    {
-                        if (Rewayat!= null){
-                            AYAPAth ="https://server"+  serverNumber (ReciteName) + ".mp3quran.net/" +ReciteName + "/"+ Rewayat + "/" +  ac.ServerName + ".mp3";
-
-                        }else {
-                            AYAPAth ="https://server"+  serverNumber (ReciteName) + ".mp3quran.net/" +ReciteName + "/"+  ac.ServerName + ".mp3";
-//                            // Log.d("gdfgrgfdg", AYAPAth);
-
+                    if (myFile.exists()) {
+                        ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName, avalible(), AYAPAth, Rewayat));
+                    } else {
+                        // MediaStore fallback: file may exist but be inaccessible via File API after reinstall
+                        String mediaStoreUri = sf.findAudioInMediaStore(displayName);
+                        if (mediaStoreUri != null) {
+                            ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName, avalible(), mediaStoreUri, Rewayat));
+                        } else {
+                            if (Rewayat != null) {
+                                AYAPAth = "https://server" + serverNumber(ReciteName) + ".mp3quran.net/" + ReciteName + "/" + Rewayat + "/" + ac.ServerName + ".mp3";
+                            } else {
+                                AYAPAth = "https://server" + serverNumber(ReciteName) + ".mp3quran.net/" + ReciteName + "/" + ac.ServerName + ".mp3";
+                            }
+                            ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName, disavalible(), AYAPAth, Rewayat));
                         }
-
-                        //  AYAPAth = "http://www.quran.alrubaye.com/quran/" + LnaguageClass.RecitesName + "/" + ac.ServerName + ".mp3";
-                        ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName, disavalible(), AYAPAth,Rewayat));
                     }
 
 
@@ -1314,29 +1315,30 @@ public class LnaguageClass {
                     ac = ListAya.get(i);
                     //String SDPath = Environment.getExternalStorageDirectory().getPath() + "/";
 //                    File SDPath =  new File(Environment.getExternalStorageDirectory()+ "/" + folder_main,"Medo_"+"/");
-                    File SDPath =  new SeparateFunctions(context).getAppSpecificDownloadStorageDir(context,activity);
+                    SeparateFunctions sf2 = new SeparateFunctions(context);
+                    File SDPath = sf2.getAppSpecificDownloadStorageDir(context,activity);
                     File SDPath2 =  new File(activity.getExternalFilesDir(null),   "MyStream/AhmedHashim_");
 
-                    AYAPAth =SDPath+  ReciteName+ ac.ServerName +".mp3";
+                    String displayName = "AhmedHashim_" + ReciteName + ac.ServerName + ".mp3";
+                    AYAPAth = SDPath + "/" + displayName;
 
                     //    String[] fmyFilemyFileiles = isoStore.GetFileNames(RealServerFolder + ListAya[i].ServerName + ".mp3");
                     File myFile = new File(AYAPAth);
-                    if (myFile.exists())
-                        ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName,  avalible(),  AYAPAth,Rewayat  ));
-                    else
-                    {
-                        if (Rewayat!= null){
-                            AYAPAth ="https://server"+  serverNumber (ReciteName) + ".mp3quran.net/" +ReciteName + "/"+ Rewayat + "/" +  ac.ServerName + ".mp3";
-                            // Log.d("gdfgrgfdg", AYAPAth);
-
-                        }else {
-                            AYAPAth ="https://server"+  serverNumber (ReciteName) + ".mp3quran.net/" +ReciteName + "/"+  ac.ServerName + ".mp3";
-                            // Log.d("gdfgrgfdg", AYAPAth);
-
+                    if (myFile.exists()) {
+                        ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName, avalible(), AYAPAth, Rewayat));
+                    } else {
+                        // MediaStore fallback: file may exist but be inaccessible via File API after reinstall
+                        String mediaStoreUri = sf2.findAudioInMediaStore(displayName);
+                        if (mediaStoreUri != null) {
+                            ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName, avalible(), mediaStoreUri, Rewayat));
+                        } else {
+                            if (Rewayat != null) {
+                                AYAPAth = "https://server" + serverNumber(ReciteName) + ".mp3quran.net/" + ReciteName + "/" + Rewayat + "/" + ac.ServerName + ".mp3";
+                            } else {
+                                AYAPAth = "https://server" + serverNumber(ReciteName) + ".mp3quran.net/" + ReciteName + "/" + ac.ServerName + ".mp3";
+                            }
+                            ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName, disavalible(), AYAPAth, Rewayat));
                         }
-
-                        //  AYAPAth = "http://www.quran.alrubaye.com/quran/" + LnaguageClass.RecitesName + "/" + ac.ServerName + ".mp3";
-                        ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName, disavalible(), AYAPAth,Rewayat));
                     }
 
 
@@ -1349,7 +1351,24 @@ public class LnaguageClass {
         return(ListAyaRanage);
     }
 
+    public String getSurahNameByIndex(int index) {
+        if (ListAya.isEmpty()) {
+            GuranAya("", "");
+        }
+        if (index >= 0 && index < ListAya.size()) {
+            return ListAya.get(index).RealName;
+        }
+        return "";
+    }
 
-
+    public String getReciterDisplayName(String serverName) {
+        ArrayList<AuthorClass> list = AutherList();
+        for (AuthorClass a : list) {
+            if (a.ServerName.equals(serverName)) {
+                return a.RealName;
+            }
+        }
+        return serverName;
+    }
 }
 

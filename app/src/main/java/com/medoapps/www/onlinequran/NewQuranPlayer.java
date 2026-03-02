@@ -6,12 +6,12 @@ import static com.medoapps.www.onlinequran.NotificationPanel.*;
 import static com.medoapps.www.onlinequran.R.id.adView;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
+
+import com.medoapps.www.onlinequran.util.AppBottomSheet;
 import androidx.core.content.ContextCompat;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -48,6 +48,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
@@ -143,7 +144,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
     private Equalizer mEqualizer;
     private LinearLayout mLinearLayout;
     private VisualizerView mVisualizerView;
-    ScrollView scrollview;
+    androidx.core.widget.NestedScrollView scrollview;
     private boolean equlizerstart = false;
 
 
@@ -186,7 +187,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
     private SeparateFunctions separateFunctions;
 
     private int numberOfTitleSet = 1;
-    private ProgressBar loadingBar;
+    private LinearProgressIndicator loadingBar;
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
@@ -360,7 +361,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
 
             updateProgressBar();
             if (player != null){
-                loadingBar.setVisibility(View.GONE);
+                hideLoading();
                 songTitleLabel.setText(player.getTitle());
                 songReciteName.setText(player.getArtist());
                 updateSourceLabel(player.getData());
@@ -750,7 +751,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
         btnDeleteSurah = (ImageButton) findViewById(R.id.btnDeleteSurah);
         songCurrentDurationLabel = (TextView) findViewById( R.id.songCurrentDurationLabel);
         songTotalDurationLabel = (TextView) findViewById( R.id.songTotalDurationLabel);
-        scrollview = ((ScrollView) findViewById(R.id.scrollmanager));
+        scrollview = ((androidx.core.widget.NestedScrollView) findViewById(R.id.middleContent));
         btnBookmark=(ImageButton) findViewById(R.id.bookmark);
 
         LnaguageClass lc = new LnaguageClass(NewQuranPlayer.this);
@@ -808,6 +809,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
         }
 
         loadAudio();
+        showLoading();
         playAudio(currentSongIndex);
         btnPlay.setImageResource( R.drawable.btn_pause);
 
@@ -937,12 +939,12 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
             @Override
             public void onClick(View arg0) {
                 if (player != null && player.CurrentServiceMediaPlayer() != null){
-                    loadingBar.setVisibility(View.VISIBLE);
+                    showLoading();
 
                     player.SkipToNextPublic();
                     player.STATE_PLAYING_public();
                 }else {
-                    loadingBar.setVisibility(View.VISIBLE);
+                    showLoading();
 
                     stopMediaPlayerService();
                     loadAndPlayAudio();
@@ -960,11 +962,11 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
             @Override
             public void onClick(View arg0) {
                 if (player != null && player.CurrentServiceMediaPlayer() != null){
-                    loadingBar.setVisibility(View.VISIBLE);
+                    showLoading();
 
                     player.SkipToPreviousPublic();
                 }else {
-                    loadingBar.setVisibility(View.VISIBLE);
+                    showLoading();
 
                     stopMediaPlayerService();
                     loadAndPlayAudio();
@@ -1044,25 +1046,25 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
             @Override
             public void onClick(View v) {
                 String currentAya = String.valueOf(currentSongIndex);
-                boolean isAlreadyBookmarked = RecitesName.equals(SettingSaved.FinalRecite)
-                        && currentAya.equals(SettingSaved.FinalAya);
+                String surahTitle = "";
+                try {
+                    surahTitle = songsList.get(currentSongIndex).get("songTitle");
+                } catch (Exception e) { e.printStackTrace(); }
 
-                if (isAlreadyBookmarked) {
-                    SettingSaved.FinalRecite = "";
-                    SettingSaved.FinalAya = "";
-                    SettingSaved.FinalRewayat = "";
-                    SettingSaved.FinalRealRecitesName = "";
-                    btnBookmark.setImageResource(R.drawable.ic_bookmark_border_black_24dp);
+                if (SettingSaved.isBookmarked(RecitesName, currentAya)) {
+                    SettingSaved.removeBookmark(getApplicationContext(), RecitesName, currentAya);
+                    btnBookmark.setImageResource(R.drawable.round_bookmark_border_24);
+                    Toast.makeText(getApplicationContext(), R.string.bookmark_removed, Toast.LENGTH_SHORT).show();
                 } else {
-                    SettingSaved.FinalRecite = RecitesName;
-                    SettingSaved.FinalAya = currentAya;
-                    SettingSaved.FinalRewayat = Rewayat;
-                    SettingSaved.FinalRealRecitesName = RealRecitesName;
-                    btnBookmark.setImageResource(R.drawable.ic_bookmark_border_black_pressed_24dp);
+                    SettingSaved.addBookmark(getApplicationContext(), RecitesName, currentAya, Rewayat, RealRecitesName, surahTitle);
+                    btnBookmark.setImageResource(R.drawable.round_bookmark_filled_24);
+                    Toast.makeText(getApplicationContext(), R.string.bookmark_added, Toast.LENGTH_SHORT).show();
                 }
-                SettingSaved settingSaved = new SettingSaved(getApplicationContext());
-                settingSaved.SaveData();
-                settingSaved.LoadData();
+
+                SettingSaved.FinalRecite = RecitesName;
+                SettingSaved.FinalAya = currentAya;
+                SettingSaved.FinalRewayat = Rewayat;
+                SettingSaved.FinalRealRecitesName = RealRecitesName;
             }
         });
 
@@ -1070,11 +1072,10 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
 
     private void updateBookmarkIcon() {
         String currentAya = String.valueOf(currentSongIndex);
-        if (RecitesName.equals(SettingSaved.FinalRecite)
-                && currentAya.equals(SettingSaved.FinalAya)) {
-            btnBookmark.setImageResource(R.drawable.ic_bookmark_border_black_pressed_24dp);
+        if (SettingSaved.isBookmarked(RecitesName, currentAya)) {
+            btnBookmark.setImageResource(R.drawable.round_bookmark_filled_24);
         } else {
-            btnBookmark.setImageResource(R.drawable.ic_bookmark_border_black_24dp);
+            btnBookmark.setImageResource(R.drawable.round_bookmark_border_24);
         }
     }
 
@@ -1114,7 +1115,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
     private void onMiniPlaylistItemClicked(int position) {
         if (position < 0 || position >= songsList.size()) return;
         currentSongIndex = position;
-        loadingBar.setVisibility(View.VISIBLE);
+        showLoading();
 
         // Update title and source label immediately
         String songTitle = songsList.get(position).get("songTitle");
@@ -1214,6 +1215,16 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
      * Function to play a song
      * @param songIndex - index of song
      * */
+    private void showLoading() {
+        loadingBar.setVisibility(View.VISIBLE);
+        songProgressBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void hideLoading() {
+        loadingBar.setVisibility(View.GONE);
+        songProgressBar.setVisibility(View.VISIBLE);
+    }
+
     private void updateSourceLabel(String path) {
         if (sourceLabel == null || sourceBadge == null || sourceIcon == null || sourceRow == null) return;
         sourceRow.setVisibility(View.VISIBLE);
@@ -1244,17 +1255,12 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
         if (songPath == null || songPath.startsWith("http")) return;
 
         String songTitle = songsList.get(currentSongIndex).get("songTitle");
-        new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.audio_manager_surah_delete))
-            .setMessage(getString(R.string.audio_manager_remove_audio_msg, songTitle))
-            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    deleteCurrentSurah(songPath);
-                }
-            })
-            .setNegativeButton(android.R.string.no, null)
-            .show();
+        AppBottomSheet.showConfirmation(this,
+            getString(R.string.audio_manager_surah_delete),
+            getString(R.string.audio_manager_remove_audio_msg, songTitle),
+            getString(android.R.string.yes),
+            getString(android.R.string.no),
+            () -> deleteCurrentSurah(songPath), null);
     }
 
     private void deleteCurrentSurah(String filePath) {
@@ -1750,7 +1756,7 @@ public class NewQuranPlayer extends AppCompatActivity implements SeekBar.OnSeekB
         scrollview.post(new Runnable() {
             @Override
             public void run() {
-                scrollview.fullScroll(ScrollView.FOCUS_DOWN);
+                scrollview.fullScroll(View.FOCUS_DOWN);
             }
         });
     }

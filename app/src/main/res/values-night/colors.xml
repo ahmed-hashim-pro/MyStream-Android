@@ -149,6 +149,9 @@
     <color name="warning_banner_bg">#332B00</color>
     <color name="gradient_surface">#333333</color>
 
+    <!-- Bottom sheet -->
+    <color name="bottom_sheet_drag_handle">#535353</color>
+
     <!-- Skeleton loader -->
     <color name="skeleton_bone">#3A3A3A</color>
 

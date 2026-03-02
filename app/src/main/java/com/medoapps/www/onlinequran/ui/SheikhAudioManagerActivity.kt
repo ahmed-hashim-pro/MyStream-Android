@@ -15,7 +15,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.view.ActionMode.Callback
@@ -38,6 +38,7 @@ import com.medoapps.www.onlinequran.service.util.QuranDownloadNotifier.ProgressI
 import com.medoapps.www.onlinequran.service.util.ServiceIntentHelper
 import com.medoapps.www.onlinequran.ui.fragment.BulkDownloadFragment
 import com.medoapps.www.onlinequran.ui.util.ToastCompat
+import com.medoapps.www.onlinequran.util.AppBottomSheet
 import com.medoapps.www.onlinequran.util.AudioManagerUtils
 import com.medoapps.www.onlinequran.util.AudioUtils
 import com.medoapps.www.onlinequran.util.QariDownloadInfo
@@ -72,7 +73,7 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
   private var downloadReceiver: DefaultDownloadReceiver? = null
   private var basePath: String? = null
   private var actionMode: ActionMode? = null
-  private var dialogConfirm: AlertDialog? = null
+  private var dialogConfirm: Dialog? = null
 
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -251,16 +252,15 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
             if (downloaded) {
               val surahName = quranDisplayData.getSuraName(this, surah, true)
               val msg = String.format(getString(R.string.audio_manager_remove_audio_msg), surahName)
-              val builder = AlertDialog.Builder(this)
-              builder.setTitle(R.string.audio_manager_remove_audio_title)
-                  .setMessage(msg)
-                  .setPositiveButton(R.string.remove_button
-                  ) { _, _ ->
-                    deleteSelection(ArrayList(listOf(surah)))
-                  }
-                  .setNegativeButton(R.string.cancel
-                  ) { dialog, _ -> dialog.dismiss() }
-              dialogConfirm = builder.show()
+              dialogConfirm = AppBottomSheet.showConfirmation(
+                  this,
+                  getString(R.string.audio_manager_remove_audio_title),
+                  msg,
+                  getString(R.string.remove_button),
+                  getString(R.string.cancel),
+                  { deleteSelection(ArrayList(listOf(surah))) },
+                  null
+              )
             } else {
               download(surah, surah)
             }

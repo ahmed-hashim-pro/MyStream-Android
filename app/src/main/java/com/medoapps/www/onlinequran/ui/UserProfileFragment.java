@@ -2,7 +2,6 @@ package com.medoapps.www.onlinequran.ui;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -10,7 +9,9 @@ import android.graphics.BitmapFactory;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
+import com.medoapps.www.onlinequran.util.AppBottomSheet;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -148,25 +150,17 @@ public class UserProfileFragment extends Fragment {
         @Override
         public void onClick(View view) {
 
-            new AlertDialog.Builder(context)
-                    .setTitle("Avatar")
-                    .setMessage("Are you sure want to change avatar profile?")
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent();
-                            intent.setType("image/*");
-                            intent.setAction(Intent.ACTION_PICK);
-                            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
-                            dialogInterface.dismiss();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    }).show();
+            AppBottomSheet.showConfirmation(context,
+                    "Avatar",
+                    "Are you sure want to change avatar profile?",
+                    context.getString(android.R.string.ok),
+                    context.getString(android.R.string.cancel),
+                    () -> {
+                        Intent intent = new Intent();
+                        intent.setType("image/*");
+                        intent.setAction(Intent.ACTION_PICK);
+                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+                    }, null);
         }
     };
 
@@ -311,49 +305,47 @@ public class UserProfileFragment extends Fragment {
                     }
 
                     if(config.getLabel().equals(USERNAME_LABEL)){
-                        View vewInflater = LayoutInflater.from(context)
-                                .inflate(R.layout.dialog_edit_username,  (ViewGroup) getView(), false);
-                        final EditText input = (EditText)vewInflater.findViewById(R.id.edit_username);
+                        BottomSheetDialog bsDialog = new BottomSheetDialog(context, R.style.AppBottomSheetDialog);
+                        View bsView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_username, null);
+                        EditText input = bsView.findViewById(R.id.edit_username);
                         input.setText(myAccount.firstname);
-                        /*Hiển thị dialog với dEitText cho phép người dùng nhập username mới*/
-                        new AlertDialog.Builder(context)
-                                .setTitle("Edit username")
-                                .setView(vewInflater)
-                                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        String newName = input.getText().toString();
-                                        if(!myAccount.firstname.equals(newName)){
-                                            changeUserName(newName);
-                                        }
-                                        dialogInterface.dismiss();
-                                    }
-                                })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.dismiss();
-                                    }
-                                }).show();
+
+                        View wrapper = LayoutInflater.from(context).inflate(R.layout.bottom_sheet_confirm, null);
+                        TextView bsTitle = wrapper.findViewById(R.id.bs_title);
+                        TextView bsMessage = wrapper.findViewById(R.id.bs_message);
+                        bsTitle.setText("Edit username");
+                        bsMessage.setVisibility(View.GONE);
+
+                        // Insert the edit text view before the button row
+                        LinearLayout parent = (LinearLayout) wrapper;
+                        int buttonRowIndex = parent.indexOfChild(wrapper.findViewById(R.id.bs_button_row));
+                        parent.addView(bsView, buttonRowIndex);
+
+                        MaterialButton btnSave = wrapper.findViewById(R.id.bs_btn_positive);
+                        MaterialButton btnCancel = wrapper.findViewById(R.id.bs_btn_negative);
+                        btnSave.setText("Save");
+                        btnCancel.setText("Cancel");
+
+                        btnSave.setOnClickListener(v -> {
+                            String newName = input.getText().toString();
+                            if (!myAccount.firstname.equals(newName)) {
+                                changeUserName(newName);
+                            }
+                            bsDialog.dismiss();
+                        });
+                        btnCancel.setOnClickListener(v -> bsDialog.dismiss());
+
+                        bsDialog.setContentView(wrapper);
+                        bsDialog.show();
                     }
 
                     if(config.getLabel().equals(RESETPASS_LABEL)){
-                        new AlertDialog.Builder(context)
-                                .setTitle("Password")
-                                .setMessage("Are you sure want to reset password?")
-                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        resetPassword(myAccount.email);
-                                        dialogInterface.dismiss();
-                                    }
-                                })
-                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.dismiss();
-                                    }
-                                }).show();
+                        AppBottomSheet.showConfirmation(context,
+                                "Password",
+                                "Are you sure want to reset password?",
+                                context.getString(android.R.string.ok),
+                                context.getString(android.R.string.cancel),
+                                () -> resetPassword(myAccount.email), null);
                     }
                 }
             });

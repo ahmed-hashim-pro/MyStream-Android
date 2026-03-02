@@ -11,7 +11,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -135,12 +136,6 @@
             android:name=".MediaPlayer"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBarTheme" />
-        <activity
-            android:name=".managerdb"
-            android:exported="false"
-            android:label="@string/title_activity_managerdb"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.subsetting" />
         <activity
             android:name=".SplashScreen"
             android:exported="true"
