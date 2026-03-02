@@ -570,7 +570,7 @@ public class MediaPlayerService extends Service implements MediaPlayer.OnComplet
                     runner.execute();*/
 //                    runThread();
 //
-                    mediaPlayer.prepare();
+                    mediaPlayer.prepareAsync();
 
                 }else{
                     if (permissions.checkStoragePermissionForService()){
