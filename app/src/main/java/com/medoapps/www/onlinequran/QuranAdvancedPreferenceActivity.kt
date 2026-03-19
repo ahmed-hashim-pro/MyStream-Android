@@ -6,7 +6,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import com.google.android.material.appbar.MaterialToolbar
 import androidx.core.app.ActivityCompat
 import com.medoapps.www.onlinequran.R
 import com.medoapps.www.onlinequran.service.util.PermissionUtil
@@ -29,7 +30,10 @@ class QuranAdvancedPreferenceActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.preferences)
 
-    val toolbar = findViewById<Toolbar>(R.id.toolbar)
+    window.statusBarColor = ContextCompat.getColor(this, R.color.background_main)
+    window.navigationBarColor = ContextCompat.getColor(this, R.color.background_main)
+
+    val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
     toolbar.setTitle(R.string.prefs_category_advanced)
     setSupportActionBar(toolbar)
     val ab = supportActionBar

@@ -59,6 +59,20 @@ open class QuranApplication : Application(), QuranApplicationComponentProvider,A
     MobileAds.initialize(this) {}
     ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     appOpenAdManager = AppOpenAdManager()
+
+    // Schedule daily Quran ayah notification
+    DailyAyahScheduler.scheduleDailyAyah(this)
+
+    // Restore athkar notification alarms
+    AthkarAlarmScheduler.restoreAlarms(this)
+
+    // Schedule daily hadith notification
+    DailyHadithScheduler.scheduleDailyHadith(this)
+
+    // Restore new feature notification alarms
+    AsmaulHusnaScheduler.restoreAlarm(this)
+    FastingReminderScheduler.restoreAlarm(this)
+    HisnNotificationScheduler.restoreAlarm(this)
   }
 
   open fun setupTimber() {

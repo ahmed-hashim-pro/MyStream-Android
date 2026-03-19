@@ -833,8 +833,10 @@ class MediaPlayerService : Service(), Player.Listener,
      */
     private val playNewAudio = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            audioIndex = StorageUtil(applicationContext).loadAudioIndex()
-            if (audioIndex != -1 && audioIndex < audioList!!.size) {
+            val storage = StorageUtil(applicationContext)
+            audioList = storage.loadAudio()
+            audioIndex = storage.loadAudioIndex()
+            if (audioIndex != -1 && audioList != null && audioIndex < audioList!!.size) {
                 activeAudio = audioList!![audioIndex]
             } else {
                 stopSelf()

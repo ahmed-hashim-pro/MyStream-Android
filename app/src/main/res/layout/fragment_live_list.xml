@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_main"
     android:layoutDirection="rtl"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
@@ -56,7 +57,7 @@
             android:layout_height="match_parent"
             android:horizontalSpacing="5dp"
             android:verticalSpacing="5dp"
-            android:listSelector="#0f0"
+            android:listSelector="@android:color/transparent"
             android:numColumns="2"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"

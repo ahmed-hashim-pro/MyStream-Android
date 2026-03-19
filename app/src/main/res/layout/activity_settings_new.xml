@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_main">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background_app_bar"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/AppTheme.Settings">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/backBTN"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@null"
+                app:tint="@color/icon_primary"
+                app:srcCompat="@drawable/outline_arrow_back_ios_24" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:gravity="center"
+                android:text="@string/action_settings"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar2"
+        android:layout_above="@+id/adView"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- General Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp"
+                android:text="@string/settings_section_general"
+                android:textColor="@color/gold_accent"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="@dimen/card_elevation_default"
+                app:cardBackgroundColor="@color/background_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:divider="@drawable/settings_divider"
+                    android:showDividers="middle">
+
+                    <!-- Language -->
+                    <include layout="@layout/settings_item_switch"
+                        android:id="@+id/item_language" />
+
+                    <!-- Startup Sound -->
+                    <include layout="@layout/settings_item_switch"
+                        android:id="@+id/item_startup_sound" />
+
+                    <!-- Titles Animation -->
+                    <include layout="@layout/settings_item_switch"
+                        android:id="@+id/item_animation" />
+
+                    <!-- Dark Mode -->
+                    <include layout="@layout/settings_item_grouped"
+                        android:id="@+id/item_dark_mode" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Notifications Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="8dp"
+                android:text="@string/settings_section_notifications"
+                android:textColor="@color/gold_accent"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="@dimen/card_elevation_default"
+                app:cardBackgroundColor="@color/background_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:divider="@drawable/settings_divider"
+                    android:showDividers="middle">
+
+                    <!-- Prayer Times Alarm -->
+                    <include layout="@layout/settings_item_grouped"
+                        android:id="@+id/item_prayer_alarm" />
+
+                    <!-- Notification Settings -->
+                    <include layout="@layout/settings_item_grouped"
+                        android:id="@+id/item_notification_settings" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Data Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="8dp"
+                android:text="@string/settings_section_data"
+                android:textColor="@color/gold_accent"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="@dimen/card_elevation_default"
+                app:cardBackgroundColor="@color/background_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:divider="@drawable/settings_divider"
+                    android:showDividers="middle">
+
+                    <!-- Downloads -->
+                    <include layout="@layout/settings_item_grouped"
+                        android:id="@+id/item_downloads" />
+
+                    <!-- Bookmarks -->
+                    <include layout="@layout/settings_item_grouped"
+                        android:id="@+id/item_bookmarks" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- About Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="8dp"
+                android:text="@string/settings_section_about"
+                android:textColor="@color/gold_accent"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="@dimen/card_elevation_default"
+                app:cardBackgroundColor="@color/background_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:divider="@drawable/settings_divider"
+                    android:showDividers="middle">
+
+                    <!-- Share App -->
+                    <include layout="@layout/settings_item_grouped"
+                        android:id="@+id/item_share" />
+
+                    <!-- Rate App -->
+                    <include layout="@layout/settings_item_grouped"
+                        android:id="@+id/item_rate" />
+
+                    <!-- Facebook -->
+                    <include layout="@layout/settings_item_grouped"
+                        android:id="@+id/item_facebook" />
+
+                    <!-- Website -->
+                    <include layout="@layout/settings_item_grouped"
+                        android:id="@+id/item_website" />
+
+                    <!-- About -->
+                    <include layout="@layout/settings_item_grouped"
+                        android:id="@+id/item_about" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Sign Out (conditional) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_sign_out"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="@dimen/card_elevation_default"
+                app:cardBackgroundColor="@color/background_card"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/item_sign_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="?attr/selectableItemBackground">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/round_logout_24"
+                        app:tint="#E53935" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sign_out"
+                        android:textColor="#E53935"
+                        android:textSize="15sp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="0dp" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Version -->
+            <TextView
+                android:id="@+id/versionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="24dp"
+                android:paddingBottom="16dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

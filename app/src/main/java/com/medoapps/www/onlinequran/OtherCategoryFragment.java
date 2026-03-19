@@ -10,19 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class OtherCategoryFragment extends Fragment implements AdapterView.OnIte
 
 
     public ArrayList<OtherCategory> listCategory = new ArrayList<OtherCategory>();
-    GridView lVRecites;
+    RecyclerView lVRecites;
 
     String RecitesName="";
     String RecitesAYA="";
@@ -100,7 +100,9 @@ public class OtherCategoryFragment extends Fragment implements AdapterView.OnIte
 
         });
 
-        lVRecites = (GridView) view.findViewById(R.id.listView);
+        lVRecites = (RecyclerView) view.findViewById(R.id.listView);
+        lVRecites.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        lVRecites.setNestedScrollingEnabled(true);
         loadItems();
 
         if(SettingSaved.OnTimeAds==false) {
@@ -119,7 +121,7 @@ public class OtherCategoryFragment extends Fragment implements AdapterView.OnIte
         OtherCategoryListLanguageClass lc = new OtherCategoryListLanguageClass(getContext());
         listCategory = lc.CategoryList();
 
-        lVRecites.setAdapter(new VivzAdapter(listCategory));
+        lVRecites.setAdapter(new CategoryAdapter(listCategory));
         Log.d(TAG, "loadItems: ");
     }
 
@@ -174,7 +176,7 @@ public class OtherCategoryFragment extends Fragment implements AdapterView.OnIte
 
 
         }
-        lVRecites .setAdapter(new VivzAdapter(listCategorytemp));
+        lVRecites.setAdapter(new CategoryAdapter(listCategorytemp));
     }
 
     @Override
@@ -183,111 +185,66 @@ public class OtherCategoryFragment extends Fragment implements AdapterView.OnIte
     }
 
 
-    class VivzAdapter extends BaseAdapter {
+    class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
         ArrayList<OtherCategory> listCategoryLocal;
 
-        VivzAdapter(ArrayList<OtherCategory> listCategory) {
-
-            listCategoryLocal = new ArrayList<OtherCategory>();
+        CategoryAdapter(ArrayList<OtherCategory> listCategory) {
             listCategoryLocal = listCategory;
-
         }
 
-
+        @NonNull
         @Override
-        public int getCount() {
-            return listCategoryLocal.size();
-        }
-
-        @Override
-        public String getItem(int position) {
-            return null;
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.other_ticket, parent, false);
+            return new ViewHolder(view);
         }
 
         @Override
-        public long getItemId(int position) {
-            return position;
-        }
-        private void onShareBy( String soura,String reciter) {
-
-            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-            sharingIntent.setType("text/plain");
-//            String shareBody = getResources().getString(R.string.sharemessage) + "  https://rebrand.ly/notfof70d";
-            String shareBody = "";
-            if (getResources().getString(R.string.sharePart3) == "reciter"){
-                shareBody = getResources().getString(R.string.sharePart1) +" " +soura+ " "+ "."+ " "+ getResources().getString(R.string.sharePart4) + " " + getResources().getString(R.string.shareURL);
-
-            }else{
-                shareBody = getResources().getString(R.string.sharePart1) +" " +soura+ " " +"."+ " "+ getResources().getString(R.string.sharePart4) + " " + getResources().getString(R.string.shareURL);
-
-            }
-            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "My Stream");
-            sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-            startActivity(Intent.createChooser(sharingIntent, "Share via"));
-
-        }
-
-        @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-
-            LayoutInflater mInflater = getActivity().getLayoutInflater();
-            View myView = mInflater.inflate(R.layout.other_ticket, null);
-
-            ImageView icon = (ImageView) myView.findViewById(R.id.icon);
-            TextView itemtxt = (TextView) myView.findViewById(R.id.itemtxt);
-            ImageButton buttonShare = (ImageButton) myView.findViewById(R.id.buttonShare);
-            LinearLayout entireCard = (LinearLayout) myView.findViewById(R.id.entireCardOtherCategory);
-            LnaguageClass lc = new LnaguageClass(getContext());
-            itemtxt = lc.SetTextFont(itemtxt,"");
-
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             final OtherCategory temp = listCategoryLocal.get(position);
-            itemtxt.setText(temp.title);
-            icon.setImageResource(temp.ImgDrawable);
 
+            LnaguageClass lc = new LnaguageClass(getContext());
+            lc.SetTextFont(holder.itemtxt, "");
 
-            entireCard.setOnClickListener(new View.OnClickListener() {
+            holder.itemtxt.setText(temp.title);
+            holder.icon.setImageResource(temp.ImgDrawable);
+
+            holder.entireCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    /*Intent intent = new Intent(getContext(), VideoWallDemoActivity.class);
-                    startActivity(intent);*/
-
-
-                    if (temp.fragment!=null){
+                    if (temp.fragment != null) {
                         LiveList newFragment = new LiveList();
                         getActivity().getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.EntireLayoutCategory, newFragment, "liveListFragment")
                                 .addToBackStack("liveListFragmentBAck")
                                 .commit();
-
-                    }else if (temp.activity != null){
+                    } else if (temp.activity != null) {
                         Intent intent = new Intent(getContext(), temp.activity);
-//                        intent.putExtra("Title", temp.title);
-//                        intent.putExtra("LiveUrl", temp.liveUrl);
                         startActivity(intent);
-
-
                     }
-//                    LiveList nextFrag= new LiveList();
-
-
                 }
             });
-            buttonShare.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onShareBy(temp.title,temp.title);
-
-
-                }
-            });
-
-            return myView;
-
-
         }
 
+        @Override
+        public int getItemCount() {
+            return listCategoryLocal.size();
+        }
 
+        class ViewHolder extends RecyclerView.ViewHolder {
+            ImageView icon;
+            TextView itemtxt;
+            MaterialCardView entireCard;
+
+            ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                icon = itemView.findViewById(R.id.icon);
+                itemtxt = itemView.findViewById(R.id.itemtxt);
+                entireCard = itemView.findViewById(R.id.entireCardOtherCategory);
+            }
+        }
     }
 
     //get access to mailbox

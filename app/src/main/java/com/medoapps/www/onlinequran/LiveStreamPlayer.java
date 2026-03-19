@@ -2,12 +2,16 @@ package com.medoapps.www.onlinequran;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackException;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -19,88 +23,124 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 
 public class LiveStreamPlayer extends AppCompatActivity {
 
-    private String Title = "";
-    private String LiveUrl = "";
-    StyledPlayerView playerView;
+    private String title = "";
+    private String liveUrl = "";
+    private StyledPlayerView playerView;
     private ExoPlayer player;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_stream);
 
-        Bundle b=getIntent().getExtras();
-        Title=b.getString("Title");
-        LiveUrl=b.getString("LiveUrl");
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            title = b.getString("Title", "");
+            liveUrl = b.getString("LiveUrl", "");
+        }
 
-        // 1. Create a default TrackSelector
-        ExoTrackSelection.Factory videoTrackSelectionFactory = new
-                AdaptiveTrackSelection.Factory();
-        DefaultTrackSelector trackSelector = new
-                DefaultTrackSelector(this, videoTrackSelectionFactory);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         playerView = findViewById(R.id.player_view);
-        player = new ExoPlayer.Builder(this).setTrackSelector(trackSelector).build();
+    }
+
+    private void initPlayer() {
+        if (player != null) return;
+
+        ExoTrackSelection.Factory videoTrackSelectionFactory =
+                new AdaptiveTrackSelection.Factory();
+        DefaultTrackSelector trackSelector =
+                new DefaultTrackSelector(this, videoTrackSelectionFactory);
+
+        player = new ExoPlayer.Builder(this)
+                .setTrackSelector(trackSelector)
+                .build();
         player.setPlayWhenReady(true);
         playerView.setPlayer(player);
 
-// DASH
-//    DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
-//        Util.getUserAgent(<context>, "ExoPlayer"));
-//    DefaultDashChunkSource.Factory chunkSourceFactory = new
-//        DefaultDashChunkSource.Factory(dataSourceFactory);
-//
-//    MediaSource mediaSource = new DashMediaSource(Uri.parse(<dash url>),
-//        dataSourceFactory, chunkSourceFactory, null, null);
+        player.addListener(new Player.Listener() {
+            @Override
+            public void onPlayerError(PlaybackException error) {
+                // Try to reconnect on error
+                if (player != null && liveUrl != null && !liveUrl.isEmpty()) {
+                    player.setMediaSource(buildMediaSource());
+                    player.prepare();
+                }
+            }
+        });
 
-
-// HLS
-    DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(this,
-        new DefaultHttpDataSource.Factory().setUserAgent("ExoPlayer"));
-
-    MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory)
-        .createMediaSource(MediaItem.fromUri(Uri.parse(LiveUrl)));
-
-// MP4
-// Produces DataSource instances through which media data is loaded.
-//        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
-//        Util.getUserAgent(this, "ExoPlayer"));
-
-// Produces Extractor instances for parsing the media data.
-//        final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-
-// This is the MediaSource representing the media to be played.
-//        MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(
-//                "http://m.live.net.sa:1935/live/quran/chunklist_w1026992551.m3u8"),
-//                dataSourceFactory, extractorsFactory, null, null);
-
-        player.setMediaSource(mediaSource);
+        player.setMediaSource(buildMediaSource());
         player.prepare();
-        player.setPlayWhenReady(true);
+    }
 
-        /*playerView = findViewById(R.id.player_view);
+    private MediaSource buildMediaSource() {
+        DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(this,
+                new DefaultHttpDataSource.Factory().setUserAgent("MyStream"));
 
-        // Instantiate the player.
-//        ExoPlayer player = new ExoPlayer.Builder(this).build();
-        ExoPlayer player =
-                new ExoPlayer.Builder(this)
+        MediaItem mediaItem = MediaItem.fromUri(Uri.parse(liveUrl));
 
-                        .build();
-// Attach player to the view.
-        playerView.setPlayer(player);
-        MediaItem mediaItem =
-                new MediaItem.Builder()
-                        .setUri(LiveUrl)
+        if (liveUrl.contains(".m3u8")) {
+            return new HlsMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(mediaItem);
+        } else {
+            return new ProgressiveMediaSource.Factory(dataSourceFactory)
+                    .createMediaSource(mediaItem);
+        }
+    }
 
-                        .build();
-// Set the media item to be played.
-        player.setMediaItem(mediaItem);
-// Prepare the player.
-        player.prepare();*/
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initPlayer();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (player == null) {
+            initPlayer();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        playerView.getPlayer().release();
+        if (player != null) {
+            player.setPlayWhenReady(false);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releasePlayer();
+    }
+
+    private void releasePlayer() {
+        if (player != null) {
+            player.release();
+            player = null;
+        }
+        if (playerView != null) {
+            playerView.setPlayer(null);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

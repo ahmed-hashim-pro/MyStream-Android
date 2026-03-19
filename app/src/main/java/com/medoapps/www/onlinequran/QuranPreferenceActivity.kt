@@ -3,8 +3,8 @@ package com.medoapps.www.onlinequran
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import com.medoapps.www.onlinequran.R
+import androidx.core.content.ContextCompat
+import com.google.android.material.appbar.MaterialToolbar
 import com.medoapps.www.onlinequran.ui.fragment.QuranSettingsFragment
 import com.medoapps.www.onlinequran.util.AudioManagerUtils
 
@@ -15,7 +15,10 @@ class QuranPreferenceActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.preferences)
 
-    val toolbar = findViewById<Toolbar>(R.id.toolbar)
+    window.statusBarColor = ContextCompat.getColor(this, R.color.background_main)
+    window.navigationBarColor = ContextCompat.getColor(this, R.color.background_main)
+
+    val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
     toolbar.setTitle(R.string.menu_settings)
     setSupportActionBar(toolbar)
     val ab = supportActionBar

@@ -1035,10 +1035,12 @@ public class RecitesName extends Fragment  {
                     holder.cardContent.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            RecitesName = temp.ServerName;
-                            Rewayat = temp.Rewayat;
-                            RealRecitesName = temp.RealName;
-                            // String welcomes = listrecitesitem.ServerName;
+                            int adapterPos = holder.getAdapterPosition();
+                            if (adapterPos == RecyclerView.NO_POSITION) return;
+                            AuthorClass clicked = (AuthorClass) listrecitesLocalobject.get(adapterPos);
+                            RecitesName = clicked.ServerName;
+                            Rewayat = clicked.Rewayat;
+                            RealRecitesName = clicked.RealName;
                             SharedView = holder.txtRecitesName;
                             DisplayAya();
                         }
@@ -1961,12 +1963,18 @@ public class RecitesName extends Fragment  {
         for (int i = 0; i < bookmarks.length(); i++) {
             try {
                 JSONObject obj = bookmarks.getJSONObject(i);
-                int ayaIndex = Integer.parseInt(obj.optString("aya", "0"));
-                String surah = lc.getSurahNameByIndex(ayaIndex);
-                String reciter = lc.getReciterDisplayName(obj.optString("recite", ""));
-                if (surah.isEmpty()) surah = obj.optString("surahTitle", "");
-                if (reciter.equals(obj.optString("recite", ""))) reciter = obj.optString("realName", "");
-                items[i] = surah + " — " + reciter;
+                if (obj.optBoolean("isRadio", false)) {
+                    String reciter = lc.getReciterDisplayName(obj.optString("recite", ""));
+                    if (reciter.equals(obj.optString("recite", ""))) reciter = obj.optString("realName", "");
+                    items[i] = reciter;
+                } else {
+                    int ayaIndex = Integer.parseInt(obj.optString("aya", "0"));
+                    String surah = lc.getSurahNameByIndex(ayaIndex);
+                    String reciter = lc.getReciterDisplayName(obj.optString("recite", ""));
+                    if (surah.isEmpty()) surah = obj.optString("surahTitle", "");
+                    if (reciter.equals(obj.optString("recite", ""))) reciter = obj.optString("realName", "");
+                    items[i] = surah + " — " + reciter;
+                }
             } catch (Exception e) {
                 items[i] = "Bookmark " + (i + 1);
             }
@@ -1986,7 +1994,7 @@ public class RecitesName extends Fragment  {
                     intent.putExtra("RecitesAYA", obj.optString("aya"));
                     intent.putExtra("Rewayat", obj.optString("rewayat"));
                     intent.putExtra("RealRecitesName", reciterName);
-                    intent.putExtra("IsRadio", false);
+                    intent.putExtra("IsRadio", obj.optBoolean("isRadio", false));
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();

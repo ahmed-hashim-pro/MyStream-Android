@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingTop="24dp"
+    android:paddingBottom="12dp"
+    android:paddingHorizontal="16dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <TextView
+        android:id="@+id/tv_hisn_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/gold_accent"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:gravity="center_vertical|start" />
+
+    <ImageView
+        android:id="@+id/iv_hisn_expand_arrow"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@android:drawable/arrow_up_float"
+        android:contentDescription="expand"
+        android:layout_marginStart="8dp" />
+
+</LinearLayout>

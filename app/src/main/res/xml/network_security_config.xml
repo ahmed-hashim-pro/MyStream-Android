@@ -6,6 +6,10 @@
     <domain includeSubdomains="true">server16.mp3quran.net</domain>
     <domain includeSubdomains="true">quran.com</domain>
     <domain includeSubdomains="true">quranicaudio.com</domain>
+    <domain includeSubdomains="true">live.net.sa</domain>
+    <domain includeSubdomains="true">m.live.net.sa</domain>
+    <domain includeSubdomains="true">stream.radiojar.com</domain>
+    <domain includeSubdomains="true">Ede-a-46.dfrn.ch</domain>
   </domain-config>
   <base-config cleartextTrafficPermitted="false"/>
 

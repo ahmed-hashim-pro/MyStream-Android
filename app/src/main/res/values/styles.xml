@@ -132,8 +132,39 @@
         <item name="android:navigationBarColor">@color/background_splash</item>
     </style>
     <style name="AppTheme.Settings" parent="AppTheme.NoActionBar">
+        <item name="android:statusBarColor">@color/background_main</item>
+        <item name="android:navigationBarColor">@color/background_main</item>
         <item name="android:windowEnterTransition">@transition/activity_slide</item>
         <item name="android:windowExitTransition">@transition/activity_fade</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.MyStream</item>
+    </style>
+
+    <!-- ============================================================ -->
+    <!-- Settings / Preference styles                                 -->
+    <!-- ============================================================ -->
+    <style name="SettingsToolbarTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="PreferenceThemeOverlay.MyStream" parent="PreferenceThemeOverlay">
+        <item name="preferenceCategoryStyle">@style/Preference.Category.MyStream</item>
+        <item name="switchPreferenceCompatStyle">@style/Preference.Switch.MyStream</item>
+        <item name="preferenceStyle">@style/Preference.MyStream</item>
+    </style>
+
+    <style name="Preference.Category.MyStream" parent="Preference.Category">
+        <item name="android:textColor">@color/gold_accent</item>
+        <item name="android:textStyle">bold</item>
+        <item name="allowDividerAbove">true</item>
+    </style>
+
+    <style name="Preference.Switch.MyStream" parent="Preference.SwitchPreferenceCompat">
+        <item name="android:widgetLayout">@layout/preference_switch_widget</item>
+    </style>
+
+    <style name="Preference.MyStream" parent="Preference">
     </style>
     <style name="AppTheme.QuranMediaPlayer" parent="AppTheme.NoActionBar">
         <item name="android:statusBarColor">@color/color_status_bar</item>

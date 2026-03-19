@@ -1,218 +1,234 @@
 package com.medoapps.www.onlinequran;
 
-import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.cardview.widget.CardView;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.medoapps.www.onlinequran.service.AuthService;
 import com.medoapps.www.onlinequran.util.AppBottomSheet;
 import com.medoapps.www.onlinequran.util.SeparateFunctions;
 
-import java.util.ArrayList;
-
-//import com.google.android.gms.ads.InterstitialAd;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Settings extends AppCompatActivity {
-
-
-    private static final int REQUEST_INVITE = 0;
-    //private InterstitialAd mInterstitialAd;
-    private static final String TAG = "Sellings";
     private AdView mAdView;
-    private ImageButton backBTN;
-    ArrayList<SettingItem> fullsongpath =new ArrayList<SettingItem>();
-    SeparateFunctions separateFunctions ;
-    AuthService authService;
+    private SeparateFunctions separateFunctions;
+    private AuthService authService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        authService = new AuthService(Settings.this);
-
-       /* // load native ad
-        NativeExpressAdView adView = (NativeExpressAdView)findViewById(R.id.adView3);
-        AdRequest request = new AdRequest.Builder().build();
-        adView.loadAd(request);*/
-
+        setContentView(R.layout.activity_settings_new);
+        authService = new AuthService(this);
         separateFunctions = new SeparateFunctions(this);
-        //load full screan ad
-        /*if (mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        } else {
-            Log.d("TAG", "The interstitial wasn't loaded yet.");
-        }*/
 
-        //load banner Ad
         loadBannerAd();
 
-        backBTN = (ImageButton) findViewById(R.id.backBTN);
-        backBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        fullsongpath.add(new SettingItem(getResources().getString(R.string.separeteapp), R.drawable.outline_share_24_settings));
+        // Toolbar back button
+        findViewById(R.id.backBTN).setOnClickListener(v -> finish());
 
-        fullsongpath.add(new SettingItem(getResources().getString(R.string.rateapp), R.drawable.outline_rate_review_24));
-//intiixae items
-        fullsongpath.add(new SettingItem(getResources().getString(R.string.ListLanguages), R.drawable.outline_translate_24));
-        fullsongpath.add(new SettingItem(getResources().getString(R.string.StartupSound), R.drawable.outline_music_note_24));
-        fullsongpath.add(new SettingItem(getResources().getString(R.string.TitlesAnimation), R.drawable.animation_icon_48px));
-        fullsongpath.add(new SettingItem(getResources().getString(R.string.DarkMode), R.drawable.outline_dark_mode_24));
-        fullsongpath.add(new SettingItem(getResources().getString(R.string.facebook), R.drawable.facebook));
-        fullsongpath.add(new SettingItem(getResources().getString(R.string.website), R.drawable.round_public_24));
-        fullsongpath.add(new SettingItem(getResources().getString(R.string.downloads), R.drawable.outline_file_download_24));
-        fullsongpath.add(new SettingItem(getResources().getString(R.string.set_time), R.drawable.round_add_alert_24));
-        fullsongpath.add(new SettingItem(getResources().getString(R.string.last_history),R.drawable.ic_bookmark_border_black_pressed_24dp));
-
-
-
-        fullsongpath.add(new SettingItem(getResources().getString(R.string.zekr),R.drawable.zekr));
-        fullsongpath.add(new SettingItem(getResources().getString(R.string.about),R.drawable.round_info_24));
-        if (!authService.isAnonymousSignIn()){
-
-            fullsongpath.add(new SettingItem(getResources().getString(R.string.sign_out),R.drawable.round_logout_24));
-        }
-
-
-
-        ListView ls=( ListView) findViewById(R.id.listView);
-        ls.setAdapter(new MyCustomAdapter());
-        ls.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                try {
-
-
-                    switch (position) {
-
-                        case 0:
-                        {
-
-                            new SeparateFunctions(getApplicationContext()).generateAppShareLink(Settings.this);
-//                            SeparateFunctions func = new SeparateFunctions(Settings.this);
-//                            func.onShareBy();
-                        } break;
-
-                        case 1:
-                        {
-
-                            SeparateFunctions separateFunctions = new SeparateFunctions(Settings.this);
-                            separateFunctions.openRationgIntent();
-
-                        }
-                        break;
-                        case 5:
-                        {
-
-                            Intent down = new Intent(Settings.this, ThemesActivity.class);
-                            startActivity(down);
-
-                        }
-                        break;
-                        case 6:
-                        {
-
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/mystream.info"));
-                            startActivity(browserIntent);
-
-                        }
-                        break;
-
-                        case 7:
-                        {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://geohashim.com"));
-                            startActivity(browserIntent);
-
-                        }
-                        break;
-                        case 8:
-                        {
-                            Toast.makeText(getApplication(), getString(R.string.not_available), Toast.LENGTH_SHORT).show();
-                            /*Intent down = new Intent(Settings.this, Downloads.class);
-                            startActivity(down);*/
-                        }break;
-                        case 9:
-                        {
-                            Intent down = new Intent(Settings.this, TimePicker.class);
-                            startActivity(down);
-                        }break;
-
-                        case 10:
-                        {
-                            showBookmarkListDialog();
-                        }break;
-                        case 11: {
-                            Intent newpage = new Intent(Settings.this, RewardVideo.class);
-                            startActivity(newpage);
-
-
-                        }break;
-                        case 12: {
-                            Intent newpage = new Intent(Settings.this, AboutApp.class);
-                            startActivity(newpage);
-                        }break;
-                        case 13: {
-                            separateFunctions.showNewCustomDialog(getString(R.string.notifyLohOut),getString(R.string.abortLogOut),getString(R.string.sign_out),getString(android.R.string.no),logOutRunnable,android.R.drawable.ic_dialog_alert);
-
-
-                        }break;
-
-
-
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        setupGeneralSection();
+        setupNotificationsSection();
+        setupDataSection();
+        setupAboutSection();
+        setupSignOut();
+        setupVersion();
     }
 
+    // ── General Section ──
+
+    private void setupGeneralSection() {
+        SettingSaved settings = new SettingSaved(getApplication());
+        settings.LoadData();
+
+        // Language switch
+        View langItem = findViewById(R.id.item_language);
+        ((ImageView) langItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.outline_translate_24);
+        ((TextView) langItem.findViewById(R.id.title)).setText(R.string.ListLanguages);
+        setSubtitle(langItem, R.id.subtitle, getString(R.string.settings_subtitle_language));
+        SwitchCompat langSwitch = langItem.findViewById(R.id.switch1);
+        langSwitch.setChecked(settings.LanguageSelect == 1);
+        langSwitch.setOnCheckedChangeListener((btn, checked) -> {
+            settings.LanguageSelect = checked ? 1 : 2;
+            settings.SaveData();
+            Toast.makeText(this, R.string.language_take_effect, Toast.LENGTH_SHORT).show();
+        });
+
+        // Startup Sound switch
+        View soundItem = findViewById(R.id.item_startup_sound);
+        ((ImageView) soundItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.outline_music_note_24);
+        ((TextView) soundItem.findViewById(R.id.title)).setText(R.string.StartupSound);
+        SwitchCompat soundSwitch = soundItem.findViewById(R.id.switch1);
+        soundSwitch.setChecked(settings.StartupSound == 1);
+        soundSwitch.setOnCheckedChangeListener((btn, checked) -> {
+            settings.StartupSound = checked ? 1 : 2;
+            settings.SaveData();
+        });
+
+        // Animation switch
+        View animItem = findViewById(R.id.item_animation);
+        ((ImageView) animItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.animation_icon_48px);
+        ((TextView) animItem.findViewById(R.id.title)).setText(R.string.TitlesAnimation);
+        SwitchCompat animSwitch = animItem.findViewById(R.id.switch1);
+        animSwitch.setChecked(settings.titlesTextAnimate);
+        animSwitch.setOnCheckedChangeListener((btn, checked) -> {
+            settings.titlesTextAnimate = checked;
+            settings.SaveData();
+        });
+
+        // Dark Mode
+        View darkItem = findViewById(R.id.item_dark_mode);
+        ((ImageView) darkItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.outline_dark_mode_24);
+        ((TextView) darkItem.findViewById(R.id.textView)).setText(R.string.DarkMode);
+        setSubtitle(darkItem, R.id.subtitle, getString(R.string.settings_subtitle_dark_mode));
+        darkItem.findViewById(R.id.arrow).setVisibility(View.VISIBLE);
+        darkItem.setOnClickListener(v -> startActivity(new Intent(this, ThemesActivity.class)));
+    }
+
+    // ── Notifications Section ──
+
+    private void setupNotificationsSection() {
+        // Prayer Times Alarm
+        View prayerItem = findViewById(R.id.item_prayer_alarm);
+        ((ImageView) prayerItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.round_add_alert_24);
+        ((TextView) prayerItem.findViewById(R.id.textView)).setText(R.string.set_time);
+        setSubtitle(prayerItem, R.id.subtitle, getString(R.string.settings_subtitle_prayer_alarm));
+        prayerItem.findViewById(R.id.arrow).setVisibility(View.VISIBLE);
+        prayerItem.setOnClickListener(v -> startActivity(new Intent(this, TimePicker.class)));
+
+        // Notification Settings page
+        View notifItem = findViewById(R.id.item_notification_settings);
+        ((ImageView) notifItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.round_add_alert_20);
+        ((TextView) notifItem.findViewById(R.id.textView)).setText(R.string.notification_settings);
+        setSubtitle(notifItem, R.id.subtitle, getString(R.string.settings_subtitle_notifications));
+        notifItem.findViewById(R.id.arrow).setVisibility(View.VISIBLE);
+        notifItem.setOnClickListener(v -> startActivity(new Intent(this, NotificationSettingsActivity.class)));
+    }
+
+    // ── Data Section ──
+
+    private void setupDataSection() {
+        // Downloads
+        View dlItem = findViewById(R.id.item_downloads);
+        ((ImageView) dlItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.outline_file_download_24);
+        ((TextView) dlItem.findViewById(R.id.textView)).setText(R.string.downloads);
+        setSubtitle(dlItem, R.id.subtitle, getString(R.string.settings_subtitle_downloads));
+        dlItem.findViewById(R.id.arrow).setVisibility(View.VISIBLE);
+        dlItem.setOnClickListener(v ->
+                Toast.makeText(this, R.string.not_available, Toast.LENGTH_SHORT).show());
+
+        // Bookmarks
+        View bmItem = findViewById(R.id.item_bookmarks);
+        ((ImageView) bmItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.ic_bookmark_border_black_pressed_24dp);
+        ((TextView) bmItem.findViewById(R.id.textView)).setText(R.string.last_history);
+        setSubtitle(bmItem, R.id.subtitle, getString(R.string.settings_subtitle_bookmarks));
+        bmItem.findViewById(R.id.arrow).setVisibility(View.VISIBLE);
+        bmItem.setOnClickListener(v -> showBookmarkListDialog());
+    }
+
+    // ── About Section ──
+
+    private void setupAboutSection() {
+        // Share
+        View shareItem = findViewById(R.id.item_share);
+        ((ImageView) shareItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.outline_share_24_settings);
+        ((TextView) shareItem.findViewById(R.id.textView)).setText(R.string.separeteapp);
+        shareItem.setOnClickListener(v ->
+                new SeparateFunctions(getApplicationContext()).generateAppShareLink(this));
+
+        // Rate
+        View rateItem = findViewById(R.id.item_rate);
+        ((ImageView) rateItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.outline_rate_review_24);
+        ((TextView) rateItem.findViewById(R.id.textView)).setText(R.string.rateapp);
+        rateItem.setOnClickListener(v ->
+                new SeparateFunctions(this).openRationgIntent());
+
+        // Facebook
+        View fbItem = findViewById(R.id.item_facebook);
+        ((ImageView) fbItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.facebook);
+        ((TextView) fbItem.findViewById(R.id.textView)).setText(R.string.facebook);
+        fbItem.setOnClickListener(v ->
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/mystream.info"))));
+
+        // Website
+        View webItem = findViewById(R.id.item_website);
+        ((ImageView) webItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.round_public_24);
+        ((TextView) webItem.findViewById(R.id.textView)).setText(R.string.website);
+        webItem.setOnClickListener(v ->
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://geohashim.com"))));
+
+        // About
+        View aboutItem = findViewById(R.id.item_about);
+        ((ImageView) aboutItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.round_info_24);
+        ((TextView) aboutItem.findViewById(R.id.textView)).setText(R.string.about);
+        aboutItem.findViewById(R.id.arrow).setVisibility(View.VISIBLE);
+        aboutItem.setOnClickListener(v ->
+                startActivity(new Intent(this, AboutApp.class)));
+    }
+
+    // ── Version ──
+
+    private void setupVersion() {
+        TextView versionText = findViewById(R.id.versionText);
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionText.setText(getString(R.string.app_name) + " v" + pInfo.versionName);
+        } catch (Exception e) {
+            versionText.setVisibility(View.GONE);
+        }
+    }
+
+    private void setSubtitle(View item, int subtitleId, String text) {
+        TextView subtitle = item.findViewById(subtitleId);
+        if (text != null && !text.isEmpty()) {
+            subtitle.setText(text);
+            subtitle.setVisibility(View.VISIBLE);
+        }
+    }
+
+    // ── Sign Out ──
+
+    private void setupSignOut() {
+        if (!authService.isAnonymousSignIn()) {
+            CardView card = findViewById(R.id.card_sign_out);
+            card.setVisibility(View.VISIBLE);
+            findViewById(R.id.item_sign_out).setOnClickListener(v ->
+                    separateFunctions.showNewCustomDialog(
+                            getString(R.string.notifyLohOut),
+                            getString(R.string.abortLogOut),
+                            getString(R.string.sign_out),
+                            getString(android.R.string.no),
+                            logOutRunnable,
+                            android.R.drawable.ic_dialog_alert));
+        }
+    }
+
+    // ── Ad ──
+
     private void loadBannerAd() {
-        mAdView = (AdView) findViewById(R.id.adView);
+        mAdView = findViewById(R.id.adView);
         mAdView.setVisibility(View.GONE);
-        if (SettingSaved.isSubscribedPremium)
-            return;
+        if (SettingSaved.isSubscribedPremium) return;
 
-
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        mAdView.loadAd(new AdRequest.Builder().build());
         mAdView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
@@ -222,39 +238,83 @@ public class Settings extends AppCompatActivity {
         });
     }
 
-    private void generateAppShareLink(){
-        Uri imageUri = Uri.parse(getString(R.string.dynamicLinkShareImage));
+    // ── Bookmarks Dialog ──
 
-        SeparateFunctions separateFunctions = new SeparateFunctions(Settings.this);
-        separateFunctions.createDynamicLink(Settings.this,"welcome",getString(R.string.app_name),getString(R.string.sharemessage),imageUri).addOnCompleteListener(Settings.this, new OnCompleteListener<ShortDynamicLink>() {
-            @Override
-            public void onComplete(@NonNull com.google.android.gms.tasks.Task<ShortDynamicLink> task) {
-                if (task.isSuccessful()) {
-                    // Short link created
-                    Uri shortLink = task.getResult().getShortLink();
-
-
-                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                    sharingIntent.setType("text/plain");
-                    String shareBody = getString(R.string.sharemessage) +"  "+ shortLink;
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "My Stream");
-                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-                    startActivity(Intent.createChooser(sharingIntent, "Share via"));
-
-
-                } else {
-                    Log.d(TAG, "createDynamicLink 2: " +task);
-                    // Error
-                }
-            }});
-    }
-    Runnable logOutRunnable = new Runnable() {
-        @Override
-        public void run() {
-            logOut();
+    private void showBookmarkListDialog() {
+        final JSONArray bookmarks = SettingSaved.getBookmarks();
+        if (bookmarks.length() == 0) {
+            Toast.makeText(this, R.string.nohistory, Toast.LENGTH_SHORT).show();
+            return;
         }
-    };
-    private void logOut(){
+
+        LnaguageClass lc = new LnaguageClass(this, this);
+        String[] items = new String[bookmarks.length()];
+        for (int i = 0; i < bookmarks.length(); i++) {
+            try {
+                JSONObject obj = bookmarks.getJSONObject(i);
+                if (obj.optBoolean("isRadio", false)) {
+                    String reciter = lc.getReciterDisplayName(obj.optString("recite", ""));
+                    if (reciter.equals(obj.optString("recite", ""))) reciter = obj.optString("realName", "");
+                    items[i] = reciter;
+                } else {
+                    int ayaIndex = Integer.parseInt(obj.optString("aya", "0"));
+                    String surah = lc.getSurahNameByIndex(ayaIndex);
+                    String reciter = lc.getReciterDisplayName(obj.optString("recite", ""));
+                    if (surah.isEmpty()) surah = obj.optString("surahTitle", "");
+                    if (reciter.equals(obj.optString("recite", ""))) reciter = obj.optString("realName", "");
+                    items[i] = surah + " — " + reciter;
+                }
+            } catch (Exception e) {
+                items[i] = "Bookmark " + (i + 1);
+            }
+        }
+
+        AppBottomSheet.showList(this,
+                getString(R.string.select_bookmark),
+                items,
+                (position) -> {
+                    try {
+                        JSONObject obj = bookmarks.getJSONObject(position);
+                        LnaguageClass lc2 = new LnaguageClass(this, this);
+                        String reciterName = lc2.getReciterDisplayName(obj.optString("recite", ""));
+                        if (reciterName.equals(obj.optString("recite", "")))
+                            reciterName = obj.optString("realName", "");
+                        Intent intent = new Intent(this, NewQuranPlayer.class);
+                        intent.putExtra("RecitesName", obj.optString("recite"));
+                        intent.putExtra("RecitesAYA", obj.optString("aya"));
+                        intent.putExtra("Rewayat", obj.optString("rewayat"));
+                        intent.putExtra("RealRecitesName", reciterName);
+                        intent.putExtra("IsRadio", obj.optBoolean("isRadio", false));
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                },
+                (position) -> {
+                    AppBottomSheet.showConfirmation(this,
+                            "",
+                            getString(R.string.delete_bookmark_confirm),
+                            getString(android.R.string.yes),
+                            getString(android.R.string.no),
+                            () -> {
+                                try {
+                                    JSONObject obj = bookmarks.getJSONObject(position);
+                                    SettingSaved.removeBookmark(getApplicationContext(),
+                                            obj.optString("recite"), obj.optString("aya"));
+                                    Toast.makeText(this, R.string.bookmark_removed, Toast.LENGTH_SHORT).show();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }, null);
+                    return true;
+                });
+    }
+
+    // ── Log Out ──
+
+    private final Runnable logOutRunnable = this::logOut;
+
+    private void logOut() {
         FirebaseAuth.getInstance().signOut();
         if (MainActivity.instance8Ref != null && MainActivity.instance8Ref.get() != null) {
             MainActivity.instance8Ref.get().finish();
@@ -264,11 +324,11 @@ public class Settings extends AppCompatActivity {
         storageUtil.storeProfileCompleted(false);
         closeMediaService();
         storageUtil.clearCacheYoutubeVideoslist();
-        Intent down = new Intent(Settings.this, SignInActivity.class);
-        startActivity(down);
+        startActivity(new Intent(this, SignInActivity.class));
     }
-    private void closeMediaService(){
-        new StorageUtil(Settings.this).clearCachedAudioPlaylist();
+
+    private void closeMediaService() {
+        new StorageUtil(this).clearCachedAudioPlaylist();
         Intent playerIntent = new Intent(this, MediaPlayerService.class);
         bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
@@ -283,264 +343,15 @@ public class Settings extends AppCompatActivity {
         }
     }
 
-    //Binding this Client to the AudioPlayer Service
-    private ServiceConnection serviceConnection = new ServiceConnection() {
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
             MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
             binder.destroyFromOutside();
-
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            //Toast.makeText(getApplicationContext(), "onServiceDisconnected", Toast.LENGTH_SHORT).show();
         }
     };
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_managerdb, menu);
-//        menu.getItem(0).
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.gbackmenu) { // stoped
-            // Intent intent=new Intent(this,MainActivity.class);
-            //startActivity(intent);
-            //load full screan ad
-
-            this.finish();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    // adapter for song list
-    private class MyCustomAdapter extends BaseAdapter {
-
-
-        public MyCustomAdapter() {
-
-        }
-
-
-        @Override
-        public int getCount() {
-            return fullsongpath.size();
-        }
-
-        @Override
-        public String getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater mInflater = getLayoutInflater();
-
-            final SettingItem s = fullsongpath.get(position);
-
-            if((position==2) ){
-
-                SettingSaved settings = new SettingSaved(getApplication());
-                settings.LoadData();
-                View myView = mInflater.inflate(R.layout.setting_item_alert, null);
-                SettingItem item = fullsongpath.get(position);
-
-                final Switch swNotify=(Switch)myView.findViewById(R.id.switch1);
-                final ImageView imgchannel=(ImageView)myView.findViewById(R.id.imgchannel);
-
-                imgchannel.setImageDrawable(ContextCompat.getDrawable(Settings.this, item.ImageURL));
-
-                swNotify.setChecked( settings.LanguageSelect==1?true:false);
-                swNotify.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        settings.LanguageSelect = isChecked == true ? 1 : 2;
-                        settings.SaveData();
-
-                        Toast.makeText(Settings.this, getString(R.string.language_take_effect), Toast.LENGTH_SHORT).show();
-                        /*LnaguageClass lc = new LnaguageClass(Sellings.this);
-                        lc.setAppLocale(isChecked == true?"ar":"en-US");*/
-
-
-                    }
-                });
-                return myView;
-            }else if((position==3) ){
-
-                SettingItem item = fullsongpath.get(position);
-                SettingSaved settings = new SettingSaved(getApplication());
-                settings.LoadData();
-                View myView = mInflater.inflate(R.layout.setting_item_alert, null);
-                final Switch swNotify=(Switch)myView.findViewById(R.id.switch1);
-                final TextView title=(TextView)myView.findViewById(R.id.title);
-                final ImageView imgchannel=(ImageView)myView.findViewById(R.id.imgchannel);
-
-                imgchannel.setImageDrawable(ContextCompat.getDrawable(Settings.this, R.drawable.outline_music_note_24));
-
-                title.setText(item.Name);
-                swNotify.setTextOn("");
-                swNotify.setTextOff("");
-                swNotify.setChecked( settings.StartupSound==1?true:false);
-                swNotify.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        settings.StartupSound = isChecked == true ? 1 : 2;
-                        settings.SaveData();
-//                        Toast.makeText(Settings.this, getString(R.string.language_take_effect), Toast.LENGTH_SHORT).show();
-                    }
-                });
-                return myView;
-            }else if((position==4) ){
-
-                SettingItem item = fullsongpath.get(position);
-                SettingSaved settings = new SettingSaved(getApplication());
-                settings.LoadData();
-                View myView = mInflater.inflate(R.layout.setting_item_alert, null);
-                final Switch swNotify=(Switch)myView.findViewById(R.id.switch1);
-                final TextView title=(TextView)myView.findViewById(R.id.title);
-                final ImageView imgchannel=(ImageView)myView.findViewById(R.id.imgchannel);
-
-                imgchannel.setImageDrawable(ContextCompat.getDrawable(Settings.this, R.drawable.animation_icon_48px));
-
-                title.setText(item.Name);
-                swNotify.setTextOn("");
-                swNotify.setTextOff("");
-                swNotify.setChecked( settings.titlesTextAnimate);
-                swNotify.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        settings.titlesTextAnimate = isChecked ;
-                        settings.SaveData();
-                    }
-                });
-                return myView;
-            }
-
-            else
-            {
-                View myView = mInflater.inflate(R.layout.settingitem, null);
-                TextView textView = (TextView) myView.findViewById(R.id.textView);
-                textView.setText(s.Name);
-                ImageView img=(ImageView)myView.findViewById(R.id.imgchannel);
-                img.setImageResource(s.ImageURL);
-                return myView;}
-        }
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
-
-        if (requestCode == REQUEST_INVITE) {
-            if (resultCode == RESULT_OK) {
-                // Get the invitation IDs of all sent messages
-                /*String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
-                for (String id : ids) {
-                    Log.d(TAG, "onActivityResult: sent invitation " + id);
-                }*/
-            } else {
-                Toast.makeText(this, "can not share app", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    public void loadad(){
-
-        /*mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getString(R.string.Pop_ad_unit_id));
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                // Load the next interstitial.
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-            }
-
-        });
-*/
-
-    }
-
-    private void showBookmarkListDialog() {
-        final JSONArray bookmarks = SettingSaved.getBookmarks();
-        if (bookmarks.length() == 0) {
-            Toast.makeText(Settings.this, getString(R.string.nohistory), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        LnaguageClass lc = new LnaguageClass(this, this);
-        String[] items = new String[bookmarks.length()];
-        for (int i = 0; i < bookmarks.length(); i++) {
-            try {
-                JSONObject obj = bookmarks.getJSONObject(i);
-                int ayaIndex = Integer.parseInt(obj.optString("aya", "0"));
-                String surah = lc.getSurahNameByIndex(ayaIndex);
-                String reciter = lc.getReciterDisplayName(obj.optString("recite", ""));
-                if (surah.isEmpty()) surah = obj.optString("surahTitle", "");
-                if (reciter.equals(obj.optString("recite", ""))) reciter = obj.optString("realName", "");
-                items[i] = surah + " — " + reciter;
-            } catch (Exception e) {
-                items[i] = "Bookmark " + (i + 1);
-            }
-        }
-
-        AppBottomSheet.showList(Settings.this,
-            getString(R.string.select_bookmark),
-            items,
-            (position) -> {
-                try {
-                    JSONObject obj = bookmarks.getJSONObject(position);
-                    LnaguageClass lc2 = new LnaguageClass(Settings.this, Settings.this);
-                    String reciterName = lc2.getReciterDisplayName(obj.optString("recite", ""));
-                    if (reciterName.equals(obj.optString("recite", ""))) reciterName = obj.optString("realName", "");
-                    Intent intent = new Intent(Settings.this, NewQuranPlayer.class);
-                    intent.putExtra("RecitesName", obj.optString("recite"));
-                    intent.putExtra("RecitesAYA", obj.optString("aya"));
-                    intent.putExtra("Rewayat", obj.optString("rewayat"));
-                    intent.putExtra("RealRecitesName", reciterName);
-                    intent.putExtra("IsRadio", false);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            },
-            (position) -> {
-                AppBottomSheet.showConfirmation(Settings.this,
-                    "",
-                    getString(R.string.delete_bookmark_confirm),
-                    getString(android.R.string.yes),
-                    getString(android.R.string.no),
-                    () -> {
-                        try {
-                            JSONObject obj = bookmarks.getJSONObject(position);
-                            SettingSaved.removeBookmark(getApplicationContext(),
-                                obj.optString("recite"), obj.optString("aya"));
-                            Toast.makeText(Settings.this, R.string.bookmark_removed, Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }, null);
-                return true;
-            });
-    }
 }

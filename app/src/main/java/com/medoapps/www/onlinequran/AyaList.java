@@ -1080,7 +1080,7 @@ public class AyaList extends AppCompatActivity {
 
 
 
-        createReport(null);
+        new Thread(() -> createReport(null)).start();
     }
 
     private void createReport(String shareUrl){

@@ -2,7 +2,9 @@ package com.medoapps.www.onlinequran.ui.fragment
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceGroup
@@ -59,6 +61,24 @@ class QuranSettingsFragment : PreferenceFragmentCompat(),
     extraPreferences
       .sortedBy { it.order }
       .forEach { it.addPreferences(preferenceScreen) }
+
+    // tint all preference icons with gold accent
+    tintPreferenceIcons(preferenceScreen)
+  }
+
+  private fun tintPreferenceIcons(preferenceGroup: PreferenceGroup) {
+    val tintColor = ContextCompat.getColor(requireContext(), R.color.gold_accent)
+    val tintList = ColorStateList.valueOf(tintColor)
+    for (i in 0 until preferenceGroup.preferenceCount) {
+      val preference = preferenceGroup.getPreference(i)
+      preference.icon?.let { icon ->
+        icon.setTintList(tintList)
+        preference.icon = icon
+      }
+      if (preference is PreferenceGroup) {
+        tintPreferenceIcons(preference)
+      }
+    }
   }
 
   override fun onResume() {

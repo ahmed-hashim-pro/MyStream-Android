@@ -1,0 +1,22 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Open hand giving -->
+    <path
+        android:fillColor="#D4A44C"
+        android:pathData="M12.6,2.4c-0.4,-0.2 -0.8,-0.2 -1.2,0L3,7.2V8c0,0.6 0.4,1 1,1h16c0.6,0 1,-0.4 1,-1V7.2L12.6,2.4zM12,4.5l5.5,3H6.5L12,4.5z"/>
+    <!-- Coins / money symbol -->
+    <path
+        android:fillColor="#D4A44C"
+        android:pathData="M5,10h2v7H5zM17,10h2v7h-2zM9,10h2v7H9zM13,10h2v7h-2z"/>
+    <!-- Base -->
+    <path
+        android:fillColor="#D4A44C"
+        android:pathData="M3,18h18v2H3z"/>
+    <!-- Giving hand arc -->
+    <path
+        android:fillColor="#D4A44C"
+        android:pathData="M12,12.5a1.5,1.5 0,1 0,0 -3a1.5,1.5 0,1 0,0 3z"/>
+</vector>

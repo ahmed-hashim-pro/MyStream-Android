@@ -47,7 +47,7 @@
     <string name="rateBtn">Rate</string>
     <string name="later">Later</string>
     <string name="facebook">Face Book</string>
-    <string name="website">Apps Coder Website</string>
+    <string name="website">geohashim.com</string>
 
 
     <string name="invitation_title">Send App Invite To Your Friends</string>
@@ -307,8 +307,8 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="dummy_button">Change Profile photo</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="about">About App</string>
-    <string name="aboutDescription">My Stream App\n This App Is proggrammed by \n
-        **Ahmed Hashim** \n belong to \n **APPS CODER For programming**\n
+    <string name="aboutDescription">My Stream App\n This App Is programmed by \n
+        **Ahmed Hashim** \n geohashim.com\n
       </string>
     <string name="aboutDescription2">Thank You for using my app</string>
 
@@ -363,6 +363,25 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="livestrem">live streaming</string>
     <string name="qurankaremchannel">قناة القرآن الكريم</string>
     <string name="alsunnaalnbweyachannel">قناة السنة النبوية</string>
+    <string name="makkah_live">بث مباشر - مكة المكرمة</string>
+    <string name="madinah_live">بث مباشر - المدينة المنورة</string>
+    <string name="quran_radio_live">إذاعة القرآن الكريم</string>
+    <string name="prayer_times">مواقيت الصلاة</string>
+    <string name="qibla_finder">اتجاه القبلة</string>
+    <string name="morning_athkar">أذكار الصباح والمساء</string>
+    <string name="tasbih_counter">المسبحة الرقمية</string>
+    <string name="dua_collection">الأدعية</string>
+    <string name="reading_progress">سجل القراءة</string>
+    <string name="daily_ayah_notification_time">وقت إشعار آية اليوم</string>
+    <string name="daily_ayah_time_set">تم ضبط الإشعار على %02d:%02d</string>
+    <string name="morning_athkar_notification">تنبيه أذكار الصباح</string>
+    <string name="evening_athkar_notification">تنبيه أذكار المساء</string>
+    <string name="athkar_notification_set">تم ضبط التنبيه على %02d:%02d</string>
+    <string name="athkar_notification_cancelled">تم إلغاء التنبيه</string>
+    <string name="widget_daily_ayah_label">آية اليوم</string>
+    <string name="widget_daily_ayah_desc">عرض آية قرآنية يومية</string>
+    <string name="widget_prayer_times_label">مواقيت الصلاة</string>
+    <string name="widget_prayer_times_desc">عرض أوقات الصلاة القادمة</string>
     <string name="youtube">YouTube</string>
     <item name="player_view" type="id" />
 
@@ -914,5 +933,52 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="view_mode_list">عرض قائمة</string>
     <string name="view_mode_grid">عرض شبكي</string>
     <string name="view_mode_compact">عرض مضغوط</string>
+
+    <!-- New feature categories -->
+    <string name="asmaul_husna">أسماء الله الحسنى</string>
+    <string name="zakat_calculator">حاسبة الزكاة</string>
+    <string name="fasting_tracker">متتبع الصيام</string>
+    <string name="daily_hadith">حديث اليوم</string>
+    <string name="islamic_events">المناسبات الإسلامية</string>
+    <string name="hisn_al_muslim">حصن المسلم</string>
+    <string name="daily_hadith_notification_time">وقت إشعار حديث اليوم</string>
+    <string name="daily_hadith_time_set">تم ضبط إشعار الحديث على %02d:%02d</string>
+    <string name="asmaul_husna_notification">إشعار اسم الله اليوم</string>
+    <string name="asmaul_husna_notification_set">تم ضبط إشعار أسماء الله الحسنى على %02d:%02d</string>
+    <string name="fasting_reminder">تذكير السحور</string>
+    <string name="fasting_reminder_set">تم ضبط تذكير السحور على %02d:%02d</string>
+    <string name="hisn_notification">إشعار دعاء اليوم</string>
+    <string name="hisn_notification_set">تم ضبط إشعار الدعاء على %02d:%02d</string>
+    <string name="notification_time_set">تم ضبط الإشعار على %02d:%02d</string>
+    <string name="focus_mode">وضع التركيز</string>
+    <string name="focus_mode_on">تم تفعيل وضع التركيز</string>
+    <string name="focus_mode_off">تم إيقاف وضع التركيز</string>
+    <string name="notification_permission_denied">يرجى السماح بالإشعارات من إعدادات التطبيق</string>
+    <string name="settings_section_general">عام</string>
+    <string name="settings_section_notifications">الإشعارات</string>
+    <string name="settings_section_data">البيانات</string>
+    <string name="settings_section_about">حول التطبيق</string>
+    <string name="notification_settings">إعدادات الإشعارات</string>
+    <string name="notif_section_quran">القرآن الكريم</string>
+    <string name="notif_section_athkar">الأذكار والأدعية</string>
+    <string name="notif_section_daily">تذكيرات يومية</string>
+    <string name="notif_time_format">الوقت: %02d:%02d</string>
+    <string name="notif_not_set">غير مفعّل</string>
+    <string name="settings_subtitle_language">تغيير لغة قوائم القراء</string>
+    <string name="settings_subtitle_dark_mode">تخصيص مظهر التطبيق</string>
+    <string name="settings_subtitle_notifications">آية اليوم، أذكار، حديث، وأكثر</string>
+    <string name="settings_subtitle_prayer_alarm">ضبط منبه الصلاة</string>
+    <string name="settings_subtitle_downloads">إدارة التحميلات</string>
+    <string name="settings_subtitle_bookmarks">المفضلة المحفوظة</string>
+
+    <!-- Themes page -->
+    <string name="theme_status_system">سيتبع وضع النظام تلقائياً</string>
+    <string name="theme_status_dark">الوضع الداكن مفعّل</string>
+    <string name="theme_status_light">الوضع الفاتح مفعّل</string>
+
+    <!-- Reminder page -->
+    <string name="reminder_status_active">المنبه مفعّل — الساعة %d:%02d</string>
+    <string name="reminder_status_select_time">اختر وقت التذكير</string>
+    <string name="reminder_status_off">المنبه غير مفعّل</string>
 
 </resources>

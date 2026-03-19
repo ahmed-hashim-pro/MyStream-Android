@@ -442,6 +442,11 @@ public  class  MainActivity extends BaseActivity {
         userImage = findViewById(R.id.user_photo);
         crown_photo = findViewById(R.id.crown_photo);
         userName = findViewById(R.id.User_name);
+        // Show Hijri date in toolbar
+        TextView tvHijriMain = findViewById(R.id.tv_hijri_date_main);
+        if (tvHijriMain != null) {
+            tvHijriMain.setText(IslamicEventsActivity.getTodayHijriString());
+        }
         adminPostPhoto = findViewById(R.id.admin_post);
         AdminPostText = findViewById(R.id.post_author);
         AdminLayout = findViewById(R.id.admin_card);
@@ -845,13 +850,9 @@ public  class  MainActivity extends BaseActivity {
         if (viewPager.getCurrentItem() == 0 ){
             moveTaskToBack(true);
         }else {
-            if (viewPager.getCurrentItem() == 3 ){
-                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                    getSupportFragmentManager().popBackStack();
-                } else {
-                    viewPager.setCurrentItem(0);
-                }
-            }else {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else {
                 viewPager.setCurrentItem(0);
             }
         }/*else {

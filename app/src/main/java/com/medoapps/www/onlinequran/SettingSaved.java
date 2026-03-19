@@ -206,6 +206,10 @@ public class SettingSaved extends AppCompatActivity {
     }
 
     public static void addBookmark(Context ctx, String recite, String aya, String rewayat, String realName, String surahTitle) {
+        addBookmark(ctx, recite, aya, rewayat, realName, surahTitle, false);
+    }
+
+    public static void addBookmark(Context ctx, String recite, String aya, String rewayat, String realName, String surahTitle, boolean isRadio) {
         if (isBookmarked(recite, aya)) return;
         try {
             JSONArray arr = getBookmarks();
@@ -215,6 +219,7 @@ public class SettingSaved extends AppCompatActivity {
             obj.put("rewayat", rewayat);
             obj.put("realName", realName);
             obj.put("surahTitle", surahTitle);
+            obj.put("isRadio", isRadio);
             arr.put(obj);
             BookmarksList = arr.toString();
             SettingSaved ss = new SettingSaved(ctx);

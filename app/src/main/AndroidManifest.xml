@@ -10,6 +10,8 @@
     </queries>
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
@@ -27,6 +29,7 @@
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
     <application
@@ -162,6 +165,11 @@
             android:name=".Settings"
             android:exported="false"
             android:label="@string/action_settings"
+            android:theme="@style/AppTheme.Settings" />
+        <activity
+            android:name=".NotificationSettingsActivity"
+            android:exported="false"
+            android:label="@string/notification_settings"
             android:theme="@style/AppTheme.Settings" />
         <activity
             android:name=".Downloads"
@@ -469,12 +477,12 @@
             android:name=".QuranPreferenceActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
-            android:theme="@style/QuranToolBar" />
+            android:theme="@style/AppTheme.Settings" />
         <activity
             android:name=".QuranAdvancedPreferenceActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
-            android:theme="@style/QuranToolBar" />
+            android:theme="@style/AppTheme.Settings" />
         <activity
             android:name=".SearchActivity"
             android:exported="false"
@@ -566,6 +574,78 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".PrayerTimesActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".QiblaActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".AthkarActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".TasbihActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".ReadingProgressActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".DuaActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+
+        <receiver
+            android:name=".PrayerNotificationReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".DailyAyahNotificationReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".AthkarNotificationReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".DailyHadithNotificationReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".AsmaulHusnaNotificationReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".FastingReminderReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".HisnNotificationReceiver"
+            android:exported="false" />
+
+        <activity
+            android:name=".AsmaulHusnaActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".ZakatCalculatorActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".FastingTrackerActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".DailyHadithActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".IslamicEventsActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".HisnAlMuslimActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+
+        <activity
             android:name=".pageselect.PageSelectActivity"
             android:exported="false"
             android:theme="@style/QuranToolBar" />
@@ -610,6 +690,31 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/search_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".DailyAyahWidget"
+            android:label="@string/widget_daily_ayah_label"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/daily_ayah_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".PrayerTimesWidget"
+            android:label="@string/widget_prayer_times_label"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.medoapps.UPDATE_PRAYER_WIDGET" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/prayer_times_widget_info" />
         </receiver>
 
         <activity

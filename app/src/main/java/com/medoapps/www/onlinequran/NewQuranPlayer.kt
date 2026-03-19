@@ -73,6 +73,7 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
     companion object {
         const val Broadcast_PLAY_NEW_AUDIO = "com.medoapps.www.onlinequran.PlayNewAudio"
         const val Broadcast_updateProgressBarReceiver = "com.medoapps.www.onlinequran.updateProgressBarReceiver"
+        private const val REQUEST_DELETE_PERMISSION = 1001
 
         @JvmField var btnPlay: ImageButton? = null
         @JvmField var isPlaying: Boolean? = false
@@ -109,6 +110,7 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
     lateinit var layoutads: LinearLayout
 
     private var wifiLock: android.net.wifi.WifiManager.WifiLock? = null
+    private var pendingDeleteFilePath: String? = null
 
     lateinit var songManager: SongsManager
     lateinit var utils: Utilities
@@ -174,9 +176,11 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        setIntent(intent)
-        val b = intent.extras
-        if (b != null && b.getBoolean("isStartFromNotification", false)) {
+        val b = intent.extras ?: return
+
+
+        if (b.getBoolean("isStartFromNotification", false)) {
+            setIntent(intent)
             val storedIndex = StorageUtil(applicationContext).loadAudioIndex()
             if (storedIndex >= 0 && songsList != null && storedIndex < songsList.size) {
                 currentSongIndex = storedIndex
@@ -190,8 +194,39 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
                     }
                 }
             }
+            return
         }
+
+
+        // Content changed — update all state and UI directly
+        setIntent(intent)
+        RecitesName = b.getString("RecitesName") ?: ""
+        IsRadio = b.getBoolean("IsRadio")
+        Rewayat = b.getString("Rewayat") ?: ""
+        RealRecitesName = b.getString("RealRecitesName") ?: ""
+        RecitesAYA = b.getString("RecitesAYA") ?: ""
+
+        // Update UI
+        songReciteName.text = RealRecitesName
+        if (IsRadio == true) {
+            btnRepeat.visibility = View.GONE
+            btnShuffle.visibility = View.GONE
+        } else {
+            btnRepeat.visibility = View.VISIBLE
+            btnShuffle.visibility = View.VISIBLE
+        }
+
+        // Reload playlist and play
+        showLoading()
+        btnPlay!!.setImageResource(R.drawable.btn_pause)
+        songManager = SongsManager(this@NewQuranPlayer, this@NewQuranPlayer)
+        songsList = songManager.getPlayList(RecitesName, Rewayat, IsRadio)
+        currentSongIndex = RecitesAYA.toIntOrNull() ?: 0
+
+        loadAudio()
+        playAudio(currentSongIndex)
     }
+
 
     // Binding this Client to the AudioPlayer Service
     private val serviceConnection = object : ServiceConnection {
@@ -268,6 +303,7 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
                 sendBroadcast(broadcastIntent)
             } else {
                 val storage = StorageUtil(applicationContext)
+                storage.storeAudio(audioList)
                 storage.storeAudioIndex(audioIndex)
 
                 val broadcastIntent = Intent(Broadcast_PLAY_NEW_AUDIO)
@@ -327,7 +363,7 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
             val songPathTxt = map["songPath"]
             val songTitleTxt = map["songTitle"]
             if (IsRadio == true) {
-                audioList!!.add(Audio(songPathTxt, "$songTitleTxt-$RealRecitesName", "Ahmed HAshim", "Radio", RecitesName, Rewayat, RealRecitesName, RecitesAYA, IsRadio))
+                audioList!!.add(Audio(songPathTxt, songTitleTxt, "Ahmed HAshim", "Radio", RecitesName, Rewayat, RealRecitesName, RecitesAYA, IsRadio))
             } else {
                 audioList!!.add(Audio(songPathTxt, songTitleTxt, "Ahmed HAshim", RealRecitesName, RecitesName, Rewayat, RealRecitesName, RecitesAYA, IsRadio))
             }
@@ -510,8 +546,6 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
 
         separateFunctions = SeparateFunctions(this)
 
-        MobileAds.initialize(this) { }
-
         loadingBar = findViewById(R.id.loadingBar)
         refresh = findViewById(R.id.btn_refresh)
         btn_SHOWAD = findViewById(R.id.btn_SHOWAD)
@@ -535,8 +569,6 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
             btn_SHOWAD.visibility = View.GONE
         }
 
-        refreshAd()
-
         val b = intent.extras
         if (b != null) {
             RecitesName = b.getString("RecitesName") ?: ""
@@ -546,6 +578,7 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
             RecitesAYA = b.getString("RecitesAYA") ?: ""
             isStartFromNotification = b.getBoolean("isStartFromNotification")
             currentPlayerPosition = b.getInt("currentPlayerPosition")
+
         } else {
             finish()
         }
@@ -597,60 +630,64 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
             btnRepeat.setImageResource(R.drawable.btn_repeat_focused)
         }
 
-        loadBannerAd()
-
         updateBookmarkIcon()
 
-        songManager = SongsManager(this@NewQuranPlayer, this@NewQuranPlayer)
-        utils = Utilities()
+        showLoading()
+        btnPlay!!.setImageResource(R.drawable.btn_pause)
+        register_updateProgressBarReceiver()
 
-        songProgressBar.setOnSeekBarChangeListener(this)
+        window.decorView.post {
+            if (isFinishing || isDestroyed) return@post
+            songManager = SongsManager(this@NewQuranPlayer, this@NewQuranPlayer)
+            utils = Utilities()
+            songProgressBar.setOnSeekBarChangeListener(this@NewQuranPlayer)
+            songsList = songManager.getPlayList(RecitesName, Rewayat, IsRadio)
+            currentSongIndex = RecitesAYA.toInt()
 
-        songsList = songManager.getPlayList(RecitesName, Rewayat, IsRadio)
+            if (isStartFromNotification == true) {
+                val storedIndex = StorageUtil(applicationContext).loadAudioIndex()
+                if (storedIndex >= 0 && storedIndex < songsList.size) {
+                    currentSongIndex = storedIndex
+                }
+            }
 
-        currentSongIndex = RecitesAYA.toInt()
+            loadAudio()
+            playAudio(currentSongIndex)
 
-        if (isStartFromNotification == true) {
-            val storedIndex = StorageUtil(applicationContext).loadAudioIndex()
-            if (storedIndex >= 0 && storedIndex < songsList.size) {
-                currentSongIndex = storedIndex
+            if (songsList != null && currentSongIndex < songsList.size) {
+                val songTitle = songsList[currentSongIndex]["songTitle"]
+                val songPath = songsList[currentSongIndex]["songPath"]
+                if (songTitle != null) songTitleLabel.text = songTitle
+                updateSourceLabel(songPath)
+            }
+
+            // Set up mini-playlist
+            miniPlaylistRecyclerView = findViewById(R.id.miniPlaylistRecyclerView)
+            playlistLayoutManager = LinearLayoutManager(this@NewQuranPlayer)
+            miniPlaylistRecyclerView!!.layoutManager = playlistLayoutManager
+            miniPlaylistRecyclerView!!.isNestedScrollingEnabled = false
+
+            miniPlaylistAdapter = MiniPlaylistAdapter(songsList, this@NewQuranPlayer) { position ->
+                onMiniPlaylistItemClicked(position)
+            }
+            miniPlaylistRecyclerView!!.adapter = miniPlaylistAdapter
+            miniPlaylistAdapter!!.setCurrentPlayingIndex(currentSongIndex)
+
+            miniPlaylistRecyclerView!!.post {
+                playlistLayoutManager!!.scrollToPositionWithOffset(
+                    currentSongIndex, miniPlaylistRecyclerView!!.height / 3
+                )
+            }
+
+            if (player != null) {
+                player!!.STATE_PLAYING_public()
             }
         }
 
-        loadAudio()
-        showLoading()
-        playAudio(currentSongIndex)
-        btnPlay!!.setImageResource(R.drawable.btn_pause)
-
-        if (songsList != null && currentSongIndex < songsList.size) {
-            val songTitle = songsList[currentSongIndex]["songTitle"]
-            val songPath = songsList[currentSongIndex]["songPath"]
-            if (songTitle != null) songTitleLabel.text = songTitle
-            updateSourceLabel(songPath)
-        }
-
-        // Set up mini-playlist
-        miniPlaylistRecyclerView = findViewById(R.id.miniPlaylistRecyclerView)
-        playlistLayoutManager = LinearLayoutManager(this)
-        miniPlaylistRecyclerView!!.layoutManager = playlistLayoutManager
-        miniPlaylistRecyclerView!!.isNestedScrollingEnabled = false
-
-        miniPlaylistAdapter = MiniPlaylistAdapter(songsList, this) { position ->
-            onMiniPlaylistItemClicked(position)
-        }
-        miniPlaylistRecyclerView!!.adapter = miniPlaylistAdapter
-        miniPlaylistAdapter!!.setCurrentPlayingIndex(currentSongIndex)
-
-        miniPlaylistRecyclerView!!.post {
-            playlistLayoutManager!!.scrollToPositionWithOffset(
-                currentSongIndex, miniPlaylistRecyclerView!!.height / 3
-            )
-        }
-
-        register_updateProgressBarReceiver()
-
-        if (player != null) {
-            player!!.STATE_PLAYING_public()
+        window.decorView.post {
+            MobileAds.initialize(this@NewQuranPlayer) { }
+            refreshAd()
+            loadBannerAd()
         }
 
         /**
@@ -793,7 +830,7 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
                 btnBookmark.setImageResource(R.drawable.round_bookmark_border_24)
                 Toast.makeText(applicationContext, R.string.bookmark_removed, Toast.LENGTH_SHORT).show()
             } else {
-                SettingSaved.addBookmark(applicationContext, RecitesName, currentAya, Rewayat, RealRecitesName, surahTitle)
+                SettingSaved.addBookmark(applicationContext, RecitesName, currentAya, Rewayat, RealRecitesName, surahTitle, IsRadio == true)
                 btnBookmark.setImageResource(R.drawable.round_bookmark_filled_24)
                 Toast.makeText(applicationContext, R.string.bookmark_added, Toast.LENGTH_SHORT).show()
             }
@@ -888,6 +925,27 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
         if (resultCode == 100) {
             currentSongIndex = data!!.extras!!.getInt("songIndex")
         }
+        if (requestCode == REQUEST_DELETE_PERMISSION) {
+            val filePath = pendingDeleteFilePath
+            pendingDeleteFilePath = null
+            if (filePath != null && resultCode == RESULT_OK) {
+                // User approved the delete — get display name and finish cleanup
+                var fileName = ""
+                try {
+                    val cursor = contentResolver.query(
+                        android.net.Uri.parse(filePath),
+                        arrayOf(android.provider.MediaStore.MediaColumns.DISPLAY_NAME),
+                        null, null, null
+                    )
+                    cursor?.use {
+                        if (it.moveToFirst()) fileName = it.getString(0) ?: ""
+                    }
+                } catch (_: Exception) {}
+                onSurahDeletedSuccessfully(filePath, fileName)
+            } else if (filePath != null) {
+                Toast.makeText(this, getString(R.string.surah_delete_failed), Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -942,6 +1000,7 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
     private fun confirmDeleteCurrentSurah() {
         if (songsList == null || currentSongIndex >= songsList.size) return
         val songPath = songsList[currentSongIndex]["songPath"]
+        android.util.Log.d("DeleteSurah", "confirmDelete songPath: $songPath")
         if (songPath == null || songPath.startsWith("http")) return
 
         val songTitle = songsList[currentSongIndex]["songTitle"]
@@ -956,53 +1015,85 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
     }
 
     private fun deleteCurrentSurah(filePath: String) {
+        android.util.Log.d("DeleteSurah", "deleteCurrentSurah called with filePath: $filePath")
         try {
-            val file = File(filePath)
             var deleted = false
-            if (file.exists()) {
-                deleted = file.delete()
-            }
+            var fileName = ""
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (filePath.startsWith("content://")) {
+                android.util.Log.d("DeleteSurah", "Handling content:// URI")
+                val uri = android.net.Uri.parse(filePath)
+                // Get display name before deleting
                 try {
-                    val resolver = contentResolver
-                    val selection = MediaStore.Audio.Media.DATA + "=?"
-                    val selectionArgs = arrayOf(filePath)
-                    resolver.delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, selection, selectionArgs)
+                    val cursor = contentResolver.query(
+                        uri,
+                        arrayOf(android.provider.MediaStore.MediaColumns.DISPLAY_NAME),
+                        null, null, null
+                    )
+                    cursor?.use {
+                        if (it.moveToFirst()) fileName = it.getString(0) ?: ""
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
+
+                android.util.Log.d("DeleteSurah", "display name resolved: $fileName")
+                try {
+                    deleted = contentResolver.delete(uri, null, null) > 0
+                    android.util.Log.d("DeleteSurah", "contentResolver.delete result: $deleted")
+                } catch (securityException: SecurityException) {
+                    android.util.Log.d("DeleteSurah", "SecurityException caught: ${securityException.message}")
+                    // After reinstall, the app no longer owns these files.
+                    // Ask the OS to show a permission dialog to the user.
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        pendingDeleteFilePath = filePath
+                        val deleteRequest = MediaStore.createDeleteRequest(contentResolver, listOf(uri))
+                        startIntentSenderForResult(
+                            deleteRequest.intentSender,
+                            REQUEST_DELETE_PERMISSION,
+                            null, 0, 0, 0
+                        )
+                        return
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        val recoverableException = securityException as? android.app.RecoverableSecurityException
+                        if (recoverableException != null) {
+                            pendingDeleteFilePath = filePath
+                            startIntentSenderForResult(
+                                recoverableException.userAction.actionIntent.intentSender,
+                                REQUEST_DELETE_PERMISSION,
+                                null, 0, 0, 0
+                            )
+                            return
+                        }
+                    }
+                }
+            } else {
+                android.util.Log.d("DeleteSurah", "Handling regular file path")
+                val file = File(filePath)
+                fileName = file.name
+                android.util.Log.d("DeleteSurah", "file.exists(): ${file.exists()}, fileName: $fileName")
+                if (file.exists()) {
+                    deleted = file.delete()
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    try {
+                        val resolver = contentResolver
+                        val selection = MediaStore.Audio.Media.DATA + "=?"
+                        val selectionArgs = arrayOf(filePath)
+                        resolver.delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, selection, selectionArgs)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+                if (!deleted && !file.exists()) {
+                    deleted = true
+                }
             }
 
-            if (deleted || !file.exists()) {
-                val lc = LnaguageClass(this@NewQuranPlayer, this@NewQuranPlayer)
-                var serverName = ""
-                val fileName = file.name
-                if (fileName.endsWith(".mp3") && fileName.startsWith(RecitesName)) {
-                    serverName = fileName.substring(RecitesName.length, fileName.length - 4)
-                }
-
-                val streamUrl: String
-                if (Rewayat != null && Rewayat.isNotEmpty()) {
-                    streamUrl = "https://server${lc.serverNumber(RecitesName)}.mp3quran.net/$RecitesName/$Rewayat/$serverName.mp3"
-                } else {
-                    streamUrl = "https://server${lc.serverNumber(RecitesName)}.mp3quran.net/$RecitesName/$serverName.mp3"
-                }
-
-                songsList[currentSongIndex]["songPath"] = streamUrl
-
-                loadAudio()
-                val storage = StorageUtil(applicationContext)
-                storage.storeAudio(audioList)
-                storage.storeAudioIndex(currentSongIndex)
-
-                val broadcastIntent = Intent(Broadcast_PLAY_NEW_AUDIO)
-                broadcastIntent.setPackage(packageName)
-                sendBroadcast(broadcastIntent)
-
-                updateSourceLabel(streamUrl)
-
-                Toast.makeText(this, getString(R.string.surah_deleted), Toast.LENGTH_SHORT).show()
+            if (deleted) {
+                onSurahDeletedSuccessfully(filePath, fileName)
             } else {
                 Toast.makeText(this, getString(R.string.surah_delete_failed), Toast.LENGTH_SHORT).show()
             }
@@ -1010,6 +1101,40 @@ class NewQuranPlayer : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
             e.printStackTrace()
             Toast.makeText(this, getString(R.string.surah_delete_failed), Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun onSurahDeletedSuccessfully(filePath: String, fileName: String) {
+        val lc = LnaguageClass(this@NewQuranPlayer, this@NewQuranPlayer)
+        var serverName = ""
+        // File name pattern: "AhmedHashim_" + RecitesName + ServerName + ".mp3"
+        val prefix = "AhmedHashim_$RecitesName"
+        if (fileName.endsWith(".mp3") && fileName.startsWith(prefix)) {
+            serverName = fileName.substring(prefix.length, fileName.length - 4)
+        } else if (fileName.endsWith(".mp3") && fileName.startsWith(RecitesName)) {
+            serverName = fileName.substring(RecitesName.length, fileName.length - 4)
+        }
+
+        val streamUrl: String
+        if (Rewayat != null && Rewayat.isNotEmpty()) {
+            streamUrl = "https://server${lc.serverNumber(RecitesName)}.mp3quran.net/$RecitesName/$Rewayat/$serverName.mp3"
+        } else {
+            streamUrl = "https://server${lc.serverNumber(RecitesName)}.mp3quran.net/$RecitesName/$serverName.mp3"
+        }
+
+        songsList[currentSongIndex]["songPath"] = streamUrl
+
+        loadAudio()
+        val storage = StorageUtil(applicationContext)
+        storage.storeAudio(audioList)
+        storage.storeAudioIndex(currentSongIndex)
+
+        val broadcastIntent = Intent(Broadcast_PLAY_NEW_AUDIO)
+        broadcastIntent.setPackage(packageName)
+        sendBroadcast(broadcastIntent)
+
+        updateSourceLabel(streamUrl)
+
+        Toast.makeText(this, getString(R.string.surah_deleted), Toast.LENGTH_SHORT).show()
     }
 
     fun playSong(songIndex: Int) {

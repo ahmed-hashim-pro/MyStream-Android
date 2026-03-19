@@ -36,6 +36,7 @@ public class SongsManager {
      * */
     public ArrayList<HashMap<String, String>> getPlayList(String  RecitesName,String  Rewayat,Boolean isRadio){
         File home = new File(MEDIA_PATH);
+        songsList.clear();
 
         if (isRadio){
             ArrayList<AuthorClass> list=new ArrayList<AuthorClass>();
@@ -73,6 +74,7 @@ public class SongsManager {
 
 
         // return songs list array
+
         return songsList;
 
 

@@ -350,10 +350,12 @@ public class RadioFragment extends Fragment implements  AdapterView.OnItemSelect
         return mylist;
     }
     private void laodRadio(){
+
         Intent intent= new Intent( getActivity(),NewQuranPlayer.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("RecitesName",RecitesName);
         intent.putExtra("Rewayat",Rewayat);
-        intent.putExtra("RealRecitesName",Rewayat);
+        intent.putExtra("RealRecitesName",RealRecitesName);
         intent.putExtra("RecitesAYA",RecitesAYA);
         intent.putExtra("IsRadio",true);
 //        Log.d(TAG, "laodRadio: " + intent.getExtras());
@@ -547,53 +549,26 @@ public class RadioFragment extends Fragment implements  AdapterView.OnItemSelect
                 holder.entireCard.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (position <listrecites.size()){
-                            if (temp.ServerName == listrecites.get(position).ServerName){
-                                RecitesName = temp.ServerName;
-                                Rewayat = temp.Rewayat;
-                                RealRecitesName = temp.RealName;
-                                RecitesAYA=String.valueOf(position);// ServerName;
-                                surahName = temp.RealName;
 
-                                AyaNameView = holder.txtRecitesName;
+                        int adapterPos = holder.getAdapterPosition();
+                        if (adapterPos == RecyclerView.NO_POSITION) return;
+                        AuthorClass clicked = (AuthorClass) listrecitesLocalobject.get(adapterPos);
+                        RecitesName = clicked.ServerName;
+                        Rewayat = clicked.Rewayat;
+                        RealRecitesName = clicked.RealName;
+                        surahName = clicked.RealName;
+                        AyaNameView = holder.txtRecitesName;
+                        AyaImage = holder.imgchannel;
 
-                                AyaImage = holder.imgchannel;
+                        // Find the correct index in the original listrecites
+                        for (int i = 0; i < listrecites.size(); i++) {
+                            if (listrecites.get(i).ServerName != null
+                                    && listrecites.get(i).ServerName.equals(clicked.ServerName)) {
+                                RecitesAYA = String.valueOf(i);
                                 laodRadio();
-                            }else {
-                                for(int i = 0; i < listrecites.size(); i++) {
-                                    if (listrecites.get(i).ServerName == temp.ServerName) {
-                                        RecitesName = temp.ServerName;
-                                        Rewayat = temp.Rewayat;
-                                        RealRecitesName = temp.RealName;
-                                        RecitesAYA=String.valueOf(i);// ServerName;
-                                        surahName = listrecites.get(i).RealName;
-
-                                        laodRadio();
-                                        break;
-                                    }
-                                    System.out.println("Current index is: " + i);
-                                }
-
-
-
-                            }
-                        }else{
-                            for(int i = 0; i < listrecites.size(); i++) {
-                                if (listrecites.get(i).ServerName == temp.ServerName) {
-                                    RecitesName = temp.ServerName;
-                                    Rewayat = temp.Rewayat;
-                                    RealRecitesName = temp.RealName;
-                                    RecitesAYA=String.valueOf(i);// ServerName;
-                                    surahName = listrecites.get(i).RealName;
-
-                                    laodRadio();
-                                    break;
-                                }
-                                System.out.println("Current index is: " + i);
+                                return;
                             }
                         }
-
-
                     }
                 });
                 holder.buttonShare.setOnClickListener(new View.OnClickListener() {
@@ -843,12 +818,18 @@ public class RadioFragment extends Fragment implements  AdapterView.OnItemSelect
         for (int i = 0; i < bookmarks.length(); i++) {
             try {
                 JSONObject obj = bookmarks.getJSONObject(i);
-                int ayaIndex = Integer.parseInt(obj.optString("aya", "0"));
-                String surah = lc.getSurahNameByIndex(ayaIndex);
-                String reciter = lc.getReciterDisplayName(obj.optString("recite", ""));
-                if (surah.isEmpty()) surah = obj.optString("surahTitle", "");
-                if (reciter.equals(obj.optString("recite", ""))) reciter = obj.optString("realName", "");
-                items[i] = surah + " — " + reciter;
+                if (obj.optBoolean("isRadio", false)) {
+                    String reciter = lc.getReciterDisplayName(obj.optString("recite", ""));
+                    if (reciter.equals(obj.optString("recite", ""))) reciter = obj.optString("realName", "");
+                    items[i] = reciter;
+                } else {
+                    int ayaIndex = Integer.parseInt(obj.optString("aya", "0"));
+                    String surah = lc.getSurahNameByIndex(ayaIndex);
+                    String reciter = lc.getReciterDisplayName(obj.optString("recite", ""));
+                    if (surah.isEmpty()) surah = obj.optString("surahTitle", "");
+                    if (reciter.equals(obj.optString("recite", ""))) reciter = obj.optString("realName", "");
+                    items[i] = surah + " — " + reciter;
+                }
             } catch (Exception e) {
                 items[i] = "Bookmark " + (i + 1);
             }
@@ -868,7 +849,7 @@ public class RadioFragment extends Fragment implements  AdapterView.OnItemSelect
                     intent.putExtra("RecitesAYA", obj.optString("aya"));
                     intent.putExtra("Rewayat", obj.optString("rewayat"));
                     intent.putExtra("RealRecitesName", reciterName);
-                    intent.putExtra("IsRadio", false);
+                    intent.putExtra("IsRadio", obj.optBoolean("isRadio", false));
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();

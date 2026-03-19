@@ -17,6 +17,9 @@
         <item name="spinnerStyle">?attr/actionDropDownStyle</item>
         <item name="spinnerDropDownItemStyle">@style/SherlockDropDownItem</item>
         <item name="spinnerItemStyle">@style/SherlockSpinnerItem</item>
+        <item name="android:statusBarColor">@color/mushaf_header_background</item>
+        <item name="android:navigationBarColor">@color/mushaf_header_background</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="QuranToolBar.Overlay">

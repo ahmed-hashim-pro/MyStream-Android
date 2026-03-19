@@ -7,6 +7,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -104,6 +107,14 @@ class QuranActivity : AppCompatActivity(),
         .inject(this)
 
     setContentView(R.layout.quran_index)
+
+    // Match status bar and nav bar to the toolbar background
+    val headerColor = ContextCompat.getColor(this, R.color.mushaf_header_background)
+    window.statusBarColor = headerColor
+    window.navigationBarColor = headerColor
+    val isNightMode = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+    WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = !isNightMode
+
     isRtl = isRtl()
 
     val tb = findViewById<Toolbar>(R.id.toolbar)

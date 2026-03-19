@@ -5,16 +5,19 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.graphics.drawable.Drawable;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 import com.medoapps.www.onlinequran.BuildConfig;
 import com.medoapps.www.onlinequran.QuranAdvancedPreferenceActivity;
 import com.medoapps.www.onlinequran.QuranApplication;
@@ -186,6 +189,9 @@ public class QuranAdvancedSettingsFragment extends PreferenceFragmentCompat {
       storageList = new ArrayList<>();
     }
 
+    // tint all preference icons with gold accent
+    tintPreferenceIcons(getPreferenceScreen());
+
     // Hide app location pref if there is no storage option
     // except for the normal Environment.getExternalStorageDirectory
     if (storageList.size() <= 1) {
@@ -254,6 +260,22 @@ public class QuranAdvancedSettingsFragment extends PreferenceFragmentCompat {
         Intent intent = new Intent(activity, QuranImportActivity.class);
         intent.setData(data.getData());
         startActivity(intent);
+      }
+    }
+  }
+
+  private void tintPreferenceIcons(PreferenceGroup group) {
+    int tintColor = ContextCompat.getColor(requireContext(), R.color.gold_accent);
+    ColorStateList tintList = ColorStateList.valueOf(tintColor);
+    for (int i = 0; i < group.getPreferenceCount(); i++) {
+      Preference preference = group.getPreference(i);
+      Drawable icon = preference.getIcon();
+      if (icon != null) {
+        icon.setTintList(tintList);
+        preference.setIcon(icon);
+      }
+      if (preference instanceof PreferenceGroup) {
+        tintPreferenceIcons((PreferenceGroup) preference);
       }
     }
   }

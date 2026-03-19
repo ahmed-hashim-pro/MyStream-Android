@@ -122,7 +122,7 @@ public class LiveList extends Fragment {
             sharingIntent.setType("text/plain");
 //            String shareBody = getResources().getString(R.string.sharemessage) + "  https://rebrand.ly/notfof70d";
             String shareBody = "";
-            if (getResources().getString(R.string.sharePart3) == "reciter"){
+            if ("reciter".equals(getResources().getString(R.string.sharePart3))){
                 shareBody = getResources().getString(R.string.sharePart1) +" " +soura+ " "+ "."+ " "+ getResources().getString(R.string.sharePart4) + " " + getResources().getString(R.string.shareURL);
 
             }else{
@@ -143,8 +143,7 @@ public class LiveList extends Fragment {
 
             ImageView icon = (ImageView) myView.findViewById(R.id.icon);
             TextView itemtxt = (TextView) myView.findViewById(R.id.itemtxt);
-            ImageButton buttonShare = (ImageButton) myView.findViewById(R.id.buttonShare);
-            LinearLayout entireCard = (LinearLayout) myView.findViewById(R.id.entireCardOtherCategory);
+            View entireCard = myView.findViewById(R.id.entireCardOtherCategory);
             LnaguageClass lc = new LnaguageClass(getContext());
             itemtxt = lc.SetTextFont(itemtxt,"");
 
@@ -152,23 +151,13 @@ public class LiveList extends Fragment {
             itemtxt.setText(temp.title);
             icon.setImageResource(temp.ImgDrawable);
 
-
             entireCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     Intent intent = new Intent(getContext(), LiveStreamPlayer.class);
                     intent.putExtra("Title", temp.title);
                     intent.putExtra("LiveUrl", temp.liveUrl);
                     startActivity(intent);
-
-                }
-            });
-            buttonShare.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onShareBy(temp.title,temp.title);
-
                 }
             });
 

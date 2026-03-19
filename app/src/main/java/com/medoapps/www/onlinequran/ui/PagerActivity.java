@@ -187,6 +187,7 @@ public class PagerActivity extends AppCompatActivity implements
   private boolean showingTranslation = false;
   private DefaultDownloadReceiver downloadReceiver;
   private boolean needsPermissionToDownloadOver3g = true;
+  private boolean isFocusMode = false;
   private Dialog promptDialog = null;
   private AyahToolBar ayahToolBar;
   private AudioRequest lastAudioRequest;
@@ -640,6 +641,7 @@ public class PagerActivity extends AppCompatActivity implements
   }
 
   public void onPageClicked() {
+    if (isFocusMode) return; // Don't toggle UI in focus mode
     toggleActionBar();
   }
 
@@ -1058,6 +1060,11 @@ public class PagerActivity extends AppCompatActivity implements
       nightMode.setChecked(isNightMode);
       nightMode.setIcon(isNightMode ? R.drawable.ic_night_mode : R.drawable.ic_day_mode);
     }
+
+    MenuItem focusMode = menu.findItem(R.id.focus_mode);
+    if (focusMode != null) {
+      focusMode.setChecked(isFocusMode);
+    }
     return true;
   }
 
@@ -1104,6 +1111,21 @@ public class PagerActivity extends AppCompatActivity implements
       FragmentManager fm = getSupportFragmentManager();
       JumpFragment jumpDialog = new JumpFragment();
       jumpDialog.show(fm, JumpFragment.TAG);
+      return true;
+    } else if (itemId == R.id.focus_mode) {
+      isFocusMode = !isFocusMode;
+      item.setChecked(isFocusMode);
+      if (isFocusMode) {
+        // Hide action bar and audio bar, enter immersive
+        toggleActionBarVisibility(false);
+        setUiVisibilityKitKat(false);
+        android.widget.Toast.makeText(this, R.string.focus_mode_on, android.widget.Toast.LENGTH_SHORT).show();
+      } else {
+        // Restore normal mode
+        setUiVisibilityKitKat(true);
+        toggleActionBarVisibility(true);
+        android.widget.Toast.makeText(this, R.string.focus_mode_off, android.widget.Toast.LENGTH_SHORT).show();
+      }
       return true;
     }
     return super.onOptionsItemSelected(item);
