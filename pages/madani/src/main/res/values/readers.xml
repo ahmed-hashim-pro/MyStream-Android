@@ -1,32 +1,387 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string-array name="quran_readers_name">
+    <!-- Gapless reciters (0-52) -->
     <item>@string/qari_minshawi_murattal_gapless</item>
     <item>@string/qari_husary_gapless</item>
+    <item>@string/qari_sudais_gapless</item>
+    <item>@string/qari_qatami_gapless</item>
+    <item>@string/qari_abdulbaset_gapless</item>
+    <item>@string/qari_abdulbaset_mujawwad_gapless</item>
+    <item>@string/qari_aziz_alili_gapless</item>
+    <item>@string/qari_salah_budair_gapless</item>
+    <item>@string/qari_shuraym_gapless</item>
+    <item>@string/qari_yasser_dussary_gapless</item>
+    <item>@string/qari_mohammad_altablawi_gapless</item>
+    <item>@string/qari_sahl_yaseen_gapless</item>
+    <item>@string/qari_shatri_gapless</item>
+    <item>@string/qari_ahmad_nauina_gapless</item>
+    <item>@string/qari_akram_al_alaqmi</item>
+    <item>@string/qari_ali_hajjaj_alsouasi_gapless</item>
+    <item>@string/qari_saad_al_ghamidi_gapless</item>
+    <item>@string/qari_bandar_baleela_gapless</item>
+    <item>@string/qari_mahmoud_ali_albana_gapless</item>
+    <item>@string/qari_abdulrahman_alshahat_gapless</item>
+    <item>@string/qari_abdurrashid_sufi_gapless</item>
+    <item>@string/qari_mostafa_ismaeel_gapless</item>
+    <item>@string/qari_husary_iza3a_gapless</item>
+    <item>@string/qari_abdulaziz_zahrani_gapless</item>
+    <item>@string/qari_afasy_gapless</item>
+    <item>@string/qari_hani_rifai_gapless</item>
+    <item>@string/qari_ayyoub_gapless</item>
+    <item>@string/qari_mishari_walk_gapless</item>
+    <item>@string/qari_jibreel_gapless</item>
+    <item>@string/qari_basfar_gapless</item>
+    <item>@string/qari_walk_gapless</item>
+    <item>@string/qari_afasy_cali_gapless</item>
+    <item>@string/qari_ajamy_gapless</item>
+    <item>@string/qari_ali_jaber_gapless</item>
+    <item>@string/qari_muaiqly_haramain_gapless</item>
+    <item>@string/qari_juhany_gapless</item>
+    <item>@string/qari_abdulmuhsin_qasim_gapless</item>
+    <item>@string/qari_fares_abbad_gapless</item>
+    <item>@string/qari_khalifa_taniji_gapless</item>
+    <item>@string/qari_abdullah_matroud_gapless</item>
+    <item>@string/qari_salah_bukhatir_gapless</item>
+    <item>@string/qari_hudhayfi_gapless</item>
+    <item>@string/qari_khaled_muhanna_gapless</item>
+    <item>@string/qari_husary_mujawwad_gapless</item>
+    <item>@string/qari_husary_muallim_gapless</item>
+    <item>@string/qari_ibrahim_alakhdar_gapless</item>
+    <item>@string/qari_muaiqly_gapless</item>
+    <item>@string/qari_yasser_salama_hadr_gapless</item>
+    <item>@string/qari_khalid_qahtani_gapless</item>
+    <item>@string/qari_mokhtasar_asmari_gapless</item>
+    <item>@string/qari_aloosi_gapless</item>
+    <item>@string/qari_alzain_ahmad_gapless</item>
+    <item>@string/qari_muhammad_rashad_shereef_gapless</item>
+    <!-- Gapped reciters (53-71) -->
     <item>@string/qari_basfar</item>
+    <item>@string/qari_abdulbaset</item>
+    <item>@string/qari_abdulbaset_mujawwad</item>
+    <item>@string/qari_suadis</item>
+    <item>@string/qari_shatri</item>
+    <item>@string/qari_afasy</item>
+    <item>@string/qari_saad_al_ghamdi</item>
+    <item>@string/qari_walk</item>
+    <item>@string/qari_hani_rifai</item>
+    <item>@string/qari_husary_mujawwad</item>
+    <item>@string/qari_hudhayfi</item>
+    <item>@string/qari_muaiqly</item>
+    <item>@string/qari_minshawi_mujawwad</item>
+    <item>@string/qari_tablawy</item>
+    <item>@string/qari_ayyoub</item>
+    <item>@string/qari_jibreel</item>
+    <item>@string/qari_shuraym</item>
+    <item>@string/qari_dussary</item>
+    <item>@string/qari_ayman_suwaid</item>
   </string-array>
 
   <integer-array translatable="false" name="quran_readers_have_gapless_equivalents">
+    <!-- Gapless reciters (0-52): all 0 -->
     <item>0</item>
     <item>0</item>
     <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <!-- Gapped reciters (53-71) -->
+    <item>1</item> <!-- basfar -->
+    <item>1</item> <!-- abdulbaset -->
+    <item>1</item> <!-- abdulbaset_mujawwad -->
+    <item>1</item> <!-- sudais -->
+    <item>1</item> <!-- shatri -->
+    <item>1</item> <!-- afasy -->
+    <item>1</item> <!-- saad_al_ghamdi -->
+    <item>1</item> <!-- walk -->
+    <item>1</item> <!-- hani_rifai -->
+    <item>1</item> <!-- husary_mujawwad -->
+    <item>1</item> <!-- hudhayfi -->
+    <item>1</item> <!-- muaiqly -->
+    <item>1</item> <!-- minshawi_mujawwad -->
+    <item>1</item> <!-- tablawy -->
+    <item>1</item> <!-- ayyoub -->
+    <item>1</item> <!-- jibreel -->
+    <item>1</item> <!-- shuraym -->
+    <item>1</item> <!-- dussary -->
+    <item>0</item> <!-- ayman_suwaid - no gapless equivalent -->
   </integer-array>
 
   <string-array translatable="false" name="quran_readers_path">
+    <!-- Gapless reciters (0-52) -->
     <item>minshawi_murattal</item>
     <item>husary</item>
-    <item>2</item>  <!-- abdullah basfar -->
+    <item>sudais</item>
+    <item>qatami</item>
+    <item>abdulbaset</item>
+    <item>abdulbaset_mujawwad</item>
+    <item>aziz_alili</item>
+    <item>salah_budair</item>
+    <item>shuraym</item>
+    <item>yasser_dussary</item>
+    <item>tablawi</item>
+    <item>sahl_yaseen</item>
+    <item>shatri</item>
+    <item>ahmad_nauina</item>
+    <item>akram_al_alaqmi</item>
+    <item>ali_hajjaj_alsouasi</item>
+    <item>saad_al_ghamidi</item>
+    <item>bandar_baleela</item>
+    <item>mahmoud_ali_albana</item>
+    <item>abdulrahman_alshahat</item>
+    <item>abdurrashid_sufi</item>
+    <item>mostafa_ismaeel</item>
+    <item>husary_iza3a</item>
+    <item>abdulaziz_zahrani</item>
+    <item>afasy</item>
+    <item>hani_rifai</item>
+    <item>ayyoub</item>
+    <item>mishari_walk</item>
+    <item>jibreel</item>
+    <item>basfar_gapless</item>
+    <item>walk</item>
+    <item>afasy_cali</item>
+    <item>ajamy</item>
+    <item>ali_jaber</item>
+    <item>muaiqly_haramain</item>
+    <item>juhany</item>
+    <item>abdulmuhsin_qasim</item>
+    <item>fares_abbad</item>
+    <item>khalifa_taniji</item>
+    <item>abdullah_matroud</item>
+    <item>salah_bukhatir</item>
+    <item>hudhayfi</item>
+    <item>khaled_muhanna</item>
+    <item>husary_mujawwad</item>
+    <item>husary_muallim</item>
+    <item>ibrahim_alakhdar</item>
+    <item>muaiqly</item>
+    <item>yasser_salama_hadr</item>
+    <item>khalid_qahtani</item>
+    <item>mokhtasar_asmari</item>
+    <item>aloosi</item>
+    <item>alzain_ahmad</item>
+    <item>muhammad_rashad_shereef</item>
+    <!-- Gapped reciters (53-71) -->
+    <item>2</item>
+    <item>abdulbaset_gapped</item>
+    <item>abdulbaset_mujawwad_gapped</item>
+    <item>sudais_gapped</item>
+    <item>shatri_gapped</item>
+    <item>afasy_gapped</item>
+    <item>saad_al_ghamdi</item>
+    <item>walk_gapped</item>
+    <item>hani_rifai_gapped</item>
+    <item>husary_mujawwad_gapped</item>
+    <item>hudhayfi_gapped</item>
+    <item>muaiqly_gapped</item>
+    <item>minshawi_mujawwad_gapped</item>
+    <item>tablawy_gapped</item>
+    <item>ayyoub_gapped</item>
+    <item>jibreel_gapped</item>
+    <item>shuraym_gapped</item>
+    <item>dussary</item>
+    <item>ayman_suwaid</item>
   </string-array>
 
   <string-array translatable="false" name="quran_readers_db_name">
+    <!-- Gapless reciters (0-52): non-empty = gapless -->
     <item>minshawi_murattal</item>
     <item>husary</item>
-    <item></item> <!-- abdullah basfar -->
+    <item>sudais</item>
+    <item>qatami</item>
+    <item>abdulbaset</item>
+    <item>abdulbaset_mujawwad</item>
+    <item>aziz_alili</item>
+    <item>salah_budair</item>
+    <item>shuraym</item>
+    <item>yasser_dussary</item>
+    <item>tablawi</item>
+    <item>sahl_yaseen</item>
+    <item>shatri</item>
+    <item>ahmad_nauina</item>
+    <item>akram_al_alaqmi</item>
+    <item>ali_hajjaj_alsouasi</item>
+    <item>saad_al_ghamidi</item>
+    <item>bandar_baleela</item>
+    <item>mahmoud_ali_albana</item>
+    <item>abdulrahman_alshahat</item>
+    <item>abdurrashid_sufi</item>
+    <item>mostafa_ismaeel</item>
+    <item>husary_iza3a</item>
+    <item>abdulaziz_zahrani</item>
+    <item>afasy</item>
+    <item>hani_rifai</item>
+    <item>ayyoub</item>
+    <item>mishari_walk</item>
+    <item>jibreel</item>
+    <item>basfar_gapless</item>
+    <item>walk</item>
+    <item>afasy_cali</item>
+    <item>ajamy</item>
+    <item>ali_jaber</item>
+    <item>muaiqly_haramain</item>
+    <item>juhany</item>
+    <item>abdulmuhsin_qasim</item>
+    <item>fares_abbad</item>
+    <item>khalifa_taniji</item>
+    <item>abdullah_matroud</item>
+    <item>salah_bukhatir</item>
+    <item>hudhayfi</item>
+    <item>khaled_muhanna</item>
+    <item>husary_mujawwad</item>
+    <item>husary_muallim</item>
+    <item>ibrahim_alakhdar</item>
+    <item>muaiqly</item>
+    <item>yasser_salama_hadr</item>
+    <item>khalid_qahtani</item>
+    <item>mokhtasar_asmari</item>
+    <item>aloosi</item>
+    <item>alzain_ahmad</item>
+    <item>muhammad_rashad_shereef</item>
+    <!-- Gapped reciters (53-71): empty = gapped -->
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
+    <item></item>
   </string-array>
 
   <string-array translatable="false" name="quran_readers_urls">
+    <!-- Gapless reciters (0-52) -->
     <item>https://download.quranicaudio.com/quran/muhammad_siddeeq_al-minshaawee/</item>
     <item>https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree/</item>
+    <item>https://download.quranicaudio.com/quran/abdurrahmaan_as-sudays/</item>
+    <item>https://download.quranicaudio.com/quran/nasser_bin_ali_alqatami/</item>
+    <item>https://download.quranicaudio.com/quran/abdul_basit_murattal/</item>
+    <item>https://download.quranicaudio.com/quran/abdulbaset_mujawwad/</item>
+    <item>https://download.quranicaudio.com/quran/aziz_alili/</item>
+    <item>https://download.quranicaudio.com/quran/salahbudair/</item>
+    <item>https://download.quranicaudio.com/quran/sa3ood_al-shuraym/</item>
+    <item>https://download.quranicaudio.com/quran/yasser_ad-dussary/</item>
+    <item>https://download.quranicaudio.com/quran/mohammad_altablawi/</item>
+    <item>https://download.quranicaudio.com/quran/sahl_yaaseen/</item>
+    <item>https://download.quranicaudio.com/quran/abu_bakr_ash-shaatree/</item>
+    <item>https://download.quranicaudio.com/quran/ahmad_nauina/</item>
+    <item>https://download.quranicaudio.com/quran/akram_al-alaqimy/</item>
+    <item>https://download.quranicaudio.com/quran/ali_hajjaj_alsouasi/</item>
+    <item>https://download.quranicaudio.com/quran/sa3d_al-ghaamidi/complete/</item>
+    <item>https://download.quranicaudio.com/quran/bandar_baleela/complete/</item>
+    <item>https://download.quranicaudio.com/quran/mahmoud_ali_albana/</item>
+    <item>https://download.quranicaudio.com/quran/abdulrahman_al_shahat/</item>
+    <item>https://download.quranicaudio.com/quran/abdurrashid_sufi/</item>
+    <item>https://download.quranicaudio.com/quran/mostafa_ismaeel/</item>
+    <item>https://download.quranicaudio.com/quran/husary_iza3a/</item>
+    <item>https://download.quranicaudio.com/quran/abdulaziz_bin_saleh_alzahrani/</item>
+    <item>https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/</item>
+    <item>https://download.quranicaudio.com/quran/rifai/</item>
+    <item>https://download.quranicaudio.com/quran/muhammad_ayyoob/</item>
+    <item>https://download.quranicaudio.com/quran/mishaari_w_ibrahim_walk/</item>
+    <item>https://download.quranicaudio.com/quran/muhammad_jibreel/complete/</item>
+    <item>https://download.quranicaudio.com/quran/abdullaah_basfar/</item>
+    <item>https://download.quranicaudio.com/quran/ibrahim_walk/</item>
+    <item>https://download.quranicaudio.com/quran/mishaari_california/</item>
+    <item>https://download.quranicaudio.com/quran/ahmed_ibn_3ali_al-3ajamy/</item>
+    <item>https://download.quranicaudio.com/quran/ali_jaber/</item>
+    <item>https://download.quranicaudio.com/quran/maher_al_muaiqly_haramain/</item>
+    <item>https://download.quranicaudio.com/quran/abdullaah_3awwaad_al-juhaynee/</item>
+    <item>https://download.quranicaudio.com/quran/abdul_muhsin_alqasim/</item>
+    <item>https://download.quranicaudio.com/quran/fares/</item>
+    <item>https://download.quranicaudio.com/quran/khalifah_taniji/</item>
+    <item>https://download.quranicaudio.com/quran/abdullah_matroud/</item>
+    <item>https://download.quranicaudio.com/quran/salaah_bukhaatir/</item>
+    <item>https://download.quranicaudio.com/quran/huthayfi/</item>
+    <item>https://download.quranicaudio.com/quran/khaled_muhanna/</item>
+    <item>https://download.quranicaudio.com/quran/husary_mujawwad/</item>
+    <item>https://download.quranicaudio.com/quran/husary_muallim/</item>
+    <item>https://download.quranicaudio.com/quran/ibrahim_al_akhdar/</item>
+    <item>https://download.quranicaudio.com/quran/maher_256/</item>
+    <item>https://download.quranicaudio.com/quran/yasser_salama_hadr/</item>
+    <item>https://download.quranicaudio.com/quran/khaalid_al-qahtaanee/</item>
+    <item>https://download.quranicaudio.com/quran/mokhtasar_asmari/</item>
+    <item>https://download.quranicaudio.com/quran/abdulrahman_aloosi/</item>
+    <item>https://download.quranicaudio.com/quran/alzain_mohammad_ahmad/</item>
+    <item>https://download.quranicaudio.com/quran/muhammad_rashad_shereef/</item>
+    <!-- Gapped reciters (53-71) -->
     <item>https://mirrors.quranicaudio.com/everyayah/Abdullah_Basfar_192kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Abdul_Basit_Murattal_192kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Abdul_Basit_Mujawwad_128kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Abdurrahmaan_As-Sudais_192kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Abu_Bakr_Ash-Shatri_128kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Alafasy_128kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Saad_Al_Ghamdi_128kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/English/Ibrahim_Walk_192kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Hani_Rifai_192kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Husary_Mujawwad_128kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Hudhaify_128kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/MaherAlMuaiqly128kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Minshawy_Mujawwad_192kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Mohammad_al_Tablaway_128kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Muhammad_Ayyoub_128kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Muhammad_Jibreel_128kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Saood_ash-Shuraym_128kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Yasser_Ad-Dussary_128kbps/</item>
+    <item>https://mirrors.quranicaudio.com/everyayah/Ayman_Sowaid_64kbps/</item>
   </string-array>
 </resources>
