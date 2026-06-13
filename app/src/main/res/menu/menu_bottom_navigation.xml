@@ -5,6 +5,7 @@
     <item
         android:id="@+id/action_quran"
         android:checked="true"
+        android:contentDescription="@string/HolyQuran"
         android:icon="@drawable/holyquran"
         android:title="@string/HolyQuran"
         app:showAsAction="ifRoom" />
@@ -17,6 +18,7 @@
     <item
         android:id="@+id/action_radio"
         android:checked="false"
+        android:contentDescription="@string/Radio"
         android:icon="@drawable/outline_radio_24"
         android:title="@string/Radio"
         app:showAsAction="ifRoom" />
@@ -26,6 +28,7 @@
     <item
         android:id="@+id/action_other"
         android:checked="false"
+        android:contentDescription="@string/OtherCategories"
         android:icon="@drawable/outline_category_24"
         android:title="@string/OtherCategories"
         app:showAsAction="ifRoom" />
@@ -33,6 +36,7 @@
     <item
         android:id="@+id/action_mushaf"
         android:checked="false"
+        android:contentDescription="@string/TheHolyQuran"
         android:icon="@drawable/ramadan_quran_24px"
         android:title="@string/TheHolyQuran"
         app:showAsAction="ifRoom" />

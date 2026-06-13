@@ -211,6 +211,10 @@ public class OtherCategoryFragment extends Fragment implements AdapterView.OnIte
             holder.itemtxt.setText(temp.title);
             holder.icon.setImageResource(temp.ImgDrawable);
 
+            // Accessibility: announce the card as a single labelled, actionable
+            // unit (the icon is decorative; see other_ticket.xml).
+            holder.entireCard.setContentDescription(temp.title);
+
             holder.entireCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
