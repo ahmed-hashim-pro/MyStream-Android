@@ -640,4 +640,108 @@
     <string name="block_user">حظر المستخدم</string>
     <string name="Blocked">تم حظر المستخدم</string>
     <string name="TitlesAnimation">عناوين متحركة</string>
+
+    <!-- ============================== Athan feature ============================== -->
+    <string name="athan_prayer_fajr">الفجر</string>
+    <string name="athan_prayer_sunrise">الشروق</string>
+    <string name="athan_prayer_dhuhr">الظهر</string>
+    <string name="athan_prayer_asr">العصر</string>
+    <string name="athan_prayer_maghrib">المغرب</string>
+    <string name="athan_prayer_isha">العشاء</string>
+
+    <string-array name="athan_hijri_months">
+        <item>محرم</item>
+        <item>صفر</item>
+        <item>ربيع الأول</item>
+        <item>ربيع الثاني</item>
+        <item>جمادى الأولى</item>
+        <item>جمادى الآخرة</item>
+        <item>رجب</item>
+        <item>شعبان</item>
+        <item>رمضان</item>
+        <item>شوال</item>
+        <item>ذو القعدة</item>
+        <item>ذو الحجة</item>
+    </string-array>
+    <string name="athan_hijri_date_format">%1$d %2$s %3$d هـ</string>
+
+    <!-- Main screen -->
+    <string name="athan_next_prayer">الصلاة القادمة</string>
+    <string name="athan_time_remaining">بعد %s</string>
+    <string name="athan_now">الآن</string>
+    <string name="athan_monthly_timetable">الجدول الشهري</string>
+    <string name="athan_settings_title">إعدادات الأذان</string>
+    <string name="athan_location_makkah_fallback">الموقع غير متاح — تُعرض مواقيت مكة المكرمة. اضغط لتحديد مدينتك.</string>
+    <string name="athan_today">اليوم</string>
+    <string name="athan_exact_alarm_card">اسمح بالمنبهات الدقيقة ليصدر الأذان في وقته تماماً</string>
+    <string name="athan_exact_alarm_enable">السماح</string>
+    <string name="athan_notification_permission_rationale">الإشعارات مطلوبة لتشغيل الأذان في أوقات الصلاة</string>
+
+    <!-- Notification modes -->
+    <string name="athan_mode_off">إيقاف</string>
+    <string name="athan_mode_silent">صامت</string>
+    <string name="athan_mode_beep">تنبيه</string>
+    <string name="athan_mode_athan">الأذان كاملاً</string>
+
+    <!-- Settings screen -->
+    <string name="athan_section_calculation">طريقة الحساب</string>
+    <string name="athan_calculation_method">طريقة حساب المواقيت</string>
+    <string name="athan_madhab">مذهب حساب العصر</string>
+    <string name="athan_madhab_shafi">الجمهور (الشافعي، المالكي، الحنبلي)</string>
+    <string name="athan_madhab_hanafi">الحنفي</string>
+    <string name="athan_high_latitude">قاعدة خطوط العرض العليا</string>
+    <string name="athan_corrections">تعديلات يدوية (بالدقائق)</string>
+    <string name="athan_section_notifications">الأذان والإشعارات</string>
+    <string name="athan_sound">صوت الأذان</string>
+    <string name="athan_sound_default">نغمة المنبه الافتراضية</string>
+    <string name="athan_pick_sound">اختر صوت الأذان</string>
+    <string name="athan_preview">استماع</string>
+    <string name="athan_vibrate">الاهتزاز</string>
+    <string name="athan_dua_after">عرض الدعاء بعد الأذان</string>
+    <string name="athan_pre_reminder">تذكير قبل الصلاة</string>
+    <string name="athan_iqama_reminder">تذكير الإقامة بعد الأذان</string>
+    <string name="athan_minutes_format">%d دقيقة</string>
+    <string name="athan_off_option">إيقاف</string>
+    <string name="athan_section_location">الموقع</string>
+    <string name="athan_location_auto">تلقائي (موقع الجهاز)</string>
+    <string name="athan_location_manual">مدينة يدوية</string>
+    <string name="athan_search_city">ابحث عن مدينة…</string>
+    <string name="athan_use_current_location">استخدام الموقع الحالي</string>
+    <string name="athan_location_updated">تم تحديث الموقع</string>
+    <string name="athan_city_not_found">لم يتم العثور على المدينة</string>
+    <string name="athan_section_calendar">التقويم</string>
+    <string name="athan_hijri_offset">تعديل التاريخ الهجري</string>
+    <string name="athan_days_format">%+d يوم</string>
+
+    <!-- Notifications -->
+    <string name="athan_channel_athan">الأذان</string>
+    <string name="athan_channel_reminders">تذكيرات الصلاة</string>
+    <string name="athan_channel_silent">مواقيت الصلاة (صامت)</string>
+    <string name="athan_notif_title">حان الآن وقت صلاة %s</string>
+    <string name="athan_notif_pre_title">%1$s بعد %2$d دقيقة</string>
+    <string name="athan_notif_iqama_title">إقامة صلاة %s</string>
+    <string name="athan_notif_time_at">وقت الصلاة: %s</string>
+    <string name="athan_stop">إيقاف الأذان</string>
+    <string name="athan_dua_text">اللهم رب هذه الدعوة التامة والصلاة القائمة، آت محمداً الوسيلة والفضيلة، وابعثه مقاماً محموداً الذي وعدته</string>
+
+    <!-- Calculation methods (display order matches athan_method_values) -->
+    <string-array name="athan_method_names">
+        <item>أم القرى (مكة المكرمة)</item>
+        <item>رابطة العالم الإسلامي</item>
+        <item>الهيئة المصرية العامة للمساحة</item>
+        <item>جامعة كراتشي</item>
+        <item>الجمعية الإسلامية لأمريكا الشمالية</item>
+        <item>دبي (الإمارات)</item>
+        <item>لجنة رؤية الهلال</item>
+        <item>الكويت</item>
+        <item>قطر</item>
+        <item>سنغافورة</item>
+    </string-array>
+
+    <string-array name="athan_high_latitude_names">
+        <item>منتصف الليل</item>
+        <item>سُبع الليل</item>
+        <item>زاوية الشفق</item>
+    </string-array>
+
 </resources>

@@ -307,6 +307,33 @@
             </intent-filter>
         </receiver>
 
+        <!-- Athan feature -->
+        <receiver
+            android:name=".athan.AthanAlarmReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".athan.AthanBootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".athan.AthanPlaybackService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+        <activity
+            android:name=".AthanSettingsActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".MonthlyPrayerTimesActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+
         <activity
             android:name=".LoginActivity"
             android:exported="false" />

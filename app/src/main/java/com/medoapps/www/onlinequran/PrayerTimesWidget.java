@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
+import com.medoapps.www.onlinequran.athan.PrayerTimeEngine;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,7 +22,6 @@ public class PrayerTimesWidget extends AppWidgetProvider {
     private static final String ACTION_UPDATE = "com.medoapps.UPDATE_PRAYER_WIDGET";
 
     private static final String[] PRAYER_KEYS = {"fajr", "sunrise", "dhuhr", "asr", "maghrib", "isha"};
-    private static final String[] PRAYER_NAMES_AR = {"الفجر", "الشروق", "الظهر", "العصر", "المغرب", "العشاء"};
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -43,32 +44,52 @@ public class PrayerTimesWidget extends AppWidgetProvider {
     }
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences("prayer_times_cache", Context.MODE_PRIVATE);
-
-        String[] times = new String[6];
-        for (int i = 0; i < PRAYER_KEYS.length; i++) {
-            times[i] = prefs.getString(PRAYER_KEYS[i], "--:--");
+        String[] times;
+        int nextPrayerIndex;
+        try {
+            // Compute today's times directly from the engine so the widget never
+            // shows a stale cache. Do NOT call PrayerTimeEngine.updateWidgetCache
+            // here — it broadcasts a widget update and would loop forever.
+            Date[] computed = PrayerTimeEngine.getTodayTimes(context);
+            times = new String[computed.length];
+            for (int i = 0; i < computed.length; i++) {
+                times[i] = PrayerTimeEngine.formatTime(context, computed[i]);
+            }
+            // Date-based comparison: correct across midnight (e.g. high-latitude
+            // isha after 00:00), unlike the HH:mm string comparison fallback.
+            nextPrayerIndex = PrayerTimeEngine.getNextPrayerIndex(context);
+        } catch (Throwable t) {
+            // Engine failed (e.g. missing settings) — fall back to the HH:mm cache.
+            SharedPreferences prefs = context.getSharedPreferences("prayer_times_cache", Context.MODE_PRIVATE);
+            times = new String[6];
+            for (int i = 0; i < PRAYER_KEYS.length; i++) {
+                times[i] = prefs.getString(PRAYER_KEYS[i], "--:--");
+            }
+            nextPrayerIndex = findNextPrayer(times);
         }
 
-        // Determine the next prayer
-        int nextPrayerIndex = findNextPrayer(times);
+        // Localized prayer names (shared with the athan feature)
+        String[] names = new String[PRAYER_KEYS.length];
+        for (int i = 0; i < names.length; i++) {
+            names[i] = context.getString(PrayerTimeEngine.PRAYER_NAME_RES[i]);
+        }
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_prayer_times);
 
-        // Static label
-        views.setTextViewText(R.id.tv_next_prayer_label, "الصلاة القادمة");
+        views.setTextViewText(R.id.tv_next_prayer_label,
+                context.getString(R.string.athan_next_prayer));
 
         // Next prayer name and time
-        views.setTextViewText(R.id.tv_next_prayer_name, PRAYER_NAMES_AR[nextPrayerIndex]);
+        views.setTextViewText(R.id.tv_next_prayer_name, names[nextPrayerIndex]);
         views.setTextViewText(R.id.tv_next_prayer_time, times[nextPrayerIndex]);
 
         // All times (exclude sunrise for compact display)
         // Indices: 0=fajr, 1=sunrise, 2=dhuhr, 3=asr, 4=maghrib, 5=isha
-        String allTimes = PRAYER_NAMES_AR[0] + " " + times[0]
-                + " | " + PRAYER_NAMES_AR[2] + " " + times[2]
-                + " | " + PRAYER_NAMES_AR[3] + " " + times[3]
-                + " | " + PRAYER_NAMES_AR[4] + " " + times[4]
-                + " | " + PRAYER_NAMES_AR[5] + " " + times[5];
+        String allTimes = names[0] + " " + times[0]
+                + " | " + names[2] + " " + times[2]
+                + " | " + names[3] + " " + times[3]
+                + " | " + names[4] + " " + times[4]
+                + " | " + names[5] + " " + times[5];
         views.setTextViewText(R.id.tv_all_times, allTimes);
 
         // PendingIntent to open PrayerTimesActivity

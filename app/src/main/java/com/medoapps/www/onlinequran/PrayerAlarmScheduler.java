@@ -38,6 +38,12 @@ public class PrayerAlarmScheduler {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
+        // Since Android 12 exact alarms need the SCHEDULE_EXACT_ALARM special access,
+        // which Android 14+ denies by default; calling setExact* without it throws
+        // SecurityException. Fall back to windowed alarms when not granted.
+        boolean canUseExact = Build.VERSION.SDK_INT < Build.VERSION_CODES.S
+                || alarmManager.canScheduleExactAlarms();
+
         Calendar now = Calendar.getInstance();
 
         for (int i = 0; i < times.length; i++) {
@@ -83,14 +89,33 @@ public class PrayerAlarmScheduler {
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
             );
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setExactAndAllowWhileIdle(
-                        AlarmManager.RTC_WAKEUP,
-                        prayerTime.getTimeInMillis(),
-                        pendingIntent
-                );
-            } else {
-                alarmManager.setExact(
+            try {
+                if (!canUseExact) {
+                    // Inexact, but still fires during Doze — a windowed alarm could be
+                    // deferred until the next maintenance window. Only reachable on
+                    // API 31+, so setAndAllowWhileIdle (API 23+) needs no guard.
+                    alarmManager.setAndAllowWhileIdle(
+                            AlarmManager.RTC_WAKEUP,
+                            prayerTime.getTimeInMillis(),
+                            pendingIntent
+                    );
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(
+                            AlarmManager.RTC_WAKEUP,
+                            prayerTime.getTimeInMillis(),
+                            pendingIntent
+                    );
+                } else {
+                    alarmManager.setExact(
+                            AlarmManager.RTC_WAKEUP,
+                            prayerTime.getTimeInMillis(),
+                            pendingIntent
+                    );
+                }
+            } catch (SecurityException e) {
+                // Exact-alarm access revoked between the check above and this call;
+                // deliver inexactly rather than crash.
+                alarmManager.set(
                         AlarmManager.RTC_WAKEUP,
                         prayerTime.getTimeInMillis(),
                         pendingIntent

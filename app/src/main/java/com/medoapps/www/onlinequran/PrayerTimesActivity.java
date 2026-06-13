@@ -3,47 +3,86 @@ package com.medoapps.www.onlinequran;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.provider.Settings;
+import android.util.TypedValue;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.location.CurrentLocationRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.tasks.CancellationTokenSource;
+import com.medoapps.www.onlinequran.athan.AthanScheduler;
+import com.medoapps.www.onlinequran.athan.HijriDate;
+import com.medoapps.www.onlinequran.athan.PrayerSettings;
+import com.medoapps.www.onlinequran.athan.PrayerTimeEngine;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Advanced athan home screen. All prayer times are computed on-device by
+ * {@link PrayerTimeEngine}; no network calls are involved.
+ */
 public class PrayerTimesActivity extends AppCompatActivity {
 
-    private static final int LOCATION_PERMISSION_CODE = 100;
-    private TextView tvFajr, tvSunrise, tvDhuhr, tvAsr, tvMaghrib, tvIsha;
-    private TextView tvDate, tvLocation, tvError;
-    private ProgressBar progressBar;
+    private static final int PERMISSIONS_REQUEST_CODE = 100;
+    private static final int MENU_MONTHLY = 1;
+    private static final int MENU_SETTINGS = 2;
+
+    private TextView tvHijriDate, tvGregorianDate, tvCity;
+    private TextView tvNextPrayerName, tvNextPrayerTime, tvCountdown;
+    private View cardExactAlarm;
+    private LinearLayout listPrayers;
+
+    private final LinearLayout[] rows = new LinearLayout[PrayerSettings.PRAYER_COUNT];
+    private final TextView[] rowTimes = new TextView[PrayerSettings.PRAYER_COUNT];
+    private final ImageButton[] rowModeButtons = new ImageButton[PrayerSettings.PRAYER_COUNT];
+
     private FusedLocationProviderClient fusedLocationClient;
+    private final CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private CountDownTimer countdownTimer;
+    private final Runnable rerenderRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (!isFinishing() && !isDestroyed()) renderAll();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prayer_times);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.prayer_times);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -52,187 +91,385 @@ public class PrayerTimesActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.background_main));
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.background_main));
 
-        tvFajr = findViewById(R.id.tv_fajr_time);
-        tvSunrise = findViewById(R.id.tv_sunrise_time);
-        tvDhuhr = findViewById(R.id.tv_dhuhr_time);
-        tvAsr = findViewById(R.id.tv_asr_time);
-        tvMaghrib = findViewById(R.id.tv_maghrib_time);
-        tvIsha = findViewById(R.id.tv_isha_time);
-        tvDate = findViewById(R.id.tv_date);
-        tvLocation = findViewById(R.id.tv_location);
-        tvError = findViewById(R.id.tv_error);
-        progressBar = findViewById(R.id.progress_bar);
+        tvHijriDate = findViewById(R.id.tv_hijri_date);
+        tvGregorianDate = findViewById(R.id.tv_gregorian_date);
+        tvCity = findViewById(R.id.tv_city);
+        tvNextPrayerName = findViewById(R.id.tv_next_prayer_name);
+        tvNextPrayerTime = findViewById(R.id.tv_next_prayer_time);
+        tvCountdown = findViewById(R.id.tv_countdown);
+        cardExactAlarm = findViewById(R.id.card_exact_alarm);
+        listPrayers = findViewById(R.id.list_prayers);
+
+        buildPrayerRows();
+
+        findViewById(R.id.row_city).setOnClickListener(v ->
+                startActivity(new Intent(this, AthanSettingsActivity.class)));
+        findViewById(R.id.btn_exact_alarm).setOnClickListener(v -> openExactAlarmSettings());
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        String today = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(new Date());
-        tvDate.setText(today);
-
-        requestLocationAndFetch();
+        requestStartupPermissions();
+        if (PrayerSettings.getLocationMode(this) == PrayerSettings.LOCATION_AUTO
+                && hasLocationPermission()) {
+            fetchLocation();
+        }
     }
 
-    private void requestLocationAndFetch() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                    LOCATION_PERMISSION_CODE);
+    // ------------------------------------------------------------ rendering
+
+    private void renderAll() {
+        tvHijriDate.setText(HijriDate.todayString(this));
+        tvGregorianDate.setText(
+                new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault()).format(new Date()));
+        renderCity();
+
+        Date[] times = PrayerTimeEngine.getTodayTimes(this);
+        int nextIndex = PrayerTimeEngine.getNextPrayerIndex(this);
+        Date nextTime = PrayerTimeEngine.getNextPrayerTime(this);
+
+        tvNextPrayerName.setText(PrayerTimeEngine.PRAYER_NAME_RES[nextIndex]);
+        tvNextPrayerTime.setText(PrayerTimeEngine.formatTime(this, nextTime));
+
+        int highlight = ContextCompat.getColor(this, R.color.gold_accent_faint);
+        for (int i = 0; i < PrayerSettings.PRAYER_COUNT; i++) {
+            rowTimes[i].setText(PrayerTimeEngine.formatTime(this, times[i]));
+            applyModeIcon(i, PrayerSettings.getNotificationMode(this, i));
+            rows[i].setBackgroundColor(i == nextIndex ? highlight : Color.TRANSPARENT);
+        }
+
+        startCountdown(nextTime);
+    }
+
+    private void renderCity() {
+        if (PrayerSettings.hasLocation(this)) {
+            String city = PrayerSettings.getCityName(this);
+            if (city == null || city.isEmpty()) {
+                city = String.format(Locale.getDefault(), "%.2f, %.2f",
+                        PrayerSettings.getLatitude(this), PrayerSettings.getLongitude(this));
+            }
+            tvCity.setText(city);
+        } else {
+            tvCity.setText(R.string.athan_location_makkah_fallback);
+        }
+    }
+
+    private void startCountdown(Date nextTime) {
+        cancelCountdown();
+        long remaining = nextTime.getTime() - System.currentTimeMillis();
+        if (remaining <= 0) {
+            tvCountdown.setText(R.string.athan_now);
+            tvCountdown.postDelayed(rerenderRunnable, 1500);
             return;
         }
-        fetchLocation();
+        countdownTimer = new CountDownTimer(remaining, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                tvCountdown.setText(getString(R.string.athan_time_remaining,
+                        formatRemaining(millisUntilFinished)));
+            }
+
+            @Override
+            public void onFinish() {
+                renderAll();
+            }
+        };
+        countdownTimer.start();
+    }
+
+    private void cancelCountdown() {
+        if (countdownTimer != null) {
+            countdownTimer.cancel();
+            countdownTimer = null;
+        }
+        if (tvCountdown != null) {
+            tvCountdown.removeCallbacks(rerenderRunnable);
+        }
+    }
+
+    private String formatRemaining(long millis) {
+        long totalSeconds = millis / 1000;
+        long h = totalSeconds / 3600;
+        long m = (totalSeconds % 3600) / 60;
+        long s = totalSeconds % 60;
+        return String.format(Locale.getDefault(), "%d:%02d:%02d", h, m, s);
+    }
+
+    // ----------------------------------------------------------- prayer rows
+
+    private void buildPrayerRows() {
+        TypedValue rippleValue = new TypedValue();
+        getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless,
+                rippleValue, true);
+
+        for (int i = 0; i < PrayerSettings.PRAYER_COUNT; i++) {
+            final int index = i;
+
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setGravity(android.view.Gravity.CENTER_VERTICAL);
+            row.setMinimumHeight(dp(56));
+            row.setPaddingRelative(dp(16), dp(8), dp(8), dp(8));
+
+            TextView name = new TextView(this);
+            name.setText(PrayerTimeEngine.PRAYER_NAME_RES[i]);
+            name.setTextColor(ContextCompat.getColor(this, R.color.text_primary));
+            name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 17);
+            name.setTypeface(name.getTypeface(), android.graphics.Typeface.BOLD);
+            row.addView(name, new LinearLayout.LayoutParams(
+                    0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+
+            TextView time = new TextView(this);
+            time.setText("--:--");
+            time.setTextColor(ContextCompat.getColor(this, R.color.gold_accent));
+            time.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            time.setTypeface(time.getTypeface(), android.graphics.Typeface.BOLD);
+            LinearLayout.LayoutParams timeParams = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            timeParams.setMarginEnd(dp(12));
+            row.addView(time, timeParams);
+
+            ImageButton modeButton = new ImageButton(this);
+            modeButton.setBackgroundResource(rippleValue.resourceId);
+            modeButton.setScaleType(android.widget.ImageView.ScaleType.CENTER);
+            modeButton.setContentDescription(getString(PrayerTimeEngine.PRAYER_NAME_RES[i]));
+            modeButton.setOnClickListener(v -> cycleMode(index));
+            row.addView(modeButton, new LinearLayout.LayoutParams(dp(44), dp(44)));
+
+            listPrayers.addView(row, new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            rows[i] = row;
+            rowTimes[i] = time;
+            rowModeButtons[i] = modeButton;
+        }
+    }
+
+    private void cycleMode(int prayerIndex) {
+        int mode = PrayerSettings.getNotificationMode(this, prayerIndex);
+        int max = (prayerIndex == PrayerSettings.PRAYER_SUNRISE)
+                ? PrayerSettings.MODE_BEEP : PrayerSettings.MODE_ATHAN;
+        int next = (mode >= max) ? PrayerSettings.MODE_OFF : mode + 1;
+        PrayerSettings.setNotificationMode(this, prayerIndex, next);
+        applyModeIcon(prayerIndex, next);
+        AthanScheduler.rescheduleAll(this);
+    }
+
+    private void applyModeIcon(int prayerIndex, int mode) {
+        int iconRes;
+        switch (mode) {
+            case PrayerSettings.MODE_SILENT:
+                iconRes = R.drawable.ic_athan_mode_silent;
+                break;
+            case PrayerSettings.MODE_BEEP:
+                iconRes = R.drawable.ic_athan_mode_beep;
+                break;
+            case PrayerSettings.MODE_ATHAN:
+                iconRes = R.drawable.ic_athan_mode_athan;
+                break;
+            default:
+                iconRes = R.drawable.ic_athan_mode_off;
+                break;
+        }
+        ImageButton button = rowModeButtons[prayerIndex];
+        button.setImageResource(iconRes);
+        int tintRes = (mode == PrayerSettings.MODE_ATHAN)
+                ? R.color.gold_accent : R.color.text_secondary;
+        button.setColorFilter(ContextCompat.getColor(this, tintRes));
+    }
+
+    // ------------------------------------------------------------- location
+
+    private boolean hasLocationPermission() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
     }
 
     private void fetchLocation() {
-        progressBar.setVisibility(View.VISIBLE);
-        tvError.setVisibility(View.GONE);
+        if (!hasLocationPermission()) return;
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Fallback: use Makkah coordinates
-            fetchPrayerTimes(21.4225, 39.8262, "مكة المكرمة");
-            return;
-        }
+        // Prefer an actual current fix over the often-stale cached one; accept
+        // a recent cached fix (≤5 min) immediately, otherwise wait up to 10 s.
+        int priority = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                ? Priority.PRIORITY_HIGH_ACCURACY
+                : Priority.PRIORITY_BALANCED_POWER_ACCURACY;
 
+        CurrentLocationRequest request = new CurrentLocationRequest.Builder()
+                .setPriority(priority)
+                .setMaxUpdateAgeMillis(5 * 60 * 1000)
+                .setDurationMillis(10 * 1000)
+                .build();
+
+        fusedLocationClient.getCurrentLocation(request, cancellationTokenSource.getToken())
+                .addOnSuccessListener(this, location -> {
+                    if (location != null) {
+                        onLocationFix(location);
+                    } else {
+                        fallbackToLastLocation();
+                    }
+                })
+                .addOnFailureListener(e -> fallbackToLastLocation());
+    }
+
+    /** A stale fix is still better than the engine's Makkah fallback. */
+    private void fallbackToLastLocation() {
+        if (!hasLocationPermission()) return;
         fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
             if (location != null) {
-                fetchPrayerTimes(location.getLatitude(), location.getLongitude(), "");
-            } else {
-                // Fallback to Makkah
-                fetchPrayerTimes(21.4225, 39.8262, "مكة المكرمة");
+                onLocationFix(location);
             }
-        }).addOnFailureListener(e -> {
-            // Fallback to Makkah
-            fetchPrayerTimes(21.4225, 39.8262, "مكة المكرمة");
         });
     }
 
-    private void fetchPrayerTimes(double lat, double lng, String locationName) {
-        if (!locationName.isEmpty()) {
-            tvLocation.setText(locationName);
-        }
-
+    private void onLocationFix(Location location) {
+        final double lat = location.getLatitude();
+        final double lng = location.getLongitude();
         executor.execute(() -> {
+            String city = "";
             try {
-                String dateStr = new SimpleDateFormat("dd-MM-yyyy", Locale.US).format(new Date());
-                String apiUrl = "https://api.aladhan.com/v1/timings/" + dateStr
-                        + "?latitude=" + lat
-                        + "&longitude=" + lng
-                        + "&method=4";  // Umm Al-Qura method
-
-                URL url = new URL(apiUrl);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setConnectTimeout(10000);
-                conn.setReadTimeout(10000);
-
-                int responseCode = conn.getResponseCode();
-                if (responseCode == 200) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuilder sb = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line);
+                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                List<Address> result = geocoder.getFromLocation(lat, lng, 1);
+                if (result != null && !result.isEmpty()) {
+                    Address address = result.get(0);
+                    if (address.getLocality() != null) {
+                        city = address.getLocality();
+                    } else if (address.getSubAdminArea() != null) {
+                        city = address.getSubAdminArea();
+                    } else if (address.getAdminArea() != null) {
+                        city = address.getAdminArea();
                     }
-                    reader.close();
-
-                    JSONObject json = new JSONObject(sb.toString());
-                    JSONObject data = json.getJSONObject("data");
-                    JSONObject timings = data.getJSONObject("timings");
-
-                    String fajr = timings.getString("Fajr");
-                    String sunrise = timings.getString("Sunrise");
-                    String dhuhr = timings.getString("Dhuhr");
-                    String asr = timings.getString("Asr");
-                    String maghrib = timings.getString("Maghrib");
-                    String isha = timings.getString("Isha");
-
-                    // Get readable date
-                    JSONObject dateObj = data.getJSONObject("date");
-                    JSONObject hijri = dateObj.getJSONObject("hijri");
-                    String hijriDate = hijri.getString("day") + " "
-                            + hijri.getJSONObject("month").getString("ar") + " "
-                            + hijri.getString("year") + " هـ";
-
-                    // Get location from meta
-                    JSONObject meta = data.getJSONObject("meta");
-                    String timezone = meta.getString("timezone");
-
-                    runOnUiThread(() -> {
-                        tvFajr.setText(fajr);
-                        tvSunrise.setText(sunrise);
-                        tvDhuhr.setText(dhuhr);
-                        tvAsr.setText(asr);
-                        tvMaghrib.setText(maghrib);
-                        tvIsha.setText(isha);
-                        tvDate.setText(hijriDate);
-                        if (locationName.isEmpty()) {
-                            tvLocation.setText(timezone);
-                        }
-                        progressBar.setVisibility(View.GONE);
-
-                        // Schedule prayer time notifications
-                        PrayerAlarmScheduler.schedulePrayerAlarms(
-                                PrayerTimesActivity.this,
-                                fajr, sunrise, dhuhr, asr, maghrib, isha);
-
-                        // Cache times for widget
-                        getSharedPreferences("prayer_times_cache", MODE_PRIVATE).edit()
-                            .putString("fajr", fajr)
-                            .putString("sunrise", sunrise)
-                            .putString("dhuhr", dhuhr)
-                            .putString("asr", asr)
-                            .putString("maghrib", maghrib)
-                            .putString("isha", isha)
-                            .apply();
-
-                        // Update widget
-                        Intent widgetIntent = new Intent(PrayerTimesActivity.this, PrayerTimesWidget.class);
-                        widgetIntent.setAction("com.medoapps.UPDATE_PRAYER_WIDGET");
-                        sendBroadcast(widgetIntent);
-                    });
-                } else {
-                    showError();
                 }
-                conn.disconnect();
-            } catch (Exception e) {
-                showError();
+            } catch (Exception ignored) {
+                // Reverse geocoding is best-effort only.
             }
+            PrayerSettings.setLocation(getApplicationContext(), lat, lng, city);
+            AthanScheduler.rescheduleAll(getApplicationContext());
+            runOnUiThread(() -> {
+                if (!isFinishing() && !isDestroyed()) renderAll();
+            });
         });
     }
 
-    private void showError() {
-        runOnUiThread(() -> {
-            progressBar.setVisibility(View.GONE);
-            tvError.setVisibility(View.VISIBLE);
-            tvError.setText("تعذر تحميل مواقيت الصلاة");
-        });
+    // ----------------------------------------------------------- permissions
+
+    private void requestStartupPermissions() {
+        ArrayList<String> needed = new ArrayList<>();
+        if (Build.VERSION.SDK_INT >= 33
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            needed.add(Manifest.permission.POST_NOTIFICATIONS);
+        }
+        if (PrayerSettings.getLocationMode(this) == PrayerSettings.LOCATION_AUTO
+                && !hasLocationPermission()) {
+            needed.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            needed.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+        if (!needed.isEmpty()) {
+            ActivityCompat.requestPermissions(this,
+                    needed.toArray(new String[0]), PERMISSIONS_REQUEST_CODE);
+        }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                fetchLocation();
-            } else {
-                // Use Makkah as fallback
-                fetchPrayerTimes(21.4225, 39.8262, "مكة المكرمة");
+        if (requestCode != PERMISSIONS_REQUEST_CODE) return;
+
+        boolean locationGranted = false;
+        for (int i = 0; i < permissions.length; i++) {
+            boolean granted = i < grantResults.length
+                    && grantResults[i] == PackageManager.PERMISSION_GRANTED;
+            if (Manifest.permission.POST_NOTIFICATIONS.equals(permissions[i]) && !granted) {
+                Toast.makeText(this, R.string.athan_notification_permission_rationale,
+                        Toast.LENGTH_LONG).show();
+            }
+            if ((Manifest.permission.ACCESS_FINE_LOCATION.equals(permissions[i])
+                    || Manifest.permission.ACCESS_COARSE_LOCATION.equals(permissions[i]))
+                    && granted) {
+                locationGranted = true;
+            }
+        }
+        if (locationGranted
+                && PrayerSettings.getLocationMode(this) == PrayerSettings.LOCATION_AUTO) {
+            fetchLocation();
+        }
+        // Denied location: the engine silently falls back to Makkah coordinates.
+    }
+
+    // ----------------------------------------------------------- exact alarm
+
+    private void updateExactAlarmCard() {
+        cardExactAlarm.setVisibility(
+                AthanScheduler.canUseExactAlarms(this) ? View.GONE : View.VISIBLE);
+    }
+
+    private void openExactAlarmSettings() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                startActivity(new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
+                        Uri.parse("package:" + getPackageName())));
+            } catch (Exception ignored) {
+                // Some OEM builds do not expose this settings screen.
             }
         }
     }
 
+    // ------------------------------------------------------------- lifecycle
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    protected void onResume() {
+        super.onResume();
+        renderAll();
+        AthanScheduler.rescheduleAll(this);
+        updateExactAlarmCard();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cancelCountdown();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        cancellationTokenSource.cancel();
         executor.shutdown();
+    }
+
+    // ------------------------------------------------------------------ menu
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(Menu.NONE, MENU_MONTHLY, 0, R.string.athan_monthly_timetable)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        menu.add(Menu.NONE, MENU_SETTINGS, 1, R.string.athan_settings_title)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        }
+        if (id == MENU_MONTHLY) {
+            startActivity(new Intent(this, MonthlyPrayerTimesActivity.class));
+            return true;
+        }
+        if (id == MENU_SETTINGS) {
+            startActivity(new Intent(this, AthanSettingsActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private int dp(int value) {
+        return Math.round(value * getResources().getDisplayMetrics().density);
     }
 }

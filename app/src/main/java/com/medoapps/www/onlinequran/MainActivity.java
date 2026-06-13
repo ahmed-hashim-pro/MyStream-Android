@@ -207,6 +207,12 @@ public  class  MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         instance8Ref = new WeakReference<>(this);
 
+        // Keep athan alarms in place on every app open; must never break launch.
+        try {
+            com.medoapps.www.onlinequran.athan.AthanScheduler.rescheduleAll(this);
+        } catch (Exception ignored) {
+        }
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         youTubePosts=new YouTubePosts();

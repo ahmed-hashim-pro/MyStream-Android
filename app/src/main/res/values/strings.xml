@@ -981,4 +981,124 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="reminder_status_select_time">اختر وقت التذكير</string>
     <string name="reminder_status_off">المنبه غير مفعّل</string>
 
+    <!-- ============================== Athan feature ============================== -->
+    <string name="athan_prayer_fajr">Fajr</string>
+    <string name="athan_prayer_sunrise">Sunrise</string>
+    <string name="athan_prayer_dhuhr">Dhuhr</string>
+    <string name="athan_prayer_asr">Asr</string>
+    <string name="athan_prayer_maghrib">Maghrib</string>
+    <string name="athan_prayer_isha">Isha</string>
+
+    <string-array name="athan_hijri_months">
+        <item>Muharram</item>
+        <item>Safar</item>
+        <item>Rabiʿ al-Awwal</item>
+        <item>Rabiʿ al-Thani</item>
+        <item>Jumada al-Ula</item>
+        <item>Jumada al-Akhirah</item>
+        <item>Rajab</item>
+        <item>Shaʿban</item>
+        <item>Ramadan</item>
+        <item>Shawwal</item>
+        <item>Dhul-Qaʿdah</item>
+        <item>Dhul-Hijjah</item>
+    </string-array>
+    <string name="athan_hijri_date_format">%1$d %2$s %3$d AH</string>
+
+    <!-- Main screen -->
+    <string name="athan_next_prayer">Next prayer</string>
+    <string name="athan_time_remaining">in %s</string>
+    <string name="athan_now">now</string>
+    <string name="athan_monthly_timetable">Monthly timetable</string>
+    <string name="athan_settings_title">Athan settings</string>
+    <string name="athan_location_makkah_fallback">Location unavailable — showing Makkah times. Tap to set your city.</string>
+    <string name="athan_today">Today</string>
+    <string name="athan_exact_alarm_card">Allow exact alarms so the athan fires precisely on time</string>
+    <string name="athan_exact_alarm_enable">Allow</string>
+    <string name="athan_notification_permission_rationale">Notifications are required to play the athan at prayer times</string>
+
+    <!-- Notification modes -->
+    <string name="athan_mode_off">Off</string>
+    <string name="athan_mode_silent">Silent</string>
+    <string name="athan_mode_beep">Notification</string>
+    <string name="athan_mode_athan">Full athan</string>
+
+    <!-- Settings screen -->
+    <string name="athan_section_calculation">Calculation</string>
+    <string name="athan_calculation_method">Calculation method</string>
+    <string name="athan_madhab">Asr juristic method (madhab)</string>
+    <string name="athan_madhab_shafi">Standard (Shafiʿi, Maliki, Hanbali)</string>
+    <string name="athan_madhab_hanafi">Hanafi</string>
+    <string name="athan_high_latitude">High-latitude rule</string>
+    <string name="athan_corrections">Manual corrections (minutes)</string>
+    <string name="athan_section_notifications">Athan &amp; notifications</string>
+    <string name="athan_sound">Athan sound</string>
+    <string name="athan_sound_default">Default alarm sound</string>
+    <string name="athan_pick_sound">Choose athan sound</string>
+    <string name="athan_preview">Preview</string>
+    <string name="athan_vibrate">Vibrate</string>
+    <string name="athan_dua_after">Show dua after athan</string>
+    <string name="athan_pre_reminder">Reminder before prayer</string>
+    <string name="athan_iqama_reminder">Iqama reminder after athan</string>
+    <string name="athan_minutes_format">%d min</string>
+    <string name="athan_off_option">Off</string>
+    <string name="athan_section_location">Location</string>
+    <string name="athan_location_auto">Automatic (device location)</string>
+    <string name="athan_location_manual">Manual city</string>
+    <string name="athan_search_city">Search for a city…</string>
+    <string name="athan_use_current_location">Use current location</string>
+    <string name="athan_location_updated">Location updated</string>
+    <string name="athan_city_not_found">City not found</string>
+    <string name="athan_section_calendar">Calendar</string>
+    <string name="athan_hijri_offset">Hijri date adjustment</string>
+    <string name="athan_days_format">%+d days</string>
+
+    <!-- Notifications -->
+    <string name="athan_channel_athan">Athan</string>
+    <string name="athan_channel_reminders">Prayer reminders</string>
+    <string name="athan_channel_silent">Prayer times (silent)</string>
+    <string name="athan_notif_title">It\'s time for %s</string>
+    <string name="athan_notif_pre_title">%1$s is in %2$d minutes</string>
+    <string name="athan_notif_iqama_title">Iqama time for %s</string>
+    <string name="athan_notif_time_at">Prayer time: %s</string>
+    <string name="athan_stop">Stop athan</string>
+    <string name="athan_dua_text">اللهم رب هذه الدعوة التامة والصلاة القائمة، آت محمداً الوسيلة والفضيلة، وابعثه مقاماً محموداً الذي وعدته</string>
+
+    <!-- Calculation methods (display order matches athan_method_values) -->
+    <string-array name="athan_method_names">
+        <item>Umm al-Qura (Makkah)</item>
+        <item>Muslim World League</item>
+        <item>Egyptian General Authority</item>
+        <item>University of Karachi</item>
+        <item>ISNA (North America)</item>
+        <item>Dubai (UAE)</item>
+        <item>Moonsighting Committee</item>
+        <item>Kuwait</item>
+        <item>Qatar</item>
+        <item>Singapore</item>
+    </string-array>
+    <string-array name="athan_method_values" translatable="false">
+        <item>UMM_AL_QURA</item>
+        <item>MUSLIM_WORLD_LEAGUE</item>
+        <item>EGYPTIAN</item>
+        <item>KARACHI</item>
+        <item>NORTH_AMERICA</item>
+        <item>DUBAI</item>
+        <item>MOON_SIGHTING_COMMITTEE</item>
+        <item>KUWAIT</item>
+        <item>QATAR</item>
+        <item>SINGAPORE</item>
+    </string-array>
+
+    <string-array name="athan_high_latitude_names">
+        <item>Middle of the night</item>
+        <item>One-seventh of the night</item>
+        <item>Twilight angle</item>
+    </string-array>
+    <string-array name="athan_high_latitude_values" translatable="false">
+        <item>MIDDLE_OF_THE_NIGHT</item>
+        <item>SEVENTH_OF_THE_NIGHT</item>
+        <item>TWILIGHT_ANGLE</item>
+    </string-array>
+
 </resources>
