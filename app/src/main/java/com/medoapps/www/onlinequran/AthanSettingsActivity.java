@@ -249,6 +249,10 @@ public class AthanSettingsActivity extends AppCompatActivity {
         refreshSoundLabels();
         bindSwitch(R.id.switch_vibrate, true);
         bindSwitch(R.id.switch_dua, false);
+        SwitchCompat volStop = findViewById(R.id.switch_volume_stop);
+        volStop.setChecked(PrayerSettings.isVolumeKeyStopEnabled(this));
+        volStop.setOnCheckedChangeListener((b, checked) ->
+                PrayerSettings.setVolumeKeyStopEnabled(this, checked));
         bindMinutesSpinner(findViewById(R.id.spinner_pre_reminder), PRE_REMINDER_VALUES, true);
         bindMinutesSpinner(findViewById(R.id.spinner_iqama), IQAMA_VALUES, false);
     }

@@ -46,6 +46,15 @@ public class AthanPlaybackService extends Service {
     private int currentIndex = -1;
     private long prayerTimeMillis;
     private String kind = KIND_ATHAN;
+    private android.os.Handler volumeHandler;
+    private Runnable volumePoll;
+    private int[] initialVolumes;
+    // A volume key may route to any of these depending on device/state.
+    private static final int[] WATCHED_STREAMS = {
+            AudioManager.STREAM_ALARM, AudioManager.STREAM_MUSIC,
+            AudioManager.STREAM_RING, AudioManager.STREAM_NOTIFICATION,
+            AudioManager.STREAM_SYSTEM
+    };
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -72,6 +81,7 @@ public class AthanPlaybackService extends Service {
         if (PrayerSettings.isVibrateEnabled(this)) {
             startVibration();
         }
+        registerVolumeStop();
         return START_NOT_STICKY;
     }
 
@@ -236,9 +246,60 @@ public class AthanPlaybackService extends Service {
         }
     }
 
+    // -------------------------------------------------- stop on volume key
+
+    /**
+     * When the athan plays without the full-screen screen in front (e.g. shown
+     * as a heads-up notification), a volume-key press changes the alarm-stream
+     * volume; detect that change and stop, so the user can silence it fast.
+     * The full-screen activity handles the keys directly when it is foreground.
+     */
+    private void registerVolumeStop() {
+        if (!PrayerSettings.isVolumeKeyStopEnabled(this)) return;
+        if (audioManager == null) {
+            audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        }
+        if (audioManager == null) return;
+        initialVolumes = new int[WATCHED_STREAMS.length];
+        for (int i = 0; i < WATCHED_STREAMS.length; i++) {
+            initialVolumes[i] = audioManager.getStreamVolume(WATCHED_STREAMS[i]);
+        }
+        volumeHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+        final long startedAt = System.currentTimeMillis();
+        volumePoll = new Runnable() {
+            @Override
+            public void run() {
+                // Grace period so our own startup/focus volume settling is ignored.
+                if (System.currentTimeMillis() - startedAt >= 600 && volumeChanged()) {
+                    stopPlayback();
+                    stopSelf();
+                    return;
+                }
+                if (volumeHandler != null) volumeHandler.postDelayed(this, 250);
+            }
+        };
+        volumeHandler.postDelayed(volumePoll, 250);
+    }
+
+    private boolean volumeChanged() {
+        for (int i = 0; i < WATCHED_STREAMS.length; i++) {
+            if (audioManager.getStreamVolume(WATCHED_STREAMS[i]) != initialVolumes[i]) return true;
+        }
+        return false;
+    }
+
+    private void unregisterVolumeStop() {
+        if (volumeHandler != null && volumePoll != null) {
+            volumeHandler.removeCallbacks(volumePoll);
+        }
+        volumeHandler = null;
+        volumePoll = null;
+    }
+
     // ------------------------------------------------------------- teardown
 
     private void stopPlayback() {
+        unregisterVolumeStop();
         if (mediaPlayer != null) {
             try {
                 if (mediaPlayer.isPlaying()) mediaPlayer.stop();

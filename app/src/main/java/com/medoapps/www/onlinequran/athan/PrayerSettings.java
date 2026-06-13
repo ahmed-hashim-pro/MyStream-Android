@@ -144,6 +144,15 @@ public final class PrayerSettings {
         prefs(c).edit().putBoolean("vibrate", enabled).apply();
     }
 
+    /** Whether pressing a volume key stops a playing athan. */
+    public static boolean isVolumeKeyStopEnabled(Context c) {
+        return prefs(c).getBoolean("volume_key_stop", true);
+    }
+
+    public static void setVolumeKeyStopEnabled(Context c, boolean enabled) {
+        prefs(c).edit().putBoolean("volume_key_stop", enabled).apply();
+    }
+
     /** Whether to append the post-athan dua to athan notifications. */
     public static boolean isDuaAfterAthanEnabled(Context c) {
         return prefs(c).getBoolean("dua_after_athan", true);

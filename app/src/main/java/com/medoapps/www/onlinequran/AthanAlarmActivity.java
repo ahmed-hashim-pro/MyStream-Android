@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -83,6 +84,22 @@ public class AthanAlarmActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         setIntent(intent);
         recreate();
+    }
+
+    /** Optionally stop the athan with a volume key (consume so volume UI stays hidden). */
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        int k = event.getKeyCode();
+        if ((k == KeyEvent.KEYCODE_VOLUME_UP || k == KeyEvent.KEYCODE_VOLUME_DOWN
+                || k == KeyEvent.KEYCODE_VOLUME_MUTE)
+                && PrayerSettings.isVolumeKeyStopEnabled(this)) {
+            if (event.getAction() == KeyEvent.ACTION_UP) {
+                stopAthan();
+                finish();
+            }
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     private void stopAthan() {
