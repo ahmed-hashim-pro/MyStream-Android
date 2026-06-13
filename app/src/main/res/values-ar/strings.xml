@@ -708,7 +708,9 @@
     <string name="athan_search_city">ابحث عن مدينة…</string>
     <string name="athan_use_current_location">استخدام الموقع الحالي</string>
     <string name="athan_location_updated">تم تحديث الموقع</string>
-    <string name="athan_city_not_found">لم يتم العثور على المدينة</string>
+    <string name="athan_city_not_found">لم يتم العثور على المدينة. تحقق من الإملاء أو الاتصال بالإنترنت.</string>
+    <string name="athan_searching">جارٍ البحث…</string>
+    <string name="athan_select_city">اختر مدينتك</string>
     <string name="athan_section_calendar">التقويم</string>
     <string name="athan_hijri_offset">تعديل التاريخ الهجري</string>
     <string name="athan_days_format">%+d يوم</string>

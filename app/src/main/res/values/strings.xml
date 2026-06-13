@@ -1048,7 +1048,9 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="athan_search_city">Search for a city…</string>
     <string name="athan_use_current_location">Use current location</string>
     <string name="athan_location_updated">Location updated</string>
-    <string name="athan_city_not_found">City not found</string>
+    <string name="athan_city_not_found">City not found. Check the spelling or your connection.</string>
+    <string name="athan_searching">Searching…</string>
+    <string name="athan_select_city">Select your city</string>
     <string name="athan_section_calendar">Calendar</string>
     <string name="athan_hijri_offset">Hijri date adjustment</string>
     <string name="athan_days_format">%+d days</string>

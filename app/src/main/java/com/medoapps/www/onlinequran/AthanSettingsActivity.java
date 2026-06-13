@@ -42,7 +42,16 @@ import com.medoapps.www.onlinequran.athan.AthanScheduler;
 import com.medoapps.www.onlinequran.athan.PrayerSettings;
 import com.medoapps.www.onlinequran.athan.PrayerTimeEngine;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -377,28 +386,152 @@ public class AthanSettingsActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.athan_location_updated, Toast.LENGTH_SHORT).show();
     }
 
+    /** A single geocoding candidate the user can pick from. */
+    private static final class CityResult {
+        final double lat, lng;
+        final String shortName;  // stored as the city label
+        final String fullLabel;  // shown in the disambiguation list
+
+        CityResult(double lat, double lng, String shortName, String fullLabel) {
+            this.lat = lat;
+            this.lng = lng;
+            this.shortName = shortName;
+            this.fullLabel = fullLabel;
+        }
+    }
+
     private void searchCity() {
         final String query = editCity.getText().toString().trim();
         if (query.isEmpty()) return;
+        Toast.makeText(this, R.string.athan_searching, Toast.LENGTH_SHORT).show();
         executor.execute(() -> {
-            List<Address> results = null;
-            try {
-                results = new Geocoder(this, Locale.getDefault()).getFromLocationName(query, 1);
-            } catch (IOException ignored) {
+            // Prefer the device geocoder, but it is missing or empty on many
+            // devices/emulators; fall back to a network geocoder so a valid
+            // city is still found. Both return several candidates so the user
+            // can disambiguate same-named places.
+            List<CityResult> candidates = geocodeWithDevice(query);
+            if (candidates.isEmpty()) {
+                candidates = geocodeWithNominatim(query);
             }
-            final List<Address> found = results;
+            final List<CityResult> found = candidates;
             runOnUiThread(() -> {
                 if (isFinishing()) return;
-                if (found == null || found.isEmpty()) {
-                    Toast.makeText(this, R.string.athan_city_not_found, Toast.LENGTH_SHORT).show();
-                    return;
+                if (found.isEmpty()) {
+                    Toast.makeText(this, R.string.athan_city_not_found, Toast.LENGTH_LONG).show();
+                } else if (found.size() == 1) {
+                    CityResult c = found.get(0);
+                    applyLocation(c.lat, c.lng, c.shortName);
+                } else {
+                    showCityChooser(found);
                 }
-                Address address = found.get(0);
-                String locality = address.getLocality();
-                applyLocation(address.getLatitude(), address.getLongitude(),
-                        locality == null || locality.isEmpty() ? query : locality);
             });
         });
+    }
+
+    /** Device geocoder (Google/OEM backend). Returns up to 5 candidates. */
+    private List<CityResult> geocodeWithDevice(String query) {
+        List<CityResult> out = new ArrayList<>();
+        if (!Geocoder.isPresent()) return out;
+        try {
+            List<Address> results =
+                    new Geocoder(this, Locale.getDefault()).getFromLocationName(query, 5);
+            if (results != null) {
+                for (Address a : results) {
+                    out.add(new CityResult(a.getLatitude(), a.getLongitude(),
+                            shortNameOf(a, query), fullLabelOf(a)));
+                }
+            }
+        } catch (IOException ignored) {
+            // Backend unreachable — caller falls back to the network geocoder.
+        }
+        return out;
+    }
+
+    private static String shortNameOf(Address a, String fallback) {
+        String name = a.getLocality();
+        if (name == null || name.isEmpty()) name = a.getSubAdminArea();
+        if (name == null || name.isEmpty()) name = a.getAdminArea();
+        if (name == null || name.isEmpty()) name = a.getFeatureName();
+        return (name == null || name.isEmpty()) ? fallback : name;
+    }
+
+    private static String fullLabelOf(Address a) {
+        StringBuilder sb = new StringBuilder();
+        if (a.getMaxAddressLineIndex() >= 0) {
+            sb.append(a.getAddressLine(0));
+        } else {
+            appendPart(sb, a.getLocality());
+            appendPart(sb, a.getAdminArea());
+            appendPart(sb, a.getCountryName());
+        }
+        return sb.length() == 0 ? a.getFeatureName() : sb.toString();
+    }
+
+    private static void appendPart(StringBuilder sb, String part) {
+        if (part == null || part.isEmpty()) return;
+        if (sb.length() > 0) sb.append(", ");
+        sb.append(part);
+    }
+
+    /**
+     * OpenStreetMap Nominatim geocoder — a network fallback that works even
+     * when the device has no geocoder backend. Returns up to 5 candidates.
+     */
+    private List<CityResult> geocodeWithNominatim(String query) {
+        List<CityResult> out = new ArrayList<>();
+        HttpURLConnection conn = null;
+        try {
+            String url = "https://nominatim.openstreetmap.org/search?format=jsonv2"
+                    + "&accept-language=" + Locale.getDefault().getLanguage()
+                    + "&limit=5&q=" + URLEncoder.encode(query, "UTF-8");
+            conn = (HttpURLConnection) new URL(url).openConnection();
+            conn.setRequestMethod("GET");
+            // Nominatim's usage policy requires an identifying User-Agent.
+            conn.setRequestProperty("User-Agent", "MyStream-Athan/1.0 (com.medoapps.www.onlinequran)");
+            conn.setConnectTimeout(10000);
+            conn.setReadTimeout(10000);
+            if (conn.getResponseCode() != 200) return out;
+
+            StringBuilder body = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), "UTF-8"))) {
+                String line;
+                while ((line = reader.readLine()) != null) body.append(line);
+            }
+
+            JSONArray arr = new JSONArray(body.toString());
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject o = arr.getJSONObject(i);
+                double lat = Double.parseDouble(o.getString("lat"));
+                double lng = Double.parseDouble(o.getString("lon"));
+                String display = o.optString("display_name", "");
+                String shortName = o.optString("name", "");
+                if (shortName.isEmpty()) {
+                    shortName = display.contains(",") ? display.substring(0, display.indexOf(',')) : display;
+                }
+                if (shortName.isEmpty()) shortName = query;
+                out.add(new CityResult(lat, lng, shortName,
+                        display.isEmpty() ? shortName : display));
+            }
+        } catch (Exception ignored) {
+            // Network/parse failure — caller shows "city not found".
+        } finally {
+            if (conn != null) conn.disconnect();
+        }
+        return out;
+    }
+
+    private void showCityChooser(List<CityResult> candidates) {
+        CharSequence[] labels = new CharSequence[candidates.size()];
+        for (int i = 0; i < candidates.size(); i++) labels[i] = candidates.get(i).fullLabel;
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle(R.string.athan_select_city)
+                .setItems(labels, (dialog, which) -> {
+                    CityResult c = candidates.get(which);
+                    applyLocation(c.lat, c.lng, c.shortName);
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
     }
 
     private boolean hasLocationPermission() {
