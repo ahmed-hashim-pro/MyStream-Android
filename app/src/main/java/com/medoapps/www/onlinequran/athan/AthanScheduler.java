@@ -42,6 +42,14 @@ public final class AthanScheduler {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
+        // Master switch: when the feature is off, cancel everything and
+        // schedule nothing.
+        if (!PrayerSettings.isAthanFeatureEnabled(context)) {
+            cancelAll(context, alarmManager);
+            com.medoapps.www.onlinequran.PrayerAlarmScheduler.cancelAllAlarms(context);
+            return;
+        }
+
         cancelAll(context, alarmManager);
         // Legacy alarms from the pre-athan PrayerAlarmScheduler (request codes
         // 0-4) survive app updates and would double-notify; clear them.

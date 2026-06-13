@@ -90,15 +90,50 @@ public final class PrayerSettings {
         prefs(c).edit().putInt("mode_" + prayerIndex, mode).apply();
     }
 
-    // ----------------------------------------------------------------- sound
+    // -------------------------------------------------------- feature master
 
-    /** Ringtone URI string for the athan sound of a prayer; "" = default alarm tone. */
-    public static String getAthanSoundUri(Context c, int prayerIndex) {
-        return prefs(c).getString("athan_sound_" + prayerIndex, "");
+    /** Master switch: when off, no athan/reminder alarms or notifications fire. */
+    public static boolean isAthanFeatureEnabled(Context c) {
+        return prefs(c).getBoolean("athan_feature_enabled", true);
     }
 
-    public static void setAthanSoundUri(Context c, int prayerIndex, String uri) {
-        prefs(c).edit().putString("athan_sound_" + prayerIndex, uri == null ? "" : uri).apply();
+    public static void setAthanFeatureEnabled(Context c, boolean enabled) {
+        prefs(c).edit().putBoolean("athan_feature_enabled", enabled).apply();
+    }
+
+    // ----------------------------------------------------------------- sound
+
+    /**
+     * Selected sound id for a slot ({@link AthanSound#SLOT_ATHAN}/SLOT_FAJR/
+     * SLOT_IQAMA). See {@link AthanSound#defaultId(String)}.
+     */
+    public static String getSoundId(Context c, String slot) {
+        return prefs(c).getString("sound_id_" + slot, AthanSound.defaultId(slot));
+    }
+
+    public static void setSoundId(Context c, String slot, String id) {
+        prefs(c).edit().putString("sound_id_" + slot, id).apply();
+    }
+
+    /** Per-slot device ringtone URI (used when the slot's sound id is "device"). */
+    public static String getDeviceSoundUri(Context c, String slot) {
+        return prefs(c).getString("device_uri_" + slot, "");
+    }
+
+    public static void setDeviceSoundUri(Context c, String slot, String uri) {
+        prefs(c).edit().putString("device_uri_" + slot, uri == null ? "" : uri).apply();
+    }
+
+    /**
+     * The sound slot a given prayer's athan should use: Fajr uses the Fajr
+     * slot unless it's set to "same as athan".
+     */
+    public static String athanSlotForPrayer(Context c, int prayerIndex) {
+        if (prayerIndex == PRAYER_FAJR
+                && !"default".equals(getSoundId(c, AthanSound.SLOT_FAJR))) {
+            return AthanSound.SLOT_FAJR;
+        }
+        return AthanSound.SLOT_ATHAN;
     }
 
     public static boolean isVibrateEnabled(Context c) {

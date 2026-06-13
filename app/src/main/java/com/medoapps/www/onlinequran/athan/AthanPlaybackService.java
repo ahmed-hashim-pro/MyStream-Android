@@ -30,6 +30,11 @@ public class AthanPlaybackService extends Service {
 
     public static final String ACTION_STOP = "com.medoapps.athan.STOP";
 
+    /** Which audio event this playback is for: {@code "athan"} or {@code "iqama"}. */
+    public static final String EXTRA_KIND = "athan_kind";
+    public static final String KIND_ATHAN = "athan";
+    public static final String KIND_IQAMA = "iqama";
+
     private static final int NOTIF_ID = 5300;
     private static final long[] VIBRATE_PATTERN = {0, 500, 400, 500, 400, 500};
 
@@ -40,6 +45,7 @@ public class AthanPlaybackService extends Service {
     private AudioManager.OnAudioFocusChangeListener focusListener;
     private int currentIndex = -1;
     private long prayerTimeMillis;
+    private String kind = KIND_ATHAN;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -55,6 +61,8 @@ public class AthanPlaybackService extends Service {
         currentIndex = index;
         prayerTimeMillis = (intent == null) ? System.currentTimeMillis()
                 : intent.getLongExtra(AthanScheduler.EXTRA_PRAYER_TIME, System.currentTimeMillis());
+        String k = (intent == null) ? null : intent.getStringExtra(EXTRA_KIND);
+        kind = TextUtils.isEmpty(k) ? KIND_ATHAN : k;
 
         AthanAlarmReceiver.createChannels(this);
         startForeground(NOTIF_ID, buildNotification(index));
@@ -69,13 +77,16 @@ public class AthanPlaybackService extends Service {
 
     private android.app.Notification buildNotification(int index) {
         String prayerName = getString(PrayerTimeEngine.PRAYER_NAME_RES[index]);
+        String title = KIND_IQAMA.equals(kind)
+                ? getString(R.string.athan_notif_iqama_title, prayerName)
+                : getString(R.string.athan_notif_title, prayerName);
         Intent stopIntent = new Intent(this, AthanPlaybackService.class).setAction(ACTION_STOP);
         PendingIntent stopPi = PendingIntent.getService(this, NOTIF_ID, stopIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         return new NotificationCompat.Builder(this, AthanAlarmReceiver.CHANNEL_ATHAN)
                 .setSmallIcon(R.drawable.ic_prayer_times)
-                .setContentTitle(getString(R.string.athan_notif_title, prayerName))
+                .setContentTitle(title)
                 .setOngoing(true)
                 .addAction(0, getString(R.string.athan_stop), stopPi)
                 .build();
@@ -120,10 +131,17 @@ public class AthanPlaybackService extends Service {
     }
 
     private Uri resolveSoundUri(int index) {
-        String saved = PrayerSettings.getAthanSoundUri(this, index);
-        if (!TextUtils.isEmpty(saved)) {
-            return Uri.parse(saved);
-        }
+        String slot = KIND_IQAMA.equals(kind)
+                ? AthanSound.SLOT_IQAMA
+                : PrayerSettings.athanSlotForPrayer(this, index);
+        AthanSound sel = AthanSound.byId(
+                AthanSound.catalogForSlot(this, slot), PrayerSettings.getSoundId(this, slot));
+        Uri u = (sel == null) ? null : sel.resolveUri(this, slot);
+        if (u != null) return u;
+
+        // Silent selections never reach the service (the receiver guards that),
+        // so a null here means a missing download or unresolved device tone —
+        // fall back to the system alarm sound.
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (uri == null) {
             uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

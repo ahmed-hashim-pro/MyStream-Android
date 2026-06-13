@@ -6,10 +6,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
-import android.media.AudioAttributes;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -40,6 +36,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.CancellationTokenSource;
 import com.medoapps.www.onlinequran.athan.AthanScheduler;
+import com.medoapps.www.onlinequran.athan.AthanSound;
 import com.medoapps.www.onlinequran.athan.PrayerSettings;
 import com.medoapps.www.onlinequran.athan.PrayerTimeEngine;
 
@@ -65,15 +62,15 @@ import java.util.concurrent.Executors;
  */
 public class AthanSettingsActivity extends AppCompatActivity {
 
-    private static final int REQUEST_PICK_SOUND = 7001;
     private static final int LOCATION_PERMISSION_CODE = 7002;
     private static final int[] PRE_REMINDER_VALUES = {0, 5, 10, 15, 20, 30};
     private static final int[] IQAMA_VALUES = {0, 10, 15, 20, 25, 30};
 
-    private TextView tvSoundName, tvCurrentCity, btnUseCurrentLocation;
+    private TextView tvCurrentCity, btnUseCurrentLocation;
+    private TextView tvSoundAthan, tvSoundFajr, tvSoundIqama;
     private EditText editCity;
-    private LinearLayout manualLocationContainer;
-    private android.media.MediaPlayer previewPlayer;
+    private LinearLayout manualLocationContainer, dependentContainer;
+    private SwitchCompat switchAthanFeature;
     private FusedLocationProviderClient fusedLocationClient;
     private final CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -99,11 +96,43 @@ public class AthanSettingsActivity extends AppCompatActivity {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        setupMasterSwitch();
         setupCalculationSection();
         buildCorrectionRows();
         setupNotificationsSection();
         setupLocationSection();
         setupCalendarSection();
+
+        applyFeatureEnabled(PrayerSettings.isAthanFeatureEnabled(this));
+    }
+
+    // ----------------------------------------------------- master switch
+
+    private void setupMasterSwitch() {
+        dependentContainer = findViewById(R.id.athan_dependent_container);
+        switchAthanFeature = findViewById(R.id.switch_athan_feature);
+        switchAthanFeature.setChecked(PrayerSettings.isAthanFeatureEnabled(this));
+        switchAthanFeature.setOnCheckedChangeListener((button, checked) -> {
+            PrayerSettings.setAthanFeatureEnabled(this, checked);
+            AthanScheduler.rescheduleAll(this);
+            applyFeatureEnabled(checked);
+        });
+    }
+
+    /** Greys out and disables every control below the master switch when off. */
+    private void applyFeatureEnabled(boolean enabled) {
+        dependentContainer.setAlpha(enabled ? 1f : 0.4f);
+        setEnabledRecursive(dependentContainer, enabled);
+    }
+
+    private void setEnabledRecursive(View view, boolean enabled) {
+        view.setEnabled(enabled);
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                setEnabledRecursive(group.getChildAt(i), enabled);
+            }
+        }
     }
 
     // ------------------------------------------------------- A. calculation
@@ -210,14 +239,35 @@ public class AthanSettingsActivity extends AppCompatActivity {
     // ----------------------------------------------- C. athan & notifications
 
     private void setupNotificationsSection() {
-        tvSoundName = findViewById(R.id.tv_sound_name);
-        tvSoundName.setText(currentSoundTitle());
-        findViewById(R.id.row_athan_sound).setOnClickListener(v -> openSoundPicker());
-        findViewById(R.id.btn_preview).setOnClickListener(v -> togglePreview());
+        tvSoundAthan = findViewById(R.id.tv_sound_athan);
+        tvSoundFajr = findViewById(R.id.tv_sound_fajr);
+        tvSoundIqama = findViewById(R.id.tv_sound_iqama);
+        findViewById(R.id.row_sound_athan).setOnClickListener(v -> openSoundPicker(AthanSound.SLOT_ATHAN));
+        findViewById(R.id.row_sound_fajr).setOnClickListener(v -> openSoundPicker(AthanSound.SLOT_FAJR));
+        findViewById(R.id.row_sound_iqama).setOnClickListener(v -> openSoundPicker(AthanSound.SLOT_IQAMA));
+        refreshSoundLabels();
         bindSwitch(R.id.switch_vibrate, true);
         bindSwitch(R.id.switch_dua, false);
         bindMinutesSpinner(findViewById(R.id.spinner_pre_reminder), PRE_REMINDER_VALUES, true);
         bindMinutesSpinner(findViewById(R.id.spinner_iqama), IQAMA_VALUES, false);
+    }
+
+    /** Updates each sound row's subtitle to the currently selected sound name. */
+    private void refreshSoundLabels() {
+        tvSoundAthan.setText(soundNameForSlot(AthanSound.SLOT_ATHAN));
+        tvSoundFajr.setText(soundNameForSlot(AthanSound.SLOT_FAJR));
+        tvSoundIqama.setText(soundNameForSlot(AthanSound.SLOT_IQAMA));
+    }
+
+    private String soundNameForSlot(String slot) {
+        AthanSound sound = AthanSound.byId(
+                AthanSound.catalogForSlot(this, slot), PrayerSettings.getSoundId(this, slot));
+        return sound == null ? "" : sound.displayName;
+    }
+
+    /** Opens the in-app sound picker for the given slot; selection persists there. */
+    private void openSoundPicker(String slot) {
+        startActivity(new Intent(this, AthanSoundPickerActivity.class).putExtra("slot", slot));
     }
 
     private void bindSwitch(int viewId, final boolean vibrate) {
@@ -249,88 +299,6 @@ public class AthanSettingsActivity extends AppCompatActivity {
             else PrayerSettings.setIqamaReminderMinutes(this, values[position]);
             AthanScheduler.rescheduleAll(this);
         });
-    }
-
-    private String currentSoundTitle() {
-        String uri = PrayerSettings.getAthanSoundUri(this, PrayerSettings.PRAYER_FAJR);
-        if (!uri.isEmpty()) {
-            try {
-                Ringtone ringtone = RingtoneManager.getRingtone(this, Uri.parse(uri));
-                if (ringtone != null) {
-                    String title = ringtone.getTitle(this);
-                    if (title != null && !title.isEmpty()) return title;
-                }
-            } catch (Exception ignored) {
-            }
-        }
-        return getString(R.string.athan_sound_default);
-    }
-
-    private void openSoundPicker() {
-        stopPreview();
-        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE,
-                RingtoneManager.TYPE_ALARM | RingtoneManager.TYPE_RINGTONE);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.athan_pick_sound));
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
-        String saved = PrayerSettings.getAthanSoundUri(this, PrayerSettings.PRAYER_FAJR);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, saved.isEmpty()
-                ? RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) : Uri.parse(saved));
-        try {
-            startActivityForResult(intent, REQUEST_PICK_SOUND);
-        } catch (Exception ignored) {
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_PICK_SOUND && resultCode == RESULT_OK && data != null) {
-            Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-            String value = uri == null ? "" : uri.toString();
-            for (int i = 0; i < PrayerSettings.PRAYER_COUNT; i++) {
-                PrayerSettings.setAthanSoundUri(this, i, value);
-            }
-            tvSoundName.setText(currentSoundTitle());
-            AthanScheduler.rescheduleAll(this);
-        }
-    }
-
-    /** Toggles a local preview of the selected (or default) athan sound. */
-    private void togglePreview() {
-        if (previewPlayer != null) {
-            stopPreview();
-            return;
-        }
-        String saved = PrayerSettings.getAthanSoundUri(this, PrayerSettings.PRAYER_FAJR);
-        Uri uri = saved.isEmpty()
-                ? RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) : Uri.parse(saved);
-        if (uri == null) return;
-        android.media.MediaPlayer player = new android.media.MediaPlayer();
-        try {
-            player.setAudioAttributes(new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_ALARM)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build());
-            player.setDataSource(this, uri);
-            player.setOnCompletionListener(mp -> stopPreview());
-            player.prepare();
-            player.start();
-            previewPlayer = player;
-        } catch (Exception e) {
-            player.release();
-        }
-    }
-
-    private void stopPreview() {
-        if (previewPlayer == null) return;
-        try {
-            previewPlayer.stop();
-        } catch (Exception ignored) {
-        }
-        previewPlayer.release();
-        previewPlayer = null;
     }
 
     // ---------------------------------------------------------- D. location
@@ -738,15 +706,15 @@ public class AthanSettingsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        stopPreview();
+    protected void onResume() {
+        super.onResume();
+        // Sound selection happens in the picker; refresh the row subtitles.
+        refreshSoundLabels();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopPreview();
         cancellationTokenSource.cancel();
         executor.shutdown();
     }

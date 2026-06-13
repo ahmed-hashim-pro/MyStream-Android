@@ -333,6 +333,10 @@
             android:name=".MonthlyPrayerTimesActivity"
             android:exported="false"
             android:theme="@style/QuranToolBar" />
+        <activity
+            android:name=".AthanSoundPickerActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
 
         <activity
             android:name=".LoginActivity"

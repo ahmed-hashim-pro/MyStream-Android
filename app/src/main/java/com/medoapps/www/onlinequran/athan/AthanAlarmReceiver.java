@@ -69,9 +69,39 @@ public class AthanAlarmReceiver extends BroadcastReceiver {
             notify(context, NOTIF_PRE_BASE + index,
                     baseBuilder(context, CHANNEL_BEEP, title, timeAt).build());
         } else if (AthanScheduler.ACTION_IQAMA.equals(action)) {
-            String title = context.getString(R.string.athan_notif_iqama_title, prayerName);
-            notify(context, NOTIF_IQAMA_BASE + index,
-                    baseBuilder(context, CHANNEL_BEEP, title, timeAt).build());
+            handleIqama(context, index, prayerName, timeAt, prayerTimeMillis);
+        }
+    }
+
+    private void handleIqama(Context context, int index,
+                             String prayerName, String timeAt, long prayerTimeMillis) {
+        AthanSound iq = AthanSound.byId(
+                AthanSound.catalogForSlot(context, AthanSound.SLOT_IQAMA),
+                PrayerSettings.getSoundId(context, AthanSound.SLOT_IQAMA));
+
+        String title = context.getString(R.string.athan_notif_iqama_title, prayerName);
+        notify(context, NOTIF_IQAMA_BASE + index,
+                baseBuilder(context, CHANNEL_BEEP, title, timeAt).build());
+
+        // Silent selection: notification only, no playback.
+        if (iq == null || iq.type == AthanSound.Type.SILENT) return;
+
+        Intent serviceIntent = new Intent(context, AthanPlaybackService.class)
+                .putExtra(AthanScheduler.EXTRA_PRAYER_INDEX, index)
+                .putExtra(AthanScheduler.EXTRA_PRAYER_TIME, prayerTimeMillis)
+                .putExtra(AthanPlaybackService.EXTRA_KIND, AthanPlaybackService.KIND_IQAMA);
+        try {
+            ContextCompat.startForegroundService(context, serviceIntent);
+        } catch (Exception e) {
+            // Background FGS starts can be rejected on API 31+; re-post the
+            // iqama notification on the fallback channel, which carries the
+            // alarm sound itself.
+            NotificationCompat.Builder fallback =
+                    baseBuilder(context, CHANNEL_FALLBACK, title, timeAt);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                fallback.setSound(defaultAlarmUri(), android.media.AudioManager.STREAM_ALARM);
+            }
+            notify(context, NOTIF_IQAMA_BASE + index, fallback.build());
         }
     }
 
@@ -102,7 +132,8 @@ public class AthanAlarmReceiver extends BroadcastReceiver {
         if (mode == PrayerSettings.MODE_ATHAN) {
             Intent serviceIntent = new Intent(context, AthanPlaybackService.class)
                     .putExtra(AthanScheduler.EXTRA_PRAYER_INDEX, index)
-                    .putExtra(AthanScheduler.EXTRA_PRAYER_TIME, prayerTimeMillis);
+                    .putExtra(AthanScheduler.EXTRA_PRAYER_TIME, prayerTimeMillis)
+                    .putExtra(AthanPlaybackService.EXTRA_KIND, AthanPlaybackService.KIND_ATHAN);
             try {
                 ContextCompat.startForegroundService(context, serviceIntent);
             } catch (Exception e) {
