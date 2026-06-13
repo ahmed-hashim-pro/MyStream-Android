@@ -418,10 +418,8 @@ public class AthanSettingsActivity extends AppCompatActivity {
                 if (isFinishing()) return;
                 if (found.isEmpty()) {
                     Toast.makeText(this, R.string.athan_city_not_found, Toast.LENGTH_LONG).show();
-                } else if (found.size() == 1) {
-                    CityResult c = found.get(0);
-                    applyLocation(c.lat, c.lng, c.shortName);
                 } else {
+                    // Always let the user confirm the match, even a single one.
                     showCityChooser(found);
                 }
             });
