@@ -1079,6 +1079,7 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="athan_alarm_now">It\'s time for prayer</string>
     <string name="athan_open_app">Open app</string>
     <string name="athan_test">Test athan now</string>
+    <string name="athan_voice_number">Athan %1$d</string>
     <string name="athan_dua_text">اللهم رب هذه الدعوة التامة والصلاة القائمة، آت محمداً الوسيلة والفضيلة، وابعثه مقاماً محموداً الذي وعدته</string>
 
     <!-- Calculation methods (display order matches athan_method_values) -->

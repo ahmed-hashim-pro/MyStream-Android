@@ -75,17 +75,17 @@ public final class AthanSound {
             list.add(new AthanSound("default", c.getString(R.string.athan_same_as_athan),
                     Type.BUNDLED, 0, null, null));
         }
-        // Bundled (offline-ready) voices. voice6 is the default.
-        list.add(bundled("voice6", "Athan — Mansour Al-Zahrani", R.raw.athan6, null));
-        list.add(bundled("voice1", "Athan — Mishary Rashid", R.raw.athan1, null));
-        // Downloadable voices (public URLs; can be migrated to Firebase Storage).
-        list.add(downloadable("voice3", "Athan — Abdul Basit", "https://www.islamcan.com/audio/adhan/azan3.mp3"));
-        list.add(downloadable("voice5", "Athan — Al-Husary", "https://www.islamcan.com/audio/adhan/azan5.mp3"));
-        list.add(downloadable("voice8", "Athan — Ali Mulla (Makkah)", "https://www.islamcan.com/audio/adhan/azan8.mp3"));
-        list.add(downloadable("voice11", "Athan — Madinah", "https://www.islamcan.com/audio/adhan/azan11.mp3"));
-        list.add(downloadable("voice15", "Athan — Egypt", "https://www.islamcan.com/audio/adhan/azan15.mp3"));
-        list.add(downloadable("voice18", "Athan — Istanbul", "https://www.islamcan.com/audio/adhan/azan18.mp3"));
-        list.add(downloadable("voice20", "Athan — Al-Qatami", "https://www.islamcan.com/audio/adhan/azan20.mp3"));
+        // Numbered voices, in order. Athan 1 and the default Athan 6 are
+        // bundled (offline); the rest download on demand.
+        list.add(bundled("voice1", num(c, 1), R.raw.athan1, null));
+        list.add(downloadable("voice3", num(c, 2), "https://www.islamcan.com/audio/adhan/azan3.mp3"));
+        list.add(downloadable("voice5", num(c, 3), "https://www.islamcan.com/audio/adhan/azan5.mp3"));
+        list.add(downloadable("voice8", num(c, 4), "https://www.islamcan.com/audio/adhan/azan8.mp3"));
+        list.add(downloadable("voice11", num(c, 5), "https://www.islamcan.com/audio/adhan/azan11.mp3"));
+        list.add(bundled("voice6", num(c, 6), R.raw.athan6, null)); // default
+        list.add(downloadable("voice15", num(c, 7), "https://www.islamcan.com/audio/adhan/azan15.mp3"));
+        list.add(downloadable("voice18", num(c, 8), "https://www.islamcan.com/audio/adhan/azan18.mp3"));
+        list.add(downloadable("voice20", num(c, 9), "https://www.islamcan.com/audio/adhan/azan20.mp3"));
         list.add(device(c));
         list.add(silent(c));
         return list;
@@ -104,6 +104,10 @@ public final class AthanSound {
     public static List<AthanSound> catalogForSlot(Context c, String slot) {
         if (SLOT_IQAMA.equals(slot)) return iqamaCatalog(c);
         return athanCatalog(c, SLOT_FAJR.equals(slot));
+    }
+
+    private static String num(Context c, int n) {
+        return c.getString(R.string.athan_voice_number, n);
     }
 
     public static AthanSound byId(List<AthanSound> catalog, String id) {
