@@ -736,6 +736,8 @@
     <string name="athan_notif_iqama_title">إقامة صلاة %s</string>
     <string name="athan_notif_time_at">وقت الصلاة: %s</string>
     <string name="athan_stop">إيقاف الأذان</string>
+    <string name="athan_alarm_now">حان وقت الصلاة</string>
+    <string name="athan_open_app">فتح التطبيق</string>
     <string name="athan_dua_text">اللهم رب هذه الدعوة التامة والصلاة القائمة، آت محمداً الوسيلة والفضيلة، وابعثه مقاماً محموداً الذي وعدته</string>
 
     <!-- Calculation methods (display order matches athan_method_values) -->

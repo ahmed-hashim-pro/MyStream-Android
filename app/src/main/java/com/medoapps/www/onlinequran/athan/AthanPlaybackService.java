@@ -84,10 +84,27 @@ public class AthanPlaybackService extends Service {
         PendingIntent stopPi = PendingIntent.getService(this, NOTIF_ID, stopIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
+        // Full-screen intent: the athan screen appears OVER other apps and the
+        // lock screen; when the device is unlocked and in use the system shows
+        // it as a high-priority heads-up notification instead — either way the
+        // Stop control is one tap away.
+        Intent fsIntent = new Intent(this, com.medoapps.www.onlinequran.AthanAlarmActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .putExtra(com.medoapps.www.onlinequran.AthanAlarmActivity.EXTRA_PRAYER_INDEX, index)
+                .putExtra(com.medoapps.www.onlinequran.AthanAlarmActivity.EXTRA_KIND, kind)
+                .putExtra(com.medoapps.www.onlinequran.AthanAlarmActivity.EXTRA_PRAYER_TIME, prayerTimeMillis);
+        PendingIntent fsPi = PendingIntent.getActivity(this, NOTIF_ID, fsIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
         return new NotificationCompat.Builder(this, AthanAlarmReceiver.CHANNEL_ATHAN)
                 .setSmallIcon(R.drawable.ic_prayer_times)
                 .setContentTitle(title)
+                .setContentText(getString(R.string.athan_alarm_now))
                 .setOngoing(true)
+                .setCategory(NotificationCompat.CATEGORY_ALARM)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(fsPi)
+                .setFullScreenIntent(fsPi, true)
                 .addAction(0, getString(R.string.athan_stop), stopPi)
                 .build();
     }
@@ -242,6 +259,10 @@ public class AthanPlaybackService extends Service {
         stopPlayback();
         stopForeground(true);
         replaceAthanNotification();
+        // Dismiss the full-screen athan screen if it's showing.
+        androidx.localbroadcastmanager.content.LocalBroadcastManager.getInstance(this)
+                .sendBroadcast(new Intent(
+                        com.medoapps.www.onlinequran.AthanAlarmActivity.ACTION_ATHAN_STOPPED));
         super.onDestroy();
     }
 
@@ -262,13 +283,17 @@ public class AthanPlaybackService extends Service {
         Intent contentIntent = new Intent(this, com.medoapps.www.onlinequran.PrayerTimesActivity.class);
         PendingIntent contentPi = PendingIntent.getActivity(this, 0, contentIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        // Quiet recap channel (CHANNEL_SILENT, low importance) so re-posting
+        // after Stop doesn't re-alert as a heads-up.
         android.app.Notification finalNotif =
-                new NotificationCompat.Builder(this, AthanAlarmReceiver.CHANNEL_ATHAN)
+                new NotificationCompat.Builder(this, AthanAlarmReceiver.CHANNEL_SILENT)
                         .setSmallIcon(R.drawable.ic_prayer_times)
                         .setContentTitle(getString(R.string.athan_notif_title, prayerName))
                         .setContentText(timeAt)
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(bigText))
                         .setContentIntent(contentPi)
+                        .setPriority(NotificationCompat.PRIORITY_LOW)
+                        .setOnlyAlertOnce(true)
                         .setAutoCancel(true)
                         .build();
         android.app.NotificationManager nm =

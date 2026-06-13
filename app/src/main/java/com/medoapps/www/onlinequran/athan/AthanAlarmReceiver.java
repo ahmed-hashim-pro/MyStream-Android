@@ -108,28 +108,15 @@ public class AthanAlarmReceiver extends BroadcastReceiver {
     private void handleAthan(Context context, int index, int mode,
                              String prayerName, String timeAt, long prayerTimeMillis) {
         String title = context.getString(R.string.athan_notif_title, prayerName);
-        String channel = (mode == PrayerSettings.MODE_ATHAN) ? CHANNEL_ATHAN
-                : (mode == PrayerSettings.MODE_BEEP) ? CHANNEL_BEEP : CHANNEL_SILENT;
-
-        NotificationCompat.Builder builder = baseBuilder(context, channel, title, timeAt);
 
         String bigText = timeAt;
         if (PrayerSettings.isDuaAfterAthanEnabled(context)) {
             bigText = timeAt + "\n\n" + context.getString(R.string.athan_dua_text);
         }
-        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(bigText));
 
         if (mode == PrayerSettings.MODE_ATHAN) {
-            Intent stopIntent = new Intent(context, AthanPlaybackService.class)
-                    .setAction(AthanPlaybackService.ACTION_STOP);
-            PendingIntent stopPi = PendingIntent.getService(context, NOTIF_ATHAN_BASE + index,
-                    stopIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-            builder.addAction(0, context.getString(R.string.athan_stop), stopPi);
-        }
-
-        notify(context, NOTIF_ATHAN_BASE + index, builder.build());
-
-        if (mode == PrayerSettings.MODE_ATHAN) {
+            // The playback service owns the rich notification (full-screen
+            // intent + Stop + audio); don't post a duplicate here.
             Intent serviceIntent = new Intent(context, AthanPlaybackService.class)
                     .putExtra(AthanScheduler.EXTRA_PRAYER_INDEX, index)
                     .putExtra(AthanScheduler.EXTRA_PRAYER_TIME, prayerTimeMillis)
@@ -138,18 +125,49 @@ public class AthanAlarmReceiver extends BroadcastReceiver {
                 ContextCompat.startForegroundService(context, serviceIntent);
             } catch (Exception e) {
                 // Background FGS starts can be rejected on API 31+ (notably when
-                // the alarm degraded to inexact delivery, which is outside the
-                // exact-alarm exemption). Re-post the same notification on the
-                // fallback channel, which carries the alarm sound itself.
+                // the alarm degraded to inexact delivery). Post a sound-carrying,
+                // full-screen fallback so the athan still alerts over apps.
                 NotificationCompat.Builder fallback =
                         baseBuilder(context, CHANNEL_FALLBACK, title, timeAt);
                 fallback.setStyle(new NotificationCompat.BigTextStyle().bigText(bigText));
+                fallback.setCategory(NotificationCompat.CATEGORY_ALARM);
+                fallback.setPriority(NotificationCompat.PRIORITY_HIGH);
+                PendingIntent fsPi = fullScreenPi(context, index,
+                        AthanPlaybackService.KIND_ATHAN, prayerTimeMillis);
+                fallback.setFullScreenIntent(fsPi, true);
+                fallback.setContentIntent(fsPi);
+                fallback.addAction(0, context.getString(R.string.athan_stop),
+                        stopServicePi(context, index));
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                     fallback.setSound(defaultAlarmUri(), android.media.AudioManager.STREAM_ALARM);
                 }
                 notify(context, NOTIF_ATHAN_BASE + index, fallback.build());
             }
+            return;
         }
+
+        // MODE_BEEP / MODE_SILENT: notification only, no over-apps takeover.
+        String channel = (mode == PrayerSettings.MODE_BEEP) ? CHANNEL_BEEP : CHANNEL_SILENT;
+        NotificationCompat.Builder builder = baseBuilder(context, channel, title, timeAt);
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(bigText));
+        notify(context, NOTIF_ATHAN_BASE + index, builder.build());
+    }
+
+    /** Full-screen intent to the over-apps athan screen. */
+    static PendingIntent fullScreenPi(Context context, int index, String kind, long prayerTimeMillis) {
+        Intent fs = new Intent(context, com.medoapps.www.onlinequran.AthanAlarmActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .putExtra(com.medoapps.www.onlinequran.AthanAlarmActivity.EXTRA_PRAYER_INDEX, index)
+                .putExtra(com.medoapps.www.onlinequran.AthanAlarmActivity.EXTRA_KIND, kind)
+                .putExtra(com.medoapps.www.onlinequran.AthanAlarmActivity.EXTRA_PRAYER_TIME, prayerTimeMillis);
+        return PendingIntent.getActivity(context, 5300 + index, fs,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+    }
+
+    static PendingIntent stopServicePi(Context context, int index) {
+        Intent stop = new Intent(context, AthanPlaybackService.class).setAction(AthanPlaybackService.ACTION_STOP);
+        return PendingIntent.getService(context, NOTIF_ATHAN_BASE + index, stop,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 
     static android.net.Uri defaultAlarmUri() {

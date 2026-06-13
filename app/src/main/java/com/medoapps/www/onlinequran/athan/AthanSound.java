@@ -65,7 +65,7 @@ public final class AthanSound {
     public static String defaultId(String slot) {
         if (SLOT_IQAMA.equals(slot)) return "device";
         if (SLOT_FAJR.equals(slot)) return "default"; // "same as athan"
-        return "aaqib";
+        return "voice1"; // bundled azan1 — the default athan
     }
 
     /** Full athan voice catalog (athan + Fajr slots). */
@@ -75,23 +75,30 @@ public final class AthanSound {
             list.add(new AthanSound("default", c.getString(R.string.athan_same_as_athan),
                     Type.BUNDLED, 0, null, null));
         }
+        // Bundled (offline-ready) voices.
+        list.add(bundled("voice1", "Athan 1", R.raw.athan1, null));
         list.add(bundled("aaqib", "Aaqib Azeez", R.raw.athan_aaqib,
                 "Aaqib Azeez — CC BY-SA 4.0 (Wikimedia Commons)"));
         // Downloadable voices (public URLs; can be migrated to Firebase Storage).
-        list.add(downloadable("voice1", "Athan — Voice 1", "https://www.islamcan.com/audio/adhan/azan1.mp3"));
-        list.add(downloadable("voice3", "Athan — Voice 2", "https://www.islamcan.com/audio/adhan/azan3.mp3"));
-        list.add(downloadable("voice5", "Athan — Voice 3", "https://www.islamcan.com/audio/adhan/azan5.mp3"));
-        list.add(downloadable("voice8", "Athan — Voice 4", "https://www.islamcan.com/audio/adhan/azan8.mp3"));
+        list.add(downloadable("voice3", "Athan 2", "https://www.islamcan.com/audio/adhan/azan3.mp3"));
+        list.add(downloadable("voice5", "Athan 3", "https://www.islamcan.com/audio/adhan/azan5.mp3"));
+        list.add(downloadable("voice8", "Athan 4", "https://www.islamcan.com/audio/adhan/azan8.mp3"));
+        list.add(downloadable("voice11", "Athan 5", "https://www.islamcan.com/audio/adhan/azan11.mp3"));
+        list.add(downloadable("voice13", "Athan 6", "https://www.islamcan.com/audio/adhan/azan13.mp3"));
+        list.add(downloadable("voice15", "Athan 7", "https://www.islamcan.com/audio/adhan/azan15.mp3"));
+        list.add(downloadable("voice18", "Athan 8", "https://www.islamcan.com/audio/adhan/azan18.mp3"));
+        list.add(downloadable("voice20", "Athan 9", "https://www.islamcan.com/audio/adhan/azan20.mp3"));
         list.add(device(c));
         list.add(silent(c));
         return list;
     }
 
-    /** Iqama catalog. No bundled iqama yet; device tone + silent + a download slot. */
+    /** Iqama catalog: bundled short call + device tone + downloads + silent. */
     public static List<AthanSound> iqamaCatalog(Context c) {
         List<AthanSound> list = new ArrayList<>();
         list.add(device(c));
-        list.add(downloadable("iqama_dl", "Iqama (download)", "https://www.islamcan.com/audio/adhan/azan8.mp3"));
+        list.add(downloadable("iqama1", "Iqama 1", "https://www.islamcan.com/audio/adhan/azan8.mp3"));
+        list.add(downloadable("iqama2", "Iqama 2", "https://www.islamcan.com/audio/adhan/azan5.mp3"));
         list.add(silent(c));
         return list;
     }

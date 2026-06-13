@@ -1076,6 +1076,8 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="athan_notif_iqama_title">Iqama time for %s</string>
     <string name="athan_notif_time_at">Prayer time: %s</string>
     <string name="athan_stop">Stop athan</string>
+    <string name="athan_alarm_now">It\'s time for prayer</string>
+    <string name="athan_open_app">Open app</string>
     <string name="athan_dua_text">اللهم رب هذه الدعوة التامة والصلاة القائمة، آت محمداً الوسيلة والفضيلة، وابعثه مقاماً محموداً الذي وعدته</string>
 
     <!-- Calculation methods (display order matches athan_method_values) -->
