@@ -1085,6 +1085,8 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="athan_over_apps">Show athan over other apps</string>
     <string name="athan_over_apps_on">Allowed — athan shows full-screen over apps</string>
     <string name="athan_over_apps_off">Tap to allow (otherwise shows as a notification when screen is on)</string>
+    <string name="athan_over_apps_prompt">Allow "Display over other apps" so the athan can take over the screen even while you\'re using another app. Without it, the athan shows as a notification when the screen is on.</string>
+    <string name="athan_test_notify_only">Test as notification</string>
     <string name="athan_dua_text">اللهم رب هذه الدعوة التامة والصلاة القائمة، آت محمداً الوسيلة والفضيلة، وابعثه مقاماً محموداً الذي وعدته</string>
 
     <!-- Calculation methods (display order matches athan_method_values) -->

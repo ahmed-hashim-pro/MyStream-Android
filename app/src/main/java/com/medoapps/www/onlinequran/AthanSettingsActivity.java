@@ -265,11 +265,31 @@ public class AthanSettingsActivity extends AppCompatActivity {
     private static final long TEST_ATHAN_DELAY_MS = 7000;
 
     /**
+     * Test entry: if the "display over other apps" permission is missing, offer
+     * to grant it (so the athan can take over the screen while it is on), then
+     * schedule the test either way.
+     */
+    private void testAthan() {
+        if (!canDrawOverlays()) {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle(R.string.athan_over_apps)
+                    .setMessage(R.string.athan_over_apps_prompt)
+                    .setPositiveButton(R.string.athan_exact_alarm_enable,
+                            (d, w) -> requestOverlayPermission())
+                    .setNegativeButton(R.string.athan_test_notify_only,
+                            (d, w) -> scheduleTestAthan())
+                    .show();
+            return;
+        }
+        scheduleTestAthan();
+    }
+
+    /**
      * Schedules the athan to fire in a few seconds via the real alarm path, so
      * you can leave to the home screen / another app and watch it appear over
      * apps (full-screen on a locked screen, high-priority heads-up when in use).
      */
-    private void testAthan() {
+    private void scheduleTestAthan() {
         int index = PrayerTimeEngine.getNextPrayerIndex(this);
         long fireAt = System.currentTimeMillis() + TEST_ATHAN_DELAY_MS;
         Intent intent = new Intent(this, com.medoapps.www.onlinequran.athan.AthanAlarmReceiver.class)
