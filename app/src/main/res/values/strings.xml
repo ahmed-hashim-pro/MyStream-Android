@@ -1082,6 +1082,9 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="athan_test_scheduled">Athan in 7 seconds — switch to the home screen to see it appear over apps</string>
     <string name="athan_voice_number">Athan %1$d</string>
     <string name="athan_volume_stop">Stop athan with volume keys</string>
+    <string name="athan_over_apps">Show athan over other apps</string>
+    <string name="athan_over_apps_on">Allowed — athan shows full-screen over apps</string>
+    <string name="athan_over_apps_off">Tap to allow (otherwise shows as a notification when screen is on)</string>
     <string name="athan_dua_text">اللهم رب هذه الدعوة التامة والصلاة القائمة، آت محمداً الوسيلة والفضيلة، وابعثه مقاماً محموداً الذي وعدته</string>
 
     <!-- Calculation methods (display order matches athan_method_values) -->

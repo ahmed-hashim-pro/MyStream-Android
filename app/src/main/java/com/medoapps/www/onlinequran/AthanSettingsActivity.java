@@ -249,6 +249,7 @@ public class AthanSettingsActivity extends AppCompatActivity {
         findViewById(R.id.row_sound_fajr).setOnClickListener(v -> openSoundPicker(AthanSound.SLOT_FAJR));
         findViewById(R.id.row_sound_iqama).setOnClickListener(v -> openSoundPicker(AthanSound.SLOT_IQAMA));
         findViewById(R.id.btn_test_athan).setOnClickListener(v -> testAthan());
+        findViewById(R.id.row_overlay).setOnClickListener(v -> requestOverlayPermission());
         refreshSoundLabels();
         bindSwitch(R.id.switch_vibrate, true);
         bindSwitch(R.id.switch_dua, false);
@@ -295,6 +296,31 @@ public class AthanSettingsActivity extends AppCompatActivity {
         tvSoundAthan.setText(soundNameForSlot(AthanSound.SLOT_ATHAN));
         tvSoundFajr.setText(soundNameForSlot(AthanSound.SLOT_FAJR));
         tvSoundIqama.setText(soundNameForSlot(AthanSound.SLOT_IQAMA));
+    }
+
+    private boolean canDrawOverlays() {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+                || android.provider.Settings.canDrawOverlays(this);
+    }
+
+    private void refreshOverlayStatus() {
+        TextView tv = findViewById(R.id.tv_overlay_status);
+        if (tv != null) {
+            tv.setText(canDrawOverlays() ? R.string.athan_over_apps_on : R.string.athan_over_apps_off);
+        }
+    }
+
+    private void requestOverlayPermission() {
+        if (canDrawOverlays()) {
+            Toast.makeText(this, R.string.athan_over_apps_on, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    android.net.Uri.parse("package:" + getPackageName())));
+        } catch (Exception e) {
+            startActivity(new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION));
+        }
     }
 
     private String soundNameForSlot(String slot) {
@@ -748,6 +774,7 @@ public class AthanSettingsActivity extends AppCompatActivity {
         super.onResume();
         // Sound selection happens in the picker; refresh the row subtitles.
         refreshSoundLabels();
+        refreshOverlayStatus();
     }
 
     @Override

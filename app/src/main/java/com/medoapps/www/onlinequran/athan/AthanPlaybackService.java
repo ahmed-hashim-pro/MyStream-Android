@@ -75,6 +75,7 @@ public class AthanPlaybackService extends Service {
 
         AthanAlarmReceiver.createChannels(this);
         startForeground(NOTIF_ID, buildNotification(index));
+        showOverApps(index);
 
         stopPlayback();
         startPlayback(index);
@@ -243,6 +244,30 @@ public class AthanPlaybackService extends Service {
             vibrator.vibrate(VibrationEffect.createWaveform(VIBRATE_PATTERN, -1));
         } else {
             vibrator.vibrate(VIBRATE_PATTERN, -1);
+        }
+    }
+
+    /**
+     * Launch the full-screen athan screen over whatever is on screen. The
+     * notification's full-screen intent only takes over when the device is
+     * locked/off; with the "display over other apps" permission we can also
+     * show it while the screen is on and in use. Without the permission this
+     * is a no-op and the high-priority heads-up notification is used instead.
+     */
+    private void showOverApps(int index) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && !android.provider.Settings.canDrawOverlays(this)) {
+            return;
+        }
+        Intent a = new Intent(this, com.medoapps.www.onlinequran.AthanAlarmActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .putExtra(com.medoapps.www.onlinequran.AthanAlarmActivity.EXTRA_PRAYER_INDEX, index)
+                .putExtra(com.medoapps.www.onlinequran.AthanAlarmActivity.EXTRA_KIND, kind)
+                .putExtra(com.medoapps.www.onlinequran.AthanAlarmActivity.EXTRA_PRAYER_TIME, prayerTimeMillis);
+        try {
+            startActivity(a);
+        } catch (Exception ignored) {
+            // Background-activity-start blocked; the full-screen notification covers it.
         }
     }
 
