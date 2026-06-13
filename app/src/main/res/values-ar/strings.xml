@@ -738,7 +738,8 @@
     <string name="athan_stop">إيقاف الأذان</string>
     <string name="athan_alarm_now">حان وقت الصلاة</string>
     <string name="athan_open_app">فتح التطبيق</string>
-    <string name="athan_test">تجربة الأذان الآن</string>
+    <string name="athan_test">تجربة الأذان (7 ث)</string>
+    <string name="athan_test_scheduled">الأذان بعد 7 ثوانٍ — انتقل إلى الشاشة الرئيسية لرؤيته فوق التطبيقات</string>
     <string name="athan_voice_number">أذان %1$d</string>
     <string name="athan_volume_stop">إيقاف الأذان بأزرار الصوت</string>
     <string name="athan_dua_text">اللهم رب هذه الدعوة التامة والصلاة القائمة، آت محمداً الوسيلة والفضيلة، وابعثه مقاماً محموداً الذي وعدته</string>

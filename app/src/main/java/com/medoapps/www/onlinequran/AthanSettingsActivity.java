@@ -1,9 +1,12 @@
 package com.medoapps.www.onlinequran;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -257,26 +260,34 @@ public class AthanSettingsActivity extends AppCompatActivity {
         bindMinutesSpinner(findViewById(R.id.spinner_iqama), IQAMA_VALUES, false);
     }
 
+    private static final int RC_TEST_ATHAN = 5777;
+    private static final long TEST_ATHAN_DELAY_MS = 7000;
+
     /**
-     * Fires the athan immediately (no waiting for a prayer time): starts the
-     * playback service with the current athan sound and opens the full-screen
-     * athan screen, so the whole flow can be tested on demand.
+     * Schedules the athan to fire in a few seconds via the real alarm path, so
+     * you can leave to the home screen / another app and watch it appear over
+     * apps (full-screen on a locked screen, high-priority heads-up when in use).
      */
     private void testAthan() {
         int index = PrayerTimeEngine.getNextPrayerIndex(this);
-        long now = System.currentTimeMillis();
-        // The service creates its notification channels itself on start.
-        Intent svc = new Intent(this, com.medoapps.www.onlinequran.athan.AthanPlaybackService.class)
+        long fireAt = System.currentTimeMillis() + TEST_ATHAN_DELAY_MS;
+        Intent intent = new Intent(this, com.medoapps.www.onlinequran.athan.AthanAlarmReceiver.class)
+                .setAction(com.medoapps.www.onlinequran.athan.AthanScheduler.ACTION_ATHAN)
                 .putExtra(com.medoapps.www.onlinequran.athan.AthanScheduler.EXTRA_PRAYER_INDEX, index)
-                .putExtra(com.medoapps.www.onlinequran.athan.AthanScheduler.EXTRA_PRAYER_TIME, now)
-                .putExtra(com.medoapps.www.onlinequran.athan.AthanPlaybackService.EXTRA_KIND,
-                        com.medoapps.www.onlinequran.athan.AthanPlaybackService.KIND_ATHAN);
-        ContextCompat.startForegroundService(this, svc);
-        startActivity(new Intent(this, AthanAlarmActivity.class)
-                .putExtra(AthanAlarmActivity.EXTRA_PRAYER_INDEX, index)
-                .putExtra(AthanAlarmActivity.EXTRA_KIND,
-                        com.medoapps.www.onlinequran.athan.AthanPlaybackService.KIND_ATHAN)
-                .putExtra(AthanAlarmActivity.EXTRA_PRAYER_TIME, now));
+                .putExtra(com.medoapps.www.onlinequran.athan.AthanScheduler.EXTRA_PRAYER_TIME, fireAt);
+        PendingIntent pi = PendingIntent.getBroadcast(this, RC_TEST_ATHAN, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !am.canScheduleExactAlarms()) {
+                am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, fireAt, pi);
+            } else {
+                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, fireAt, pi);
+            }
+        } catch (SecurityException e) {
+            am.set(AlarmManager.RTC_WAKEUP, fireAt, pi);
+        }
+        Toast.makeText(this, R.string.athan_test_scheduled, Toast.LENGTH_LONG).show();
     }
 
     /** Updates each sound row's subtitle to the currently selected sound name. */
