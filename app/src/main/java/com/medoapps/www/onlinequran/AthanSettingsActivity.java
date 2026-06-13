@@ -20,6 +20,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -520,16 +521,89 @@ public class AthanSettingsActivity extends AppCompatActivity {
     }
 
     private void showCityChooser(List<CityResult> candidates) {
-        CharSequence[] labels = new CharSequence[candidates.size()];
-        for (int i = 0; i < candidates.size(); i++) labels[i] = candidates.get(i).fullLabel;
-        new androidx.appcompat.app.AlertDialog.Builder(this)
-                .setTitle(R.string.athan_select_city)
-                .setItems(labels, (dialog, which) -> {
-                    CityResult c = candidates.get(which);
-                    applyLocation(c.lat, c.lng, c.shortName);
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .show();
+        View content = getLayoutInflater().inflate(R.layout.dialog_city_chooser, null);
+        LinearLayout list = content.findViewById(R.id.dialog_city_list);
+
+        androidx.appcompat.app.AlertDialog dialog =
+                new androidx.appcompat.app.AlertDialog.Builder(this)
+                        .setView(content)
+                        .create();
+        if (dialog.getWindow() != null) {
+            // Let the layout's rounded background be the visible surface.
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        for (int i = 0; i < candidates.size(); i++) {
+            CityResult c = candidates.get(i);
+            list.addView(buildCityRow(c, dialog));
+            if (i < candidates.size() - 1) list.addView(buildRowDivider());
+        }
+
+        content.findViewById(R.id.dialog_city_cancel).setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+    }
+
+    /** A styled candidate row: pin badge + city name + region/country. */
+    private View buildCityRow(CityResult c, androidx.appcompat.app.AlertDialog dialog) {
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setClickable(true);
+        row.setFocusable(true);
+        row.setPadding(dp(24), dp(12), dp(24), dp(12));
+        TypedValue ripple = new TypedValue();
+        getTheme().resolveAttribute(android.R.attr.selectableItemBackground, ripple, true);
+        row.setBackgroundResource(ripple.resourceId);
+        row.setOnClickListener(v -> {
+            applyLocation(c.lat, c.lng, c.shortName);
+            dialog.dismiss();
+        });
+
+        ImageView pin = new ImageView(this);
+        int badge = dp(40);
+        LinearLayout.LayoutParams pinLp = new LinearLayout.LayoutParams(badge, badge);
+        pinLp.setMarginEnd(dp(16));
+        pin.setLayoutParams(pinLp);
+        pin.setBackgroundResource(R.drawable.bg_city_icon_circle);
+        pin.setImageResource(R.drawable.ic_pref_marker);
+        pin.setColorFilter(ContextCompat.getColor(this, R.color.gold_accent));
+        int pad = dp(8);
+        pin.setPadding(pad, pad, pad, pad);
+        row.addView(pin);
+
+        LinearLayout text = new LinearLayout(this);
+        text.setOrientation(LinearLayout.VERTICAL);
+        text.setLayoutParams(new LinearLayout.LayoutParams(0,
+                ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+
+        TextView name = new TextView(this);
+        name.setText(c.shortName);
+        name.setTextColor(ContextCompat.getColor(this, R.color.text_primary));
+        name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+        name.setTypeface(name.getTypeface(), Typeface.BOLD);
+        text.addView(name);
+
+        TextView sub = new TextView(this);
+        sub.setText(c.fullLabel);
+        sub.setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
+        sub.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+        sub.setMaxLines(2);
+        sub.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        text.addView(sub);
+
+        row.addView(text);
+        return row;
+    }
+
+    private View buildRowDivider() {
+        View divider = new View(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, dp(1));
+        lp.setMarginStart(dp(80));
+        lp.setMarginEnd(dp(24));
+        divider.setLayoutParams(lp);
+        divider.setBackgroundColor(ContextCompat.getColor(this, R.color.gold_accent_faint));
+        return divider;
     }
 
     private boolean hasLocationPermission() {
