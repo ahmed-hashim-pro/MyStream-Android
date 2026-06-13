@@ -245,11 +245,34 @@ public class AthanSettingsActivity extends AppCompatActivity {
         findViewById(R.id.row_sound_athan).setOnClickListener(v -> openSoundPicker(AthanSound.SLOT_ATHAN));
         findViewById(R.id.row_sound_fajr).setOnClickListener(v -> openSoundPicker(AthanSound.SLOT_FAJR));
         findViewById(R.id.row_sound_iqama).setOnClickListener(v -> openSoundPicker(AthanSound.SLOT_IQAMA));
+        findViewById(R.id.btn_test_athan).setOnClickListener(v -> testAthan());
         refreshSoundLabels();
         bindSwitch(R.id.switch_vibrate, true);
         bindSwitch(R.id.switch_dua, false);
         bindMinutesSpinner(findViewById(R.id.spinner_pre_reminder), PRE_REMINDER_VALUES, true);
         bindMinutesSpinner(findViewById(R.id.spinner_iqama), IQAMA_VALUES, false);
+    }
+
+    /**
+     * Fires the athan immediately (no waiting for a prayer time): starts the
+     * playback service with the current athan sound and opens the full-screen
+     * athan screen, so the whole flow can be tested on demand.
+     */
+    private void testAthan() {
+        int index = PrayerTimeEngine.getNextPrayerIndex(this);
+        long now = System.currentTimeMillis();
+        // The service creates its notification channels itself on start.
+        Intent svc = new Intent(this, com.medoapps.www.onlinequran.athan.AthanPlaybackService.class)
+                .putExtra(com.medoapps.www.onlinequran.athan.AthanScheduler.EXTRA_PRAYER_INDEX, index)
+                .putExtra(com.medoapps.www.onlinequran.athan.AthanScheduler.EXTRA_PRAYER_TIME, now)
+                .putExtra(com.medoapps.www.onlinequran.athan.AthanPlaybackService.EXTRA_KIND,
+                        com.medoapps.www.onlinequran.athan.AthanPlaybackService.KIND_ATHAN);
+        ContextCompat.startForegroundService(this, svc);
+        startActivity(new Intent(this, AthanAlarmActivity.class)
+                .putExtra(AthanAlarmActivity.EXTRA_PRAYER_INDEX, index)
+                .putExtra(AthanAlarmActivity.EXTRA_KIND,
+                        com.medoapps.www.onlinequran.athan.AthanPlaybackService.KIND_ATHAN)
+                .putExtra(AthanAlarmActivity.EXTRA_PRAYER_TIME, now));
     }
 
     /** Updates each sound row's subtitle to the currently selected sound name. */
