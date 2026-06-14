@@ -99,3 +99,4 @@ build
 
 # Large design assets (PSDs etc.) — kept locally only, too big for GitHub (>100MB files)
 /screenshoots/
+.superpowers/
