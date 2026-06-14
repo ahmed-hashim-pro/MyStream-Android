@@ -1127,4 +1127,56 @@ Press the button below to set the time for this , then you can start the app </s
         <item>TWILIGHT_ANGLE</item>
     </string-array>
 
+    <!-- Onboarding -->
+    <string name="onb_get_started">Get Started</string>
+    <string name="onb_skip">Skip</string>
+    <string name="onb_next">Next</string>
+    <string name="onb_continue">Continue</string>
+    <string name="onb_enter_app">Enter app</string>
+
+    <string name="onb_intro_tagline">Quran, Radio &amp; Prayer times — online and offline</string>
+
+    <string name="onb_offline_badge">Available offline</string>
+
+    <string name="onb_mushaf_title">Read &amp; listen, even offline</string>
+    <string name="onb_mushaf_desc">Download the Mushaf once, then read while the verse highlights in sync with the recitation — anywhere, no internet needed.</string>
+
+    <string name="onb_reciters_title">150+ reciters, online or offline</string>
+    <string name="onb_reciters_desc">Stream the whole Quran from your favourite qari, or download any surah to listen later with no connection.</string>
+
+    <string name="onb_radio_title">Live Quran radio</string>
+    <string name="onb_radio_desc">Tune in to dozens of live Quran stations across every qira\'a, all day long.</string>
+
+    <string name="onb_athan_title">Never miss a prayer</string>
+    <string name="onb_athan_desc">Accurate offline prayer times with a real athan at every prayer — pick your voice, location and reminders.</string>
+
+    <string name="onb_tools_title">Everything in one place</string>
+    <string name="onb_tools_desc">Qibla, Tasbih, Athkar, Zakat, 99 Names, Duas and more — your complete Islamic toolkit.</string>
+
+    <string name="onb_personalize_title">Personalize</string>
+    <string name="onb_personalize_sub">Turn features on now — change anytime in Settings</string>
+    <string name="onb_section_prayer">Prayer Times</string>
+    <string name="onb_section_reminders">Daily Reminders</string>
+    <string name="onb_section_appearance">Appearance</string>
+
+    <string name="onb_athan_toggle_title">Athan &amp; Prayer Alarms</string>
+    <string name="onb_athan_toggle_desc">Adhan at every prayer, offline</string>
+    <string name="onb_athan_shortcut">Set your location &amp; athan voice</string>
+
+    <string name="onb_reminder_daily_ayah">Daily Ayah</string>
+    <string name="onb_reminder_morning_athkar">Morning Athkar</string>
+    <string name="onb_reminder_evening_athkar">Evening Athkar</string>
+    <string name="onb_reminder_dua">Dua of the Day</string>
+    <string name="onb_reminder_hadith">Daily Hadith</string>
+    <string name="onb_reminder_asmaul_husna">Asmaul Husna</string>
+    <string name="onb_reminder_suhoor">Suhoor Reminder</string>
+
+    <string name="onb_theme_light">Light</string>
+    <string name="onb_theme_dark">Dark</string>
+    <string name="onb_theme_system">System</string>
+
+    <string name="onb_ready_title">You\'re all set</string>
+    <string name="onb_ready_desc">We\'ll ask for a couple of permissions so reminders and the athan can reach you on time.</string>
+    <string name="onb_grant_exact_alarm">Allow exact alarms for accurate athan times</string>
+
 </resources>
