@@ -1,209 +1,171 @@
 package com.medoapps.www.onlinequran;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.medoapps.www.onlinequran.fragment.ThemesFragment;
+import com.medoapps.www.onlinequran.onboarding.AndroidFeatureGateway;
+import com.medoapps.www.onlinequran.onboarding.OnboardingFeatureController;
+import com.medoapps.www.onlinequran.onboarding.OnboardingHost;
+import com.medoapps.www.onlinequran.onboarding.OnboardingIntroFragment;
+import com.medoapps.www.onlinequran.onboarding.OnboardingPersonalizeFragment;
+import com.medoapps.www.onlinequran.onboarding.OnboardingReadyFragment;
+import com.medoapps.www.onlinequran.onboarding.OnboardingState;
+import com.medoapps.www.onlinequran.onboarding.OnboardingTourFragment;
 import com.medoapps.www.onlinequran.service.AuthService;
 
-public class WelcomeActivity extends AppCompatActivity {
+import android.content.Intent;
 
-    private ViewPager viewPager;
-    private MyViewPagerAdapter myViewPagerAdapter;
+public class WelcomeActivity extends AppCompatActivity implements OnboardingHost {
+
+    /** Page indices. Pages 0..LAST_TOUR_PAGE show dots + the Skip/Next bar. */
+    private static final int LAST_TOUR_PAGE = 5; // intro(0) + 5 tour slides (1..5)
+    private static final int DOT_COUNT = LAST_TOUR_PAGE + 1; // 6 dots for pages 0..5
+
+    private ViewPager2 pager;
     private LinearLayout dotsLayout;
-    private TextView[] dots;
-    private int[] layouts;
-    public static Button btnSkip, btnNext;
+    private View bottomBar;
+    private Button btnSkip, btnNext;
+
     private PreferenceManager prefManager;
-    private LinearLayout fragmentContainer;
-    ThemesFragment newFragment ;
-    AuthService authService;
+    private AuthService authService;
+    private OnboardingState onboardingState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        authService = new AuthService(WelcomeActivity.this);
-        // Checking for first time launch - before calling setContentView()
+        authService = new AuthService(this);
         prefManager = new PreferenceManager(this);
         if (!prefManager.isFirstTimeLaunch()) {
             launchHomeScreen();
-            finish();
+            return;
         }
-        SettingSaved settingSaved=new SettingSaved(WelcomeActivity.this);
-        settingSaved.SaveData();
 
+        // Seed state from current settings so toggles reflect reality on re-runs.
+        AndroidFeatureGateway gateway = new AndroidFeatureGateway(this);
+        onboardingState = OnboardingState.defaults();
+        onboardingState.athanEnabled = gateway.isAthanEnabled();
+        onboardingState.themeMode = gateway.currentThemeMode();
+        for (com.medoapps.www.onlinequran.onboarding.Reminder r
+                : com.medoapps.www.onlinequran.onboarding.Reminder.values()) {
+            onboardingState.setReminderEnabled(r, gateway.isReminderEnabled(r));
+        }
 
-
-
-
-        // Making notification bar transparent
         if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
-
-        setContentView(R.layout.activity_welcome);
-//        newFragment = new ThemesFragment();
-
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
-        dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
-        btnSkip = (Button) findViewById(R.id.btn_skip);
-        btnNext = (Button) findViewById(R.id.btn_next);
-
-        // layouts of all welcome sliders
-        // add few more layouts if you want
-        layouts = new int[]{
-                R.layout.slide_screen1,
-                R.layout.slide_screen2,
-                R.layout.slide_screen3,
-                R.layout.slide_screen4};
-
-        // adding bottom dots
-        addBottomDots(0);
-
-        // making notification bar transparent
         changeStatusBarColor();
 
-        myViewPagerAdapter = new MyViewPagerAdapter();
-        viewPager.setAdapter(myViewPagerAdapter);
-        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+        setContentView(R.layout.activity_welcome);
+        pager = findViewById(R.id.onb_pager);
+        dotsLayout = findViewById(R.id.onb_dots);
+        bottomBar = findViewById(R.id.onb_bottom_bar);
+        btnSkip = findViewById(R.id.onb_skip);
+        btnNext = findViewById(R.id.onb_next);
 
-        btnSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                startReminderService();
+        pager.setAdapter(new OnboardingPagerAdapter(this));
+        pager.registerOnPageChangeCallback(pageChangeCallback);
+        buildDots();
+        updateChromeForPage(0);
 
-                launchHomeScreen();
-            }
-        });
-
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // checking for last page
-                // if last page home screen will be launched
-                int current = getItem(+1);
-                if (current < layouts.length) {
-                    // move to next screen
-                    viewPager.setCurrentItem(current);
-                } else {
-//                    startReminderService();
-                    launchHomeScreen();
-                }
-            }
-        });
-
+        btnSkip.setOnClickListener(v -> finishOnboarding());
+        btnNext.setOnClickListener(v -> goToNextPage());
     }
 
-    private void startReminderService(){
-        startService(new Intent(WelcomeActivity.this, QuranListenTimerService.class));
+    // ---- OnboardingHost ----
+
+    @Override
+    public OnboardingState getOnboardingState() {
+        return onboardingState;
     }
-    private void addBottomDots(int currentPage) {
-        dots = new TextView[layouts.length];
 
-        int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
-        int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
-
-        dotsLayout.removeAllViews();
-        for (int i = 0; i < dots.length; i++) {
-            dots[i] = new TextView(this);
-            dots[i].setText(Html.fromHtml("&#8226;"));
-            dots[i].setTextSize(35);
-            dots[i].setTextColor(colorsInactive[currentPage]);
-            dotsLayout.addView(dots[i]);
+    @Override
+    public void goToNextPage() {
+        int next = pager.getCurrentItem() + 1;
+        if (next < OnboardingPagerAdapter.PAGE_COUNT) {
+            pager.setCurrentItem(next, true);
+        } else {
+            finishOnboarding();
         }
-
-        if (dots.length > 0)
-            dots[currentPage].setTextColor(colorsActive[currentPage]);
     }
 
-    private int getItem(int i) {
-        return viewPager.getCurrentItem() + i;
+    @Override
+    public void finishOnboarding() {
+        new OnboardingFeatureController(new AndroidFeatureGateway(this)).apply(onboardingState);
+        launchHomeScreen();
+    }
+
+    // ---- chrome ----
+
+    private final ViewPager2.OnPageChangeCallback pageChangeCallback =
+            new ViewPager2.OnPageChangeCallback() {
+                @Override
+                public void onPageSelected(int position) {
+                    updateChromeForPage(position);
+                }
+            };
+
+    private void updateChromeForPage(int position) {
+        boolean showBar = position <= LAST_TOUR_PAGE;
+        bottomBar.setVisibility(showBar ? View.VISIBLE : View.GONE);
+        dotsLayout.setVisibility(showBar ? View.VISIBLE : View.GONE);
+        if (showBar) {
+            highlightDot(position);
+            btnNext.setText(position == 0 ? getString(R.string.onb_get_started) : getString(R.string.onb_next));
+        }
+    }
+
+    private void buildDots() {
+        dotsLayout.removeAllViews();
+        for (int i = 0; i < DOT_COUNT; i++) {
+            TextView dot = new TextView(this);
+            dot.setText(Html.fromHtml("&#8226;"));
+            dot.setTextSize(28);
+            dot.setPadding(6, 0, 6, 0);
+            dot.setTextColor(getResources().getColor(R.color.onb_dot_inactive));
+            dotsLayout.addView(dot);
+        }
+        highlightDot(0);
+    }
+
+    private void highlightDot(int position) {
+        if (position >= DOT_COUNT) return;
+        for (int i = 0; i < dotsLayout.getChildCount(); i++) {
+            ((TextView) dotsLayout.getChildAt(i)).setTextColor(
+                    getResources().getColor(R.color.onb_dot_inactive));
+        }
+        ((TextView) dotsLayout.getChildAt(position)).setTextColor(
+                getResources().getColor(R.color.onb_accent_end));
     }
 
     private void launchHomeScreen() {
-        /*SettingSaved sv = new SettingSaved(getApplicationContext());
-        sv.LoadData();*/
         prefManager.setFirstTimeLaunch(false);
-        SettingSaved settingSaved=new SettingSaved(WelcomeActivity.this);
-        settingSaved.LoadData();
-        settingSaved.SaveData();
-
-
-
         try {
-            if (!authService.isUserSignedIn()){
-                boolean isAuthed = authService.signInAnonymously();
-                startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
-                finish();
-
-            }else{
-
-                startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
-                finish();
+            if (!authService.isUserSignedIn()) {
+                authService.signInAnonymously();
             }
         } catch (Exception e) {
             e.printStackTrace();
-            startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
-            finish();
         }
-
-        //startActivity(new Intent(WelcomeActivity.this, SignInActivity.class));
-        //finish();
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
-    //  viewpager change listener
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
-
-        @Override
-        public void onPageSelected(int position) {
-            addBottomDots(position);
-//            startLoadThemesFragment(position);
-            // changing the next button text 'NEXT' / 'GOT IT'
-            if (position == layouts.length - 1) {
-                // last page. make button text to GOT IT
-                btnNext.setText(getString(R.string.start));
-                //btnNext.setVisibility(View.GONE);
-                btnSkip.setVisibility(View.GONE);
-
-
-            } else {
-                // still pages are left
-                btnNext.setVisibility(View.VISIBLE);
-                btnNext.setText(getString(R.string.next));
-                //btnSkip.setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-        }
-    };
-
-    /**
-     * Making notification bar transparent
-     */
     private void changeStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -212,80 +174,45 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    public void darkMode(View view) {
-        Intent down = new Intent(WelcomeActivity.this, ThemesActivity.class);
-        startActivity(down);
-    }
+    /** 8 steps: intro, 5 tour pillars, personalize, ready. */
+    private static class OnboardingPagerAdapter extends FragmentStateAdapter {
+        static final int PAGE_COUNT = 8;
 
-    /**
-     * View pager adapter
-     */
-    public class MyViewPagerAdapter extends PagerAdapter {
-        private LayoutInflater layoutInflater;
-        private FrameLayout fragmentContainer;
-        FragmentManager fm = getSupportFragmentManager();
-
-        public MyViewPagerAdapter() {
+        OnboardingPagerAdapter(FragmentActivity activity) {
+            super(activity);
         }
 
+        @NonNull
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            try {
-
-                layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                View view = layoutInflater.inflate(layouts[position], container, false);
-                container.addView(view);
-                Log.d("TAG", "instantiateItem: " + position);
-
-                fragmentContainer = view.findViewById(R.id.welcomefragmentContainer);
-
-                try {
-                    if (fragmentContainer !=null){
-                        newFragment = new ThemesFragment();
-
-                        if (newFragment != null) {
-        //                    fm.beginTransaction().remove(newFragment).commit();
-                        }
-                        fm.beginTransaction()
-                                .replace(R.id.welcomefragmentContainer, newFragment, "ThemesFragment")
-                                .addToBackStack(null)
-                                .commit();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-                return view;
-            } catch (Exception e) {
-                e.printStackTrace();
+        public Fragment createFragment(int position) {
+            switch (position) {
+                case 0:
+                    return new OnboardingIntroFragment();
+                case 1:
+                    return OnboardingTourFragment.newInstance(
+                            R.drawable.ic_onb_mushaf, R.string.onb_mushaf_title, R.string.onb_mushaf_desc, true);
+                case 2:
+                    return OnboardingTourFragment.newInstance(
+                            R.drawable.ic_onb_reciters, R.string.onb_reciters_title, R.string.onb_reciters_desc, true);
+                case 3:
+                    return OnboardingTourFragment.newInstance(
+                            R.drawable.ic_onb_radio, R.string.onb_radio_title, R.string.onb_radio_desc, false);
+                case 4:
+                    return OnboardingTourFragment.newInstance(
+                            R.drawable.ic_onb_athan, R.string.onb_athan_title, R.string.onb_athan_desc, true);
+                case 5:
+                    return OnboardingTourFragment.newInstance(
+                            R.drawable.ic_onb_tools, R.string.onb_tools_title, R.string.onb_tools_desc, false);
+                case 6:
+                    return new OnboardingPersonalizeFragment();
+                default:
+                    return new OnboardingReadyFragment();
             }
-            return null;
         }
 
         @Override
-        public int getCount() {
-            return layouts.length;
+        public int getItemCount() {
+            return PAGE_COUNT;
         }
-
-        @Override
-        public boolean isViewFromObject(View view, Object obj) {
-            return view == obj;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            View view = (View) object;
-            container.removeView(view);
-        }
-    }
-
-    public void buset(View view){
-
-        Intent intent = new Intent(getApplicationContext(),TimePicker.class);
-        startActivity(intent);
-        //btnNext.setVisibility(View.VISIBLE);
-
     }
 }
