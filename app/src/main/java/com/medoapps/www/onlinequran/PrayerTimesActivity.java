@@ -59,6 +59,7 @@ public class PrayerTimesActivity extends AppCompatActivity {
     private TextView tvHijriDate, tvGregorianDate, tvCity;
     private TextView tvNextPrayerName, tvNextPrayerTime, tvCountdown;
     private View cardExactAlarm;
+    private View cardOverlay;
     private LinearLayout listPrayers;
 
     private final LinearLayout[] rows = new LinearLayout[PrayerSettings.PRAYER_COUNT];
@@ -98,6 +99,7 @@ public class PrayerTimesActivity extends AppCompatActivity {
         tvNextPrayerTime = findViewById(R.id.tv_next_prayer_time);
         tvCountdown = findViewById(R.id.tv_countdown);
         cardExactAlarm = findViewById(R.id.card_exact_alarm);
+        cardOverlay = findViewById(R.id.card_overlay);
         listPrayers = findViewById(R.id.list_prayers);
 
         buildPrayerRows();
@@ -105,6 +107,7 @@ public class PrayerTimesActivity extends AppCompatActivity {
         findViewById(R.id.row_city).setOnClickListener(v ->
                 startActivity(new Intent(this, AthanSettingsActivity.class)));
         findViewById(R.id.btn_exact_alarm).setOnClickListener(v -> openExactAlarmSettings());
+        findViewById(R.id.btn_overlay).setOnClickListener(v -> openOverlaySettings());
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -252,6 +255,7 @@ public class PrayerTimesActivity extends AppCompatActivity {
         PrayerSettings.setNotificationMode(this, prayerIndex, next);
         applyModeIcon(prayerIndex, next);
         AthanScheduler.rescheduleAll(this);
+        updateOverlayCard();
     }
 
     private void applyModeIcon(int prayerIndex, int mode) {
@@ -417,6 +421,34 @@ public class PrayerTimesActivity extends AppCompatActivity {
         }
     }
 
+    // ------------------------------------------------------ display over apps
+
+    /** Show the prompt only when a full-athan prayer is set but the overlay isn't allowed. */
+    private void updateOverlayCard() {
+        boolean granted = Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+                || Settings.canDrawOverlays(this);
+        boolean anyAthanMode = false;
+        for (int i = 0; i < PrayerSettings.PRAYER_COUNT; i++) {
+            if (PrayerSettings.getNotificationMode(this, i) == PrayerSettings.MODE_ATHAN) {
+                anyAthanMode = true;
+                break;
+            }
+        }
+        cardOverlay.setVisibility(!granted && anyAthanMode ? View.VISIBLE : View.GONE);
+    }
+
+    private void openOverlaySettings() {
+        try {
+            startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName())));
+        } catch (Exception e) {
+            try {
+                startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION));
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
     // ------------------------------------------------------------- lifecycle
 
     @Override
@@ -425,6 +457,7 @@ public class PrayerTimesActivity extends AppCompatActivity {
         renderAll();
         AthanScheduler.rescheduleAll(this);
         updateExactAlarmCard();
+        updateOverlayCard();
     }
 
     @Override

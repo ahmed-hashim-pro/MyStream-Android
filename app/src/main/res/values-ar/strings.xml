@@ -747,6 +747,7 @@
     <string name="athan_over_apps_off">اضغط للسماح (وإلا يظهر كإشعار عند تشغيل الشاشة)</string>
     <string name="athan_over_apps_prompt">اسمح بـ \"العرض فوق التطبيقات\" ليظهر الأذان فوق الشاشة حتى أثناء استخدامك لتطبيق آخر. بدونها يظهر الأذان كإشعار عندما تكون الشاشة مضاءة.</string>
     <string name="athan_test_notify_only">تجربة كإشعار</string>
+    <string name="athan_overlay_card">اسمح بظهور الأذان فوق التطبيقات عندما تكون الشاشة مضاءة</string>
     <string name="athan_dua_text">اللهم رب هذه الدعوة التامة والصلاة القائمة، آت محمداً الوسيلة والفضيلة، وابعثه مقاماً محموداً الذي وعدته</string>
 
     <!-- Calculation methods (display order matches athan_method_values) -->
