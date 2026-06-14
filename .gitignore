@@ -81,3 +81,18 @@ build
 .idea
 .gradle
 /.gradle/
+
+# OS junk
+.DS_Store
+
+# Build outputs (APK/AAB/etc.)
+*.apk
+*.aab
+*.ap_
+*.dex
+/release/
+/madani/release/
+/app/release/
+
+# Loose dev screenshots in repo root (the screenshoots/ folder is kept)
+/Screenshot_*.png
