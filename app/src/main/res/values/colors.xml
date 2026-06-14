@@ -291,4 +291,16 @@
     <color name="skeleton_bone">#E0D8D0</color>
     <color name="divider_color">#1A000000</color>
 
+    <!-- Onboarding (light = Warm Gold Glass) -->
+    <color name="onb_bg_top">#FFF8EF</color>
+    <color name="onb_bg_bottom">#F1E0C0</color>
+    <color name="onb_card">#9EFFFFFF</color>
+    <color name="onb_card_stroke">#E6CF9F</color>
+    <color name="onb_text_primary">#5B4A22</color>
+    <color name="onb_text_secondary">#7A6A45</color>
+    <color name="onb_accent_start">#D4A44C</color>
+    <color name="onb_accent_end">#B8860B</color>
+    <color name="onb_on_accent">#FFFFFF</color>
+    <color name="onb_dot_inactive">#CDBF9E</color>
+
 </resources>
