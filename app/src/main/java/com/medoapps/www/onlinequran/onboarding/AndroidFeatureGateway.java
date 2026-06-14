@@ -36,6 +36,8 @@ public class AndroidFeatureGateway implements FeatureGateway {
         switch (reminder) {
             case DAILY_AYAH:
                 DailyAyahScheduler.scheduleDailyAyah(context, reminder.defaultHour, reminder.defaultMinute);
+                context.getSharedPreferences("daily_ayah_prefs", Context.MODE_PRIVATE)
+                        .edit().putBoolean("notification_enabled", true).apply();
                 break;
             case MORNING_ATHKAR:
                 AthkarAlarmScheduler.scheduleMorning(context, reminder.defaultHour, reminder.defaultMinute);
@@ -48,6 +50,8 @@ public class AndroidFeatureGateway implements FeatureGateway {
                 break;
             case DAILY_HADITH:
                 DailyHadithScheduler.scheduleDailyHadith(context, reminder.defaultHour, reminder.defaultMinute);
+                context.getSharedPreferences("daily_hadith_prefs", Context.MODE_PRIVATE)
+                        .edit().putBoolean("notification_enabled", true).apply();
                 break;
             case ASMAUL_HUSNA:
                 AsmaulHusnaScheduler.schedule(context, reminder.defaultHour, reminder.defaultMinute);
@@ -61,11 +65,19 @@ public class AndroidFeatureGateway implements FeatureGateway {
     @Override
     public void disableReminder(Reminder reminder) {
         switch (reminder) {
-            case DAILY_AYAH:      DailyAyahScheduler.cancel(context); break;
+            case DAILY_AYAH:
+                DailyAyahScheduler.cancel(context);
+                context.getSharedPreferences("daily_ayah_prefs", Context.MODE_PRIVATE)
+                        .edit().putBoolean("notification_enabled", false).apply();
+                break;
             case MORNING_ATHKAR:  AthkarAlarmScheduler.cancelMorning(context); break;
             case EVENING_ATHKAR:  AthkarAlarmScheduler.cancelEvening(context); break;
             case DUA_HISN:        HisnNotificationScheduler.cancel(context); break;
-            case DAILY_HADITH:    DailyHadithScheduler.cancel(context); break;
+            case DAILY_HADITH:
+                DailyHadithScheduler.cancel(context);
+                context.getSharedPreferences("daily_hadith_prefs", Context.MODE_PRIVATE)
+                        .edit().putBoolean("notification_enabled", false).apply();
+                break;
             case ASMAUL_HUSNA:    AsmaulHusnaScheduler.cancel(context); break;
             case SUHOOR_FASTING:  FastingReminderScheduler.cancel(context); break;
         }
