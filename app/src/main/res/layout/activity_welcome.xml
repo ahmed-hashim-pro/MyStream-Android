@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@drawable/bg_onboarding">
 
+    <!-- Pager takes all remaining space ABOVE the dots + button bar so slide
+         content can never render underneath them. When the dots/bar are hidden
+         (Personalize & Ready steps) this expands to fill. -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/onb_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <LinearLayout
         android:id="@+id/onb_dots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/onb_bottom_bar"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="12dp"
         android:orientation="horizontal" />
 
@@ -22,9 +27,9 @@
         android:id="@+id/onb_bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
+        android:paddingTop="4dp"
         android:paddingBottom="20dp">
 
         <Button
@@ -33,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
             android:text="@string/onb_skip"
             android:textColor="@color/onb_text_secondary" />
 
@@ -41,6 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:background="@drawable/bg_onboarding_button"
             android:minWidth="120dp"
             android:paddingStart="24dp"
@@ -49,4 +56,4 @@
             android:textColor="@color/onb_on_accent"
             android:textStyle="bold" />
     </RelativeLayout>
-</RelativeLayout>
+</LinearLayout>
