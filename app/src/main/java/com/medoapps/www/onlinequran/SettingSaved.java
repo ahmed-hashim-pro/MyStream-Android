@@ -139,7 +139,11 @@ public class SettingSaved extends AppCompatActivity {
                 LanguageSelect=1;
             else
                 LanguageSelect=2;
-            LoadData( );
+            // Persist the resolved language so we don't re-enter this branch.
+            // Previously this recursed into LoadData() without writing the value,
+            // which infinite-looped (StackOverflowError) whenever LoadData ran
+            // before any SaveData on a fresh install.
+            sharedpreferences.edit().putInt("LanguageSelect", LanguageSelect).apply();
         }
         Log.d(TAG, "LoadData: " + LanguageSelect);
 
