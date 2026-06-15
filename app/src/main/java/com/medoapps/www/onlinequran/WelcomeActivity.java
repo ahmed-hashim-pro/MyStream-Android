@@ -55,6 +55,12 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
             return;
         }
 
+        // Initialise the SettingSaved store before reading from it. On a fresh
+        // install SettingSaved.LoadData() recurses infinitely if LanguageSelect
+        // has never been persisted; SaveData() writes the defaults first. This
+        // mirrors the original onboarding's startup sequence.
+        new SettingSaved(this).SaveData();
+
         // Seed state from current settings so toggles reflect reality on re-runs.
         AndroidFeatureGateway gateway = new AndroidFeatureGateway(this);
         onboardingState = OnboardingState.defaults();
