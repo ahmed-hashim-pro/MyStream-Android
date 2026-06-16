@@ -5,5 +5,5 @@
         android:angle="0"
         android:startColor="@color/onb_accent_start"
         android:endColor="@color/onb_accent_end" />
-    <corners android:radius="30dp" />
+    <corners android:radius="26dp" />
 </shape>
