@@ -86,9 +86,13 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
         // bottom buttons (Skip/Next, Continue, Enter app) and the status bar
         // never overlap the chrome, regardless of gesture vs 3-button navigation.
         final View root = findViewById(R.id.onb_root);
+        final int extraBottom = Math.round(16 * getResources().getDisplayMetrics().density);
         ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
             Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(v.getPaddingLeft(), bars.top, v.getPaddingRight(), bars.bottom);
+            // Add a comfortable base margin on top of the nav-bar inset so the
+            // bottom buttons clear the nav bar with breathing room, whether the
+            // window is edge-to-edge (inset > 0) or already fitted (inset == 0).
+            v.setPadding(v.getPaddingLeft(), bars.top, v.getPaddingRight(), bars.bottom + extraBottom);
             return insets;
         });
 
