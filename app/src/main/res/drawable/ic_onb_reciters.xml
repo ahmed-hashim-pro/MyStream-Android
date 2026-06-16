@@ -1,6 +1,7 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24"
     android:tint="@color/onb_accent_end">
+    <!-- headphones: band + two earcups (filled) -->
     <path android:fillColor="@android:color/white"
-        android:pathData="M12,3a4,4 0 0,0 -4,4v4a4,4 0 0,0 8,0V7a4,4 0 0,0 -4,-4zM6,11a6,6 0 0,0 12,0M12,17v4M8,21h8" />
+        android:pathData="M12,4C7.6,4 4,7.6 4,12v6.5C4,19.3 4.7,20 5.5,20H7c0.6,0 1,-0.4 1,-1v-6c0,-0.6 -0.4,-1 -1,-1H6v-0.5C6,8.5 8.7,6 12,6s6,2.5 6,5.5V12h-1c-0.6,0 -1,0.4 -1,1v6c0,0.6 0.4,1 1,1h1.5c0.8,0 1.5,-0.7 1.5,-1.5V12C20,7.6 16.4,4 12,4z" />
 </vector>

@@ -13,6 +13,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -78,6 +81,17 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
         changeStatusBarColor();
 
         setContentView(R.layout.activity_welcome);
+
+        // Edge-to-edge safety: pad the content by the system-bar insets so the
+        // bottom buttons (Skip/Next, Continue, Enter app) and the status bar
+        // never overlap the chrome, regardless of gesture vs 3-button navigation.
+        final View root = findViewById(R.id.onb_root);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(v.getPaddingLeft(), bars.top, v.getPaddingRight(), bars.bottom);
+            return insets;
+        });
+
         pager = findViewById(R.id.onb_pager);
         dotsLayout = findViewById(R.id.onb_dots);
         bottomBar = findViewById(R.id.onb_bottom_bar);
