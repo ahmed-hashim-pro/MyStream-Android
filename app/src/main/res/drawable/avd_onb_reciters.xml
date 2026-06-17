@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bake-off technique B: AnimatedVectorDrawable. The headphones outline traces
+     itself (trimPathEnd 0->1), then the fill fades in. -->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24"
+            android:tint="@color/onb_accent_end">
+
+            <!-- Filled headphones, faded in after the trace. -->
+            <path
+                android:name="hp_fill"
+                android:fillColor="@android:color/white"
+                android:fillAlpha="0"
+                android:pathData="M12,4C7.6,4 4,7.6 4,12v6.5C4,19.3 4.7,20 5.5,20H7c0.6,0 1,-0.4 1,-1v-6c0,-0.6 -0.4,-1 -1,-1H6v-0.5C6,8.5 8.7,6 12,6s6,2.5 6,5.5V12h-1c-0.6,0 -1,0.4 -1,1v6c0,0.6 0.4,1 1,1h1.5c0.8,0 1.5,-0.7 1.5,-1.5V12C20,7.6 16.4,4 12,4z" />
+
+            <!-- Stroked outline that traces itself first. -->
+            <path
+                android:name="hp_outline"
+                android:fillColor="@android:color/transparent"
+                android:strokeColor="@android:color/white"
+                android:strokeWidth="0.8"
+                android:trimPathStart="0"
+                android:trimPathEnd="0"
+                android:pathData="M12,4C7.6,4 4,7.6 4,12v6.5C4,19.3 4.7,20 5.5,20H7c0.6,0 1,-0.4 1,-1v-6c0,-0.6 -0.4,-1 -1,-1H6v-0.5C6,8.5 8.7,6 12,6s6,2.5 6,5.5V12h-1c-0.6,0 -1,0.4 -1,1v6c0,0.6 0.4,1 1,1h1.5c0.8,0 1.5,-0.7 1.5,-1.5V12C20,7.6 16.4,4 12,4z" />
+        </vector>
+    </aapt:attr>
+
+    <!-- Trace the outline. -->
+    <target android:name="hp_outline">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="trimPathEnd"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:duration="650"
+                android:interpolator="@android:interpolator/decelerate_cubic" />
+        </aapt:attr>
+    </target>
+
+    <!-- Fade the fill in once the trace is mostly done. -->
+    <target android:name="hp_fill">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="fillAlpha"
+                android:valueFrom="0"
+                android:valueTo="1"
+                android:startOffset="500"
+                android:duration="400"
+                android:interpolator="@android:interpolator/decelerate_cubic" />
+        </aapt:attr>
+    </target>
+</animated-vector>

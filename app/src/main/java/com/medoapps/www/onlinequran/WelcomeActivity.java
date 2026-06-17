@@ -39,6 +39,7 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
     private static final int LAST_TOUR_PAGE = 5; // intro(0) + 5 tour slides (1..5)
     private static final int DOT_COUNT = LAST_TOUR_PAGE + 1; // 6 dots for pages 0..5
 
+    private View root;
     private ViewPager2 pager;
     private LinearLayout dotsLayout;
     private View bottomBar;
@@ -74,33 +75,48 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
             onboardingState.setReminderEnabled(r, gateway.isReminderEnabled(r));
         }
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        }
+        // Opt into true edge-to-edge so the window draws behind BOTH the status
+        // bar and the navigation bar. The legacy SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        // only extended layout behind the status bar, so the bottom inset we add
+        // below (bars.bottom) double-counted the nav bar in 3-button mode and the
+        // Skip/Next bar got clipped under it. setDecorFitsSystemWindows(false)
+        // makes the systemBars insets accurate for the padding math.
+        androidx.core.view.WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         changeStatusBarColor();
 
         setContentView(R.layout.activity_welcome);
 
-        // Edge-to-edge safety: pad the content by the system-bar insets so the
-        // bottom buttons (Skip/Next, Continue, Enter app) and the status bar
-        // never overlap the chrome, regardless of gesture vs 3-button navigation.
-        final View root = findViewById(R.id.onb_root);
-        final int extraBottom = Math.round(16 * getResources().getDisplayMetrics().density);
-        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
-            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // Add a comfortable base margin on top of the nav-bar inset so the
-            // bottom buttons clear the nav bar with breathing room, whether the
-            // window is edge-to-edge (inset > 0) or already fitted (inset == 0).
-            v.setPadding(v.getPaddingLeft(), bars.top, v.getPaddingRight(), bars.bottom + extraBottom);
-            return insets;
-        });
-
+        root = findViewById(R.id.onb_root);
         pager = findViewById(R.id.onb_pager);
         dotsLayout = findViewById(R.id.onb_dots);
         bottomBar = findViewById(R.id.onb_bottom_bar);
         btnSkip = findViewById(R.id.onb_skip);
         btnNext = findViewById(R.id.onb_next);
+
+        // Edge-to-edge inset handling. The nav-bar inset (plus a 20dp gap) becomes
+        // the root's bottom padding, so the Skip/Next bar sits 20dp above the nav
+        // bar with its buttons fully visible, while the status-bar inset pads the
+        // top. Bar-less steps (Personalize/Ready) clear the nav bar the same way.
+        final float density = getResources().getDisplayMetrics().density;
+        final int barGap = Math.round(20 * density); // breathing room above the nav bar
+        // The systemBars inset is dispatched asynchronously, so on the first frame
+        // after the splash->onboarding transition bars.bottom can still be 0 —
+        // which would draw the bar UNDER the nav bar. We seed a sane fallback for
+        // that first frame only; once the REAL inset arrives we use it verbatim so
+        // the bar hugs the bottom on gesture nav (small inset) AND clears a 3-button
+        // nav (large inset), instead of being forced to a 48dp minimum.
+        final int navFallback = Math.round(48 * density);
+        // Seed the padding before the first draw so it's correct even pre-dispatch.
+        root.setPadding(root.getPaddingLeft(), root.getPaddingTop(), root.getPaddingRight(), navFallback + barGap);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            int bottom = (bars.bottom > 0 ? bars.bottom : navFallback) + barGap;
+            v.setPadding(v.getPaddingLeft(), bars.top, v.getPaddingRight(), bottom);
+            return insets;
+        });
+        // Force an inset pass so padding is applied before the first draw rather
+        // than only after the system gets around to dispatching insets.
+        ViewCompat.requestApplyInsets(root);
 
         pager.setAdapter(new OnboardingPagerAdapter(this));
         pager.registerOnPageChangeCallback(pageChangeCallback);
@@ -212,21 +228,27 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
             switch (position) {
                 case 0:
                     return new OnboardingIntroFragment();
+                // Each feature page runs a signature animation that describes it.
                 case 1:
                     return OnboardingTourFragment.newInstance(
-                            R.drawable.ic_onb_mushaf, R.string.onb_mushaf_title, R.string.onb_mushaf_desc, true);
+                            R.drawable.ic_onb_mushaf, R.string.onb_mushaf_title, R.string.onb_mushaf_desc, true,
+                            OnboardingTourFragment.ANIM_PROPERTY, 0);
                 case 2:
                     return OnboardingTourFragment.newInstance(
-                            R.drawable.ic_onb_reciters, R.string.onb_reciters_title, R.string.onb_reciters_desc, true);
+                            R.drawable.ic_onb_reciters, R.string.onb_reciters_title, R.string.onb_reciters_desc, true,
+                            OnboardingTourFragment.ANIM_VECTOR, R.drawable.avd_onb_reciters);
                 case 3:
                     return OnboardingTourFragment.newInstance(
-                            R.drawable.ic_onb_radio, R.string.onb_radio_title, R.string.onb_radio_desc, false);
+                            R.drawable.ic_onb_radio, R.string.onb_radio_title, R.string.onb_radio_desc, false,
+                            OnboardingTourFragment.ANIM_LOTTIE, R.raw.onb_radio_waves);
                 case 4:
                     return OnboardingTourFragment.newInstance(
-                            R.drawable.ic_onb_athan, R.string.onb_athan_title, R.string.onb_athan_desc, true);
+                            R.drawable.ic_onb_athan, R.string.onb_athan_title, R.string.onb_athan_desc, true,
+                            OnboardingTourFragment.ANIM_VECTOR, R.drawable.avd_onb_athan);
                 case 5:
                     return OnboardingTourFragment.newInstance(
-                            R.drawable.ic_onb_tools, R.string.onb_tools_title, R.string.onb_tools_desc, false);
+                            R.drawable.ic_onb_tools, R.string.onb_tools_title, R.string.onb_tools_desc, false,
+                            OnboardingTourFragment.ANIM_VECTOR, R.drawable.avd_onb_tools);
                 case 6:
                     return new OnboardingPersonalizeFragment();
                 default:

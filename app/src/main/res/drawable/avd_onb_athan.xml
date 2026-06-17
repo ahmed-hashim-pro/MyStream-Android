@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Athan page: the mosque builds itself bottom-up — base, then minarets, then
+     dome, then the finial — each part rises into place and fades in. -->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24"
+            android:tint="@color/onb_accent_end">
+
+            <group android:name="g_base" android:translateY="5">
+                <path android:name="p_base" android:fillColor="@android:color/white" android:fillAlpha="0"
+                    android:pathData="M3.8,11.8h16.4v1.6H3.8zM5.5,14h13v6h-13z" />
+            </group>
+            <group android:name="g_min" android:translateY="5">
+                <path android:name="p_min" android:fillColor="@android:color/white" android:fillAlpha="0"
+                    android:pathData="M5,9.5h1.5v5.5H5zM17.5,9.5H19v5.5h-1.5z" />
+            </group>
+            <group android:name="g_dome" android:translateY="5">
+                <path android:name="p_dome" android:fillColor="@android:color/white" android:fillAlpha="0"
+                    android:pathData="M8,10.6C8,8.4 9.8,7 12,6.2c2.2,0.8 4,2.2 4,4.4v0.5H8z" />
+            </group>
+            <group android:name="g_finial" android:translateY="5">
+                <path android:name="p_finial" android:fillColor="@android:color/white" android:fillAlpha="0"
+                    android:pathData="M12,2.5c0.7,0.7 1.2,1.2 1.2,2 0,0.8 -0.5,1.4 -1.2,1.9 -0.7,-0.5 -1.2,-1.1 -1.2,-1.9 0,-0.8 0.5,-1.3 1.2,-2z" />
+            </group>
+        </vector>
+    </aapt:attr>
+
+    <target android:name="g_base"><aapt:attr name="android:animation">
+        <objectAnimator android:propertyName="translateY" android:valueFrom="5" android:valueTo="0" android:duration="420" android:startOffset="0" android:interpolator="@android:interpolator/decelerate_cubic" />
+    </aapt:attr></target>
+    <target android:name="p_base"><aapt:attr name="android:animation">
+        <objectAnimator android:propertyName="fillAlpha" android:valueFrom="0" android:valueTo="1" android:duration="300" android:startOffset="0" />
+    </aapt:attr></target>
+
+    <target android:name="g_min"><aapt:attr name="android:animation">
+        <objectAnimator android:propertyName="translateY" android:valueFrom="5" android:valueTo="0" android:duration="420" android:startOffset="120" android:interpolator="@android:interpolator/decelerate_cubic" />
+    </aapt:attr></target>
+    <target android:name="p_min"><aapt:attr name="android:animation">
+        <objectAnimator android:propertyName="fillAlpha" android:valueFrom="0" android:valueTo="1" android:duration="300" android:startOffset="120" />
+    </aapt:attr></target>
+
+    <target android:name="g_dome"><aapt:attr name="android:animation">
+        <objectAnimator android:propertyName="translateY" android:valueFrom="5" android:valueTo="0" android:duration="420" android:startOffset="240" android:interpolator="@android:interpolator/decelerate_cubic" />
+    </aapt:attr></target>
+    <target android:name="p_dome"><aapt:attr name="android:animation">
+        <objectAnimator android:propertyName="fillAlpha" android:valueFrom="0" android:valueTo="1" android:duration="300" android:startOffset="240" />
+    </aapt:attr></target>
+
+    <target android:name="g_finial"><aapt:attr name="android:animation">
+        <objectAnimator android:propertyName="translateY" android:valueFrom="5" android:valueTo="0" android:duration="420" android:startOffset="360" android:interpolator="@android:interpolator/overshoot" />
+    </aapt:attr></target>
+    <target android:name="p_finial"><aapt:attr name="android:animation">
+        <objectAnimator android:propertyName="fillAlpha" android:valueFrom="0" android:valueTo="1" android:duration="300" android:startOffset="360" />
+    </aapt:attr></target>
+</animated-vector>

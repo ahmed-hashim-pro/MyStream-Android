@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -21,6 +22,16 @@
             android:layout_height="240dp"
             android:layout_gravity="center"
             android:background="@drawable/bg_onboarding_art_badge">
+
+            <!-- Bake-off technique C: Lottie broadcast rings, shown only on the
+                 Radio page (otherwise GONE). Sits behind the feature icon. -->
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/onb_tour_lottie"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:lottie_loop="true" />
 
             <ImageView
                 android:id="@+id/onb_tour_art"

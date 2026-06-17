@@ -166,6 +166,9 @@ dependencies {
     implementation "com.google.android.material:material:${materialComponentsVersion}"
     implementation "androidx.core:core-splashscreen:1.0.1"
 
+    // Lottie — onboarding feature animations (bake-off: Radio page).
+    implementation "com.airbnb.android:lottie:6.4.0"
+
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${lifecycleVersion}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycleVersion}"

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tools page: the 2x2 toolkit assembles — each tile pops in with an overshoot
+     bounce, staggered top-left -> bottom-right. -->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24"
+            android:tint="@color/onb_accent_end">
+
+            <group android:name="t1" android:pivotX="7" android:pivotY="7"
+                android:scaleX="0" android:scaleY="0">
+                <path android:name="p1" android:fillColor="@android:color/white" android:fillAlpha="0"
+                    android:pathData="M5.5,3.5h3a2,2 0 0 1 2,2v3a2,2 0 0 1 -2,2h-3a2,2 0 0 1 -2,-2v-3a2,2 0 0 1 2,-2z" />
+            </group>
+            <group android:name="t2" android:pivotX="17" android:pivotY="7"
+                android:scaleX="0" android:scaleY="0">
+                <path android:name="p2" android:fillColor="@android:color/white" android:fillAlpha="0"
+                    android:pathData="M15.5,3.5h3a2,2 0 0 1 2,2v3a2,2 0 0 1 -2,2h-3a2,2 0 0 1 -2,-2v-3a2,2 0 0 1 2,-2z" />
+            </group>
+            <group android:name="t3" android:pivotX="7" android:pivotY="17"
+                android:scaleX="0" android:scaleY="0">
+                <path android:name="p3" android:fillColor="@android:color/white" android:fillAlpha="0"
+                    android:pathData="M5.5,13.5h3a2,2 0 0 1 2,2v3a2,2 0 0 1 -2,2h-3a2,2 0 0 1 -2,-2v-3a2,2 0 0 1 2,-2z" />
+            </group>
+            <group android:name="t4" android:pivotX="17" android:pivotY="17"
+                android:scaleX="0" android:scaleY="0">
+                <path android:name="p4" android:fillColor="@android:color/white" android:fillAlpha="0"
+                    android:pathData="M15.5,13.5h3a2,2 0 0 1 2,2v3a2,2 0 0 1 -2,2h-3a2,2 0 0 1 -2,-2v-3a2,2 0 0 1 2,-2z" />
+            </group>
+        </vector>
+    </aapt:attr>
+
+    <target android:name="t1"><aapt:attr name="android:animation"><set>
+        <objectAnimator android:propertyName="scaleX" android:valueFrom="0" android:valueTo="1" android:duration="420" android:startOffset="0" android:interpolator="@android:interpolator/overshoot" />
+        <objectAnimator android:propertyName="scaleY" android:valueFrom="0" android:valueTo="1" android:duration="420" android:startOffset="0" android:interpolator="@android:interpolator/overshoot" />
+    </set></aapt:attr></target>
+    <target android:name="p1"><aapt:attr name="android:animation">
+        <objectAnimator android:propertyName="fillAlpha" android:valueFrom="0" android:valueTo="1" android:duration="160" android:startOffset="0" />
+    </aapt:attr></target>
+
+    <target android:name="t2"><aapt:attr name="android:animation"><set>
+        <objectAnimator android:propertyName="scaleX" android:valueFrom="0" android:valueTo="1" android:duration="420" android:startOffset="90" android:interpolator="@android:interpolator/overshoot" />
+        <objectAnimator android:propertyName="scaleY" android:valueFrom="0" android:valueTo="1" android:duration="420" android:startOffset="90" android:interpolator="@android:interpolator/overshoot" />
+    </set></aapt:attr></target>
+    <target android:name="p2"><aapt:attr name="android:animation">
+        <objectAnimator android:propertyName="fillAlpha" android:valueFrom="0" android:valueTo="1" android:duration="160" android:startOffset="90" />
+    </aapt:attr></target>
+
+    <target android:name="t3"><aapt:attr name="android:animation"><set>
+        <objectAnimator android:propertyName="scaleX" android:valueFrom="0" android:valueTo="1" android:duration="420" android:startOffset="180" android:interpolator="@android:interpolator/overshoot" />
+        <objectAnimator android:propertyName="scaleY" android:valueFrom="0" android:valueTo="1" android:duration="420" android:startOffset="180" android:interpolator="@android:interpolator/overshoot" />
+    </set></aapt:attr></target>
+    <target android:name="p3"><aapt:attr name="android:animation">
+        <objectAnimator android:propertyName="fillAlpha" android:valueFrom="0" android:valueTo="1" android:duration="160" android:startOffset="180" />
+    </aapt:attr></target>
+
+    <target android:name="t4"><aapt:attr name="android:animation"><set>
+        <objectAnimator android:propertyName="scaleX" android:valueFrom="0" android:valueTo="1" android:duration="420" android:startOffset="270" android:interpolator="@android:interpolator/overshoot" />
+        <objectAnimator android:propertyName="scaleY" android:valueFrom="0" android:valueTo="1" android:duration="420" android:startOffset="270" android:interpolator="@android:interpolator/overshoot" />
+    </set></aapt:attr></target>
+    <target android:name="p4"><aapt:attr name="android:animation">
+        <objectAnimator android:propertyName="fillAlpha" android:valueFrom="0" android:valueTo="1" android:duration="160" android:startOffset="270" />
+    </aapt:attr></target>
+</animated-vector>
