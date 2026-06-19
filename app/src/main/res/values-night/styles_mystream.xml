@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Night: keep components inheriting day styles; nothing to override yet.
+         File exists so future night-only overrides have a home. -->
+</resources>
