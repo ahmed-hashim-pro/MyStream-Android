@@ -106,13 +106,13 @@ public class Settings extends AppCompatActivity {
     // ── Notifications Section ──
 
     private void setupNotificationsSection() {
-        // Prayer Times Alarm
+        // Prayer Times Alarm → new Athan settings (replaces the legacy TimePicker reminder)
         View prayerItem = findViewById(R.id.item_prayer_alarm);
         ((ImageView) prayerItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.round_add_alert_24);
-        ((TextView) prayerItem.findViewById(R.id.textView)).setText(R.string.set_time);
+        ((TextView) prayerItem.findViewById(R.id.textView)).setText(R.string.athan_settings_title);
         setSubtitle(prayerItem, R.id.subtitle, getString(R.string.settings_subtitle_prayer_alarm));
         prayerItem.findViewById(R.id.arrow).setVisibility(View.VISIBLE);
-        prayerItem.setOnClickListener(v -> startActivity(new Intent(this, TimePicker.class)));
+        prayerItem.setOnClickListener(v -> startActivity(new Intent(this, AthanSettingsActivity.class)));
 
         // Notification Settings page
         View notifItem = findViewById(R.id.item_notification_settings);
