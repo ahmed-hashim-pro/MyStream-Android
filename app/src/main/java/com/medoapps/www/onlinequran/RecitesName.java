@@ -190,6 +190,8 @@ public class RecitesName extends Fragment  {
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) getView().findViewById(R.id.search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        // This list filters reciters locally, so override the shared Quran searchable hint.
+        searchView.setQueryHint(getString(R.string.search_reciter_hint));
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {

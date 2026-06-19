@@ -609,6 +609,7 @@ Press the button below to set the time for this , then you can start the app </s
         little we can do to help with this.
     </string>
     <string name="search_hint">Search the Quran</string>
+    <string name="search_reciter_hint">Search reciters…</string>
     <string name="quranSearchType">Verses of the Quran</string>
     <string name="search_full_results">Full Results</string>
     <string name="search_entire_mushaf">Search the entire mushaf</string>

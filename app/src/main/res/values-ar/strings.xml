@@ -334,6 +334,7 @@
     </string>
 
     <string name="search_hint">بحث في القرآن</string>
+    <string name="search_reciter_hint">ابحث عن قارئ…</string>
     <string name="quranSearchType">آيات القرآن</string>
     <string name="search_full_results">نتائج كاملة</string>
     <string name="search_entire_mushaf">ابحث في المصحف بأكمله</string>
