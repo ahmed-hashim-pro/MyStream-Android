@@ -41,6 +41,11 @@ public final class HijriDate {
         return new int[]{hy, hm, hd};
     }
 
+    /** True if the given gregorian day falls in Ramadan (hijri month 9). */
+    public static boolean isRamadan(Calendar gregorian) {
+        return fromGregorian(gregorian)[1] == 9;
+    }
+
     /** Today's hijri date with the user's offset, e.g. "27 ذو الحجة 1447 هـ". */
     public static String todayString(Context context) {
         Calendar day = Calendar.getInstance();
