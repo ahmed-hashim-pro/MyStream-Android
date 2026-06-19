@@ -74,7 +74,7 @@ public class HomeFragment extends Fragment {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (binding == null) return;
+                if (binding == null || !isAdded()) return;
                 User u = snapshot.getValue(User.class);
                 if (u == null) return;
                 binding.homeName.setText(u.firstname != null ? u.firstname : "");
