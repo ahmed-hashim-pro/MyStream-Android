@@ -165,6 +165,8 @@ public class PagerActivity extends AppCompatActivity implements
     ActivityCompat.OnRequestPermissionsResultCallback {
   private static final String AUDIO_DOWNLOAD_KEY = "AUDIO_DOWNLOAD_KEY";
   private static final String LAST_READ_PAGE = "LAST_READ_PAGE";
+  /** Persistent last-read page for the home "continue reading" card. */
+  public static final String HOME_LAST_READ_PAGE = "home_last_read_page";
   private static final String LAST_READING_MODE_IS_TRANSLATION =
       "LAST_READING_MODE_IS_TRANSLATION";
   private static final String LAST_ACTIONBAR_STATE = "LAST_ACTIONBAR_STATE";
@@ -1004,6 +1006,11 @@ public class PagerActivity extends AppCompatActivity implements
   public void onSaveInstanceState(Bundle state) {
     int lastPage = quranInfo.getPageFromPosition(viewPager.getCurrentItem(), isDualPageVisible());
     state.putInt(LAST_READ_PAGE, lastPage);
+    // Persist for the home hub's continue-reading card (survives process death).
+    PreferenceManager.getDefaultSharedPreferences(this)
+            .edit()
+            .putInt(HOME_LAST_READ_PAGE, lastPage)
+            .apply();
     state.putBoolean(LAST_READING_MODE_IS_TRANSLATION, showingTranslation);
     state.putBoolean(LAST_ACTIONBAR_STATE, isActionBarHidden);
     state.putBoolean(LAST_WAS_DUAL_PAGES, isDualPages);
