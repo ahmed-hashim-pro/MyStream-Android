@@ -27,14 +27,18 @@ import com.medoapps.www.onlinequran.R;
 import com.medoapps.www.onlinequran.athan.HijriDate;
 import com.medoapps.www.onlinequran.athan.PrayerTimeEngine;
 import com.medoapps.www.onlinequran.databinding.FragmentHomeBinding;
+import com.medoapps.www.onlinequran.models.Post;
 import com.medoapps.www.onlinequran.models.User;
 import com.medoapps.www.onlinequran.ui.PagerActivity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    private final HomeReciterAdapter reciterAdapter = new HomeReciterAdapter();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -52,7 +56,10 @@ public class HomeFragment extends Fragment {
         bindStreak();
         bindContinueReading();
         bindQuickActions();
-        // Reciters carousel adapter is wired in Task 7.
+        binding.recitersRecycler.setAdapter(reciterAdapter);
+        reciterAdapter.setOnReciterClick(p ->
+                startActivity(new android.content.Intent(requireContext(), QuranDataActivity.class)));
+        loadReciters();
     }
 
     @Override
@@ -144,6 +151,24 @@ public class HomeFragment extends Fragment {
         } catch (Exception ignored) {
             // Nav graph not present yet (pre-Task 8); ignore.
         }
+    }
+
+    private void loadReciters() {
+        FirebaseDatabase.getInstance().getReference()
+                .child("youtube-posts").orderByKey().limitToFirst(10)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (binding == null || !isAdded()) return;
+                        List<Post> posts = new ArrayList<>();
+                        for (DataSnapshot child : snapshot.getChildren()) {
+                            Post p = child.getValue(Post.class);
+                            if (p != null) posts.add(p);
+                        }
+                        reciterAdapter.submit(posts);
+                    }
+                    @Override public void onCancelled(@NonNull DatabaseError error) {}
+                });
     }
 
     @Override
