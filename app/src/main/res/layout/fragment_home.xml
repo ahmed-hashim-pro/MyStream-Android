@@ -380,6 +380,19 @@
                             android:layout_marginTop="6dp"
                             android:textSize="13sp"
                             tools:text="7 يوم" />
+
+                        <!-- Empty-state nudge: shown only when today_pages==0 AND streak_days==0 -->
+                        <TextView
+                            android:id="@+id/streak_nudge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/home_reading_nudge"
+                            android:textColor="@color/gold_accent"
+                            android:textSize="12sp"
+                            android:textStyle="italic"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

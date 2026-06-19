@@ -341,14 +341,20 @@ public class HomeFragment extends Fragment {
         int dailyGoal  = Math.max(1, prefs.getInt("daily_goal", 5));
         int streakDays = prefs.getInt("streak_days", 0);
 
-        // Arc: 0-100 percent of goal
-        int arcProgress = Math.round(100f * todayPages / dailyGoal);
+        boolean isEmpty = (todayPages == 0 && streakDays == 0);
+
+        // Arc: 0-100 percent of goal.
+        // In empty state keep progress at 0 (faint track ring is already visible via trackColor).
+        int arcProgress = isEmpty ? 0 : Math.round(100f * todayPages / dailyGoal);
         binding.statArc.setProgressCompat(Math.min(arcProgress, 100), false);
 
         binding.statPages.setText(
                 getString(R.string.home_stat_pages, todayPages, dailyGoal));
         binding.streakCount.setText(
                 getString(R.string.home_streak_count, streakDays));
+
+        // Show inviting nudge only in the fully-empty state.
+        binding.streakNudge.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
 
         // Build 7-dot streak row (today = index 6)
         buildStreakDots(streakDays);
@@ -648,7 +654,9 @@ public class HomeFragment extends Fragment {
 
         for (int i = 0; i < barCount; i++) {
             View bar = eq.getChildAt(i);
-            bar.setPivotY(bar.getHeight()); // grow from bottom
+            // Use measured height so pivot is correct even on first layout pass.
+            float h = bar.getHeight() > 0 ? bar.getHeight() : bar.getMeasuredHeight();
+            bar.setPivotY(h); // grow from bottom
             float peak = peaks[i % peaks.length];
             ObjectAnimator anim = ObjectAnimator.ofFloat(bar, View.SCALE_Y, 1f, peak, 1f);
             anim.setDuration(EQ_ANIM_MS + (long)(i * 40));

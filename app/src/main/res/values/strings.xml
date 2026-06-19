@@ -1192,6 +1192,7 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="home_continue_subtitle">تابع القراءة</string>
     <string name="home_stat_pages">%1$d / %2$d صفحات</string>
     <string name="home_streak_count">%1$d يوم</string>
+    <string name="home_reading_nudge">ابدأ رحلتك في القراءة</string>
     <string name="home_prayer_timeline_title">أوقات الصلاة</string>
 
     <!-- Quick-action tile labels (§4.7) -->

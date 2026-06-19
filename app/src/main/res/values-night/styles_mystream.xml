@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Night: keep components inheriting day styles; nothing to override yet.
-         File exists so future night-only overrides have a home. -->
+    <!-- Night overrides for home hub cards.
+         Widget.MyStream.Card inherits Widget.Material3.CardView.Elevated which resolves
+         cardBackgroundColor via ?attr/colorSurface — already dark (#121212) in night.
+         Widget.MyStream.Discover uses ?attr/colorSurface (light: warm cream; dark: #121212).
+         Widget.MyStream.QuickAction background (bg_qa_tile) resolves @color/md_theme_light_surface
+         which is also overridden to #121212 in values-night/colors.xml.
+         All warm-surface cards therefore adapt automatically; no additional overrides needed. -->
 </resources>
