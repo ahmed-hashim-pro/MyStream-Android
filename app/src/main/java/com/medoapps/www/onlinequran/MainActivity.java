@@ -231,10 +231,11 @@ public  class  MainActivity extends BaseActivity {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         navController.addOnDestinationChangedListener((controller, destination, args) -> {
-            // Home owns its own collapsing header — hide the legacy activity app bar there.
-            if (appbar != null) {
-                appbar.setVisibility(destination.getId() == R.id.nav_home ? View.GONE : View.VISIBLE);
-            }
+            if (appbar == null) return;
+            int id = destination.getId();
+            boolean mainTab = id == R.id.nav_home || id == R.id.nav_quran
+                    || id == R.id.nav_radio || id == R.id.nav_more;
+            appbar.setVisibility(mainTab ? View.GONE : View.VISIBLE);
         });
 
         admin_fab = (ExtendedFloatingActionButton) findViewById(R.id.admin_fab);
@@ -1267,6 +1268,12 @@ public  class  MainActivity extends BaseActivity {
         }
 
 
+    }
+
+    /** Trigger the rewarded ad from a tab header. */
+    public void showRewardedAd() {
+        loadRewardedAd();
+        showRewardedVideo();
     }
 
     public void message(View view) {

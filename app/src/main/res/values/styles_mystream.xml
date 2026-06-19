@@ -135,6 +135,27 @@
         <item name="cardElevation">2dp</item>
     </style>
 
+    <!-- Compact tab-header bar: navy background, actionBarSize height, shared by G2–G4 fragments -->
+    <style name="Widget.MyStream.TabHeader">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@color/navy_700</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+
+    <style name="Widget.MyStream.TabHeader.Title">
+        <item name="android:textColor">@color/gold_accent</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
     <!-- NOTE: Widget.MyStream.BottomNav.ActiveIndicator is defined in styles.xml —
          extended there; PillDock references it via the existing name. -->
 

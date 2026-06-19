@@ -170,6 +170,12 @@ public class OtherCategoryListLanguageClass {
                 R.drawable.ic_hisn,
                 null, HisnAlMuslimActivity.class));
 
+        // Settings
+        OtherCategoryListInfo.add(new OtherCategory(
+                "الإعدادات",
+                R.drawable.ic_settings_gear,
+                null, Settings.class));
+
         return OtherCategoryListInfo;
     }
 
