@@ -165,7 +165,6 @@ public class RecitesName extends Fragment  {
     private DatabaseReference mDatabase;
     private DatabaseReference mUserReference;
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/4177191030";
-    MainActivity MainActivityInstance;
     private boolean isSubscribedPremium ;
 
     public static RecitesName newInstance() {
@@ -175,10 +174,6 @@ public class RecitesName extends Fragment  {
 
     public RecitesName() {
 
-    }
-
-    public RecitesName(MainActivity MainActivityInstance) {
-        this.MainActivityInstance = MainActivityInstance;
     }
 
     @Override
@@ -829,10 +824,6 @@ public class RecitesName extends Fragment  {
                                 intent.putExtra("videoTitle", holder.title);
                                 intent.putExtra("videoDescription", holder.descriptiontxt);
                                 startActivity(intent);
-                                if (MainActivityInstance!=null){
-                                    MainActivityInstance.switchToYoutubeFragment();
-
-                                }
                                 createYouTubePostReport(null,postKey,holder.title);
 
                             }

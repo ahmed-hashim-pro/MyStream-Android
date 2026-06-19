@@ -751,11 +751,6 @@ public  class  MainActivity extends BaseActivity {
                     }
                 });
     }
-    public void switchToYoutubeFragment(){
-        if (navController != null){
-            navController.navigate(R.id.nav_home);
-        }
-    }
     @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {

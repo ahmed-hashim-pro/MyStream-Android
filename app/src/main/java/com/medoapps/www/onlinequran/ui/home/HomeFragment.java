@@ -148,8 +148,8 @@ public class HomeFragment extends Fragment {
         try {
             androidx.navigation.fragment.NavHostFragment
                     .findNavController(this).navigate(destinationId);
-        } catch (Exception ignored) {
-            // Nav graph not present yet (pre-Task 8); ignore.
+        } catch (IllegalArgumentException ignored) {
+            // Guard against a destination id not present in the current nav graph.
         }
     }
 
