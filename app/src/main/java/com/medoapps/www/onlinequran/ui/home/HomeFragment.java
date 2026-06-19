@@ -1,5 +1,8 @@
 package com.medoapps.www.onlinequran.ui.home;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -12,6 +15,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -55,6 +59,9 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private static final long TICK_INTERVAL_MS = 1_000L;
+    private static final long RING_ANIM_MS     = 400L;
+    private static final long EQ_ANIM_MS       = 280L;
+    private static final long PULSE_ANIM_MS    = 900L;
 
     private FragmentHomeBinding binding;
     private final HomeReciterAdapter reciterAdapter = new HomeReciterAdapter();
@@ -63,6 +70,11 @@ public class HomeFragment extends Fragment {
     private Runnable heroTicker;
     /** Absolute millis of the next prayer (already rolled to tomorrow if needed). */
     private long heroNextMillis = 0L;
+
+    // ---- Animator fields (cancelled in onPause / nulled in onDestroyView) ----
+    private ValueAnimator ringAnimator;
+    private AnimatorSet   eqAnimatorSet;
+    private ObjectAnimator livePulseAnimator;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -134,6 +146,7 @@ public class HomeFragment extends Fragment {
     public void onPause() {
         super.onPause();
         stopHeroTicker();
+        cancelAnimators();
     }
 
     private void bindProfile() {
@@ -203,7 +216,9 @@ public class HomeFragment extends Fragment {
         binding.heroPrayerName.setText(getString(PrayerTimeEngine.PRAYER_NAME_RES[idx]));
         binding.heroPrayerTime.setText(PrayerTimeEngine.formatTime(ctx, times[idx]));
 
-        binding.heroRing.setProgress(RingMath.sweepFraction(prevMillis, nextMillis, now));
+        float targetProgress = RingMath.sweepFraction(prevMillis, nextMillis, now);
+        float fromProgress = binding.heroRing.getProgress();
+        animateRingTo(fromProgress, targetProgress);
         binding.heroRing.setCenterText(
                 formatHms(HomeCountdown.remainingMillis(now, nextMillis)),
                 getString(R.string.home_hero_remaining));
@@ -459,6 +474,16 @@ public class HomeFragment extends Fragment {
         // Live dot: only shown when a station was explicitly played
         binding.radioLiveDot.setVisibility(hasLastPlayed ? View.VISIBLE : View.GONE);
 
+        // Equalizer + pulse animate only when a station is live
+        if (hasLastPlayed) {
+            // Defer until views are laid out so pivot is computed correctly
+            binding.radioEq.post(() -> startEqAnimation());
+            startLivePulse();
+        } else {
+            stopEqAnimation();
+            stopLivePulse();
+        }
+
         // Thumbnail via Glide (rounded corners, 8dp)
         if (img != null && !img.isEmpty()) {
             int cornerPx = (int) (8 * getResources().getDisplayMetrics().density);
@@ -557,6 +582,110 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         stopHeroTicker();
+        cancelAnimators();
+        ringAnimator      = null;
+        eqAnimatorSet     = null;
+        livePulseAnimator = null;
         binding = null;
+    }
+
+    // -------------------------------------------------------------------------
+    // Motion helpers
+    // -------------------------------------------------------------------------
+
+    private void cancelAnimators() {
+        if (ringAnimator != null)      ringAnimator.cancel();
+        if (eqAnimatorSet != null)     eqAnimatorSet.cancel();
+        if (livePulseAnimator != null) livePulseAnimator.cancel();
+    }
+
+    /**
+     * Animates the hero ring progress from {@code from} to {@code to} over
+     * {@link #RING_ANIM_MS}ms with an ease-in-out interpolator. Cancels any
+     * in-flight ring animation first.
+     */
+    private void animateRingTo(float from, float to) {
+        if (binding == null) return;
+        if (ringAnimator != null) ringAnimator.cancel();
+
+        ringAnimator = ValueAnimator.ofFloat(from, to);
+        ringAnimator.setDuration(RING_ANIM_MS);
+        ringAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        ringAnimator.addUpdateListener(anim -> {
+            if (binding == null) return;
+            binding.heroRing.setProgress((float) anim.getAnimatedValue());
+        });
+        ringAnimator.start();
+    }
+
+    /**
+     * Starts looping scale-Y oscillation on each bar of the radio_eq LinearLayout.
+     * Each bar gets a slightly offset phase so they don't move in lock-step.
+     */
+    private void startEqAnimation() {
+        if (binding == null) return;
+        if (eqAnimatorSet != null && eqAnimatorSet.isRunning()) return;
+
+        LinearLayout eq = binding.radioEq;
+        int barCount = eq.getChildCount();
+        if (barCount == 0) return;
+
+        ObjectAnimator[] bars = new ObjectAnimator[barCount];
+        // Different amplitudes to give a natural look: bars oscillate between
+        // their natural height (scaleY=1) and a taller peak (scaleY=1.8).
+        float[] peaks = {1.8f, 1.4f, 2.0f, 1.6f};
+
+        for (int i = 0; i < barCount; i++) {
+            View bar = eq.getChildAt(i);
+            bar.setPivotY(bar.getHeight()); // grow from bottom
+            float peak = peaks[i % peaks.length];
+            ObjectAnimator anim = ObjectAnimator.ofFloat(bar, View.SCALE_Y, 1f, peak, 1f);
+            anim.setDuration(EQ_ANIM_MS + (long)(i * 40));
+            anim.setRepeatCount(ValueAnimator.INFINITE);
+            anim.setRepeatMode(ValueAnimator.RESTART);
+            anim.setInterpolator(new AccelerateDecelerateInterpolator());
+            // Stagger start via start delay so bars are out of phase
+            anim.setStartDelay((long)(i * 60));
+            bars[i] = anim;
+        }
+
+        eqAnimatorSet = new AnimatorSet();
+        eqAnimatorSet.playTogether(bars);
+        eqAnimatorSet.start();
+    }
+
+    private void stopEqAnimation() {
+        if (eqAnimatorSet != null) {
+            eqAnimatorSet.cancel();
+            // Reset bars to natural scale
+            if (binding != null) {
+                LinearLayout eq = binding.radioEq;
+                for (int i = 0; i < eq.getChildCount(); i++) {
+                    eq.getChildAt(i).setScaleY(1f);
+                }
+            }
+        }
+    }
+
+    /**
+     * Starts a gentle alpha pulse on {@code radio_live_dot} to signal live status.
+     */
+    private void startLivePulse() {
+        if (binding == null) return;
+        if (livePulseAnimator != null && livePulseAnimator.isRunning()) return;
+
+        livePulseAnimator = ObjectAnimator.ofFloat(binding.radioLiveDot, View.ALPHA, 1f, 0.3f);
+        livePulseAnimator.setDuration(PULSE_ANIM_MS);
+        livePulseAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        livePulseAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        livePulseAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        livePulseAnimator.start();
+    }
+
+    private void stopLivePulse() {
+        if (livePulseAnimator != null) {
+            livePulseAnimator.cancel();
+            if (binding != null) binding.radioLiveDot.setAlpha(1f);
+        }
     }
 }

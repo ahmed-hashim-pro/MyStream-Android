@@ -88,6 +88,11 @@ public class PrayerCountdownRingView extends View {
     // Public API
     // ---------------------------------------------------------------------------
 
+    /** Returns the current sweep progress (0..1). */
+    public float getProgress() {
+        return progress;
+    }
+
     /** Set the sweep progress (elapsed fraction). Clamped to [0,1]. */
     public void setProgress(float fraction) {
         progress = Math.max(0f, Math.min(1f, fraction));
