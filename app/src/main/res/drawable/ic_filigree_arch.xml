@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!-- Outer arch -->
+    <path
+        android:pathData="M10,100 Q10,20 60,20 Q110,20 110,100"
+        android:strokeColor="#1AD4A44C"
+        android:strokeWidth="2.5"
+        android:fillColor="#00000000" />
+
+    <!-- Inner arch -->
+    <path
+        android:pathData="M22,100 Q22,36 60,36 Q98,36 98,100"
+        android:strokeColor="#1AD4A44C"
+        android:strokeWidth="2"
+        android:fillColor="#00000000" />
+
+    <!-- Left column -->
+    <path
+        android:pathData="M10,100 L10,108"
+        android:strokeColor="#1AD4A44C"
+        android:strokeWidth="2.5"
+        android:fillColor="#00000000" />
+
+    <!-- Right column -->
+    <path
+        android:pathData="M110,100 L110,108"
+        android:strokeColor="#1AD4A44C"
+        android:strokeWidth="2.5"
+        android:fillColor="#00000000" />
+
+    <!-- Base line -->
+    <path
+        android:pathData="M6,108 L114,108"
+        android:strokeColor="#1AD4A44C"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000" />
+
+    <!-- Central decorative diamond -->
+    <path
+        android:pathData="M60,50 L64,56 L60,62 L56,56 Z"
+        android:fillColor="#1AD4A44C" />
+
+</vector>

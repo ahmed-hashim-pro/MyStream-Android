@@ -84,4 +84,68 @@
     <!-- BottomNav intermediate style (required for Widget.MyStream.BottomNav.ActiveIndicator) -->
     <style name="Widget.MyStream.BottomNav"></style>
 
+    <!-- ============================================================ -->
+    <!-- Home Redesign v2: Glass / Arc / Timeline / Dock styles       -->
+    <!-- ============================================================ -->
+
+    <!-- Glass card: translucent white over navy, 18dp corners -->
+    <style name="Widget.MyStream.GlassCard" parent="Widget.Material3.CardView.Filled">
+        <item name="cardBackgroundColor">@android:color/transparent</item>
+        <item name="android:background">@drawable/bg_glass_card</item>
+        <item name="cardCornerRadius">18dp</item>
+        <item name="contentPadding">14dp</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
+    <!-- Circular progress arc: gold track for streak/goal widget -->
+    <style name="Widget.MyStream.StatArc" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:indeterminate">false</item>
+        <item name="android:progressDrawable">@drawable/bg_stat_arc_track</item>
+        <item name="android:minWidth">64dp</item>
+        <item name="android:minHeight">64dp</item>
+    </style>
+
+    <!-- Prayer timeline node label: small centered text -->
+    <style name="Widget.MyStream.PrayerNode">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <!-- Radio / Now-Playing card: navy background, 18dp corners -->
+    <style name="Widget.MyStream.RadioNowPlaying" parent="Widget.Material3.CardView.Filled">
+        <item name="cardBackgroundColor">@color/navy_700</item>
+        <item name="cardCornerRadius">18dp</item>
+        <item name="contentPadding">14dp</item>
+        <item name="cardElevation">4dp</item>
+    </style>
+
+    <!-- Discover card: warm surface, 16dp corners, light elevation -->
+    <style name="Widget.MyStream.Discover" parent="Widget.Material3.CardView.Filled">
+        <item name="cardBackgroundColor">@color/md_theme_light_surface</item>
+        <item name="cardCornerRadius">16dp</item>
+        <item name="contentPadding">12dp</item>
+        <item name="cardElevation">2dp</item>
+    </style>
+
+    <!-- NOTE: Widget.MyStream.BottomNav.ActiveIndicator is defined in styles.xml —
+         extended there; PillDock references it via the existing name. -->
+
+    <!-- Pill-dock BottomNavigationView: warm surface + gold selected items -->
+    <style name="Widget.MyStream.BottomNav.PillDock" parent="Widget.Material3.BottomNavigationView">
+        <item name="android:background">@drawable/bg_pill_dock</item>
+        <item name="itemActiveIndicatorStyle">@style/Widget.MyStream.BottomNav.ActiveIndicator</item>
+        <item name="labelVisibilityMode">selected</item>
+        <item name="itemIconTint">@color/bottom_nav_item_color</item>
+        <item name="itemTextColor">@color/bottom_nav_item_color</item>
+    </style>
+
+    <!-- Lozenge/pill shape for the active indicator -->
+    <style name="ShapeAppearance.MyStream.PillIndicator" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>
