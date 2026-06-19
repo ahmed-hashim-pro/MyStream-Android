@@ -230,6 +230,13 @@ public  class  MainActivity extends BaseActivity {
         navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
+        navController.addOnDestinationChangedListener((controller, destination, args) -> {
+            // Home owns its own collapsing header — hide the legacy activity app bar there.
+            if (appbar != null) {
+                appbar.setVisibility(destination.getId() == R.id.nav_home ? View.GONE : View.VISIBLE);
+            }
+        });
+
         admin_fab = (ExtendedFloatingActionButton) findViewById(R.id.admin_fab);
         fab_add = (FloatingActionButton) findViewById(R.id.fab_add);
         addBostBTN = (FloatingActionButton) findViewById(R.id.fab_new_post);
