@@ -26,6 +26,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.appbar.AppBarLayout;
+
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.medoapps.www.onlinequran.AuthorClass;
@@ -76,6 +78,11 @@ public class HomeFragment extends Fragment {
     private AnimatorSet   eqAnimatorSet;
     private ObjectAnimator livePulseAnimator;
 
+    // ---- Collapsed-toolbar live title fields (Fix 1 & 2) ----
+    private String heroPrayerName   = "";
+    private String heroRemainingText = "";
+    private AppBarLayout.OnOffsetChangedListener offsetListener;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -112,7 +119,7 @@ public class HomeFragment extends Fragment {
     private void bindCollapseTitle() {
         // Start hidden so nothing shows over the expanded hero.
         binding.homeToolbar.setTitleTextColor(0x00FFFFFF);
-        binding.homeAppbar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+        offsetListener = (appBarLayout, verticalOffset) -> {
             if (binding == null || !isAdded()) return;
             int range = appBarLayout.getTotalScrollRange();
             float collapsed = range == 0 ? 0f : (float) Math.abs(verticalOffset) / range;
@@ -120,14 +127,12 @@ public class HomeFragment extends Fragment {
             float titleAlpha = Math.max(0f, Math.min(1f, (collapsed - 0.66f) / 0.34f));
             int a = (int) (titleAlpha * 255f) & 0xFF;
             binding.homeToolbar.setTitleTextColor((a << 24) | 0x00FFFFFF);
-            if (collapsed > 0.66f && binding.homeToolbar.getTitle() == null) {
-                int idx = PrayerTimeEngine.getNextPrayerIndex(requireContext());
-                String name = getString(PrayerTimeEngine.PRAYER_NAME_RES[idx]);
-                long remaining = HomeCountdown.remainingMillis(
-                        System.currentTimeMillis(), heroNextMillis);
-                binding.homeToolbar.setTitle(name + " · " + HomeCountdown.format(remaining));
+            if (collapsed > 0.66f) {
+                // Always update from live fields so the title tracks the countdown.
+                binding.homeToolbar.setTitle(heroPrayerName + " · " + heroRemainingText);
             }
-        });
+        };
+        binding.homeAppbar.addOnOffsetChangedListener(offsetListener);
     }
 
     @Override
@@ -213,14 +218,16 @@ public class HomeFragment extends Fragment {
         // Previous (non-sunrise) prayer that started this interval.
         long prevMillis = previousPrayerMillis(times, idx, nextIsTomorrowFajr);
 
-        binding.heroPrayerName.setText(getString(PrayerTimeEngine.PRAYER_NAME_RES[idx]));
+        heroPrayerName = getString(PrayerTimeEngine.PRAYER_NAME_RES[idx]);
+        binding.heroPrayerName.setText(heroPrayerName);
         binding.heroPrayerTime.setText(PrayerTimeEngine.formatTime(ctx, times[idx]));
 
         float targetProgress = RingMath.sweepFraction(prevMillis, nextMillis, now);
         float fromProgress = binding.heroRing.getProgress();
         animateRingTo(fromProgress, targetProgress);
+        heroRemainingText = formatHms(HomeCountdown.remainingMillis(now, nextMillis));
         binding.heroRing.setCenterText(
-                formatHms(HomeCountdown.remainingMillis(now, nextMillis)),
+                heroRemainingText,
                 getString(R.string.home_hero_remaining));
 
         renderPrayerDots(times, now);
@@ -279,8 +286,9 @@ public class HomeFragment extends Fragment {
                     // Prayer reached — recompute the next one (also refreshes the ring sweep).
                     bindHero();
                 } else {
+                    heroRemainingText = formatHms(remaining);
                     binding.heroRing.setCenterText(
-                            formatHms(remaining), getString(R.string.home_hero_remaining));
+                            heroRemainingText, getString(R.string.home_hero_remaining));
                 }
                 heroHandler.postDelayed(this, TICK_INTERVAL_MS);
             }
@@ -491,8 +499,7 @@ public class HomeFragment extends Fragment {
                     .load(img)
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(cornerPx)))
                     .placeholder(com.medoapps.www.onlinequran.R.drawable.outline_radio_24)
-                    .into((ImageView) binding.getRoot().findViewById(
-                            com.medoapps.www.onlinequran.R.id.radio_thumb));
+                    .into(binding.radioThumb);
         }
 
         // Tap opens Radio tab
@@ -583,6 +590,10 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
         stopHeroTicker();
         cancelAnimators();
+        if (offsetListener != null) {
+            binding.homeAppbar.removeOnOffsetChangedListener(offsetListener);
+            offsetListener = null;
+        }
         ringAnimator      = null;
         eqAnimatorSet     = null;
         livePulseAnimator = null;
