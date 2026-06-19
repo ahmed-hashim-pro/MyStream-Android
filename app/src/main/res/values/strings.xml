@@ -1194,4 +1194,16 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="home_streak_count">%1$d يوم</string>
     <string name="home_prayer_timeline_title">أوقات الصلاة</string>
 
+    <!-- Quick-action tile labels (§4.7) -->
+    <string name="qa_label_mushaf">المصحف</string>
+    <string name="qa_label_radio">راديو</string>
+    <string name="qa_label_athkar">الأذكار</string>
+    <string name="qa_label_qibla">القبلة</string>
+
+    <!-- Discover band (§4.9) -->
+    <string name="discover_athkar_title">أذكار الصباح والمساء</string>
+    <string name="discover_events_title">مناسبات إسلامية</string>
+    <string name="discover_events_chip">قريباً</string>
+    <string name="home_reciters_header">القرّاء</string>
+
 </resources>

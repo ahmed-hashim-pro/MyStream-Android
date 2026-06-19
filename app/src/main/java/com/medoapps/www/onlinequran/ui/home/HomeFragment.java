@@ -35,7 +35,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.medoapps.www.onlinequran.AthkarActivity;
 import com.medoapps.www.onlinequran.AthanSettingsActivity;
+import com.medoapps.www.onlinequran.IslamicEventsActivity;
+import com.medoapps.www.onlinequran.QiblaActivity;
 import com.medoapps.www.onlinequran.QuranDataActivity;
 import com.medoapps.www.onlinequran.R;
 import com.medoapps.www.onlinequran.athan.HijriDate;
@@ -504,13 +507,23 @@ public class HomeFragment extends Fragment {
     }
 
     private void bindQuickActions() {
+        // المصحف — open Quran browser
         binding.qaQuran.setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), QuranDataActivity.class)));
+        // راديو — switch to radio tab
         binding.qaRadio.setOnClickListener(v -> openTab(R.id.nav_radio));
-        binding.qaAthkar.setOnClickListener(v -> openTab(R.id.nav_more));
+        // الأذكار — open Athkar screen (§4.7: qa_athan id, new target)
         binding.qaAthan.setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), AthanSettingsActivity.class)));
+                startActivity(new Intent(requireContext(), AthkarActivity.class)));
+        // القبلة — open Qibla screen (§4.7: qa_athkar id, new target)
+        binding.qaAthkar.setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), QiblaActivity.class)));
         binding.recitersSeeAll.setOnClickListener(v -> openTab(R.id.nav_quran));
+        // Discover band clicks (§4.9)
+        binding.discoverAthkar.setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), AthkarActivity.class)));
+        binding.discoverEvents.setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), IslamicEventsActivity.class)));
     }
 
     private void openTab(int destinationId) {

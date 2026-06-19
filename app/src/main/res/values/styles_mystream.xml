@@ -57,16 +57,20 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <!-- Quick-action tile -->
+    <!-- Quick-action tile: rounded elevated warm-surface card with gold-faint ripple -->
     <style name="Widget.MyStream.QuickAction">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginHorizontal">5dp</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:paddingStart">6dp</item>
+        <item name="android:paddingEnd">6dp</item>
+        <item name="android:background">@drawable/bg_qa_tile</item>
+        <item name="android:elevation">2dp</item>
     </style>
 
     <!-- Standard content card -->

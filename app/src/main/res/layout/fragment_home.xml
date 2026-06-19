@@ -643,54 +643,98 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Quick actions -->
+            <!-- Quick actions (§4.7): rounded elevated cards, gold line-icons, gold-faint press -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="6dp">
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginHorizontal="-5dp">
 
                 <LinearLayout android:id="@+id/qa_quran" style="@style/Widget.MyStream.QuickAction">
-                    <ImageView android:layout_width="26dp" android:layout_height="26dp"
-                        app:srcCompat="@drawable/holyquran" app:tint="@color/gold_accent"
-                        android:contentDescription="@string/HolyQuran" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp" android:text="@string/HolyQuran" android:textSize="11sp" />
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        app:srcCompat="@drawable/holyquran"
+                        app:tint="@color/gold_accent"
+                        android:contentDescription="@string/qa_label_mushaf" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:text="@string/qa_label_mushaf"
+                        android:textSize="12sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textStyle="bold"
+                        android:gravity="center" />
                 </LinearLayout>
 
                 <LinearLayout android:id="@+id/qa_radio" style="@style/Widget.MyStream.QuickAction">
-                    <ImageView android:layout_width="26dp" android:layout_height="26dp"
-                        app:srcCompat="@drawable/outline_radio_24" app:tint="@color/gold_accent"
-                        android:contentDescription="@string/Radio" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp" android:text="@string/Radio" android:textSize="11sp" />
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        app:srcCompat="@drawable/outline_radio_24"
+                        app:tint="@color/gold_accent"
+                        android:contentDescription="@string/qa_label_radio" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:text="@string/qa_label_radio"
+                        android:textSize="12sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textStyle="bold"
+                        android:gravity="center" />
                 </LinearLayout>
 
+                <!-- qa_athan id kept; now routes to AthkarActivity (§4.7 mapping) -->
                 <LinearLayout android:id="@+id/qa_athan" style="@style/Widget.MyStream.QuickAction">
-                    <ImageView android:layout_width="26dp" android:layout_height="26dp"
-                        app:srcCompat="@drawable/ic_athan_mode_athan" app:tint="@color/gold_accent"
-                        android:contentDescription="@string/athan_prayer_fajr" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp" android:text="@string/athan_prayer_fajr" android:textSize="11sp" />
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        app:srcCompat="@drawable/ic_athkar"
+                        app:tint="@color/gold_accent"
+                        android:contentDescription="@string/qa_label_athkar" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:text="@string/qa_label_athkar"
+                        android:textSize="12sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textStyle="bold"
+                        android:gravity="center" />
                 </LinearLayout>
 
+                <!-- qa_athkar id kept; now routes to QiblaActivity (§4.7 mapping) -->
                 <LinearLayout android:id="@+id/qa_athkar" style="@style/Widget.MyStream.QuickAction">
-                    <ImageView android:layout_width="26dp" android:layout_height="26dp"
-                        app:srcCompat="@drawable/ic_athkar" app:tint="@color/gold_accent"
-                        android:contentDescription="@string/OtherCategories" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp" android:text="@string/OtherCategories" android:textSize="11sp" />
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        app:srcCompat="@drawable/ic_qibla"
+                        app:tint="@color/gold_accent"
+                        android:contentDescription="@string/qa_label_qibla" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:text="@string/qa_label_qibla"
+                        android:textSize="12sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textStyle="bold"
+                        android:gravity="center" />
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Reciters section header -->
+            <!-- Reciters section header (§4.8) -->
             <LinearLayout style="@style/Widget.MyStream.SectionHeader">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     style="@style/Widget.MyStream.SectionHeader.Title"
-                    android:text="@string/HolyQuran" />
+                    android:text="@string/home_reciters_header" />
                 <TextView
                     android:id="@+id/reciters_see_all"
                     android:layout_width="wrap_content"
@@ -701,13 +745,123 @@
                     android:padding="4dp" />
             </LinearLayout>
 
+            <!-- Reciters carousel: glossier — taller height, padding for card shadows -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reciters_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="148dp"
                 android:clipToPadding="false"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:paddingBottom="4dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <!-- ============================================================ -->
+            <!-- Discover band (§4.9): two feature cards                      -->
+            <!-- ============================================================ -->
+            <LinearLayout
+                style="@style/Widget.MyStream.SectionHeader">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@style/Widget.MyStream.SectionHeader.Title"
+                    android:text="اكتشف" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="24dp">
+
+                <!-- Discover: Athkar (§4.9) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/discover_athkar"
+                    style="@style/Widget.MyStream.Discover"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    app:rippleColor="@color/gold_accent_faint">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="4dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            app:srcCompat="@drawable/ic_athkar"
+                            app:tint="@color/gold_accent"
+                            android:contentDescription="@null"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/discover_athkar_title"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorOnSurface"
+                            android:lineSpacingMultiplier="1.2"
+                            android:maxLines="2" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Discover: Islamic Events (§4.9) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/discover_events"
+                    style="@style/Widget.MyStream.Discover"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    app:rippleColor="@color/gold_accent_faint">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="4dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            app:srcCompat="@drawable/ic_islamic_events"
+                            app:tint="@color/gold_accent"
+                            android:contentDescription="@null"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/discover_events_title"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorOnSurface"
+                            android:lineSpacingMultiplier="1.2"
+                            android:maxLines="2"
+                            android:layout_marginBottom="8dp" />
+
+                        <!-- Upcoming chip -->
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/discover_events_chip"
+                            android:textSize="11sp"
+                            app:chipBackgroundColor="@color/gold_accent_faint"
+                            app:chipStrokeColor="@color/gold_accent"
+                            app:chipStrokeWidth="1dp"
+                            android:textColor="@color/gold_accent"
+                            app:ensureMinTouchTargetSize="false"
+                            style="@style/Widget.Material3.Chip.Suggestion" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
