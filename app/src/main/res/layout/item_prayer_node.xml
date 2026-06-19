@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Single prayer node: dot + name + time, used in the 5-prayer timeline -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
+
+    <!-- Name label -->
+    <TextView
+        android:id="@+id/node_name"
+        style="@style/Widget.MyStream.PrayerNode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="11sp" />
+
+    <!-- Dot (background set in code: bg_prayer_node_next / past / future) -->
+    <View
+        android:id="@+id/node_dot"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/bg_prayer_node_future" />
+
+    <!-- Time label -->
+    <TextView
+        android:id="@+id/node_time"
+        style="@style/Widget.MyStream.PrayerNode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.75"
+        android:textSize="10sp" />
+
+</LinearLayout>

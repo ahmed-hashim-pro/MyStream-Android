@@ -3,12 +3,15 @@ package com.medoapps.www.onlinequran.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -64,6 +67,8 @@ public class HomeFragment extends Fragment {
         bindHero();
         bindStreak();
         bindContinueReading();
+        bindStreakGoal();
+        bindPrayerTimeline();
         bindQuickActions();
         binding.recitersRecycler.setAdapter(reciterAdapter);
         reciterAdapter.setOnReciterClick(p ->
@@ -105,6 +110,8 @@ public class HomeFragment extends Fragment {
         // Hero + continue card can change while away; recompute and start ticking.
         bindHero();
         bindContinueReading();
+        bindStreakGoal();
+        bindPrayerTimeline();
         startHeroTicker();
     }
 
@@ -269,14 +276,142 @@ public class HomeFragment extends Fragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
         int page = prefs.getInt(PagerActivity.HOME_LAST_READ_PAGE, -1);
         if (page > 0) {
-            binding.continueSubtitle.setText(R.string.home_continue_reading);
+            binding.continueSubtitle.setText(R.string.home_continue_subtitle);
             binding.continueTitle.setText(getString(R.string.quran_page) + " " + page);
+            binding.continueProgress.setMax(604);
+            binding.continueProgress.setProgress(page);
         } else {
             binding.continueSubtitle.setText(R.string.home_start_reading);
             binding.continueTitle.setText(R.string.HolyQuran);
+            binding.continueProgress.setProgress(0);
         }
-        binding.cardContinue.setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), QuranDataActivity.class)));
+        View.OnClickListener openQuran = v ->
+                startActivity(new Intent(requireContext(), QuranDataActivity.class));
+        binding.cardContinue.setOnClickListener(openQuran);
+        binding.continueResume.setOnClickListener(openQuran);
+    }
+
+    // -------------------------------------------------------------------------
+    // §4.3 Reading streak + daily-goal arc
+    // -------------------------------------------------------------------------
+
+    private void bindStreakGoal() {
+        if (binding == null || !isAdded()) return;
+        SharedPreferences prefs = requireContext()
+                .getSharedPreferences("reading_progress", Context.MODE_PRIVATE);
+        int todayPages = prefs.getInt("today_pages", 0);
+        int dailyGoal  = Math.max(1, prefs.getInt("daily_goal", 5));
+        int streakDays = prefs.getInt("streak_days", 0);
+
+        // Arc: 0-100 percent of goal
+        int arcProgress = Math.round(100f * todayPages / dailyGoal);
+        binding.statArc.setProgressCompat(Math.min(arcProgress, 100), false);
+
+        binding.statPages.setText(
+                getString(R.string.home_stat_pages, todayPages, dailyGoal));
+        binding.streakCount.setText(
+                getString(R.string.home_streak_count, streakDays));
+
+        // Build 7-dot streak row (today = index 6)
+        buildStreakDots(streakDays);
+    }
+
+    /**
+     * Populates the streak_dots LinearLayout with 7 circular dots.
+     * Dots for completed days (including today when streak > 0) are gold-filled;
+     * remaining are faint outlines. Today is the rightmost dot (index 6).
+     */
+    private void buildStreakDots(int streakDays) {
+        LinearLayout dotsRow = binding.streakDots;
+        dotsRow.removeAllViews();
+
+        int dotSizePx = (int) (10 * getResources().getDisplayMetrics().density);
+        int marginPx  = (int) (5  * getResources().getDisplayMetrics().density);
+        // streak wraps at 7 for display purposes
+        int filledCount = Math.min(streakDays, 7);
+
+        for (int i = 0; i < 7; i++) {
+            View dot = new View(requireContext());
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dotSizePx, dotSizePx);
+            lp.setMarginEnd(marginPx);
+            dot.setLayoutParams(lp);
+
+            // Dots 0..(7 - filledCount - 1) are empty; the rest are filled.
+            boolean filled = i >= (7 - filledCount);
+            // Today's dot (index 6) gets a slightly larger gold fill when streak >= 1.
+            if (filled) {
+                GradientDrawable gd = new GradientDrawable();
+                gd.setShape(GradientDrawable.OVAL);
+                gd.setColor(requireContext().getColor(R.color.gold_accent));
+                dot.setBackground(gd);
+            } else {
+                dot.setBackgroundResource(R.drawable.bg_prayer_node_future);
+            }
+            dotsRow.addView(dot);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // §4.4 5-prayer timeline
+    // -------------------------------------------------------------------------
+
+    /** Prayer indices for the timeline: Fajr(0) · Dhuhr(2) · Asr(3) · Maghrib(4) · Isha(5) */
+    private static final int[] TIMELINE_INDICES = {0, 2, 3, 4, 5};
+
+    /**
+     * Inflates 5 prayer nodes into prayer_timeline, applies past/next/future
+     * backgrounds based on current time and the next-prayer index.
+     */
+    private void bindPrayerTimeline() {
+        if (binding == null || !isAdded()) return;
+        Context ctx = requireContext();
+        Date[] times   = PrayerTimeEngine.getTodayTimes(ctx);
+        int    nextIdx = PrayerTimeEngine.getNextPrayerIndex(ctx);
+        long   now     = System.currentTimeMillis();
+
+        LinearLayout rail = binding.prayerTimeline;
+        rail.removeAllViews();
+        LayoutInflater inflater = LayoutInflater.from(ctx);
+
+        for (int i = 0; i < TIMELINE_INDICES.length; i++) {
+            int prayerIdx = TIMELINE_INDICES[i];
+            View node = inflater.inflate(R.layout.item_prayer_node, rail, false);
+
+            TextView nameView = node.findViewById(R.id.node_name);
+            View     dotView  = node.findViewById(R.id.node_dot);
+            TextView timeView = node.findViewById(R.id.node_time);
+
+            nameView.setText(getString(PrayerTimeEngine.PRAYER_NAME_RES[prayerIdx]));
+            timeView.setText(PrayerTimeEngine.formatTime(ctx, times[prayerIdx]));
+
+            // State: next = gold-filled node, past = faint gold, future = outline
+            boolean isPast = times[prayerIdx].getTime() <= now;
+            boolean isNext = prayerIdx == nextIdx;
+            if (isNext) {
+                dotView.setBackgroundResource(R.drawable.bg_prayer_node_next);
+                nameView.setTextColor(ctx.getColor(R.color.gold_accent));
+                nameView.setAlpha(1f);
+            } else if (isPast) {
+                dotView.setBackgroundResource(R.drawable.bg_prayer_node_past);
+                nameView.setAlpha(0.5f);
+                timeView.setAlpha(0.5f);
+            } else {
+                dotView.setBackgroundResource(R.drawable.bg_prayer_node_future);
+            }
+
+            rail.addView(node);
+
+            // Thin connector between nodes (not after the last one)
+            if (i < TIMELINE_INDICES.length - 1) {
+                View connector = new View(ctx);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        0, (int) (1.5f * getResources().getDisplayMetrics().density));
+                lp.weight = 0.3f;
+                connector.setLayoutParams(lp);
+                connector.setBackgroundColor(ctx.getColor(R.color.gold_accent_faint));
+                rail.addView(connector);
+            }
+        }
     }
 
     private void bindQuickActions() {
