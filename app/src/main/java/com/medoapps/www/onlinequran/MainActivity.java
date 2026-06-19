@@ -56,9 +56,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 import androidx.transition.Slide;
-import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdError;
@@ -112,25 +113,11 @@ public  class  MainActivity extends BaseActivity {
 
     BottomNavigationView bottomNavigationView;
 
-    //This is our viewPager
-    private ViewPager viewPager;
-
-
-    //Fragments
-
-    RecitesName quranFragment;
-    YouTubePosts youTubePosts;
-    RadioFragment radioFragment;
-    OtherCategoryFragment otherCategoryFragment;
-//    RecentPosts recentFragment;
-    TopPosts topPostsFragment;
-    MenuItem prevMenuItem;
+    private NavController navController;
 
     private static final String TAG = "MainActivity";
 //    private AdView mAdView;
 
-    private FragmentPagerAdapter mPagerAdapter;
-//    private ViewPager mViewPager;
     public ImageView userImage;
     public ImageView crown_photo;
     public ImageView adminPostPhoto;
@@ -215,12 +202,6 @@ public  class  MainActivity extends BaseActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        youTubePosts=new YouTubePosts();
-        quranFragment=new RecitesName(this);
-        radioFragment=new RadioFragment();
-        otherCategoryFragment=new OtherCategoryFragment();
-//        recentFragment=new RecentPosts();
-        topPostsFragment=new TopPosts();
         try {
             adView = new AdView(this);
         } catch (Exception e) {
@@ -241,86 +222,13 @@ public  class  MainActivity extends BaseActivity {
         subscribeCard.setVisibility(View.GONE);
 //        loadBannerAd();
 
-//Initializing viewPager
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setOffscreenPageLimit(8);
-
-
         //Initializing the bottomNavigationView
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_quran:
-                                viewPager.setCurrentItem(0);
-                                break;
-                            /*case R.id.action_youtube:
-//                                YouTubePosts.newInstance().scrollToTop();
-                                try {
-                                    if (prevMenuItem != null && prevMenuItem.getItemId() == R.id.action_youtube)
-                                        youTubePosts.scrollToTop();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                                viewPager.setCurrentItem(1);
-                                break;*/
-                            case R.id.action_radio:
-                                viewPager.setCurrentItem(1);
-                                break;
-                            case R.id.action_other:
-                                viewPager.setCurrentItem(2);
-                                break;
-                            case R.id.action_mushaf:
-                                startActivity(new Intent(MainActivity.this, QuranDataActivity.class));
-                                return false;
-
-                            /*case R.id.action_recent:
-                                viewPager.setCurrentItem(4);
-                                break;*/
-                            /*case R.id.action_top_posts:
-                                viewPager.setCurrentItem(4);
-                                break;*/
-                        }
-                        return false;
-                    }
-                });
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-
-            @Override
-            public void onPageSelected(int position) {
-
-                Log.d(TAG, "onPageSelectedfdsf: " + position);
-                if (prevMenuItem != null) {
-                    prevMenuItem.setChecked(false);
-                }
-                else
-                {
-                    bottomNavigationView.getMenu().getItem(0).setChecked(false);
-                }
-                Log.d("page", "onPageSelected: "+position);
-                bottomNavigationView.getMenu().getItem(position).setChecked(true);
-                prevMenuItem = bottomNavigationView.getMenu().getItem(position);
-
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-        setupViewPager(viewPager);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.nav_host_fragment);
+        navController = navHostFragment.getNavController();
+        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         admin_fab = (ExtendedFloatingActionButton) findViewById(R.id.admin_fab);
         fab_add = (FloatingActionButton) findViewById(R.id.fab_add);
@@ -844,8 +752,8 @@ public  class  MainActivity extends BaseActivity {
                 });
     }
     public void switchToYoutubeFragment(){
-        if (viewPager!= null){
-            viewPager.setCurrentItem(1);
+        if (navController != null){
+            navController.navigate(R.id.nav_home);
         }
     }
     @SuppressLint("MissingSuperCall")
@@ -853,18 +761,13 @@ public  class  MainActivity extends BaseActivity {
     public void onBackPressed() {
         // Move the task containing the MainActivity to the back of the activity stack, instead of
         // destroying it. Therefore, MainActivity will be shown when the user switches back to the app.
-        if (viewPager.getCurrentItem() == 0 ){
+        if (navController != null
+                && navController.getCurrentDestination() != null
+                && navController.getCurrentDestination().getId() == R.id.nav_home) {
             moveTaskToBack(true);
-        }else {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                getSupportFragmentManager().popBackStack();
-            } else {
-                viewPager.setCurrentItem(0);
-            }
-        }/*else {
+        } else if (navController == null || !navController.navigateUp()) {
             moveTaskToBack(true);
-
-        }*/
+        }
 
 
 
@@ -1370,65 +1273,6 @@ public  class  MainActivity extends BaseActivity {
         //intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, postKey);
         //intent.putExtra(PostDetailActivity.EXTRA_USER_KEY, userKEY);
         startActivity(intent);
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-
-        mPagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
-            private final Fragment[] mFragments = new Fragment[] {
-                    quranFragment,
-//                    youTubePosts,
-                    new RadioFragment(),
-                    new OtherCategoryFragment(),
-//                    new RecentPosts(),
-//                    new TopPosts()
-
-
-            };
-            private final String[] mFragmentNames = new String[] {
-                    getString(R.string.HolyQuran),
-//                    getString(R.string.YouTube),
-                    getString(R.string.Radio),
-                    getString(R.string.OtherCategories),
-//                    getString(R.string.heading_recent),
-//                    getString(R.string.heading_my_top_posts),
-
-
-            };
-            @Override
-            public Fragment getItem(int position) {
-                return mFragments[position];
-            }
-            @Override
-            public int getCount() {
-                return mFragments.length;
-            }
-
-            @Override
-            public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-//                super.destroyItem(container, position, object);
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return mFragmentNames[position];
-            }
-        };
-        /*ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        quranFragment=new RecitesName();
-        youTubePosts=new YouTubePosts();
-        radioFragment=new RadioFragment();
-        otherCategoryFragment=new OtherCategoryFragment();
-        recentFragment=new RecentPosts();
-        topPostsFragment=new TopPosts();
-
-        adapter.addFragment(quranFragment);
-        adapter.addFragment(youTubePosts);
-        adapter.addFragment(radioFragment);
-        adapter.addFragment(otherCategoryFragment);
-        adapter.addFragment(recentFragment);*/
-//        adapter.addFragment(topPostsFragment);
-        viewPager.setAdapter(mPagerAdapter);
     }
 
     @Override

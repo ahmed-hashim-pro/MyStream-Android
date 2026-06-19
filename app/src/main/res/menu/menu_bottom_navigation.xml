@@ -3,55 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_quran"
-        android:checked="true"
-        android:contentDescription="@string/HolyQuran"
+        android:id="@id/nav_home"
+        android:icon="@drawable/ic_home_24"
+        android:title="@string/menu_home" />
+    <item
+        android:id="@id/nav_quran"
         android:icon="@drawable/holyquran"
-        android:title="@string/HolyQuran"
-        app:showAsAction="ifRoom" />
-    <!--<item
-        android:id="@+id/action_youtube"
-        android:checked="false"
-        android:icon="@drawable/outline_ondemand_video_24"
-        android:title="@string/YouTube"
-        app:showAsAction="ifRoom" />-->
+        android:title="@string/HolyQuran" />
     <item
-        android:id="@+id/action_radio"
-        android:checked="false"
-        android:contentDescription="@string/Radio"
+        android:id="@id/nav_radio"
         android:icon="@drawable/outline_radio_24"
-        android:title="@string/Radio"
-        app:showAsAction="ifRoom" />
-
-
-
+        android:title="@string/Radio" />
     <item
-        android:id="@+id/action_other"
-        android:checked="false"
-        android:contentDescription="@string/OtherCategories"
-        android:icon="@drawable/outline_category_24"
-        android:title="@string/OtherCategories"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/action_mushaf"
-        android:checked="false"
-        android:contentDescription="@string/TheHolyQuran"
+        android:id="@+id/nav_mushaf"
         android:icon="@drawable/ramadan_quran_24px"
-        android:title="@string/TheHolyQuran"
-        app:showAsAction="ifRoom" />
-
-
-    <!--<item
-        android:id="@+id/action_recent"
-        android:checked="false"
-        android:icon="@drawable/outline_play_circle_outline_24"
-        android:title="@string/heading_recent"
-        app:showAsAction="ifRoom" />-->
-    <!--<item
-        android:id="@+id/action_top_posts"
-        android:checked="false"
-        android:icon="@drawable/top_posts"
-        android:title="@string/heading_my_top_posts"
-        app:showAsAction="ifRoom" />-->
+        android:title="@string/TheHolyQuran" />
+    <item
+        android:id="@id/nav_more"
+        android:icon="@drawable/outline_category_24"
+        android:title="@string/OtherCategories" />
 </menu>

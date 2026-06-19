@@ -3,13 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/nav_home">
 
     <fragment
         android:id="@+id/nav_home"
         android:name="com.medoapps.www.onlinequran.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@id/nav_quran"
+        android:name="com.medoapps.www.onlinequran.RecitesName"
+        android:label="@string/HolyQuran" />
+
+    <fragment
+        android:id="@id/nav_radio"
+        android:name="com.medoapps.www.onlinequran.RadioFragment"
+        android:label="@string/Radio" />
+
+    <fragment
+        android:id="@id/nav_more"
+        android:name="com.medoapps.www.onlinequran.OtherCategoryFragment"
+        android:label="@string/OtherCategories" />
+
+    <activity
+        android:id="@+id/nav_mushaf"
+        android:name="com.medoapps.www.onlinequran.QuranDataActivity"
+        android:label="@string/TheHolyQuran" />
 
     <fragment
         android:id="@+id/nav_adminDashUsers"
