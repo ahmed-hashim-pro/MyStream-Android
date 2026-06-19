@@ -302,8 +302,9 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/background_bottom_nav_bar"
-        app:elevation="@dimen/card_elevation_default"
+        android:layout_margin="12dp"
+        android:background="@drawable/bg_pill_dock"
+        app:elevation="8dp"
         app:itemIconTint="@drawable/bottom_navigation_color_selector"
         app:itemTextColor="@drawable/bottom_navigation_color_selector"
         app:itemActiveIndicatorStyle="@style/Widget.MyStream.BottomNav.ActiveIndicator"
@@ -311,7 +312,7 @@
         app:itemTextAppearanceInactive="@style/TextAppearance.MyStream.BottomNav.Inactive"
         app:itemIconSize="26dp"
         app:itemRippleColor="@color/gold_accent_faint"
-        app:labelVisibilityMode="labeled"
-        android:layout_gravity="bottom|end"
+        app:labelVisibilityMode="selected"
+        android:layout_gravity="bottom"
         app:menu="@menu/menu_bottom_navigation" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
