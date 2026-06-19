@@ -1186,6 +1186,8 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="home_start_reading">Start reading</string>
     <string name="home_next_prayer">Next · %1$s</string>
     <string name="home_countdown_in">in %1$s</string>
+    <string name="home_hero_next">التالي</string>
+    <string name="home_hero_remaining">باقي</string>
     <string name="see_all">See all</string>
 
 </resources>

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +39,15 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
+    private static final long TICK_INTERVAL_MS = 1_000L;
+
     private FragmentHomeBinding binding;
     private final HomeReciterAdapter reciterAdapter = new HomeReciterAdapter();
+
+    private final Handler heroHandler = new Handler(Looper.getMainLooper());
+    private Runnable heroTicker;
+    /** Absolute millis of the next prayer (already rolled to tomorrow if needed). */
+    private long heroNextMillis = 0L;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -52,7 +61,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         bindProfile();
         bindHijri();
-        bindCountdown();
+        bindHero();
         bindStreak();
         bindContinueReading();
         bindQuickActions();
@@ -60,14 +69,49 @@ public class HomeFragment extends Fragment {
         reciterAdapter.setOnReciterClick(p ->
                 startActivity(new android.content.Intent(requireContext(), QuranDataActivity.class)));
         loadReciters();
+        bindCollapseTitle();
+    }
+
+    /**
+     * Fades a compact "next prayer · remaining" title into the pinned toolbar's
+     * title text as the header collapses, so it never overlaps the expanded
+     * hero. Only the title TextView alpha is animated — the toolbar's navy
+     * background and the CTL content-scrim stay fully opaque.
+     */
+    private void bindCollapseTitle() {
+        // Start hidden so nothing shows over the expanded hero.
+        binding.homeToolbar.setTitleTextColor(0x00FFFFFF);
+        binding.homeAppbar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            if (binding == null || !isAdded()) return;
+            int range = appBarLayout.getTotalScrollRange();
+            float collapsed = range == 0 ? 0f : (float) Math.abs(verticalOffset) / range;
+            // Cross-fade the title in over the last third of the collapse.
+            float titleAlpha = Math.max(0f, Math.min(1f, (collapsed - 0.66f) / 0.34f));
+            int a = (int) (titleAlpha * 255f) & 0xFF;
+            binding.homeToolbar.setTitleTextColor((a << 24) | 0x00FFFFFF);
+            if (collapsed > 0.66f && binding.homeToolbar.getTitle() == null) {
+                int idx = PrayerTimeEngine.getNextPrayerIndex(requireContext());
+                String name = getString(PrayerTimeEngine.PRAYER_NAME_RES[idx]);
+                long remaining = HomeCountdown.remainingMillis(
+                        System.currentTimeMillis(), heroNextMillis);
+                binding.homeToolbar.setTitle(name + " · " + HomeCountdown.format(remaining));
+            }
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // Countdown + continue card can change while away.
-        bindCountdown();
+        // Hero + continue card can change while away; recompute and start ticking.
+        bindHero();
         bindContinueReading();
+        startHeroTicker();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopHeroTicker();
     }
 
     private void bindProfile() {
@@ -101,16 +145,117 @@ public class HomeFragment extends Fragment {
         binding.homeHijri.setText(HijriDate.todayString(requireContext()));
     }
 
-    private void bindCountdown() {
+    // ---------------------------------------------------------------------
+    // Next-prayer hero (glass card + countdown ring)
+    // ---------------------------------------------------------------------
+
+    /** Non-sunrise prayer indices, in chronological order. */
+    private static final int[] PRAYER_ORDER = {0, 2, 3, 4, 5};
+    private static final long DAY_MILLIS = 86_400_000L;
+
+    /**
+     * Recomputes the next prayer, fills the hero card (name/time), sweeps the
+     * ring across the prev→next interval, and renders the 5-dot strip. Also
+     * caches {@link #heroNextMillis} so the per-second ticker stays cheap.
+     */
+    private void bindHero() {
+        if (binding == null || !isAdded()) return;
         Context ctx = requireContext();
         int idx = PrayerTimeEngine.getNextPrayerIndex(ctx);
         Date[] times = PrayerTimeEngine.getTodayTimes(ctx);
-        String name = getString(PrayerTimeEngine.PRAYER_NAME_RES[idx]);
-        long remaining = HomeCountdown.remainingMillis(
-                System.currentTimeMillis(), times[idx].getTime());
-        binding.homeCountdownLabel.setText(getString(R.string.home_next_prayer, name));
-        binding.homeCountdownValue.setText(
-                getString(R.string.home_countdown_in, HomeCountdown.format(remaining)));
+        long now = System.currentTimeMillis();
+
+        // Next-prayer absolute millis. getNextPrayerIndex() returns Fajr (0)
+        // when today is done; in that case the real target is tomorrow's Fajr,
+        // approximated as today's Fajr + 24h.
+        long nextMillis = times[idx].getTime();
+        boolean nextIsTomorrowFajr = (idx == 0 && nextMillis <= now);
+        if (nextIsTomorrowFajr) {
+            nextMillis += DAY_MILLIS;
+        }
+        heroNextMillis = nextMillis;
+
+        // Previous (non-sunrise) prayer that started this interval.
+        long prevMillis = previousPrayerMillis(times, idx, nextIsTomorrowFajr);
+
+        binding.heroPrayerName.setText(getString(PrayerTimeEngine.PRAYER_NAME_RES[idx]));
+        binding.heroPrayerTime.setText(PrayerTimeEngine.formatTime(ctx, times[idx]));
+
+        binding.heroRing.setProgress(RingMath.sweepFraction(prevMillis, nextMillis, now));
+        binding.heroRing.setCenterText(
+                formatHms(HomeCountdown.remainingMillis(now, nextMillis)),
+                getString(R.string.home_hero_remaining));
+
+        renderPrayerDots(times, now);
+    }
+
+    /**
+     * Absolute millis of the prayer immediately before {@code nextIdx}.
+     * If the next prayer is tomorrow's Fajr, the interval started at today's
+     * Isha; otherwise it is the closest earlier non-sunrise prayer.
+     */
+    private long previousPrayerMillis(Date[] times, int nextIdx, boolean nextIsTomorrowFajr) {
+        if (nextIsTomorrowFajr) {
+            return times[5].getTime(); // today's Isha
+        }
+        long prev = times[5].getTime() - DAY_MILLIS; // fallback: yesterday's Isha
+        for (int i = PRAYER_ORDER.length - 1; i >= 0; i--) {
+            int p = PRAYER_ORDER[i];
+            if (p < nextIdx) {
+                prev = times[p].getTime();
+                break;
+            }
+        }
+        return prev;
+    }
+
+    /** Fills dots for prayers already passed today, outline for upcoming. */
+    private void renderPrayerDots(Date[] times, long now) {
+        ViewGroup dots = binding.prayerDots;
+        int n = Math.min(dots.getChildCount(), PRAYER_ORDER.length);
+        for (int i = 0; i < n; i++) {
+            boolean passed = times[PRAYER_ORDER[i]].getTime() <= now;
+            dots.getChildAt(i).setBackgroundResource(
+                    passed ? R.drawable.dot_prayer_filled : R.drawable.dot_prayer_outline);
+        }
+    }
+
+    /** Renders remaining millis as H:MM:SS (e.g. "2:14:30"). */
+    private static String formatHms(long millis) {
+        if (millis < 0) millis = 0;
+        long totalSec = millis / 1000L;
+        long h = totalSec / 3600L;
+        long m = (totalSec % 3600L) / 60L;
+        long s = totalSec % 60L;
+        return String.format(java.util.Locale.US, "%d:%02d:%02d", h, m, s);
+    }
+
+    private void startHeroTicker() {
+        stopHeroTicker();
+        heroTicker = new Runnable() {
+            @Override
+            public void run() {
+                if (binding == null || !isAdded()) return;
+                long now = System.currentTimeMillis();
+                long remaining = HomeCountdown.remainingMillis(now, heroNextMillis);
+                if (remaining <= 0) {
+                    // Prayer reached — recompute the next one (also refreshes the ring sweep).
+                    bindHero();
+                } else {
+                    binding.heroRing.setCenterText(
+                            formatHms(remaining), getString(R.string.home_hero_remaining));
+                }
+                heroHandler.postDelayed(this, TICK_INTERVAL_MS);
+            }
+        };
+        heroHandler.postDelayed(heroTicker, TICK_INTERVAL_MS);
+    }
+
+    private void stopHeroTicker() {
+        if (heroTicker != null) {
+            heroHandler.removeCallbacks(heroTicker);
+            heroTicker = null;
+        }
     }
 
     private void bindStreak() {
@@ -174,6 +319,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        stopHeroTicker();
         binding = null;
     }
 }

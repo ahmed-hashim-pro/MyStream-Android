@@ -12,41 +12,68 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/home_collapsing"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            app:contentScrim="@color/gold_accent"
-            app:statusBarScrim="@color/gold_accent"
+            android:layout_height="300dp"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@drawable/bg_header_navy"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/navy_700"
+            app:statusBarScrim="@color/navy_700"
             app:titleEnabled="false"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-            <!-- Expanded navy header -->
+            <!-- Faint gold filigree watermark behind the header content -->
+            <ImageView
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:layout_gravity="end|top"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="-40dp"
+                android:alpha="0.07"
+                android:contentDescription="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_filigree_arch"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.5"
+                app:tint="@color/gold_accent" />
+
+            <!-- Expanded header content (parallax) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/navy_700"
                 android:orientation="vertical"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:paddingTop="40dp"
-                android:paddingBottom="16dp"
-                app:layout_collapseMode="parallax">
+                android:paddingBottom="14dp"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.5">
 
+                <!-- Status-bar spacer so content clears the system icons -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="28dp" />
+
+                <!-- Top row: avatar + greeting/name + streak pill -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/home_avatar"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
                         android:layout_marginEnd="10dp"
-                        android:src="@mipmap/ic_launcher_new_transparent9" />
+                        android:src="@mipmap/ic_launcher_new_transparent9"
+                        app:civ_border_color="@color/gold_accent"
+                        app:civ_border_width="1.5dp" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -58,10 +85,10 @@
                             android:id="@+id/home_greeting"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:alpha="0.85"
                             android:text="@string/home_greeting"
                             android:textColor="#FFFFFF"
-                            android:textSize="13sp"
-                            android:alpha="0.85" />
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/home_name"
@@ -79,58 +106,135 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_listrow_badge"
                         android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
                         android:paddingTop="5dp"
+                        android:paddingEnd="10dp"
                         android:paddingBottom="5dp"
                         android:textColor="@color/gold_accent"
-                        android:textStyle="bold"
                         android:textSize="12sp"
+                        android:textStyle="bold"
                         tools:text="🔥 7" />
                 </LinearLayout>
 
+                <!-- Glass next-prayer hero card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/hero_card"
+                    style="@style/Widget.MyStream.GlassCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="4dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/hero_next_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:alpha="0.75"
+                                android:letterSpacing="0.12"
+                                android:text="@string/home_hero_next"
+                                android:textColor="@color/gold_accent"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/hero_prayer_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textColor="#FFFFFF"
+                                android:textSize="26sp"
+                                android:textStyle="bold"
+                                tools:text="المغرب" />
+
+                            <TextView
+                                android:id="@+id/hero_prayer_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:alpha="0.85"
+                                android:textColor="#FFFFFF"
+                                android:textSize="15sp"
+                                tools:text="18:42" />
+                        </LinearLayout>
+
+                        <com.medoapps.www.onlinequran.ui.home.PrayerCountdownRingView
+                            android:id="@+id/hero_ring"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Hijri + Gregorian caption -->
                 <TextView
                     android:id="@+id/home_hijri"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="12dp"
                     android:alpha="0.85"
+                    android:textColor="#FFFFFF"
                     android:textSize="13sp"
                     tools:text="14 Dhul-Hijjah 1447" />
 
+                <!-- 5-dot prayer progress strip -->
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/prayer_dots"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/home_countdown_label"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp"
-                        tools:text="Next · Maghrib" />
+                    <View
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/dot_prayer_filled" />
 
-                    <TextView
-                        android:id="@+id/home_countdown_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        tools:text="in 2h 14m" />
+                    <View
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/dot_prayer_filled" />
+
+                    <View
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/dot_prayer_outline" />
+
+                    <View
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/dot_prayer_outline" />
+
+                    <View
+                        android:layout_width="8dp"
+                        android:layout_height="8dp"
+                        android:background="@drawable/dot_prayer_outline" />
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- Collapsed pin bar (navy). Title is set/cross-faded by HomeFragment
+                 on collapse so it doesn't overlap the expanded content. -->
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/home_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:minHeight="?attr/actionBarSize"
+                android:background="@color/navy_700"
                 app:layout_collapseMode="pin"
-                app:title="@string/menu_home"
                 app:titleTextColor="#FFFFFF" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>

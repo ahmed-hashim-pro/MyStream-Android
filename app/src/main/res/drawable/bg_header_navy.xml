@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Home header gradient: navy_700 (#1F2A44) → navy_500 (#2C3A5E), top-to-bottom -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:startColor="@color/navy_700"
+        android:endColor="@color/navy_500"
+        android:angle="270" />
+</shape>
