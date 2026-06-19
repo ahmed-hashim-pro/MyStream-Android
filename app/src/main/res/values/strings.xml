@@ -1180,4 +1180,12 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="onb_ready_desc">We\'ll ask for a couple of permissions so reminders and the athan can reach you on time.</string>
     <string name="onb_grant_exact_alarm">Allow exact alarms for accurate athan times</string>
 
+    <!-- Home hub -->
+    <string name="home_greeting">Assalamu alaikum</string>
+    <string name="home_continue_reading">Continue reading</string>
+    <string name="home_start_reading">Start reading</string>
+    <string name="home_next_prayer">Next · %1$s</string>
+    <string name="home_countdown_in">in %1$s</string>
+    <string name="see_all">See all</string>
+
 </resources>
