@@ -965,6 +965,14 @@ public class PagerActivity extends AppCompatActivity implements
 
   @Override
   public void onPause() {
+    // Persist last-read page for the home "continue reading" card.
+    // onPause fires on every exit (including Back/finish), unlike onSaveInstanceState.
+    if (viewPager != null) {
+      PreferenceManager.getDefaultSharedPreferences(this)
+          .edit()
+          .putInt(HOME_LAST_READ_PAGE, getCurrentPage())
+          .apply();
+    }
     foregroundDisposable.clear();
     if (promptDialog != null) {
       promptDialog.dismiss();
@@ -1006,11 +1014,6 @@ public class PagerActivity extends AppCompatActivity implements
   public void onSaveInstanceState(Bundle state) {
     int lastPage = quranInfo.getPageFromPosition(viewPager.getCurrentItem(), isDualPageVisible());
     state.putInt(LAST_READ_PAGE, lastPage);
-    // Persist for the home hub's continue-reading card (survives process death).
-    PreferenceManager.getDefaultSharedPreferences(this)
-            .edit()
-            .putInt(HOME_LAST_READ_PAGE, lastPage)
-            .apply();
     state.putBoolean(LAST_READING_MODE_IS_TRANSLATION, showingTranslation);
     state.putBoolean(LAST_ACTIONBAR_STATE, isActionBarHidden);
     state.putBoolean(LAST_WAS_DUAL_PAGES, isDualPages);
