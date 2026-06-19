@@ -1,5 +1,7 @@
 package com.medoapps.www.onlinequran.ui.home;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,13 +12,20 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
+
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.medoapps.www.onlinequran.AuthorClass;
+import com.medoapps.www.onlinequran.RadioLanguageClass;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -69,6 +78,8 @@ public class HomeFragment extends Fragment {
         bindContinueReading();
         bindStreakGoal();
         bindPrayerTimeline();
+        bindNowPlaying();
+        bindVerseOfDay();
         bindQuickActions();
         binding.recitersRecycler.setAdapter(reciterAdapter);
         reciterAdapter.setOnReciterClick(p ->
@@ -112,6 +123,7 @@ public class HomeFragment extends Fragment {
         bindContinueReading();
         bindStreakGoal();
         bindPrayerTimeline();
+        bindNowPlaying();
         startHeroTicker();
     }
 
@@ -412,6 +424,83 @@ public class HomeFragment extends Fragment {
                 rail.addView(connector);
             }
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // §4.5 Now-playing radio card
+    // -------------------------------------------------------------------------
+
+    private void bindNowPlaying() {
+        if (binding == null || !isAdded()) return;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        String name = prefs.getString("home_radio_name", null);
+        String img  = prefs.getString("home_radio_img", null);
+
+        boolean hasLastPlayed = (name != null && !name.isEmpty());
+        if (!hasLastPlayed) {
+            // Fall back to featured station (first entry in the list)
+            RadioLanguageClass lc = new RadioLanguageClass();
+            java.util.ArrayList<AuthorClass> list = lc.AutherList();
+            if (list != null && !list.isEmpty()) {
+                AuthorClass featured = list.get(0);
+                name = featured.RealName;
+                img  = featured.ImgUrl;
+            }
+        }
+
+        // Station name
+        if (name != null) {
+            binding.radioName.setText(name);
+        }
+
+        // Live dot: only shown when a station was explicitly played
+        binding.radioLiveDot.setVisibility(hasLastPlayed ? View.VISIBLE : View.GONE);
+
+        // Thumbnail via Glide (rounded corners, 8dp)
+        if (img != null && !img.isEmpty()) {
+            int cornerPx = (int) (8 * getResources().getDisplayMetrics().density);
+            Glide.with(this)
+                    .load(img)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(cornerPx)))
+                    .placeholder(com.medoapps.www.onlinequran.R.drawable.outline_radio_24)
+                    .into((ImageView) binding.getRoot().findViewById(
+                            com.medoapps.www.onlinequran.R.id.radio_thumb));
+        }
+
+        // Tap opens Radio tab
+        binding.radioCard.setOnClickListener(v -> openTab(com.medoapps.www.onlinequran.R.id.nav_radio));
+    }
+
+    // -------------------------------------------------------------------------
+    // §4.6 Verse of the Day
+    // -------------------------------------------------------------------------
+
+    private void bindVerseOfDay() {
+        if (binding == null || !isAdded()) return;
+        String[] arabic      = getResources().getStringArray(com.medoapps.www.onlinequran.R.array.verse_arabic);
+        String[] refs        = getResources().getStringArray(com.medoapps.www.onlinequran.R.array.verse_ref);
+        String[] translation = getResources().getStringArray(com.medoapps.www.onlinequran.R.array.verse_translation);
+
+        int n = arabic.length;
+        int i = java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_YEAR) % n;
+
+        binding.verseArabic.setText(arabic[i]);
+        binding.verseRef.setText(refs[i]);
+        binding.verseTranslation.setText(translation[i]);
+
+        final String copyArabic = arabic[i];
+        final String copyRef    = refs[i];
+        binding.verseCopy.setOnClickListener(v -> {
+            ClipboardManager cm = (ClipboardManager)
+                    requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            if (cm != null) {
+                cm.setPrimaryClip(ClipData.newPlainText("verse", copyArabic + " — " + copyRef));
+                Toast.makeText(requireContext(), "تم نسخ الآية", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // verse_listen: no-op in this task (Task 9 will wire up audio)
+        binding.verseListen.setOnClickListener(v -> { /* TODO Task 9: play ayah audio */ });
     }
 
     private void bindQuickActions() {

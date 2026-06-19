@@ -57,6 +57,7 @@ import com.medoapps.www.onlinequran.models.Report;
 import com.medoapps.www.onlinequran.models.ReportType;
 import com.medoapps.www.onlinequran.models.User;
 import com.medoapps.www.onlinequran.service.ReportService;
+import androidx.preference.PreferenceManager;
 import com.medoapps.www.onlinequran.util.AppBottomSheet;
 import com.medoapps.www.onlinequran.util.SeparateFunctions;
 
@@ -559,6 +560,14 @@ public class RadioFragment extends Fragment implements  AdapterView.OnItemSelect
                         surahName = clicked.RealName;
                         AyaNameView = holder.txtRecitesName;
                         AyaImage = holder.imgchannel;
+
+                        // Persist last-played station for Home now-playing card
+                        PreferenceManager.getDefaultSharedPreferences(requireContext())
+                                .edit()
+                                .putString("home_radio_name", clicked.RealName)
+                                .putString("home_radio_img", clicked.ImgUrl)
+                                .putString("home_radio_server", clicked.ServerName)
+                                .apply();
 
                         // Find the correct index in the original listrecites
                         for (int i = 0; i < listrecites.size(); i++) {
