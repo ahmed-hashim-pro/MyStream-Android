@@ -66,7 +66,6 @@ public class HomeFragment extends Fragment {
     private static final long PULSE_ANIM_MS    = 900L;
 
     private FragmentHomeBinding binding;
-    private final HomeReciterAdapter reciterAdapter = new HomeReciterAdapter();
 
     private final Handler heroHandler = new Handler(Looper.getMainLooper());
     private Runnable heroTicker;
@@ -103,10 +102,6 @@ public class HomeFragment extends Fragment {
         bindNowPlaying();
         bindVerseOfDay();
         bindQuickActions();
-        binding.recitersRecycler.setAdapter(reciterAdapter);
-        reciterAdapter.setOnReciterClick(p ->
-                startActivity(new android.content.Intent(requireContext(), QuranDataActivity.class)));
-        loadReciters();
         bindCollapseTitle();
     }
 
@@ -556,7 +551,6 @@ public class HomeFragment extends Fragment {
         // القبلة — open Qibla screen (§4.7: qa_athkar id, new target)
         binding.qaAthkar.setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), QiblaActivity.class)));
-        binding.recitersSeeAll.setOnClickListener(v -> openTab(R.id.nav_quran));
         // Discover band clicks (§4.9)
         binding.discoverAthkar.setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AthkarActivity.class)));
@@ -571,24 +565,6 @@ public class HomeFragment extends Fragment {
         } catch (IllegalArgumentException ignored) {
             // Guard against a destination id not present in the current nav graph.
         }
-    }
-
-    private void loadReciters() {
-        FirebaseDatabase.getInstance().getReference()
-                .child("youtube-posts").orderByKey().limitToFirst(10)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (binding == null || !isAdded()) return;
-                        List<Post> posts = new ArrayList<>();
-                        for (DataSnapshot child : snapshot.getChildren()) {
-                            Post p = child.getValue(Post.class);
-                            if (p != null) posts.add(p);
-                        }
-                        reciterAdapter.submit(posts);
-                    }
-                    @Override public void onCancelled(@NonNull DatabaseError error) {}
-                });
     }
 
     @Override

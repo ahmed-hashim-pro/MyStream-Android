@@ -740,36 +740,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Reciters section header (§4.8) -->
-            <LinearLayout style="@style/Widget.MyStream.SectionHeader">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    style="@style/Widget.MyStream.SectionHeader.Title"
-                    android:text="@string/home_reciters_header" />
-                <TextView
-                    android:id="@+id/reciters_see_all"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/see_all"
-                    android:textColor="@color/gold_accent"
-                    android:textSize="13sp"
-                    android:padding="4dp" />
-            </LinearLayout>
-
-            <!-- Reciters carousel: glossier — taller height, padding for card shadows -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/reciters_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="148dp"
-                android:clipToPadding="false"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:paddingBottom="4dp"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
             <!-- ============================================================ -->
             <!-- Discover band (§4.9): two feature cards                      -->
             <!-- ============================================================ -->
