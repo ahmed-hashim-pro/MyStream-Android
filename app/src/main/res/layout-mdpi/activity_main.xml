@@ -209,19 +209,30 @@
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@+id/adView"
+                android:layout_above="@+id/nav_bottom_anchor"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="-2dp"
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/mobile_navigation" />
 
+            <!-- Stable 0dp bottom anchor so the NavHost fills to the tab bar
+                 independently of the ad banner's state. -->
+            <View
+                android:id="@+id/nav_bottom_anchor"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_alignParentBottom="true" />
+
+            <!-- Bottom banner hidden for now; kept (with the loader in MainActivity) to
+                 re-activate later: set visibility back to visible and re-enable loadBannerAd(). -->
             <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/adView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
+                android:visibility="gone"
                 android:background="@color/transparent"
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/banner_ad_unit_id" />

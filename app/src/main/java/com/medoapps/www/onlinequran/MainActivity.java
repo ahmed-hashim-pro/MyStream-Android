@@ -520,7 +520,9 @@ public  class  MainActivity extends BaseActivity {
     }
     private void loadOrdinaryUser(){
         crown_photo.setVisibility(View.GONE);
-        loadBannerAd();
+        // Bottom banner ad disabled for now — re-enable this call (and the AdView's
+        // visibility in the layouts) to bring the ad above the tabs back.
+        // loadBannerAd();
     }
     private void loadPremiumUser(){
         crown_photo.setVisibility(View.VISIBLE);
