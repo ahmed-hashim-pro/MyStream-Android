@@ -7,8 +7,8 @@
     android:background="@color/transparent"
     android:orientation="vertical"
     android:paddingBottom="2dp"
-    android:paddingStart="5dp"
-    android:paddingEnd="5dp"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
     android:paddingTop="2dp">
 
     <androidx.cardview.widget.CardView
@@ -23,45 +23,51 @@
         app:cardElevation="@dimen/card_elevation_default"
         android:layoutDirection="rtl"
         app:cardMaxElevation="@dimen/card_elevation_raised"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="14dp"
         app:cardBackgroundColor="@color/background_card"
         app:cardPreventCornerOverlap="true"
-        app:contentPadding="12dp">
+        app:contentPadding="0dp">
 
         <LinearLayout
             android:id="@+id/entireCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="8dp">
 
-            <ImageView
-                android:id="@+id/imgchannel"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="7dp"
-                android:layout_marginEnd="7dp"
-                android:layout_weight="0"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:src="@drawable/ramadan_quran"
-                app:tint="@color/gold_accent" />
+            <!-- Gold-tinted leading icon in a rounded frame -->
+            <FrameLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/bg_icon_frame_gold"
+                android:layout_gravity="center_vertical">
 
+                <ImageView
+                    android:id="@+id/imgchannel"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:src="@drawable/ramadan_quran"
+                    app:tint="@color/gold_accent" />
+
+            </FrameLayout>
+
+            <!-- Reciter name — bold, marquee -->
             <TextView
                 android:id="@+id/txtRecitesName"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:transitionName="shared_reciter"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/imgchannel"
                 android:layout_weight="1"
+                android:transitionName="shared_reciter"
+                android:gravity="center_vertical"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:paddingEnd="7dp"
-                android:paddingStart="7dp"
+                android:paddingEnd="8dp"
                 android:text="Large Text"
                 android:singleLine="true"
                 android:ellipsize="marquee"
@@ -69,32 +75,19 @@
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
                 android:textColor="@color/text_primary"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
+            <!-- Gold trailing share/play affordance -->
             <ImageButton
                 android:id="@+id/buttonShare"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
+                android:layout_gravity="center_vertical"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:text="@string/downlaod"
-                android:layout_gravity="center"
                 app:srcCompat="@drawable/btn_share"
-                app:tint="@color/icon_secondary" />
-            <!--<ImageView
-                android:id="@+id/imageView"
-                android:layout_width="20dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:layout_gravity="center"
-                android:layout_weight="0"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:rotationY="180"
-                android:visibility="gone"
-                android:src="@drawable/backirrow" />-->
+                app:tint="@color/gold_accent" />
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
@@ -110,7 +103,7 @@
         app:cardBackgroundColor="@color/background_card"
         app:cardElevation="@dimen/card_elevation_default"
         app:cardMaxElevation="@dimen/card_elevation_raised"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="14dp"
         app:cardPreventCornerOverlap="true">
 
     </androidx.cardview.widget.CardView>
@@ -124,7 +117,7 @@
         app:cardElevation="@dimen/card_elevation_default"
         app:cardMaxElevation="@dimen/card_elevation_raised"
         app:cardBackgroundColor="@color/background_card"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="14dp"
         android:layoutDirection="ltr"
         app:cardPreventCornerOverlap="true"
         android:visibility="gone"
@@ -202,23 +195,7 @@
 
                         </LinearLayout>
 
-
-
                     </androidx.cardview.widget.CardView>
-                    <!--<androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-
-
-                        app:cardBackgroundColor="@color/white"
-                        android:layoutDirection="rtl"
-
-
-                        android:layout_gravity="bottom"
-
-                        app:contentPadding="2dp">
-
-                    </androidx.cardview.widget.CardView>-->
                 </LinearLayout>
 
                 <ImageView
@@ -243,8 +220,6 @@
                     android:scaleType="fitXY"
 
                     android:src="@drawable/ic_play_arrow_black_24dp" />
-
-
 
             </RelativeLayout>
             <RelativeLayout
@@ -408,8 +383,6 @@
                     android:layout_gravity="center"
                     android:visibility="invisible"
                     android:orientation="horizontal"
-
-
                     >
 
                     <TextView

@@ -13,64 +13,100 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
+        <!-- Modern gold/navy tab header -->
+        <RelativeLayout
             android:id="@+id/watchtitleCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            app:cardElevation="10dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/navy_700"
+            android:elevation="4dp"
             android:layoutDirection="rtl"
-            app:cardMaxElevation="12dp"
-            ads:cardBackgroundColor="@color/fragmentsMainBar"
-            app:cardPreventCornerOverlap="true"
-            app:contentPadding="2dp">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <!-- Leading avatar (gold-ring app glyph) at start -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/headerAvatar"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:src="@mipmap/ic_launcher_new_transparent9"
+                app:civ_border_color="@color/gold_accent"
+                app:civ_border_width="1.5dp" />
+
+            <!-- Right-side actions: rewards, settings, toggle, search -->
+            <LinearLayout
+                android:id="@+id/headerActions"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentEnd="true"
                 android:gravity="center_vertical"
-                >
+                android:orientation="horizontal">
 
-                <SearchView
-                    android:id="@+id/search"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_toEndOf="@+id/toggleViewBTN"
-                    android:backgroundTint="@color/white"
-                    android:iconifiedByDefault="true">
-
-
-                </SearchView>
-
+                <!-- View-mode toggle -->
                 <ImageButton
                     android:id="@+id/toggleViewBTN"
-                    android:layout_width="wrap_content"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_alignParentStart="true"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/cd_toggle_view"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    app:tint="@color/icon_primary"
-                    app:srcCompat="@drawable/ic_tune" />
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_tune"
+                    app:tint="@color/gold_accent" />
 
-                <TextView
-                    android:id="@+id/recitelisttxt"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_toEndOf="@+id/toggleViewBTN"
-                    android:layout_marginStart="56dp"
-                    android:layout_marginEnd="15dp"
-                    android:layout_marginBottom="5dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/recites_list"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                <!-- Settings gear -->
+                <ImageButton
+                    android:id="@+id/headerSettingsBTN"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/action_settings"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_settings_gear"
+                    app:tint="@color/gold_accent" />
 
-            </RelativeLayout>
+                <!-- Rewards trophy -->
+                <ImageButton
+                    android:id="@+id/headerRewardsBTN"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/action_settings"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/outline_emoji_events_24"
+                    app:tint="@color/gold_accent" />
 
+            </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+            <!-- Search (expands from end; sits over the action row when active) -->
+            <SearchView
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_toStartOf="@+id/headerActions"
+                android:layout_toEndOf="@+id/headerAvatar"
+                android:layout_marginStart="8dp"
+                android:iconifiedByDefault="true"
+                android:queryBackground="@android:color/transparent" />
+
+            <!-- Title "القرّاء" — overlaid; hidden when search is active -->
+            <TextView
+                android:id="@+id/recitelisttxt"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_toStartOf="@+id/headerActions"
+                android:layout_toEndOf="@+id/headerAvatar"
+                android:layout_marginStart="12dp"
+                android:gravity="center_vertical"
+                android:text="@string/home_reciters_header"
+                android:textColor="@color/gold_accent"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+        </RelativeLayout>
 
 
         <include layout="@layout/skeleton_reciter_list" />

@@ -6,8 +6,8 @@
     android:layoutDirection="rtl"
     android:background="@color/transparent"
     android:paddingBottom="1dp"
-    android:paddingStart="5dp"
-    android:paddingEnd="5dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
     android:paddingTop="1dp">
 
     <androidx.cardview.widget.CardView
@@ -21,26 +21,36 @@
         android:foreground="@drawable/ripple_card_compact"
         app:cardElevation="0dp"
         app:cardMaxElevation="@dimen/card_elevation_raised"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="10dp"
         app:cardBackgroundColor="@color/background_card"
         app:cardPreventCornerOverlap="true"
-        app:contentPadding="8dp">
+        app:contentPadding="0dp">
 
         <LinearLayout
             android:id="@+id/entireCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="44dp"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:paddingEnd="6dp">
 
-            <ImageView
-                android:id="@+id/imgchannel"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/ramadan_quran"
-                app:tint="@color/gold_accent" />
+            <!-- Gold-tinted icon in small rounded frame -->
+            <FrameLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_icon_frame_gold">
+
+                <ImageView
+                    android:id="@+id/imgchannel"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ramadan_quran"
+                    app:tint="@color/gold_accent" />
+
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/txtRecitesName"
@@ -49,7 +59,6 @@
                 android:layout_weight="1"
                 android:transitionName="shared_reciter"
                 android:paddingEnd="4dp"
-                android:paddingStart="4dp"
                 android:text="Large Text"
                 android:singleLine="true"
                 android:ellipsize="marquee"
@@ -57,7 +66,8 @@
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
                 android:textColor="@color/text_primary"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <ImageButton
                 android:id="@+id/buttonShare"
@@ -65,7 +75,7 @@
                 android:layout_height="28dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:srcCompat="@drawable/btn_share"
-                app:tint="@color/icon_secondary" />
+                app:tint="@color/gold_accent" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -81,7 +91,7 @@
         app:cardBackgroundColor="@color/background_card"
         app:cardElevation="@dimen/card_elevation_default"
         app:cardMaxElevation="@dimen/card_elevation_raised"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="10dp"
         app:cardPreventCornerOverlap="true">
 
     </androidx.cardview.widget.CardView>
@@ -95,7 +105,7 @@
         app:cardElevation="@dimen/card_elevation_default"
         app:cardMaxElevation="@dimen/card_elevation_raised"
         app:cardBackgroundColor="@color/background_card"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="10dp"
         android:layoutDirection="ltr"
         app:cardPreventCornerOverlap="true"
         android:visibility="gone"

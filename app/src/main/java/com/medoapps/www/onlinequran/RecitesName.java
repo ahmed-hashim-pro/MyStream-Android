@@ -130,6 +130,9 @@ public class RecitesName extends Fragment  {
     ShimmerLayout reciterLoader;
 
     private ImageButton toggleViewBTN;
+    private ImageButton headerSettingsBTN;
+    private ImageButton headerRewardsBTN;
+    private android.widget.LinearLayout headerActions;
     private static final int VIEW_MODE_LIST = 0;
     private static final int VIEW_MODE_GRID = 1;
     private static final int VIEW_MODE_COMPACT = 2;
@@ -192,6 +195,7 @@ public class RecitesName extends Fragment  {
             public boolean onClose() {
                 recitelisttxt.setVisibility(View.VISIBLE);
                 toggleViewBTN.setVisibility(View.VISIBLE);
+                if (headerActions != null) headerActions.setVisibility(View.VISIBLE);
                 return false;
             }
         });
@@ -200,6 +204,7 @@ public class RecitesName extends Fragment  {
             public void onClick(View view) {
                 recitelisttxt.setVisibility(View.GONE);
                 toggleViewBTN.setVisibility(View.GONE);
+                if (headerActions != null) headerActions.setVisibility(View.GONE);
             }
         });
         //final Context co=this;
@@ -348,6 +353,30 @@ public class RecitesName extends Fragment  {
                 showViewModeMenu(v);
             }
         });
+
+        headerActions = (android.widget.LinearLayout) getView().findViewById(R.id.headerActions);
+
+        headerSettingsBTN = (ImageButton) getView().findViewById(R.id.headerSettingsBTN);
+        if (headerSettingsBTN != null) {
+            headerSettingsBTN.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getActivity(), Settings.class));
+                }
+            });
+        }
+
+        headerRewardsBTN = (ImageButton) getView().findViewById(R.id.headerRewardsBTN);
+        if (headerRewardsBTN != null) {
+            headerRewardsBTN.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getActivity() instanceof MainActivity) {
+                        ((MainActivity) requireActivity()).showRewardedAd();
+                    }
+                }
+            });
+        }
 
         searchManager();
 
