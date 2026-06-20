@@ -1278,6 +1278,18 @@ public  class  MainActivity extends BaseActivity {
         showRewardedVideo();
     }
 
+    /**
+     * Switch to a bottom-nav destination the same way tapping the tab does, so the
+     * bottom-nav selection and the NavigationUI back stack stay in sync. Used by the
+     * Home hub's shortcuts (e.g. the radio card / quick actions) — navigating the
+     * NavController directly would desync the tab selection and break later tab taps.
+     */
+    public void selectBottomTab(int itemId) {
+        if (bottomNavigationView != null) {
+            bottomNavigationView.setSelectedItemId(itemId);
+        }
+    }
+
     public void message(View view) {
 
         Intent intent = new Intent(this, Messenger.class);

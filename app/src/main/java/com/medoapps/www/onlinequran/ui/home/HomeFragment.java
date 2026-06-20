@@ -558,12 +558,14 @@ public class HomeFragment extends Fragment {
                 startActivity(new Intent(requireContext(), IslamicEventsActivity.class)));
     }
 
+    /**
+     * Switch to a bottom-nav tab via the host activity so the tab selection and the
+     * NavigationUI back stack stay in sync. Navigating the NavController directly here
+     * desynced the bottom nav (the tab stayed "Home"), so a later Home-tab tap no-opped.
+     */
     private void openTab(int destinationId) {
-        try {
-            androidx.navigation.fragment.NavHostFragment
-                    .findNavController(this).navigate(destinationId);
-        } catch (IllegalArgumentException ignored) {
-            // Guard against a destination id not present in the current nav graph.
+        if (getActivity() instanceof com.medoapps.www.onlinequran.MainActivity) {
+            ((com.medoapps.www.onlinequran.MainActivity) requireActivity()).selectBottomTab(destinationId);
         }
     }
 
