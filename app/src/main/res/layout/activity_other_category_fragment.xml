@@ -7,25 +7,85 @@
     android:layout_height="match_parent"
     android:background="@color/background_main"
     android:layoutDirection="rtl"
-    tools:context=".RadioFragment">
+    tools:context=".OtherCategoryFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/recitelisttxt"
+        <!-- Modern gold/navy tab header (mirrors Quran/Radio tabs) -->
+        <RelativeLayout
+            android:id="@+id/watchtitleCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="20dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="12dp"
-            android:text="@string/OtherCategories"
-            android:textColor="@color/text_primary"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/navy_700"
+            android:elevation="4dp"
+            android:gravity="center_vertical"
+            android:layoutDirection="rtl">
+
+            <!-- Leading avatar (gold-ring app glyph) at start -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/headerAvatar"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:src="@mipmap/ic_launcher_new_transparent9"
+                app:civ_border_color="@color/gold_accent"
+                app:civ_border_width="1.5dp" />
+
+            <!-- Right-side actions: settings gear + rewards trophy -->
+            <LinearLayout
+                android:id="@+id/headerActions"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentEnd="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- Settings gear -->
+                <ImageButton
+                    android:id="@+id/headerSettingsBTN"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/action_settings"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_settings_gear"
+                    app:tint="@color/gold_accent" />
+
+                <!-- Rewards trophy -->
+                <ImageButton
+                    android:id="@+id/headerRewardsBTN"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/action_settings"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/outline_emoji_events_24"
+                    app:tint="@color/gold_accent" />
+
+            </LinearLayout>
+
+            <!-- Title "المزيد" -->
+            <TextView
+                android:id="@+id/recitelisttxt"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_toStartOf="@+id/headerActions"
+                android:layout_toEndOf="@+id/headerAvatar"
+                android:layout_marginStart="12dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@string/more_tab_header"
+                android:textColor="@color/gold_accent"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listView"

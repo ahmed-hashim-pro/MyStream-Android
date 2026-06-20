@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -83,6 +84,24 @@ public class OtherCategoryFragment extends Fragment implements AdapterView.OnIte
 
         instance4 =this;
         recitelisttxt = (TextView) view.findViewById(R.id.recitelisttxt);
+
+        // Header: settings gear → Settings screen
+        ImageButton headerSettingsBTN = view.findViewById(R.id.headerSettingsBTN);
+        if (headerSettingsBTN != null) {
+            headerSettingsBTN.setOnClickListener(v ->
+                    startActivity(new Intent(getContext(), Settings.class)));
+        }
+
+        // Header: rewards trophy → rewarded ad
+        ImageButton headerRewardsBTN = view.findViewById(R.id.headerRewardsBTN);
+        if (headerRewardsBTN != null) {
+            headerRewardsBTN.setOnClickListener(v -> {
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).showRewardedAd();
+                }
+            });
+        }
+
         SettingSaved.IsOpen =  1;//App Is Opened
         SettingSaved.SounlLoad=1;//sound load
         //load banner ad
