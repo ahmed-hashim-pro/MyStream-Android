@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_100"
     android:layoutDirection="rtl"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
@@ -13,78 +12,112 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <androidx.cardview.widget.CardView
+
+        <!-- Modern gold/navy tab header (mirrors Quran tab) -->
+        <RelativeLayout
             android:id="@+id/watchtitleCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            app:cardElevation="10dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/navy_700"
+            android:elevation="4dp"
             android:layoutDirection="rtl"
-            app:cardMaxElevation="12dp"
-            app:cardPreventCornerOverlap="true"
-            app:contentPadding="2dp">
+            android:gravity="center_vertical">
 
+            <!-- Leading avatar (gold-ring app glyph) at start -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/headerAvatar"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:src="@mipmap/ic_launcher_new_transparent9"
+                app:civ_border_color="@color/gold_accent"
+                app:civ_border_width="1.5dp" />
+
+            <!-- Right-side actions: rewayah spinner, settings, rewards -->
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                android:id="@+id/headerActions"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentEnd="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-
-                    <SearchView
-                        android:id="@+id/search"
-                        android:layout_width="200dp"
-                        android:layout_height="?attr/actionBarSize"
-                        android:backgroundTint="@color/white"
-                        android:iconifiedByDefault="true" />
-
-                    <TextView
-                        android:id="@+id/recitelisttxt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="?attr/actionBarSize"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="5dp"
-                        android:gravity="center"
-                        android:text="@string/radio_list"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:textSize="20sp" />
-
-
-                </RelativeLayout>
+                <!-- Rewayah filter spinner -->
                 <Spinner
                     android:id="@+id/rewayah_spinner"
-                    android:layout_width="match_parent"
-                    android:textColor="@color/black"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@drawable/bg_spinner"
-                    android:layout_alignParentStart="true"/>
+                    android:layout_width="120dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="4dp"
+                    android:textColor="@color/gold_accent"
+                    android:background="@drawable/bg_spinner_navy"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="24dp" />
+
+                <!-- Settings gear -->
+                <ImageButton
+                    android:id="@+id/headerSettingsBTN"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/action_settings"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_settings_gear"
+                    app:tint="@color/gold_accent" />
+
+                <!-- Rewards trophy -->
+                <ImageButton
+                    android:id="@+id/headerRewardsBTN"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/action_settings"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/outline_emoji_events_24"
+                    app:tint="@color/gold_accent" />
+
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+            <!-- Search (expands from end; sits over the action row when active) -->
+            <SearchView
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_toStartOf="@+id/headerActions"
+                android:layout_toEndOf="@+id/headerAvatar"
+                android:layout_marginStart="8dp"
+                android:iconifiedByDefault="true"
+                android:queryBackground="@android:color/transparent" />
 
+            <!-- Title "الإذاعات" — overlaid; hidden when search is active -->
+            <TextView
+                android:id="@+id/recitelisttxt"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_toStartOf="@+id/headerActions"
+                android:layout_toEndOf="@+id/headerAvatar"
+                android:layout_marginStart="12dp"
+                android:gravity="center_vertical"
+                android:text="@string/radio_stations_header"
+                android:textColor="@color/gold_accent"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
 
-
+        </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listView"
-            style="@style/Widget.AppCompat.Light.ListView.DropDown"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-
             android:layout_marginTop="2dp"
             android:layout_weight="1"
             android:background="@color/transparent"
-            android:horizontalSpacing="15dp"
-            tools:listitem="@layout/radio_ticket"/>
+            tools:listitem="@layout/radio_ticket" />
 
         <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView"

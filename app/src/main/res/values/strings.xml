@@ -1206,5 +1206,6 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="discover_events_title">مناسبات إسلامية</string>
     <string name="discover_events_chip">قريباً</string>
     <string name="home_reciters_header">القرّاء</string>
+    <string name="radio_stations_header">الإذاعات</string>
 
 </resources>

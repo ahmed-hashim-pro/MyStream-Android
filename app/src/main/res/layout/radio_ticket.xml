@@ -6,8 +6,8 @@
     android:background="@color/transparent"
     android:orientation="vertical"
     android:paddingBottom="2dp"
-    android:paddingStart="5dp"
-    android:paddingEnd="5dp"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
     android:paddingTop="2dp">
 
     <androidx.cardview.widget.CardView
@@ -16,36 +16,50 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/ripple_card"
         app:cardElevation="@dimen/card_elevation_default"
         android:layoutDirection="rtl"
         app:cardMaxElevation="@dimen/card_elevation_raised"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="14dp"
         app:cardBackgroundColor="@color/background_card"
         app:cardPreventCornerOverlap="true"
-        android:focusableInTouchMode="true"
-        app:contentPadding="12dp">
+        app:contentPadding="0dp">
 
         <LinearLayout
             android:id="@+id/entireCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="8dp"
             android:focusable="false"
             android:focusableInTouchMode="false">
 
-            <ImageView
-                android:id="@+id/imgchannel"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="7dp"
-                android:layout_marginEnd="7dp"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:transitionName="shared_surah_image"
-                app:tint="@color/gold_accent"
-                android:src="@drawable/btn_play" />
+            <!-- Gold-tinted leading radio icon in a rounded frame -->
+            <FrameLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/bg_icon_frame_gold"
+                android:layout_gravity="center_vertical">
 
+                <ImageView
+                    android:id="@+id/imgchannel"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:transitionName="shared_surah_image"
+                    android:src="@drawable/outline_radio_24"
+                    app:tint="@color/gold_accent" />
+
+            </FrameLayout>
+
+            <!-- Station name + rewayah subtitle -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -59,8 +73,7 @@
                     android:focusable="false"
                     android:transitionName="shared_surah"
                     android:focusableInTouchMode="false"
-                    android:paddingEnd="7dp"
-                    android:paddingStart="7dp"
+                    android:paddingEnd="4dp"
                     android:text="Large Text"
                     android:singleLine="true"
                     android:ellipsize="marquee"
@@ -68,7 +81,8 @@
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
                     android:textColor="@color/text_primary"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtRadioRewayah"
@@ -76,8 +90,7 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:paddingEnd="7dp"
-                    android:paddingStart="7dp"
+                    android:paddingEnd="4dp"
                     android:paddingTop="2dp"
                     android:text="Large Text"
                     android:singleLine="true"
@@ -87,21 +100,24 @@
                     android:scrollHorizontally="true"
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
+
             </LinearLayout>
 
+            <!-- Gold trailing share button -->
             <ImageButton
                 android:id="@+id/buttonShare"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:text="@string/downlaod"
-                android:layout_gravity="center"
+                android:layout_gravity="center_vertical"
                 app:srcCompat="@drawable/btn_share"
-                app:tint="@color/icon_secondary" />
+                app:tint="@color/gold_accent" />
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
+    <!-- Ad placeholder card — hidden by default, shown when adapter injects an ad -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardviewad"
         android:layout_width="match_parent"
@@ -109,10 +125,11 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:layoutDirection="rtl"
+        android:visibility="gone"
         app:cardBackgroundColor="@color/background_card"
         app:cardElevation="@dimen/card_elevation_default"
         app:cardMaxElevation="@dimen/card_elevation_raised"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="14dp"
         app:cardPreventCornerOverlap="true">
 
     </androidx.cardview.widget.CardView>

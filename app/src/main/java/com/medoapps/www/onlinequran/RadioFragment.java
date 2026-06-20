@@ -186,6 +186,21 @@ public class RadioFragment extends Fragment implements  AdapterView.OnItemSelect
         loadad();//to load ads full screen
 
 
+        // Wire header action buttons
+        ImageButton headerSettings = getView().findViewById(R.id.headerSettingsBTN);
+        if (headerSettings != null) {
+            headerSettings.setOnClickListener(v ->
+                    startActivity(new Intent(getActivity(), Settings.class)));
+        }
+        ImageButton headerRewards = getView().findViewById(R.id.headerRewardsBTN);
+        if (headerRewards != null) {
+            headerRewards.setOnClickListener(v -> {
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) requireActivity()).showRewardedAd();
+                }
+            });
+        }
+
         SettingSaved.IsOpen =  1;//App Is Opened
         SettingSaved.SounlLoad=1;//sound load
         //load banner ad
