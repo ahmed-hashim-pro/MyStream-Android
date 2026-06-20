@@ -391,15 +391,16 @@ public class HomeFragment extends Fragment {
     }
 
     // -------------------------------------------------------------------------
-    // §4.4 5-prayer timeline
+    // A §3 Today's Prayers — horizontal pill-rail
     // -------------------------------------------------------------------------
 
-    /** Prayer indices for the timeline: Fajr(0) · Dhuhr(2) · Asr(3) · Maghrib(4) · Isha(5) */
+    /** Prayer indices for the rail: Fajr(0) · Dhuhr(2) · Asr(3) · Maghrib(4) · Isha(5) */
     private static final int[] TIMELINE_INDICES = {0, 2, 3, 4, 5};
 
     /**
-     * Inflates 5 prayer nodes into prayer_timeline, applies past/next/future
-     * backgrounds based on current time and the next-prayer index.
+     * Builds A's pill-rail of 5 prayer cards (name + time) into prayer_timeline.
+     * The NEXT prayer is highlighted with a gold gradient pill + white text;
+     * past prayers are dimmed; future prayers use the default white pill.
      */
     private void bindPrayerTimeline() {
         if (binding == null || !isAdded()) return;
@@ -412,44 +413,44 @@ public class HomeFragment extends Fragment {
         rail.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(ctx);
 
+        int gapPx = (int) (8 * getResources().getDisplayMetrics().density);
+
         for (int i = 0; i < TIMELINE_INDICES.length; i++) {
             int prayerIdx = TIMELINE_INDICES[i];
-            View node = inflater.inflate(R.layout.item_prayer_node, rail, false);
+            View pill = inflater.inflate(R.layout.item_prayer_pill, rail, false);
 
-            TextView nameView = node.findViewById(R.id.node_name);
-            View     dotView  = node.findViewById(R.id.node_dot);
-            TextView timeView = node.findViewById(R.id.node_time);
+            View     root     = pill.findViewById(R.id.pill_root);
+            TextView nameView = pill.findViewById(R.id.pill_name);
+            TextView timeView = pill.findViewById(R.id.pill_time);
 
             nameView.setText(getString(PrayerTimeEngine.PRAYER_NAME_RES[prayerIdx]));
             timeView.setText(PrayerTimeEngine.formatTime(ctx, times[prayerIdx]));
 
-            // State: next = gold-filled node, past = faint gold, future = outline
             boolean isPast = times[prayerIdx].getTime() <= now;
             boolean isNext = prayerIdx == nextIdx;
             if (isNext) {
-                dotView.setBackgroundResource(R.drawable.bg_prayer_node_next);
-                nameView.setTextColor(ctx.getColor(R.color.gold_accent));
-                nameView.setAlpha(1f);
+                // Gold gradient pill, white text (A .bn-pcell.now)
+                root.setBackgroundResource(R.drawable.bg_prayer_pill_now);
+                nameView.setTextColor(0xFFFFFFFF);
+                timeView.setTextColor(0xFFFFFFFF);
+                pill.setAlpha(1f);
             } else if (isPast) {
-                dotView.setBackgroundResource(R.drawable.bg_prayer_node_past);
-                nameView.setAlpha(0.5f);
-                timeView.setAlpha(0.5f);
-            } else {
-                dotView.setBackgroundResource(R.drawable.bg_prayer_node_future);
+                // Dimmed default pill (A .bn-pcell.past)
+                pill.setAlpha(0.5f);
             }
 
-            rail.addView(node);
-
-            // Thin connector between nodes (not after the last one)
-            if (i < TIMELINE_INDICES.length - 1) {
-                View connector = new View(ctx);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        0, (int) (1.5f * getResources().getDisplayMetrics().density));
-                lp.weight = 0.3f;
-                connector.setLayoutParams(lp);
-                connector.setBackgroundColor(ctx.getColor(R.color.gold_accent_faint));
-                rail.addView(connector);
+            // 8dp gap between pills (no margin after the last one)
+            LinearLayout.LayoutParams lp =
+                    (LinearLayout.LayoutParams) pill.getLayoutParams();
+            if (lp == null) {
+                lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
             }
+            lp.setMarginEnd(i < TIMELINE_INDICES.length - 1 ? gapPx : 0);
+            pill.setLayoutParams(lp);
+
+            rail.addView(pill);
         }
     }
 

@@ -1195,6 +1195,10 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="home_streak_count">%1$d يوم</string>
     <string name="home_reading_nudge">ابدأ رحلتك في القراءة</string>
     <string name="home_prayer_timeline_title">أوقات الصلاة</string>
+    <string name="home_prayers_title">مواقيت اليوم</string>
+    <string name="home_prayers_action">الأذان</string>
+    <string name="home_quick_actions_title">إجراءات سريعة</string>
+    <string name="home_verse_title">آية اليوم</string>
 
     <!-- Quick-action tile labels (§4.7) -->
     <string name="qa_label_mushaf">المصحف</string>
