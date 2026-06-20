@@ -189,10 +189,12 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <!-- Non-scrolling container so each tab fragment manages its own scrolling
+         (the Home hub is a CoordinatorLayout; wrapping it in a NestedScrollView
+         trapped its scroll). Keeps ScrollingViewBehavior so it sits below the app bar. -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
         android:layout_marginBottom="80dp"
         ads:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
@@ -239,7 +241,7 @@
 
         </RelativeLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
