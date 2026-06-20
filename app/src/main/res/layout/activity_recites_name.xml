@@ -15,13 +15,9 @@
 
         <!-- Modern gold/navy tab header -->
         <RelativeLayout
+            style="@style/Widget.MyStream.TabHeader"
             android:id="@+id/watchtitleCard"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/navy_700"
-            android:elevation="4dp"
-            android:layoutDirection="rtl"
-            android:gravity="center_vertical">
+            android:layoutDirection="rtl">
 
             <!-- Leading avatar (gold-ring app glyph) at start -->
             <de.hdodenhof.circleimageview.CircleImageView
@@ -72,7 +68,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/action_settings"
+                    android:contentDescription="@string/action_rewards"
                     android:padding="8dp"
                     app:srcCompat="@drawable/outline_emoji_events_24"
                     app:tint="@color/gold_accent" />
@@ -92,19 +88,14 @@
 
             <!-- Title "القرّاء" — overlaid; hidden when search is active -->
             <TextView
+                style="@style/Widget.MyStream.TabHeader.Title"
                 android:id="@+id/recitelisttxt"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_toStartOf="@+id/headerActions"
                 android:layout_toEndOf="@+id/headerAvatar"
                 android:layout_marginStart="12dp"
-                android:gravity="center_vertical"
-                android:text="@string/home_reciters_header"
-                android:textColor="@color/gold_accent"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:maxLines="1"
-                android:ellipsize="end" />
+                android:text="@string/home_reciters_header" />
 
         </RelativeLayout>
 
