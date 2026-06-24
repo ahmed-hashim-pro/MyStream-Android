@@ -56,6 +56,7 @@ public class BubbleContentController {
 
     /** Decrement dhikr i directly (drawer tapping); returns true iff it just hit 0. */
     public boolean countAt(int i) {
+        if (i < 0 || i >= remaining.length) return false;
         if (remaining[i] > 0) remaining[i]--;
         return remaining[i] == 0;
     }
