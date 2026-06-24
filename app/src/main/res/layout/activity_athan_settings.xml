@@ -489,8 +489,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <include layout="@layout/settings_section_bubble" />
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -669,6 +667,9 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
+
+            <!-- Floating bubble: works independently of the Athan feature, so it sits OUTSIDE athan_dependent_container (not greyed out when Athan is off) -->
+            <include layout="@layout/settings_section_bubble" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>
