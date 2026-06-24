@@ -1137,6 +1137,9 @@
     <!-- صف فقاعة الأذكار العائمة في الإعدادات الرئيسية -->
     <string name="bubble_settings_row_title">فقاعة الأذكار العائمة</string>
     <string name="bubble_settings_row_subtitle">عُدّ أذكار الصباح والمساء فوق أي تطبيق</string>
+    <string name="bubble_over_apps">العرض فوق التطبيقات الأخرى</string>
+    <string name="bubble_over_apps_on">مسموح — يمكن للفقاعة الظهور فوق التطبيقات</string>
+    <string name="bubble_over_apps_off">اضغط للسماح (مطلوب للفقاعة العائمة)</string>
 
     <!-- فقاعة الأذكار العائمة -->
     <string name="bubble_title">فقاعة الأذكار العائمة</string>

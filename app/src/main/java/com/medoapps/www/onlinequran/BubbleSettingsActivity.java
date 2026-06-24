@@ -140,7 +140,7 @@ public class BubbleSettingsActivity extends AppCompatActivity {
     private void refreshBubbleStatus() {
         TextView tv = findViewById(R.id.tv_bubble_overlay_status);
         if (tv != null) {
-            tv.setText(canDrawOverlays() ? R.string.athan_over_apps_on : R.string.athan_over_apps_off);
+            tv.setText(canDrawOverlays() ? R.string.bubble_over_apps_on : R.string.bubble_over_apps_off);
         }
     }
 
@@ -153,7 +153,7 @@ public class BubbleSettingsActivity extends AppCompatActivity {
 
     private void requestOverlayPermission() {
         if (canDrawOverlays()) {
-            android.widget.Toast.makeText(this, R.string.athan_over_apps_on,
+            android.widget.Toast.makeText(this, R.string.bubble_over_apps_on,
                     android.widget.Toast.LENGTH_SHORT).show();
             return;
         }

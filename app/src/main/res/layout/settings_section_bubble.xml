@@ -20,7 +20,7 @@
         android:layout_height="wrap_content" android:orientation="vertical" android:minHeight="56dp"
         android:paddingVertical="8dp" android:background="?attr/selectableItemBackground">
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="@string/athan_over_apps" android:textColor="@color/text_primary" android:textSize="15sp" />
+            android:text="@string/bubble_over_apps" android:textColor="@color/text_primary" android:textSize="15sp" />
         <TextView android:id="@+id/tv_bubble_overlay_status" android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:textColor="@color/text_secondary" android:textSize="13sp" />
     </LinearLayout>

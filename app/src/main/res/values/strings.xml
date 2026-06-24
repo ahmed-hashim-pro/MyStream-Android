@@ -1438,6 +1438,9 @@ Press the button below to set the time for this , then you can start the app </s
     <!-- Floating Athkar Bubble settings row (in main Settings screen) -->
     <string name="bubble_settings_row_title">Floating Athkar Bubble</string>
     <string name="bubble_settings_row_subtitle">Count day &amp; night athkar over any app</string>
+    <string name="bubble_over_apps">Display over other apps</string>
+    <string name="bubble_over_apps_on">Allowed — the bubble can float over apps</string>
+    <string name="bubble_over_apps_off">Tap to allow (required for the floating bubble)</string>
 
     <!-- Floating Athkar Bubble -->
     <string name="bubble_title">Floating Athkar Bubble</string>
