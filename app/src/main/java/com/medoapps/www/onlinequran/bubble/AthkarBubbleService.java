@@ -58,9 +58,16 @@ public class AthkarBubbleService extends Service {
         nm.createNotificationChannel(ch);
     }
 
-    // --- overlay hooks (implemented in Task 10) ---
-    private void attachOverlay() { /* Task 10 */ }
-    private void detachOverlay() { /* Task 10 */ }
+    private BubbleOverlayController overlay;
+
+    // --- overlay hooks ---
+    private void attachOverlay() {
+        if (overlay == null) overlay = new BubbleOverlayController(this);
+        overlay.show();
+    }
+    private void detachOverlay() {
+        if (overlay != null) overlay.hide();
+    }
 
     @Override public void onDestroy() { detachOverlay(); super.onDestroy(); }
     @Override public IBinder onBind(Intent intent) { return null; }
