@@ -111,6 +111,10 @@
                     <include layout="@layout/settings_item_grouped"
                         android:id="@+id/item_notification_settings" />
 
+                    <!-- Floating Athkar Bubble -->
+                    <include layout="@layout/settings_item_grouped"
+                        android:id="@+id/item_floating_bubble" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

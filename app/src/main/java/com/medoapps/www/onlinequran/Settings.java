@@ -119,6 +119,14 @@ public class Settings extends AppCompatActivity {
         setSubtitle(notifItem, R.id.subtitle, getString(R.string.settings_subtitle_notifications));
         notifItem.findViewById(R.id.arrow).setVisibility(View.VISIBLE);
         notifItem.setOnClickListener(v -> startActivity(new Intent(this, NotificationSettingsActivity.class)));
+
+        // Floating Athkar Bubble dedicated screen
+        View bubbleItem = findViewById(R.id.item_floating_bubble);
+        ((ImageView) bubbleItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.ic_athkar);
+        ((TextView) bubbleItem.findViewById(R.id.textView)).setText(R.string.bubble_settings_row_title);
+        setSubtitle(bubbleItem, R.id.subtitle, getString(R.string.bubble_settings_row_subtitle));
+        bubbleItem.findViewById(R.id.arrow).setVisibility(View.VISIBLE);
+        bubbleItem.setOnClickListener(v -> startActivity(new Intent(this, BubbleSettingsActivity.class)));
     }
 
     // ── Data Section ──

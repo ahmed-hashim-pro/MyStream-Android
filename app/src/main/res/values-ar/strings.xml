@@ -1134,6 +1134,10 @@
     <!-- عنوان فرعي في رأس صفحة السور، مثل "١١٤ سورة" -->
     <string name="surah_count">%1$d سورة</string>
 
+    <!-- صف فقاعة الأذكار العائمة في الإعدادات الرئيسية -->
+    <string name="bubble_settings_row_title">فقاعة الأذكار العائمة</string>
+    <string name="bubble_settings_row_subtitle">عُدّ أذكار الصباح والمساء فوق أي تطبيق</string>
+
     <!-- فقاعة الأذكار العائمة -->
     <string name="bubble_title">فقاعة الأذكار العائمة</string>
     <string name="bubble_subtitle">فقاعة قابلة للسحب فوق التطبيقات لأذكار الصباح والمساء.</string>

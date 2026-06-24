@@ -668,8 +668,7 @@
             </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- Floating bubble: works independently of the Athan feature, so it sits OUTSIDE athan_dependent_container (not greyed out when Athan is off) -->
-            <include layout="@layout/settings_section_bubble" />
+            <!-- Floating bubble section relocated to BubbleSettingsActivity (dedicated screen) -->
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

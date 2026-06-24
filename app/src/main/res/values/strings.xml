@@ -1435,6 +1435,10 @@ Press the button below to set the time for this , then you can start the app </s
     <!-- Aya list navy-hero subtitle, e.g. "114 surahs" -->
     <string name="surah_count">%1$d surahs</string>
 
+    <!-- Floating Athkar Bubble settings row (in main Settings screen) -->
+    <string name="bubble_settings_row_title">Floating Athkar Bubble</string>
+    <string name="bubble_settings_row_subtitle">Count day &amp; night athkar over any app</string>
+
     <!-- Floating Athkar Bubble -->
     <string name="bubble_title">Floating Athkar Bubble</string>
     <string name="bubble_subtitle">A draggable bubble over other apps for your day &amp; night athkar.</string>

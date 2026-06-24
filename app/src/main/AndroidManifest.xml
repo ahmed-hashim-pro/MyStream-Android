@@ -361,6 +361,10 @@
             android:exported="false"
             android:theme="@style/QuranToolBar" />
         <activity
+            android:name=".BubbleSettingsActivity"
+            android:exported="false"
+            android:theme="@style/QuranToolBar" />
+        <activity
             android:name=".MonthlyPrayerTimesActivity"
             android:exported="false"
             android:theme="@style/QuranToolBar" />
