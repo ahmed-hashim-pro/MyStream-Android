@@ -17,7 +17,7 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:textDirection="rtl"
-        android:textColor="@color/text_primary"
+        android:textColor="@color/bubble_thumb_text"
         android:includeFontPadding="false" />
 
     <TextView

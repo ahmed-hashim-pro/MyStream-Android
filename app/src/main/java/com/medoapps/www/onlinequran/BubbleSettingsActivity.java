@@ -157,8 +157,8 @@ public class BubbleSettingsActivity extends AppCompatActivity {
 
     // -------------------------------------------------- style card previews
 
-    /** Mirror of BubbleOverlayController.loadSession() — picks morning or evening items. */
-    private List<AthkarItem> currentSessionItems() {
+    /** Returns the current morning/evening session, defaulting to MORNING on error. */
+    private BubbleSession currentSession() {
         long now = System.currentTimeMillis();
         long fajr = now, asr = now;
         try {
@@ -168,26 +168,14 @@ public class BubbleSettingsActivity extends AppCompatActivity {
                 asr  = t[PrayerSettings.PRAYER_ASR].getTime();
             }
         } catch (Exception ignored) {}
-        BubbleSession session = BubbleSessionSelector.select(now, fajr, asr);
-        return (session == BubbleSession.MORNING)
-                ? AthkarRepository.getMorningItems()
-                : AthkarRepository.getEveningItems();
+        return BubbleSessionSelector.select(now, fajr, asr);
     }
 
     private void bindStylePreviews() {
-        List<AthkarItem> items = currentSessionItems();
-
-        // determine session glyph
-        long now = System.currentTimeMillis();
-        long fajr = now, asr = now;
-        try {
-            Date[] t = PrayerTimeEngine.getTodayTimes(this);
-            if (t != null) {
-                fajr = t[PrayerSettings.PRAYER_FAJR].getTime();
-                asr  = t[PrayerSettings.PRAYER_ASR].getTime();
-            }
-        } catch (Exception ignored) {}
-        BubbleSession session = BubbleSessionSelector.select(now, fajr, asr);
+        BubbleSession session = currentSession();
+        List<AthkarItem> items = (session == BubbleSession.MORNING)
+                ? AthkarRepository.getMorningItems()
+                : AthkarRepository.getEveningItems();
         String glyph = (session == BubbleSession.MORNING) ? "☀" : "☾";
 
         // --- Card A: chat-head glyph ---

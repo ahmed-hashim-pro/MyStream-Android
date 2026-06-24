@@ -2,6 +2,6 @@
 <!-- White rounded panel used inside the C and D preview thumbnails. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="@color/background_card" />
+    <solid android:color="@color/bubble_thumb_panel" />
     <corners android:radius="6dp" />
 </shape>

@@ -309,6 +309,10 @@
     <color name="skeleton_bone">#E0D8D0</color>
     <color name="divider_color">#1A000000</color>
 
+    <!-- Bubble style-card thumbnail: fixed light panel (never inverts in night mode) -->
+    <color name="bubble_thumb_panel">#FFFFFFFF</color>
+    <color name="bubble_thumb_text">#FF1C1B1F</color>
+
     <!-- Onboarding (light = Warm Gold Glass) -->
     <color name="onb_bg_top">#FFF8EF</color>
     <color name="onb_bg_bottom">#F1E0C0</color>
