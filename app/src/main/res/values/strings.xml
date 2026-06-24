@@ -1435,4 +1435,23 @@ Press the button below to set the time for this , then you can start the app </s
     <!-- Aya list navy-hero subtitle, e.g. "114 surahs" -->
     <string name="surah_count">%1$d surahs</string>
 
+    <!-- Floating Athkar Bubble -->
+    <string name="bubble_title">Floating Athkar Bubble</string>
+    <string name="bubble_subtitle">A draggable bubble over other apps for your day &amp; night athkar.</string>
+    <string name="bubble_enable">Show floating bubble</string>
+    <string name="bubble_enable_sub">Off until you enable it</string>
+    <string name="bubble_style">Bubble style</string>
+    <string name="bubble_style_a">Chat-head</string>
+    <string name="bubble_style_a_desc">A round bubble → focused one-dhikr counter.</string>
+    <string name="bubble_style_c">Edge drawer</string>
+    <string name="bubble_style_c_desc">A slim edge tab → the whole set as a list.</string>
+    <string name="bubble_style_d">Mini-pill</string>
+    <string name="bubble_style_d_desc">A small bar showing the current dhikr; tap to expand.</string>
+    <string name="bubble_show_during">Show during</string>
+    <string name="bubble_show_windows">Day &amp; Night windows</string>
+    <string name="bubble_show_always">Always on</string>
+    <string name="bubble_channel_name">Floating athkar bubble</string>
+    <string name="bubble_notif_text">Athkar bubble is active</string>
+    <string name="bubble_today_done">Today · %1$d/%2$d done</string>
+
 </resources>

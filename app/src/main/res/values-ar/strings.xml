@@ -1134,4 +1134,23 @@
     <!-- عنوان فرعي في رأس صفحة السور، مثل "١١٤ سورة" -->
     <string name="surah_count">%1$d سورة</string>
 
+    <!-- فقاعة الأذكار العائمة -->
+    <string name="bubble_title">فقاعة الأذكار العائمة</string>
+    <string name="bubble_subtitle">فقاعة قابلة للسحب فوق التطبيقات لأذكار الصباح والمساء.</string>
+    <string name="bubble_enable">إظهار الفقاعة العائمة</string>
+    <string name="bubble_enable_sub">متوقفة حتى تفعّلها</string>
+    <string name="bubble_style">شكل الفقاعة</string>
+    <string name="bubble_style_a">الفقاعة</string>
+    <string name="bubble_style_a_desc">فقاعة دائرية ← عدّاد ذكر واحد.</string>
+    <string name="bubble_style_c">الدُّرج الجانبي</string>
+    <string name="bubble_style_c_desc">لسان على الحافة ← المجموعة كاملة كقائمة.</string>
+    <string name="bubble_style_d">الشريط الصغير</string>
+    <string name="bubble_style_d_desc">شريط صغير يعرض الذكر الحالي؛ اضغط للتوسيع.</string>
+    <string name="bubble_show_during">الظهور خلال</string>
+    <string name="bubble_show_windows">أوقات الصباح والمساء</string>
+    <string name="bubble_show_always">دائمًا</string>
+    <string name="bubble_channel_name">فقاعة الأذكار العائمة</string>
+    <string name="bubble_notif_text">فقاعة الأذكار نشطة</string>
+    <string name="bubble_today_done">اليوم · %1$d/%2$d تمّ</string>
+
 </resources>
