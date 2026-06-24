@@ -1,0 +1,19 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bubble_root"
+    android:layout_width="62dp" android:layout_height="62dp"
+    android:layoutDirection="locale">
+
+    <View android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="@drawable/bubble_disc" />
+
+    <TextView android:id="@+id/bubble_glyph"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="center" android:textSize="24sp" android:text="☀"
+        android:textColor="@color/text_on_navy" />
+
+    <TextView android:id="@+id/bubble_badge"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="top|end" android:minWidth="22dp" android:gravity="center"
+        android:paddingHorizontal="5dp" android:textSize="11sp" android:textStyle="bold"
+        android:textColor="#1A1305" android:background="@drawable/bg_avatar_gold" android:text="1" />
+</FrameLayout>

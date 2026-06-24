@@ -1,0 +1,59 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/walker_root"
+    android:layout_width="280dp" android:layout_height="wrap_content"
+    android:orientation="vertical" android:background="@drawable/bg_card_continue"
+    android:layoutDirection="locale">
+
+    <!-- header -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:gravity="center_vertical"
+        android:padding="12dp" android:background="@drawable/bg_navy_hero">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:orientation="vertical">
+        </TextView>
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView android:id="@+id/walker_title" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:textColor="@color/text_on_navy"
+                android:textStyle="bold" android:textSize="14sp" android:text="@string/athkar_section_morning" />
+            <TextView android:id="@+id/walker_sub" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:textColor="@color/hint_on_navy" android:textSize="11sp" />
+        </LinearLayout>
+        <TextView android:id="@+id/walker_close" android:layout_width="30dp" android:layout_height="30dp"
+            android:gravity="center" android:text="–" android:textColor="@color/text_on_navy" android:textSize="18sp" />
+    </LinearLayout>
+
+    <!-- day/night switch -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:padding="10dp">
+        <TextView android:id="@+id/walker_switch_day" android:layout_width="0dp" android:layout_weight="1"
+            android:layout_height="wrap_content" android:gravity="center" android:padding="7dp"
+            android:text="@string/bubble_style_a" android:textColor="@color/text_primary" />
+        <TextView android:id="@+id/walker_switch_night" android:layout_width="0dp" android:layout_weight="1"
+            android:layout_height="wrap_content" android:gravity="center" android:padding="7dp"
+            android:text="@string/bubble_style_a" android:textColor="@color/text_secondary" />
+    </LinearLayout>
+
+    <!-- dhikr -->
+    <TextView android:id="@+id/walker_dhikr" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:maxHeight="110dp" android:scrollbars="none" android:gravity="center"
+        android:paddingHorizontal="16dp" android:paddingTop="6dp" android:textColor="@color/text_primary"
+        android:textSize="18sp" android:lineSpacingMultiplier="1.4" android:textDirection="rtl" />
+    <TextView android:id="@+id/walker_ref" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:gravity="center" android:paddingTop="6dp" android:textColor="@color/text_secondary" android:textSize="10sp" />
+
+    <!-- walk: prev | count dial | next -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:gravity="center" android:padding="12dp">
+        <TextView android:id="@+id/walker_prev" android:layout_width="34dp" android:layout_height="34dp"
+            android:gravity="center" android:text="‹" android:textSize="18sp" android:textColor="@color/text_secondary" />
+        <TextView android:id="@+id/walker_count" android:layout_width="96dp" android:layout_height="96dp"
+            android:layout_marginHorizontal="14dp" android:gravity="center" android:textStyle="bold"
+            android:textSize="30sp" android:textColor="@color/text_primary" android:background="@drawable/bubble_disc" />
+        <TextView android:id="@+id/walker_next" android:layout_width="34dp" android:layout_height="34dp"
+            android:gravity="center" android:text="›" android:textSize="18sp" android:textColor="@color/text_secondary" />
+    </LinearLayout>
+
+    <TextView android:id="@+id/walker_today" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:padding="11dp" android:textColor="@color/text_secondary" android:textSize="11sp" />
+</LinearLayout>
