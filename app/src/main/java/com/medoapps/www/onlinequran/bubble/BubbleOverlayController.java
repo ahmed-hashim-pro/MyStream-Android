@@ -83,18 +83,24 @@ public class BubbleOverlayController {
     private Context themedContext() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(service);
         int savedMode = prefs.getInt("currentThemeMode", -1);
-        int nightBits;
+        Context base;
         if (savedMode == AppCompatDelegate.MODE_NIGHT_YES) {
-            nightBits = Configuration.UI_MODE_NIGHT_YES;
+            int nightBits = Configuration.UI_MODE_NIGHT_YES;
+            Configuration cfg = new Configuration(service.getResources().getConfiguration());
+            cfg.uiMode = (cfg.uiMode & ~Configuration.UI_MODE_NIGHT_MASK) | nightBits;
+            base = service.createConfigurationContext(cfg);
         } else if (savedMode == AppCompatDelegate.MODE_NIGHT_NO) {
-            nightBits = Configuration.UI_MODE_NIGHT_NO;
+            int nightBits = Configuration.UI_MODE_NIGHT_NO;
+            Configuration cfg = new Configuration(service.getResources().getConfiguration());
+            cfg.uiMode = (cfg.uiMode & ~Configuration.UI_MODE_NIGHT_MASK) | nightBits;
+            base = service.createConfigurationContext(cfg);
         } else {
             // Follow-system or unknown — let the device decide.
-            return service;
+            base = service;
         }
-        Configuration cfg = new Configuration(service.getResources().getConfiguration());
-        cfg.uiMode = (cfg.uiMode & ~Configuration.UI_MODE_NIGHT_MASK) | nightBits;
-        return service.createConfigurationContext(cfg);
+        // Wrap with the app theme so ?attr/... references (e.g. selectableItemBackground)
+        // resolve correctly when inflating overlays from a Service context.
+        return new android.view.ContextThemeWrapper(base, R.style.AppTheme);
     }
 
     public void hide() {
