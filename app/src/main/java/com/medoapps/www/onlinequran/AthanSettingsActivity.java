@@ -21,10 +21,15 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.medoapps.www.onlinequran.bubble.BubblePrefs;
+import com.medoapps.www.onlinequran.bubble.BubbleScheduler;
+import com.medoapps.www.onlinequran.bubble.BubbleStyle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -259,6 +264,7 @@ public class AthanSettingsActivity extends AppCompatActivity {
                 PrayerSettings.setVolumeKeyStopEnabled(this, checked));
         bindMinutesSpinner(findViewById(R.id.spinner_pre_reminder), PRE_REMINDER_VALUES, true);
         bindMinutesSpinner(findViewById(R.id.spinner_iqama), IQAMA_VALUES, false);
+        setupBubbleSection();
     }
 
     private static final int RC_TEST_ATHAN = 5777;
@@ -741,6 +747,75 @@ public class AthanSettingsActivity extends AppCompatActivity {
         AthanScheduler.rescheduleAll(this);
     }
 
+    // ---------------------------------------------------------- F. bubble
+
+    private void setupBubbleSection() {
+        BubblePrefs bp = new BubblePrefs(this);
+
+        androidx.appcompat.widget.SwitchCompat sw = findViewById(R.id.switch_bubble);
+        sw.setChecked(bp.isEnabled());
+        sw.setOnCheckedChangeListener((b, checked) -> {
+            if (checked && !canDrawOverlays()) { requestOverlayPermission(); b.setChecked(false); return; }
+            bp.setEnabled(checked);
+            android.content.Intent svc = new android.content.Intent(this,
+                    com.medoapps.www.onlinequran.bubble.AthkarBubbleService.class);
+            if (checked) {
+                androidx.core.content.ContextCompat.startForegroundService(this, svc);
+                BubbleScheduler.reschedule(this); // no-op until Task 14; safe to call
+            } else {
+                startService(svc.setAction(com.medoapps.www.onlinequran.bubble.AthkarBubbleService.ACTION_STOP));
+            }
+        });
+
+        findViewById(R.id.row_bubble_overlay).setOnClickListener(v -> requestOverlayPermission());
+
+        bindStyleCards(bp);
+        bindShowDuring(bp);
+        refreshBubbleStatus();
+    }
+
+    private void bindStyleCards(BubblePrefs bp) {
+        int[] cardIds = { R.id.card_style_a, R.id.card_style_c, R.id.card_style_d };
+        BubbleStyle[] styles = { BubbleStyle.CHAT_HEAD, BubbleStyle.DRAWER, BubbleStyle.PILL };
+        for (int i = 0; i < cardIds.length; i++) {
+            final BubbleStyle s = styles[i];
+            findViewById(cardIds[i]).setOnClickListener(v -> { bp.setStyle(s); applyStyleSelection(bp); restartBubbleIfRunning(bp); });
+        }
+        applyStyleSelection(bp);
+    }
+
+    private void applyStyleSelection(BubblePrefs bp) {
+        BubbleStyle sel = bp.getStyle();
+        findViewById(R.id.card_style_a).setActivated(sel == BubbleStyle.CHAT_HEAD);
+        findViewById(R.id.card_style_c).setActivated(sel == BubbleStyle.DRAWER);
+        findViewById(R.id.card_style_d).setActivated(sel == BubbleStyle.PILL);
+        ((RadioButton) findViewById(R.id.radio_a)).setChecked(sel == BubbleStyle.CHAT_HEAD);
+        ((RadioButton) findViewById(R.id.radio_c)).setChecked(sel == BubbleStyle.DRAWER);
+        ((RadioButton) findViewById(R.id.radio_d)).setChecked(sel == BubbleStyle.PILL);
+    }
+
+    private void bindShowDuring(BubblePrefs bp) {
+        View win = findViewById(R.id.seg_windows), always = findViewById(R.id.seg_always);
+        Runnable apply = () -> { win.setActivated(!bp.isAlwaysOn()); always.setActivated(bp.isAlwaysOn()); };
+        win.setOnClickListener(v -> { bp.setAlwaysOn(false); apply.run(); BubbleScheduler.reschedule(this); });
+        always.setOnClickListener(v -> { bp.setAlwaysOn(true); apply.run(); BubbleScheduler.reschedule(this); });
+        apply.run();
+    }
+
+    private void restartBubbleIfRunning(BubblePrefs bp) {
+        if (!bp.isEnabled()) return;
+        android.content.Intent svc = new android.content.Intent(this,
+                com.medoapps.www.onlinequran.bubble.AthkarBubbleService.class);
+        startService(svc.setAction(com.medoapps.www.onlinequran.bubble.AthkarBubbleService.ACTION_STOP));
+        androidx.core.content.ContextCompat.startForegroundService(this,
+                new android.content.Intent(this, com.medoapps.www.onlinequran.bubble.AthkarBubbleService.class));
+    }
+
+    private void refreshBubbleStatus() {
+        TextView tv = findViewById(R.id.tv_bubble_overlay_status);
+        if (tv != null) tv.setText(canDrawOverlays() ? R.string.athan_over_apps_on : R.string.athan_over_apps_off);
+    }
+
     // ------------------------------------------------------------- plumbing
 
     private void listen(Spinner spinner, final OnPick callback) {
@@ -795,6 +870,7 @@ public class AthanSettingsActivity extends AppCompatActivity {
         // Sound selection happens in the picker; refresh the row subtitles.
         refreshSoundLabels();
         refreshOverlayStatus();
+        refreshBubbleStatus();
     }
 
     @Override
