@@ -17,12 +17,15 @@ import com.medoapps.www.onlinequran.R;
 /** Foreground service that hosts the floating athkar overlay. Type: specialUse. */
 public class AthkarBubbleService extends Service {
     public static final String ACTION_STOP = "com.medoapps.athkar.bubble.STOP";
+    /** Rebuild the overlay in place (e.g. after a style change) without a stop/start race. */
+    public static final String ACTION_REFRESH = "com.medoapps.athkar.bubble.REFRESH";
     static final int NOTIF_ID = 4000;
     static final String CHANNEL = "bubble_channel";
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null && ACTION_STOP.equals(intent.getAction())) {
+        String action = intent != null ? intent.getAction() : null;
+        if (ACTION_STOP.equals(action)) {
             detachOverlay();
             stopForeground(true);
             stopSelf();
@@ -30,6 +33,9 @@ public class AthkarBubbleService extends Service {
         }
         createChannel(this);
         startForeground(NOTIF_ID, buildNotification());
+        if (ACTION_REFRESH.equals(action)) {
+            detachOverlay(); // tear down the old overlay so the new style/session is rebuilt below
+        }
         attachOverlay();
         return START_STICKY;
     }

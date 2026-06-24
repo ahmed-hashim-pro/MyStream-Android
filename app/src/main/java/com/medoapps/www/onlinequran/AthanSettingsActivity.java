@@ -804,11 +804,11 @@ public class AthanSettingsActivity extends AppCompatActivity {
 
     private void restartBubbleIfRunning(BubblePrefs bp) {
         if (!bp.isEnabled()) return;
-        android.content.Intent svc = new android.content.Intent(this,
-                com.medoapps.www.onlinequran.bubble.AthkarBubbleService.class);
-        startService(svc.setAction(com.medoapps.www.onlinequran.bubble.AthkarBubbleService.ACTION_STOP));
+        // Rebuild the overlay in place so the new style takes effect — a single refresh
+        // intent, not stop+start (whose stopSelf() could race and kill the restarted service).
         androidx.core.content.ContextCompat.startForegroundService(this,
-                new android.content.Intent(this, com.medoapps.www.onlinequran.bubble.AthkarBubbleService.class));
+                new android.content.Intent(this, com.medoapps.www.onlinequran.bubble.AthkarBubbleService.class)
+                        .setAction(com.medoapps.www.onlinequran.bubble.AthkarBubbleService.ACTION_REFRESH));
     }
 
     private void refreshBubbleStatus() {
