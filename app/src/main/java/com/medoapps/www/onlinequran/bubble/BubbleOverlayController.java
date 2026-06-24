@@ -3,10 +3,13 @@ package com.medoapps.www.onlinequran.bubble;
 
 import android.app.Service;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
 import com.medoapps.www.onlinequran.AthkarItem;
@@ -43,6 +47,7 @@ public class BubbleOverlayController {
     private BubbleSession session;
     private BubbleContentController content;
     private int dayOfYear;
+    private Context inflationContext;   // themed context used for all overlay inflations
 
     public BubbleOverlayController(Service service) {
         this.service = service;
@@ -61,8 +66,35 @@ public class BubbleOverlayController {
     public void show() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(service)) return;
         if (bubbleView != null) return;
+        inflationContext = themedContext();
         loadSession();
         addBubble();
+    }
+
+    /**
+     * Returns a Context whose Configuration reflects the app's chosen night-mode setting,
+     * so overlays inflated from a Service (which has no Activity theme) resolve
+     * theme-dependent colors correctly on cold-start (e.g. launched from an alarm receiver).
+     *
+     * Only overrides when the user has picked an explicit light or dark mode; when the app
+     * follows the system setting (or the pref is absent) the service context is returned
+     * unchanged so the device uiMode continues to govern — same behaviour as before.
+     */
+    private Context themedContext() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(service);
+        int savedMode = prefs.getInt("currentThemeMode", -1);
+        int nightBits;
+        if (savedMode == AppCompatDelegate.MODE_NIGHT_YES) {
+            nightBits = Configuration.UI_MODE_NIGHT_YES;
+        } else if (savedMode == AppCompatDelegate.MODE_NIGHT_NO) {
+            nightBits = Configuration.UI_MODE_NIGHT_NO;
+        } else {
+            // Follow-system or unknown — let the device decide.
+            return service;
+        }
+        Configuration cfg = new Configuration(service.getResources().getConfiguration());
+        cfg.uiMode = (cfg.uiMode & ~Configuration.UI_MODE_NIGHT_MASK) | nightBits;
+        return service.createConfigurationContext(cfg);
     }
 
     public void hide() {
@@ -88,7 +120,7 @@ public class BubbleOverlayController {
         BubbleStyle style = prefs.getStyle();
         int layout = style == BubbleStyle.PILL ? R.layout.bubble_pill : R.layout.bubble_chathead;
         int w = style == BubbleStyle.PILL ? dp(240) : dp(62);
-        bubbleView = LayoutInflater.from(service).inflate(layout, null);
+        bubbleView = LayoutInflater.from(inflationContext).inflate(layout, null);
         bubbleLp = baseParams(w, dp(62));
         bubbleLp.gravity = Gravity.TOP | Gravity.START;
         bubbleLp.x = "left".equals(prefs.getSide()) ? dp(8) : screenW() - w - dp(8);
@@ -166,7 +198,7 @@ public class BubbleOverlayController {
     private void togglePanel() { if (panelView == null) showPanel(); else removePanel(); }
 
     private void showDrawer() {
-        panelView = LayoutInflater.from(service).inflate(R.layout.bubble_drawer, null);
+        panelView = LayoutInflater.from(inflationContext).inflate(R.layout.bubble_drawer, null);
         boolean left = service.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
         WindowManager.LayoutParams lp = baseParams(dp(236), WindowManager.LayoutParams.MATCH_PARENT);
         lp.gravity = Gravity.TOP | (left ? Gravity.START : Gravity.END);
@@ -178,7 +210,7 @@ public class BubbleOverlayController {
         android.widget.LinearLayout listView = panelView.findViewById(R.id.drawer_list);
         for (int i = 0; i < content.size(); i++) {
             final int idx = i;
-            View row = LayoutInflater.from(service).inflate(R.layout.bubble_drawer_row, listView, false);
+            View row = LayoutInflater.from(inflationContext).inflate(R.layout.bubble_drawer_row, listView, false);
             ((TextView) row.findViewById(R.id.row_text)).setText(content.currentItemAt(idx).text);
             TextView c = row.findViewById(R.id.row_count);
             c.setText(content.remainingAt(idx) <= 0 ? "✓" : String.valueOf(content.remainingAt(idx)));
@@ -195,7 +227,7 @@ public class BubbleOverlayController {
     }
 
     private void showPanel() {
-        panelView = LayoutInflater.from(service).inflate(R.layout.bubble_panel_walker, null);
+        panelView = LayoutInflater.from(inflationContext).inflate(R.layout.bubble_panel_walker, null);
         WindowManager.LayoutParams lp = baseParams(dp(280), WindowManager.LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.TOP | ("left".equals(prefs.getSide()) ? Gravity.START : Gravity.END);
         lp.x = dp(12);
