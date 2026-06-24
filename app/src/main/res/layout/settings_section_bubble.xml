@@ -29,10 +29,31 @@
         android:text="@string/bubble_style" android:textColor="@color/text_secondary"
         android:textStyle="bold" android:textSize="11sp" android:paddingTop="8dp" android:paddingBottom="4dp" />
 
-    <!-- 3 style cards (A / C / D) -->
+    <!-- Card A: Chat-head — radio on END, thumbnail on START (opposite the radio) -->
     <LinearLayout android:id="@+id/card_style_a" android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="horizontal" android:gravity="center_vertical" android:padding="11dp"
-        android:layout_marginBottom="8dp" android:background="@drawable/bubble_style_card">
+        android:layout_marginBottom="8dp" android:background="@drawable/bubble_style_card"
+        android:layoutDirection="locale">
+
+        <!-- thumbnail: small navy circle with session glyph -->
+        <FrameLayout
+            android:id="@+id/thumb_a"
+            android:layout_width="84dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_thumb_navy"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/thumb_a_glyph"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/gold_accent"
+                android:background="@drawable/bubble_disc" />
+        </FrameLayout>
+
         <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/bubble_style_a"
                 android:textStyle="bold" android:textColor="@color/text_primary" android:textSize="14sp" />
@@ -42,9 +63,28 @@
         <RadioButton android:id="@+id/radio_a" android:layout_width="wrap_content" android:layout_height="wrap_content" android:clickable="false" />
     </LinearLayout>
 
+    <!-- Card C: Edge drawer — thumbnail showing mini list of real athkar -->
     <LinearLayout android:id="@+id/card_style_c" android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="horizontal" android:gravity="center_vertical" android:padding="11dp"
-        android:layout_marginBottom="8dp" android:background="@drawable/bubble_style_card">
+        android:layout_marginBottom="8dp" android:background="@drawable/bubble_style_card"
+        android:layoutDirection="locale">
+
+        <!-- thumbnail: white panel with athkar rows, populated at runtime -->
+        <FrameLayout
+            android:layout_width="84dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_thumb_navy">
+            <LinearLayout
+                android:id="@+id/thumb_c_rows"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@drawable/bg_thumb_inner_white"
+                android:padding="5dp"
+                android:layoutDirection="locale" />
+        </FrameLayout>
+
         <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/bubble_style_c"
                 android:textStyle="bold" android:textColor="@color/text_primary" android:textSize="14sp" />
@@ -54,9 +94,71 @@
         <RadioButton android:id="@+id/radio_c" android:layout_width="wrap_content" android:layout_height="wrap_content" android:clickable="false" />
     </LinearLayout>
 
+    <!-- Card D: Mini-pill — thumbnail showing pill with glyph + current dhikr + count -->
     <LinearLayout android:id="@+id/card_style_d" android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="horizontal" android:gravity="center_vertical" android:padding="11dp"
-        android:background="@drawable/bubble_style_card">
+        android:background="@drawable/bubble_style_card"
+        android:layoutDirection="locale">
+
+        <!-- thumbnail: navy bg with a white pill inside -->
+        <FrameLayout
+            android:id="@+id/thumb_d"
+            android:layout_width="84dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_thumb_navy"
+            android:gravity="center">
+
+            <!-- the pill itself -->
+            <LinearLayout
+                android:layout_width="74dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_thumb_inner_white"
+                android:padding="3dp"
+                android:layoutDirection="locale">
+
+                <TextView
+                    android:id="@+id/thumb_d_glyph"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:textSize="10sp"
+                    android:textColor="@color/gold_accent"
+                    android:background="@drawable/bubble_disc" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="3dp">
+
+                    <TextView
+                        android:id="@+id/thumb_d_dhikr"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="7sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textDirection="rtl"
+                        android:textColor="@color/text_primary"
+                        android:includeFontPadding="false" />
+
+                    <TextView
+                        android:id="@+id/thumb_d_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="6sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/gold_accent"
+                        android:includeFontPadding="false" />
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
         <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/bubble_style_d"
                 android:textStyle="bold" android:textColor="@color/text_primary" android:textSize="14sp" />

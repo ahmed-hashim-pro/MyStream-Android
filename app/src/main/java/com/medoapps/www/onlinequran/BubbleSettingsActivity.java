@@ -3,7 +3,9 @@ package com.medoapps.www.onlinequran;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -12,9 +14,16 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
+import com.medoapps.www.onlinequran.athan.PrayerSettings;
+import com.medoapps.www.onlinequran.athan.PrayerTimeEngine;
 import com.medoapps.www.onlinequran.bubble.BubblePrefs;
 import com.medoapps.www.onlinequran.bubble.BubbleScheduler;
+import com.medoapps.www.onlinequran.bubble.BubbleSession;
+import com.medoapps.www.onlinequran.bubble.BubbleSessionSelector;
 import com.medoapps.www.onlinequran.bubble.BubbleStyle;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Dedicated settings screen for the Floating Athkar Bubble feature.
@@ -43,6 +52,7 @@ public class BubbleSettingsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         refreshBubbleStatus();
+        bindStylePreviews();
         BubblePrefs bp = new BubblePrefs(this);
         applyStyleSelection(bp);
         // Re-apply show-during state
@@ -84,6 +94,7 @@ public class BubbleSettingsActivity extends AppCompatActivity {
         bindStyleCards(bp);
         bindShowDuring(bp);
         refreshBubbleStatus();
+        bindStylePreviews();
     }
 
     private void bindStyleCards(BubblePrefs bp) {
@@ -141,6 +152,72 @@ public class BubbleSettingsActivity extends AppCompatActivity {
         TextView tv = findViewById(R.id.tv_bubble_overlay_status);
         if (tv != null) {
             tv.setText(canDrawOverlays() ? R.string.bubble_over_apps_on : R.string.bubble_over_apps_off);
+        }
+    }
+
+    // -------------------------------------------------- style card previews
+
+    /** Mirror of BubbleOverlayController.loadSession() — picks morning or evening items. */
+    private List<AthkarItem> currentSessionItems() {
+        long now = System.currentTimeMillis();
+        long fajr = now, asr = now;
+        try {
+            Date[] t = PrayerTimeEngine.getTodayTimes(this);
+            if (t != null) {
+                fajr = t[PrayerSettings.PRAYER_FAJR].getTime();
+                asr  = t[PrayerSettings.PRAYER_ASR].getTime();
+            }
+        } catch (Exception ignored) {}
+        BubbleSession session = BubbleSessionSelector.select(now, fajr, asr);
+        return (session == BubbleSession.MORNING)
+                ? AthkarRepository.getMorningItems()
+                : AthkarRepository.getEveningItems();
+    }
+
+    private void bindStylePreviews() {
+        List<AthkarItem> items = currentSessionItems();
+
+        // determine session glyph
+        long now = System.currentTimeMillis();
+        long fajr = now, asr = now;
+        try {
+            Date[] t = PrayerTimeEngine.getTodayTimes(this);
+            if (t != null) {
+                fajr = t[PrayerSettings.PRAYER_FAJR].getTime();
+                asr  = t[PrayerSettings.PRAYER_ASR].getTime();
+            }
+        } catch (Exception ignored) {}
+        BubbleSession session = BubbleSessionSelector.select(now, fajr, asr);
+        String glyph = (session == BubbleSession.MORNING) ? "☀" : "☾";
+
+        // --- Card A: chat-head glyph ---
+        TextView thumbAGlyph = findViewById(R.id.thumb_a_glyph);
+        if (thumbAGlyph != null) thumbAGlyph.setText(glyph);
+
+        // --- Card C: up to 4 mini athkar rows ---
+        LinearLayout thumbCRows = findViewById(R.id.thumb_c_rows);
+        if (thumbCRows != null) {
+            thumbCRows.removeAllViews();
+            int limit = Math.min(4, items.size());
+            LayoutInflater inflater = LayoutInflater.from(this);
+            for (int i = 0; i < limit; i++) {
+                AthkarItem item = items.get(i);
+                android.view.View row = inflater.inflate(R.layout.thumb_athkar_row, thumbCRows, false);
+                ((TextView) row.findViewById(R.id.row_ar)).setText(item.text);
+                ((TextView) row.findViewById(R.id.row_count)).setText(String.valueOf(item.remainingCount));
+                thumbCRows.addView(row);
+            }
+        }
+
+        // --- Card D: mini pill with first dhikr + count ---
+        TextView thumbDGlyph = findViewById(R.id.thumb_d_glyph);
+        TextView thumbDDhikr = findViewById(R.id.thumb_d_dhikr);
+        TextView thumbDCount = findViewById(R.id.thumb_d_count);
+        if (thumbDGlyph != null) thumbDGlyph.setText(glyph);
+        if (!items.isEmpty()) {
+            AthkarItem first = items.get(0);
+            if (thumbDDhikr != null) thumbDDhikr.setText(first.text);
+            if (thumbDCount != null) thumbDCount.setText("×" + first.remainingCount);
         }
     }
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Navy gradient background for style-card preview thumbnails. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="160"
+        android:startColor="@color/navy_500"
+        android:endColor="@color/navy_900" />
+    <corners android:radius="10dp" />
+</shape>
