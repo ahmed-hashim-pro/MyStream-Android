@@ -85,21 +85,40 @@ public class BubbleOverlayController {
     }
 
     private void addBubble() {
-        bubbleView = LayoutInflater.from(service).inflate(R.layout.bubble_chathead, null);
-        bubbleLp = baseParams(dp(62), dp(62));
+        BubbleStyle style = prefs.getStyle();
+        int layout = style == BubbleStyle.PILL ? R.layout.bubble_pill : R.layout.bubble_chathead;
+        int w = style == BubbleStyle.PILL ? dp(240) : dp(62);
+        bubbleView = LayoutInflater.from(service).inflate(layout, null);
+        bubbleLp = baseParams(w, dp(62));
         bubbleLp.gravity = Gravity.TOP | Gravity.START;
-        bubbleLp.x = "left".equals(prefs.getSide()) ? dp(8) : screenW() - dp(70);
+        bubbleLp.x = "left".equals(prefs.getSide()) ? dp(8) : screenW() - w - dp(8);
         bubbleLp.y = prefs.getPosY(dp(220));
         renderCollapsed();
         attachDrag(bubbleView);
+        // pill has its own count + list buttons:
+        View count = bubbleView.findViewById(R.id.pill_count);
+        if (count != null) count.setOnClickListener(x -> onCount());
+        View list = bubbleView.findViewById(R.id.pill_list);
+        if (list != null) list.setOnClickListener(x -> togglePanel());
         wm.addView(bubbleView, bubbleLp);
     }
 
     private void renderCollapsed() {
-        ((TextView) bubbleView.findViewById(R.id.bubble_glyph))
-                .setText(session == BubbleSession.MORNING ? "☀" : "☾");
         int rem = content.remainingAt(content.currentIndex());
-        ((TextView) bubbleView.findViewById(R.id.bubble_badge)).setText(rem <= 0 ? "✓" : String.valueOf(rem));
+        String glyph = session == BubbleSession.MORNING ? "☀" : "☾";
+        TextView g = bubbleView.findViewById(R.id.bubble_glyph);
+        if (g != null) { // chat-head
+            g.setText(glyph);
+            ((TextView) bubbleView.findViewById(R.id.bubble_badge)).setText(rem <= 0 ? "✓" : String.valueOf(rem));
+        }
+        TextView pg = bubbleView.findViewById(R.id.pill_glyph);
+        if (pg != null) { // pill
+            pg.setText(glyph);
+            ((TextView) bubbleView.findViewById(R.id.pill_dhikr)).setText(content.currentItem().text);
+            ((TextView) bubbleView.findViewById(R.id.pill_meta))
+                    .setText(content.currentItem().count + " · " + (rem <= 0 ? "✓" : rem));
+            ((TextView) bubbleView.findViewById(R.id.pill_count)).setText(rem <= 0 ? "✓" : "+");
+        }
     }
 
     // --- drag + tap (Correction A: cleaner move detection with touch-slop) ---
