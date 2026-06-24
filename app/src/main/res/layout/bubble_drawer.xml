@@ -1,0 +1,22 @@
+<!-- res/layout/bubble_drawer.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_root" android:layout_width="236dp" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/background_card" android:layoutDirection="locale">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:gravity="center_vertical" android:padding="13dp"
+        android:background="@drawable/bg_navy_hero">
+        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView android:id="@+id/drawer_title" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:textColor="@color/text_on_navy" android:textStyle="bold" android:textSize="14sp" />
+            <TextView android:id="@+id/drawer_sub" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:textColor="@color/hint_on_navy" android:textSize="10sp" />
+        </LinearLayout>
+        <TextView android:id="@+id/drawer_back" android:layout_width="30dp" android:layout_height="30dp"
+            android:gravity="center" android:text="›" android:textColor="@color/text_on_navy" android:textSize="16sp" />
+    </LinearLayout>
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout android:id="@+id/drawer_list" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical" />
+    </ScrollView>
+</LinearLayout>

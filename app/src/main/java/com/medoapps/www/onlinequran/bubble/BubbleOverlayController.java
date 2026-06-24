@@ -142,7 +142,14 @@ public class BubbleOverlayController {
                         wm.updateViewLayout(bubbleView, bubbleLp);
                         return true;
                     case MotionEvent.ACTION_UP:
-                        if (!moved && System.currentTimeMillis() - downT < 250) { togglePanel(); return true; }
+                        if (!moved && System.currentTimeMillis() - downT < 250) {
+                            if (prefs.getStyle() == BubbleStyle.DRAWER) {
+                                if (panelView == null) showDrawer(); else removePanel();
+                            } else {
+                                togglePanel();
+                            }
+                            return true;
+                        }
                         int w2 = v.getWidth() > 0 ? v.getWidth() : dp(62);
                         boolean left = bubbleLp.x + w2 / 2 < screenW() / 2;
                         bubbleLp.x = left ? dp(8) : screenW() - w2 - dp(8);
@@ -157,6 +164,35 @@ public class BubbleOverlayController {
     }
 
     private void togglePanel() { if (panelView == null) showPanel(); else removePanel(); }
+
+    private void showDrawer() {
+        panelView = LayoutInflater.from(service).inflate(R.layout.bubble_drawer, null);
+        boolean left = service.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+        WindowManager.LayoutParams lp = baseParams(dp(236), WindowManager.LayoutParams.MATCH_PARENT);
+        lp.gravity = Gravity.TOP | (left ? Gravity.START : Gravity.END);
+        ((TextView) panelView.findViewById(R.id.drawer_title))
+                .setText(session == BubbleSession.MORNING ? R.string.athkar_section_morning : R.string.athkar_section_evening);
+        ((TextView) panelView.findViewById(R.id.drawer_sub))
+                .setText(service.getString(R.string.bubble_today_done, content.doneCount(), content.size()));
+        panelView.findViewById(R.id.drawer_back).setOnClickListener(x -> removePanel());
+        android.widget.LinearLayout listView = panelView.findViewById(R.id.drawer_list);
+        for (int i = 0; i < content.size(); i++) {
+            final int idx = i;
+            View row = LayoutInflater.from(service).inflate(R.layout.bubble_drawer_row, listView, false);
+            ((TextView) row.findViewById(R.id.row_text)).setText(content.currentItemAt(idx).text);
+            TextView c = row.findViewById(R.id.row_count);
+            c.setText(content.remainingAt(idx) <= 0 ? "✓" : String.valueOf(content.remainingAt(idx)));
+            row.setOnClickListener(v -> {
+                boolean done = content.countAt(idx);
+                haptic();
+                if (done) progress.markDone(dayOfYear, session.name(), idx);
+                c.setText(content.remainingAt(idx) <= 0 ? "✓" : String.valueOf(content.remainingAt(idx)));
+                renderCollapsed();
+            });
+            listView.addView(row);
+        }
+        wm.addView(panelView, lp);
+    }
 
     private void showPanel() {
         panelView = LayoutInflater.from(service).inflate(R.layout.bubble_panel_walker, null);

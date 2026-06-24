@@ -42,4 +42,10 @@ public class BubbleContentControllerTest {
         assertThat(c.fraction()).isWithin(0.001f).of(1f / 3f);
         assertThat(c.isAllDone()).isFalse();
     }
+    @Test public void countAt_targetsSpecificIndex() {
+        BubbleContentController c = make();
+        assertThat(c.countAt(2)).isFalse();          // c 100->99
+        assertThat(c.remainingAt(2)).isEqualTo(99);
+        assertThat(c.currentIndex()).isEqualTo(0);   // pointer unchanged
+    }
 }
