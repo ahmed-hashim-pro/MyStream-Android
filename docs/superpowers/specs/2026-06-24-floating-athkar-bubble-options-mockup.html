@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Floating Athkar Bubble — View Options · My Stream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#B8860B; --gold-light:#E9C778; --gold-soft:#d9b24a;
+  --navy-900:#172033; --navy-700:#1F2A44; --navy-500:#2C3A5E;
+  --bg:#FFF8F0; --card:#FFFFFF; --text:#1C1B1F; --text2:#6b6770;
+  --line:rgba(28,27,31,.10); --muted:#cdbfa9; --on-navy:#FFFFFF; --on-navy-dim:rgba(255,255,255,.62);
+  --shadow:0 18px 40px -18px rgba(23,32,51,.42);
+}
+[data-theme="dark"]{
+  --gold:#D4A44C; --gold-light:#E9C778; --gold-soft:#caa24f;
+  --bg:#121212; --card:#1E1E1E; --text:#ECEAE6; --text2:#9a948c;
+  --line:rgba(255,255,255,.10); --muted:#4a443a; --shadow:0 20px 44px -18px rgba(0,0,0,.75);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+html,body{margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#e8eaf0;min-height:100vh;padding:26px 22px 70px;
+  background:radial-gradient(1100px 520px at 12% -8%,#20304f 0,transparent 60%),radial-gradient(900px 480px at 100% 0,#11182a 0,transparent 55%),#0c111d;}
+.wrap{max-width:1280px;margin:0 auto}
+h1.title{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:0 0 2px;display:flex;align-items:center;gap:10px}
+h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 12px var(--gold-light)}
+.sub{color:#9fb0d0;font-size:13.5px;margin:0 0 18px;max-width:880px;line-height:1.55}
+.sub code{background:#161d2e;border:1px solid #273350;border-radius:5px;padding:1px 6px;font-size:12px;color:#cdd6ea}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:24px;position:sticky;top:0;z-index:100;
+  padding:12px 0;background:linear-gradient(#0c111d,#0c111dee 70%,transparent)}
+.seg{display:inline-flex;background:#161d2e;border:1px solid #273350;border-radius:12px;padding:4px;gap:3px}
+.seg button{font:inherit;font-size:12.5px;font-weight:600;color:#9fb0d0;background:transparent;border:0;padding:7px 13px;border-radius:9px;cursor:pointer;transition:.15s}
+.seg button.on{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1305;box-shadow:0 4px 14px -6px var(--gold)}
+.seg .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#5f6f8e;padding:0 8px 0 4px;align-self:center;font-weight:700}
+.hint{color:#7e8db0;font-size:12px;margin-left:auto}.hint b{color:#cdd6ea}
+
+.grid{display:flex;flex-wrap:wrap;gap:26px;justify-content:center}
+.opt{width:300px;display:flex;flex-direction:column;gap:10px}
+.opt .head{display:flex;align-items:baseline;gap:8px}
+.opt .badge{font-size:11px;font-weight:900;color:#1a1305;background:linear-gradient(135deg,var(--gold-light),var(--gold));width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex:none}
+.opt .nm{font-size:14px;font-weight:800;color:#fff}
+.opt .best{font-size:11.5px;color:#8fa0c0;line-height:1.45;min-height:32px}
+.opt .best b{color:#cdd6ea}
+
+.phone{width:300px;height:600px;border-radius:38px;background:#05070c;padding:9px;position:relative;
+  box-shadow:0 30px 70px -28px rgba(0,0,0,.85),0 0 0 2px #1c2335,inset 0 0 0 2px #000;}
+.screen{width:100%;height:100%;border-radius:30px;overflow:hidden;position:relative}
+.bgapp{position:absolute;inset:0;background:linear-gradient(160deg,#3a4f7a,#243a63 42%,#5a4a6e);overflow:hidden}
+.bgapp:before{content:"";position:absolute;inset:0;background:radial-gradient(300px 220px at 78% 10%,rgba(255,255,255,.12),transparent 60%)}
+.bgc{position:absolute;top:54px;left:0;right:0;text-align:center;color:#fff}
+.bgc .b{font-size:46px;font-weight:300;line-height:1;text-shadow:0 2px 16px rgba(0,0,0,.3)}
+.bgc .d{font-size:12px;opacity:.85;margin-top:6px}
+.bgrid{position:absolute;left:18px;right:18px;bottom:30px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.bgrid .s{height:44px;border-radius:13px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:20px}
+.scrim{position:absolute;inset:0;background:rgba(8,11,20,.45);opacity:0;pointer-events:none;transition:.2s;z-index:20}
+.scrim.show{opacity:1}
+.layer{position:absolute;inset:0;z-index:30}
+
+/* shared bubble */
+.bub{position:absolute;width:58px;height:58px;border-radius:50%;padding:3px;cursor:pointer;z-index:34;touch-action:none;
+  background:conic-gradient(var(--gold) var(--cp,0%),rgba(255,255,255,.28) 0);box-shadow:0 8px 22px -8px rgba(0,0,0,.6),0 0 0 1px rgba(212,164,76,.3)}
+.bub .disc{width:100%;height:100%;border-radius:50%;background:linear-gradient(155deg,var(--navy-500),var(--navy-900));display:flex;align-items:center;justify-content:center;position:relative;border:2.5px solid rgba(255,255,255,.12)}
+.bub .disc .g{font-size:24px}.bub .disc.morn .g{color:#ffd97a}.bub .disc.eve .g{color:#cdd9ff}
+.bub .bdg{position:absolute;top:-3px;right:-3px;min-width:21px;height:21px;padding:0 5px;border-radius:11px;background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#1a1305;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--card)}
+
+/* shared walker panel (used by A, B, D) */
+.panel{position:absolute;width:262px;background:var(--bg);border-radius:22px;overflow:hidden;box-shadow:var(--shadow),0 0 0 1px var(--line);z-index:33}
+.ph{display:flex;align-items:center;gap:10px;padding:12px;color:var(--on-navy);background:linear-gradient(150deg,var(--navy-700),var(--navy-900))}
+.ph.eve{background:linear-gradient(150deg,#27355a,#101a30)}
+.ph .av{width:36px;height:36px;border-radius:50%;background:var(--navy-500);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none}
+.ph .tt{flex:1;min-width:0}.ph .tt .t{font-size:13.5px;font-weight:800}.ph .tt .s{font-size:10.5px;color:var(--on-navy-dim);display:flex;align-items:center;gap:5px}
+.ph .tt .s .liv{width:5px;height:5px;border-radius:50%;background:#5fd29a;box-shadow:0 0 5px #5fd29a}
+.ph .xx{width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;cursor:pointer}
+.swc{display:flex;gap:5px;padding:9px 12px 2px}
+.swc .w{flex:1;text-align:center;font-size:11px;font-weight:700;padding:6px;border-radius:9px;border:1px solid var(--line);color:var(--text2);background:var(--card);cursor:pointer}
+.swc .w.on{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1305;border-color:transparent}
+.dots{display:flex;gap:3px;padding:8px 12px 2px}
+.dots .dt{flex:1;height:3px;border-radius:3px;background:var(--muted)}.dots .dt.done{background:var(--gold)}.dots .dt.cur{background:var(--gold-soft)}
+.pbody{padding:6px 14px 12px;display:flex;flex-direction:column;align-items:center}
+.aar{font-family:'Amiri',serif;font-size:18px;line-height:1.85;color:var(--text);direction:rtl;text-align:center;max-height:92px;overflow-y:auto;width:100%}
+.aar::-webkit-scrollbar{width:0}
+.aref{font-size:10px;color:var(--text2);margin-top:6px}
+.walk{display:flex;align-items:center;gap:12px;margin-top:10px}
+.ar2{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--text2);font-size:17px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.dial{width:112px;height:112px;border-radius:50%;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center}
+.dial:active{transform:scale(.96)}
+.dial .dr{position:absolute;inset:0;border-radius:50%;background:conic-gradient(var(--gold) var(--dp,0%),var(--muted) 0)}
+.dial .di{position:absolute;inset:6px;border-radius:50%;background:linear-gradient(155deg,var(--card),var(--bg));border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dial .di .n{font-size:36px;font-weight:800;color:var(--text);line-height:1}
+.dial .di .x{font-size:10px;color:var(--text2);font-weight:700}
+.dial .di .tp{font-size:8px;color:var(--gold);font-weight:800;letter-spacing:.06em;margin-top:2px;text-transform:uppercase}
+.dial.cmp .di{background:linear-gradient(155deg,#2f6e4f,#1c4c34)}.dial.cmp .di .n{color:#fff}.dial.cmp .di .x,.dial.cmp .di .tp{color:rgba(255,255,255,.7)}
+.pfoot{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-top:1px solid var(--line);background:var(--card)}
+.pfoot .st{font-size:10.5px;color:var(--text2)}.pfoot .st b{color:var(--gold);font-weight:800;font-size:13px}
+.pfoot .fb{font-size:10px;font-weight:700;color:var(--text2);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:5px 9px;cursor:pointer}
+[dir="rtl"] .walk{flex-direction:row-reverse}[dir="rtl"] .ph .tt{text-align:right}
+
+/* B radial */
+.fan{position:absolute;z-index:33}
+.fan .fi{position:absolute;width:50px;height:50px;border-radius:50%;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-size:18px;animation:pop .25s both}
+.fan .fi .fl{font-size:8px;font-weight:700;color:var(--text2);margin-top:1px}
+@keyframes pop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
+
+/* C edge drawer */
+.edgetab{position:absolute;right:0;top:230px;width:30px;height:64px;border-radius:16px 0 0 16px;cursor:pointer;z-index:34;
+  background:linear-gradient(155deg,var(--navy-500),var(--navy-900));display:flex;align-items:center;justify-content:center;box-shadow:-6px 6px 16px -8px rgba(0,0,0,.6);border:1px solid rgba(212,164,76,.4);border-right:0}
+.edgetab .g{font-size:20px;color:#ffd97a}
+.drawer{position:absolute;top:0;right:0;bottom:0;width:236px;background:var(--bg);z-index:33;box-shadow:var(--shadow);transform:translateX(100%);transition:transform .26s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+.drawer.open{transform:translateX(0)}
+.drow{display:flex;align-items:center;gap:10px;padding:11px 13px;border-bottom:1px solid var(--line);cursor:pointer}
+.drow .dt2{flex:1;min-width:0}
+.drow .da{font-family:'Amiri',serif;font-size:15px;direction:rtl;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drow .dc{min-width:34px;height:28px;padding:0 8px;border-radius:14px;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--gold)}
+.drow.done .dc{background:#3a9d6b;color:#fff;border-color:transparent}
+
+/* D mini pill */
+.pill{position:absolute;height:46px;border-radius:24px;background:var(--card);box-shadow:var(--shadow),0 0 0 1px var(--line);display:flex;align-items:center;gap:9px;padding:4px 14px 4px 4px;cursor:pointer;z-index:34}
+.pill .pc{width:38px;height:38px;border-radius:50%;padding:2px;background:conic-gradient(var(--gold) var(--cp,0%),var(--muted) 0);flex:none}
+.pill .pc .d{width:100%;height:100%;border-radius:50%;background:linear-gradient(155deg,var(--navy-500),var(--navy-900));display:flex;align-items:center;justify-content:center;font-size:17px;color:#ffd97a}
+.pill .pi{display:flex;flex-direction:column;min-width:0}
+.pill .pa{font-family:'Amiri',serif;font-size:15px;direction:rtl;color:var(--text);line-height:1.2;white-space:nowrap}
+.pill .px{font-size:10px;color:var(--text2);font-weight:700}
+
+/* E card */
+.fcard{position:absolute;width:250px;border-radius:22px;overflow:hidden;background:linear-gradient(165deg,#21304e,var(--navy-900) 60%,#0f1626);color:#fff;box-shadow:var(--shadow);z-index:33}
+.fcard .fh{display:flex;align-items:center;gap:9px;padding:11px 13px}
+.fcard .fh .av{width:32px;height:32px;border-radius:50%;background:var(--navy-500);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:15px}
+.fcard .fh .t{flex:1;font-size:13px;font-weight:800}
+.fcard .fh .xx{opacity:.7;cursor:pointer;font-size:15px}
+.fcard .fdots{display:flex;gap:3px;padding:0 13px}
+.fcard .fdots .dt{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.25)}.fcard .fdots .dt.done{background:var(--gold)}.fcard .fdots .dt.cur{background:#fff}
+.fcard .fbody{padding:14px 16px 6px;text-align:center;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.fcard .fbody .ar{font-family:'Amiri',serif;font-size:19px;line-height:1.8;direction:rtl;max-height:96px;overflow-y:auto}
+.fcard .fbody .ar::-webkit-scrollbar{width:0}
+.fcard .fbody .rf{font-size:10px;color:rgba(255,255,255,.5);margin-top:8px}
+.fcard .ffoot{display:flex;align-items:center;justify-content:center;gap:16px;padding:6px 13px 14px}
+.fcard .ffoot .ar3{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.25);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer}
+.fcard .cdial{width:74px;height:74px;border-radius:50%;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--gold) var(--dp,0%),rgba(255,255,255,.16) 0);padding:5px}
+.fcard .cdial .ci{width:100%;height:100%;border-radius:50%;background:linear-gradient(155deg,var(--navy-500),var(--navy-900));display:flex;flex-direction:column;align-items:center;justify-content:center}
+.fcard .cdial .ci .n{font-size:24px;font-weight:800;color:#fff;line-height:1}.fcard .cdial .ci .x{font-size:9px;color:var(--on-navy-dim)}
+.fcard .cdial.cmp .ci{background:linear-gradient(155deg,#2f6e4f,#1c4c34)}
+
+.pickbar{margin-top:30px;background:#121a2b;border:1px solid #243150;border-radius:16px;padding:16px 18px;color:#cdd6ea}
+.pickbar h4{margin:0 0 8px;color:#fff;font-size:14px}
+.pickbar table{width:100%;border-collapse:collapse;font-size:12.5px}
+.pickbar td{padding:6px 8px;border-bottom:1px solid #1e2940;vertical-align:top}
+.pickbar td.k{color:var(--gold-light);font-weight:800;white-space:nowrap;width:54px}
+.pickbar td b{color:#e6ecf9}
+.foot-note{font-size:12px;color:#7e8db0;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="title"><span class="dot"></span>Floating Athkar Bubble — pick a view</h1>
+  <p class="sub">Five takes on the same feature: a floating <b>day &amp; night athkar</b> companion over other apps. Same content (<code>AthkarActivity</code> morning/evening), same tokens — only the <b>shape of the interaction</b> differs. Tap each phone to open/interact; counters work. Toggle <b>Session / Theme / Language</b> for all at once.</p>
+
+  <div class="controls">
+    <div class="seg"><span class="lbl">Session</span>
+      <button id="s-m" class="on" onclick="setSession('morning')">☀︎ Day</button>
+      <button id="s-e" onclick="setSession('evening')">☾ Night</button>
+    </div>
+    <div class="seg"><span class="lbl">Theme</span>
+      <button id="t-l" class="on" onclick="setTheme('light')">☀︎ Light</button>
+      <button id="t-d" onclick="setTheme('dark')">☾ Dark</button>
+    </div>
+    <div class="seg"><span class="lbl">Lang</span>
+      <button id="l-en" class="on" onclick="setLang('en')">EN</button>
+      <button id="l-ar" onclick="setLang('ar')">عربي</button>
+    </div>
+    <div class="hint"><b>Note:</b> drag-to-move &amp; drag-to-✕ dismiss work the same on every version.</div>
+  </div>
+
+  <div class="grid">
+    <div class="opt">
+      <div class="head"><span class="badge">A</span><span class="nm">Chat-head + walker</span></div>
+      <div class="best"><b>Closest to Messenger.</b> Familiar ball → focused one-dhikr counter panel. Drag enabled here.</div>
+      <div class="phone"><div class="screen" id="scrA"></div></div>
+    </div>
+    <div class="opt">
+      <div class="head"><span class="badge">B</span><span class="nm">Radial hub</span></div>
+      <div class="best"><b>Bubble as a launcher.</b> Tap fans out Day / Night / Tasbih / Dua — one bubble, many shortcuts.</div>
+      <div class="phone"><div class="screen" id="scrB"></div></div>
+    </div>
+    <div class="opt">
+      <div class="head"><span class="badge">C</span><span class="nm">Edge peek drawer</span></div>
+      <div class="best"><b>Docks to the edge.</b> A slim tab → slides out the whole set as a list; tap a row to count it.</div>
+      <div class="phone"><div class="screen" id="scrC"></div></div>
+    </div>
+    <div class="opt">
+      <div class="head"><span class="badge">D</span><span class="nm">Glanceable mini-pill</span></div>
+      <div class="best"><b>Readable at rest.</b> Shows the current dhikr + count without tapping; tap to expand the walker.</div>
+      <div class="phone"><div class="screen" id="scrD"></div></div>
+    </div>
+    <div class="opt">
+      <div class="head"><span class="badge">E</span><span class="nm">Floating swipe-cards</span></div>
+      <div class="best"><b>Story-like.</b> Swipe one dhikr per card; the floating cousin of the stored Stories feature.</div>
+      <div class="phone"><div class="screen" id="scrE"></div></div>
+    </div>
+  </div>
+
+  <div class="pickbar">
+    <h4>How they differ — to help you pick</h4>
+    <table>
+      <tr><td class="k">A</td><td><b>Most familiar / least surprising.</b> Best if you want “the Messenger bubble, but athkar.” One dhikr at a time, big counter.</td></tr>
+      <tr><td class="k">B</td><td><b>Most versatile.</b> Best if the bubble should be a hub for several quick actions, not only athkar.</td></tr>
+      <tr><td class="k">C</td><td><b>Best overview.</b> See the whole set at once; least “game-y”, most utilitarian. Good for fast tap-through.</td></tr>
+      <tr><td class="k">D</td><td><b>Most informative at rest.</b> You read/advance the dhikr without even opening it. Slightly larger footprint.</td></tr>
+      <tr><td class="k">E</td><td><b>Most beautiful / immersive.</b> Matches the Stories feel; great for focus, less for speed.</td></tr>
+    </table>
+    <p class="foot-note">Tell me a letter (or mix — e.g. “A’s bubble + C’s list”), and I’ll lock the design and write the spec.</p>
+  </div>
+</div>
+
+<script>
+const STR={
+ en:{morning:"Morning Athkar",evening:"Evening Athkar",day:"Day",night:"Night",active:"now · after Fajr",later:"later",
+     of:(a,b)=>`${a}/${b}`,x:"×",tap:"tap",today:"Today",open:"Open full",done:"done",
+     tasbih:"Tasbih",dua:"Dua",close:"Close"},
+ ar:{morning:"أذكار الصباح",evening:"أذكار المساء",day:"الصباح",night:"المساء",active:"الآن · بعد الفجر",later:"لاحقًا",
+     of:(a,b)=>`${a}/${b}`,x:"×",tap:"اضغط",today:"اليوم",open:"فتح الكل",done:"تمّ",
+     tasbih:"المسبحة",dua:"الدعاء",close:"إغلاق"}
+};
+const SESS={
+ morning:{g:"☀︎",cls:"morn",items:[
+   {ar:"اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ",c:1,ref:"Al-Baqarah 255"},
+   {ar:"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ",c:1,ref:"Muslim"},
+   {ar:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",c:100,ref:"Al-Bukhari & Muslim"},
+   {ar:"بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ",c:3,ref:"Abu Dawud"},
+   {ar:"حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ",c:7,ref:"Abu Dawud"}
+ ]},
+ evening:{g:"☾",cls:"eve",items:[
+   {ar:"اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ",c:1,ref:"Al-Baqarah 255"},
+   {ar:"أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ",c:1,ref:"Muslim"},
+   {ar:"أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",c:3,ref:"Muslim"},
+   {ar:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",c:100,ref:"Al-Bukhari & Muslim"},
+   {ar:"اللَّهُمَّ بِكَ أَمْسَيْنَا وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا وَبِكَ نَمُوتُ",c:1,ref:"At-Tirmidhi"}
+ ]}
+};
+let session="morning", theme="light", lang="en";
+const ST={}; // per-variant {session, idx, remaining[], open, fan}
+const KEYS=["A","B","C","D","E"];
+function initAll(){ KEYS.forEach(k=>{ ST[k]={session, idx:0, remaining:SESS[session].items.map(i=>i.c),
+  open:(k==='A'||k==='C'||k==='E'), fan:(k==='B')}; }); }
+function doneN(k){ return ST[k].remaining.filter(r=>r<=0).length; }
+function frac(k){ return doneN(k)/SESS[ST[k].session].items.length; }
+
+function bg(){ return `<div class="bgapp"><div class="bgc"><div class="b">7:14</div><div class="d">Wed, Jun 24</div></div>
+   <div class="bgrid"><div class="s">💬</div><div class="s">📷</div><div class="s">🗺️</div><div class="s">🎵</div></div></div>`; }
+
+/* shared walker panel html for A,B,D */
+function walker(k){
+  const t=STR[lang], s=SESS[ST[k].session], it=s.items[ST[k].idx], rem=ST[k].remaining[ST[k].idx];
+  const dp=Math.round((it.c-rem)/it.c*100), act=ST[k].session==='morning';
+  return `<div class="ph ${s.cls==='eve'?'eve':''}">
+      <div class="av">${s.g}</div>
+      <div class="tt"><div class="t">${ST[k].session==='morning'?t.morning:t.evening}</div>
+        <div class="s">${act?`<span class="liv"></span>${t.active}`:t.later}</div></div>
+      <div class="xx" onclick="closeP('${k}',event)">–</div></div>
+    <div class="swc"><div class="w ${ST[k].session==='morning'?'on':''}" onclick="setVarSession('${k}','morning',event)">☀︎ ${t.day}</div>
+      <div class="w ${ST[k].session==='evening'?'on':''}" onclick="setVarSession('${k}','evening',event)">☾ ${t.night}</div></div>
+    <div class="dots">${s.items.map((x,i)=>`<div class="dt ${ST[k].remaining[i]<=0?'done':(i===ST[k].idx?'cur':'')}"></div>`).join('')}</div>
+    <div class="pbody"><div class="aar">${it.ar}</div><div class="aref">${it.ref} · ${t.of(ST[k].idx+1,s.items.length)}</div>
+      <div class="walk"><div class="ar2" onclick="step('${k}',-1,event)">‹</div>
+        <div class="dial ${rem<=0?'cmp':''}" style="--dp:${dp}%" onclick="count('${k}',event)">
+          <div class="dr"></div><div class="di">${rem<=0?`<div class="n">✓</div>`:`<div class="n">${rem}</div><div class="x">${t.x}${it.c}</div><div class="tp">${t.tap}</div>`}</div></div>
+        <div class="ar2" onclick="step('${k}',1,event)">›</div></div></div>
+    <div class="pfoot"><div class="st">${t.today} · <b>${doneN(k)}</b>/${s.items.length} ${t.done}</div><div class="fb">${t.open}</div></div>`;
+}
+function bubbleHTML(k,left,top){ const s=SESS[ST[k].session], rem=ST[k].remaining[ST[k].idx];
+  return `<div class="bub" id="bub${k}" style="left:${left}px;top:${top}px;--cp:${Math.round(frac(k)*100)}%" onclick="toggle('${k}',event)">
+    <div class="disc ${s.cls}"><span class="g">${s.g}</span><span class="bdg">${rem<=0?'✓':rem}</span></div></div>`; }
+
+function render(k){
+  const el=document.getElementById('scr'+k); const t=STR[lang], s=SESS[ST[k].session];
+  if(k==='A'){
+    el.innerHTML=bg()+`<div class="scrim ${ST.A.open?'show':''}" onclick="closeP('A',event)"></div><div class="layer">
+      ${bubbleHTML('A',228,230)}
+      <div class="panel" id="panA" style="right:14px;top:120px;display:${ST.A.open?'block':'none'}">${walker('A')}</div></div>`;
+    makeDrag('bubA');
+  }
+  if(k==='B'){
+    const items=[['☀︎',t.day,"morning"],['☾',t.night,"evening"],['📿',t.tasbih,"tasbih"],['🤲',t.dua,"dua"]];
+    const fan = ST.B.fan? `<div class="fan" style="right:30px;bottom:90px">`+
+      items.map((it,i)=>{const ang=(i*26+8); const r=92; const x=-Math.cos(ang*Math.PI/180)*r; const y=-Math.sin(ang*Math.PI/180)*r;
+        return `<div class="fi" style="right:${ -x }px;bottom:${ y }px;animation-delay:${i*40}ms" onclick="fanPick('${it[2]}',event)">${it[0]}<span class="fl">${it[1]}</span></div>`;}).join('')+`</div>`:'';
+    el.innerHTML=bg()+`<div class="scrim ${ST.B.open?'show':''}" onclick="closeP('B',event)"></div><div class="layer">
+      ${fan}
+      ${bubbleHTML('B',228,250)}
+      <div class="panel" id="panB" style="right:14px;top:90px;display:${ST.B.open?'block':'none'}">${walker('B')}</div></div>`;
+  }
+  if(k==='C'){
+    el.innerHTML=bg()+`<div class="layer">
+      <div class="edgetab" onclick="toggle('C',event)"><span class="g">${s.g}</span></div>
+      <div class="drawer ${ST.C.open?'open':''}">
+        <div class="ph ${s.cls==='eve'?'eve':''}"><div class="av">${s.g}</div>
+          <div class="tt"><div class="t">${ST.C.session==='morning'?t.morning:t.evening}</div><div class="s">${t.of(doneN('C'),s.items.length)} ${t.done}</div></div>
+          <div class="xx" onclick="closeP('C',event)">›</div></div>
+        <div class="swc"><div class="w ${ST.C.session==='morning'?'on':''}" onclick="setVarSession('C','morning',event)">☀︎ ${t.day}</div>
+          <div class="w ${ST.C.session==='evening'?'on':''}" onclick="setVarSession('C','evening',event)">☾ ${t.night}</div></div>
+        <div style="overflow-y:auto">${s.items.map((it,i)=>`<div class="drow ${ST.C.remaining[i]<=0?'done':''}" onclick="countRow('C',${i},event)">
+           <div class="dt2"><div class="da">${it.ar}</div></div>
+           <div class="dc">${ST.C.remaining[i]<=0?'✓':ST.C.remaining[i]}</div></div>`).join('')}</div>
+      </div></div>`;
+  }
+  if(k==='D'){
+    const it=s.items[ST.D.idx], rem=ST.D.remaining[ST.D.idx];
+    el.innerHTML=bg()+`<div class="scrim ${ST.D.open?'show':''}" onclick="closeP('D',event)"></div><div class="layer">
+      <div class="pill" style="right:14px;top:250px;--cp:${Math.round((it.c-rem)/it.c*100)}%" onclick="toggle('D',event)">
+        <div class="pc"><div class="d">${s.g}</div></div>
+        <div class="pi"><div class="pa">${it.ar.length>16?it.ar.slice(0,16)+'…':it.ar}</div><div class="px">${t.x}${it.c} · ${rem<=0?'✓':rem} ${lang==='en'?'left':'باقٍ'}</div></div></div>
+      <div class="panel" id="panD" style="right:14px;top:60px;display:${ST.D.open?'block':'none'}">${walker('D')}</div></div>`;
+  }
+  if(k==='E'){
+    const it=s.items[ST.E.idx], rem=ST.E.remaining[ST.E.idx], dp=Math.round((it.c-rem)/it.c*100);
+    el.innerHTML=bg()+`<div class="scrim ${ST.E.open?'show':''}" onclick="closeP('E',event)"></div><div class="layer">
+      ${ST.E.open?'':bubbleHTML('E',228,250)}
+      <div class="fcard" style="left:25px;right:25px;top:130px;display:${ST.E.open?'block':'none'};width:auto">
+        <div class="fh"><div class="av">${s.g}</div><div class="t">${ST.E.session==='morning'?t.morning:t.evening}</div><div class="xx" onclick="closeP('E',event)">✕</div></div>
+        <div class="fdots">${s.items.map((x,i)=>`<div class="dt ${ST.E.remaining[i]<=0?'done':(i===ST.E.idx?'cur':'')}"></div>`).join('')}</div>
+        <div class="fbody"><div class="ar">${it.ar}</div><div class="rf">${it.ref} · ${t.of(ST.E.idx+1,s.items.length)}</div></div>
+        <div class="ffoot"><div class="ar3" onclick="step('E',-1,event)">‹</div>
+          <div class="cdial ${rem<=0?'cmp':''}" style="--dp:${dp}%" onclick="count('E',event)">
+            <div class="ci">${rem<=0?`<div class="n">✓</div>`:`<div class="n">${rem}</div><div class="x">${t.x}${it.c}</div>`}</div></div>
+          <div class="ar3" onclick="step('E',1,event)">›</div></div></div></div>`;
+  }
+}
+function renderAll(){ KEYS.forEach(render); }
+
+/* interactions */
+function toggle(k,e){ if(e)e.stopPropagation(); ST[k].open=!ST[k].open; if(k==='B'&&ST.B.open)ST.B.fan=false; if(k==='B'&&!ST.B.open)ST.B.fan=true; render(k); }
+function closeP(k,e){ if(e)e.stopPropagation(); ST[k].open=false; if(k==='B')ST.B.fan=true; render(k); }
+function count(k,e){ if(e)e.stopPropagation(); if(ST[k].remaining[ST[k].idx]>0)ST[k].remaining[ST[k].idx]--;
+  render(k); if(ST[k].remaining[ST[k].idx]===0){ setTimeout(()=>{ if(ST[k].idx<SESS[ST[k].session].items.length-1){ST[k].idx++; render(k);} },420); } }
+function countRow(k,i,e){ if(e)e.stopPropagation(); if(ST[k].remaining[i]>0)ST[k].remaining[i]--; render(k); }
+function step(k,d,e){ if(e)e.stopPropagation(); const n=SESS[ST[k].session].items.length; ST[k].idx=Math.max(0,Math.min(n-1,ST[k].idx+d)); render(k); }
+function setVarSession(k,v,e){ if(e)e.stopPropagation(); ST[k].session=v; ST[k].idx=0; ST[k].remaining=SESS[v].items.map(i=>i.c); render(k); }
+function fanPick(which,e){ if(e)e.stopPropagation(); if(which==='morning'||which==='evening'){ ST.B.session=which; ST.B.idx=0; ST.B.remaining=SESS[which].items.map(i=>i.c); ST.B.fan=false; ST.B.open=true; } render('B'); }
+
+/* light drag for A */
+function makeDrag(id){
+  const b=document.getElementById(id); if(!b)return; const sc=b.closest('.screen');
+  let d=null;
+  b.addEventListener('pointerdown',e=>{ const r=sc.getBoundingClientRect(); d={sx:e.clientX,sy:e.clientY,ox:b.offsetLeft,oy:b.offsetTop,moved:false,r}; b.setPointerCapture(e.pointerId); });
+  b.addEventListener('pointermove',e=>{ if(!d)return; const dx=e.clientX-d.sx,dy=e.clientY-d.sy; if(Math.abs(dx)+Math.abs(dy)>4)d.moved=true; if(!d.moved)return;
+    let nx=Math.max(6,Math.min(d.ox+dx,d.r.width-64)),ny=Math.max(40,Math.min(d.oy+dy,d.r.height-64)); b.style.left=nx+'px';b.style.top=ny+'px'; });
+  b.addEventListener('pointerup',e=>{ if(!d)return; const moved=d.moved; const cx=b.offsetLeft+29; b.style.left=(cx<d.r.width/2?10:d.r.width-68)+'px'; if(!moved){ d=null; toggle('A'); } else d=null; });
+}
+
+/* global toggles */
+function setSession(v){ session=v; document.getElementById('s-m').classList.toggle('on',v==='morning'); document.getElementById('s-e').classList.toggle('on',v==='evening'); initAll(); renderAll(); }
+function setTheme(v){ theme=v; document.documentElement.setAttribute('data-theme',v); document.getElementById('t-l').classList.toggle('on',v==='light'); document.getElementById('t-d').classList.toggle('on',v==='dark'); }
+function setLang(v){ lang=v; document.documentElement.setAttribute('dir',v==='ar'?'rtl':'ltr'); document.getElementById('l-en').classList.toggle('on',v==='en'); document.getElementById('l-ar').classList.toggle('on',v==='ar'); renderAll(); }
+
+initAll(); renderAll();
+</script>
+</body>
+</html>

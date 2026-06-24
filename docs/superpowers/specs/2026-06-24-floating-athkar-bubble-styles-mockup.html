@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Floating Athkar Bubble — pick a style in the app · My Stream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#B8860B; --gold-light:#E9C778; --gold-soft:#d9b24a;
+  --navy-900:#172033; --navy-700:#1F2A44; --navy-500:#2C3A5E;
+  --bg:#FFF8F0; --card:#FFFFFF; --text:#1C1B1F; --text2:#6b6770;
+  --line:rgba(28,27,31,.10); --muted:#cdbfa9; --on-navy:#FFFFFF; --on-navy-dim:rgba(255,255,255,.62);
+  --shadow:0 16px 38px -18px rgba(23,32,51,.40);
+}
+[data-theme="dark"]{
+  --gold:#D4A44C; --gold-light:#E9C778; --gold-soft:#caa24f;
+  --bg:#121212; --card:#1E1E1E; --text:#ECEAE6; --text2:#9a948c;
+  --line:rgba(255,255,255,.10); --muted:#4a443a; --shadow:0 18px 44px -18px rgba(0,0,0,.75);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+html,body{margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#e8eaf0;min-height:100vh;padding:26px 22px 60px;
+  background:radial-gradient(1100px 520px at 12% -8%,#20304f 0,transparent 60%),radial-gradient(900px 480px at 100% 0,#11182a 0,transparent 55%),#0c111d;}
+.wrap{max-width:1180px;margin:0 auto}
+h1.title{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:0 0 2px;display:flex;align-items:center;gap:10px}
+h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 12px var(--gold-light)}
+.sub{color:#9fb0d0;font-size:13.5px;margin:0 0 18px;max-width:880px;line-height:1.55}
+.sub code{background:#161d2e;border:1px solid #273350;border-radius:5px;padding:1px 6px;font-size:12px;color:#cdd6ea}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:22px}
+.seg{display:inline-flex;background:#161d2e;border:1px solid #273350;border-radius:12px;padding:4px;gap:3px}
+.seg button{font:inherit;font-size:12.5px;font-weight:600;color:#9fb0d0;background:transparent;border:0;padding:7px 13px;border-radius:9px;cursor:pointer;transition:.15s}
+.seg button.on{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1305;box-shadow:0 4px 14px -6px var(--gold)}
+.seg .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#5f6f8e;padding:0 8px 0 4px;align-self:center;font-weight:700}
+.hint{color:#7e8db0;font-size:12px;margin-left:auto}.hint b{color:#cdd6ea}
+
+.stage{display:flex;gap:34px;align-items:flex-start;flex-wrap:wrap}
+.phone-col{display:flex;flex-direction:column;align-items:center;gap:11px}
+.phone-cap{font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#7e8db0}
+.phone{width:322px;height:700px;border-radius:42px;background:#05070c;padding:10px;flex:none;position:relative;
+  box-shadow:0 36px 84px -30px rgba(0,0,0,.85),0 0 0 2px #1c2335,inset 0 0 0 2px #000;}
+.screen{width:100%;height:100%;border-radius:33px;overflow:hidden;position:relative;background:var(--bg)}
+.notch{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:104px;height:24px;background:#05070c;border-radius:0 0 15px 15px;z-index:60}
+
+/* ===== SETTINGS screen ===== */
+.set{position:absolute;inset:0;display:flex;flex-direction:column;color:var(--text)}
+.set-hero{background:linear-gradient(150deg,var(--navy-700),var(--navy-900));color:var(--on-navy);padding:20px 18px 18px;position:relative;overflow:hidden}
+.set-hero:before{content:"";position:absolute;inset:0;background:radial-gradient(220px 120px at 88% -10%,rgba(212,164,76,.28),transparent 70%)}
+.set-hero .nav{display:flex;align-items:center;gap:12px;position:relative}
+.set-hero .nav .bk{font-size:20px}
+.set-hero .nav .t{font-size:16px;font-weight:800}
+.set-hero .h2{font-size:20px;font-weight:800;margin-top:14px;letter-spacing:-.01em;position:relative}
+.set-hero .h2 .em{font-size:22px;margin-right:6px}
+.set-hero .p{font-size:11.5px;color:var(--on-navy-dim);margin-top:4px;position:relative;line-height:1.4}
+.set-body{flex:1;overflow-y:auto;padding:14px 14px 24px}
+.set-body::-webkit-scrollbar{width:0}
+.scard{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}
+.srow{display:flex;align-items:center;gap:12px;padding:14px 15px}
+.srow+.srow{border-top:1px solid var(--line)}
+.srow .ic{width:38px;height:38px;border-radius:11px;background:rgba(184,134,11,.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.srow .tx{flex:1;min-width:0}.srow .tx .t{font-size:13.5px;font-weight:700;color:var(--text)}.srow .tx .s{font-size:11px;color:var(--text2);margin-top:1px}
+.sw{width:46px;height:27px;border-radius:14px;background:var(--muted);position:relative;flex:none;cursor:pointer;transition:.2s}
+.sw.on{background:linear-gradient(135deg,var(--gold),var(--gold-soft))}
+.sw .k{position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sw.on .k{left:22px}
+.chk{font-size:12px;font-weight:800;color:#3a9d6b;display:flex;align-items:center;gap:4px}
+.go{font-size:11px;font-weight:800;color:var(--gold)}
+.sect{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--text2);padding:4px 6px 8px}
+
+/* style option cards */
+.opts{display:flex;flex-direction:column;gap:10px}
+.ocard{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1.5px solid var(--line);border-radius:14px;background:var(--card);cursor:pointer;transition:.15s}
+.ocard.on{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,134,11,.14)}
+.thumb{width:54px;height:72px;border-radius:10px;background:linear-gradient(160deg,#3a4f7a,#243a63);position:relative;flex:none;overflow:hidden;border:1px solid rgba(0,0,0,.15)}
+/* thumb illustrations */
+.th-ball{position:absolute;right:7px;top:30px;width:18px;height:18px;border-radius:50%;background:var(--navy-900);border:2px solid var(--gold)}
+.th-panel{position:absolute;left:6px;bottom:6px;width:30px;height:26px;border-radius:6px;background:var(--bg)}
+.th-tab{position:absolute;right:0;top:28px;width:6px;height:18px;border-radius:4px 0 0 4px;background:var(--gold)}
+.th-draw{position:absolute;right:0;top:0;bottom:0;width:30px;background:var(--bg);border-left:2px solid var(--gold)}
+.th-draw i{display:block;height:6px;margin:7px 5px 0;border-radius:3px;background:var(--muted)}
+.th-pill{position:absolute;right:5px;top:30px;width:42px;height:16px;border-radius:9px;background:var(--bg);border:1px solid var(--gold)}
+.th-pill:before{content:"";position:absolute;left:2px;top:2px;width:11px;height:11px;border-radius:50%;background:var(--navy-900);border:1.5px solid var(--gold)}
+.ocard .od{flex:1;min-width:0}.ocard .od .t{font-size:13.5px;font-weight:800;color:var(--text)}.ocard .od .s{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4}
+.radio{width:22px;height:22px;border-radius:50%;border:2px solid var(--muted);flex:none;display:flex;align-items:center;justify-content:center}
+.ocard.on .radio{border-color:var(--gold)}
+.ocard.on .radio:after{content:"";width:11px;height:11px;border-radius:50%;background:var(--gold)}
+.segrow{display:flex;gap:6px;padding:12px 13px}
+.segrow .sg{flex:1;text-align:center;font-size:11.5px;font-weight:700;padding:8px;border-radius:10px;border:1px solid var(--line);color:var(--text2);background:var(--bg);cursor:pointer}
+.segrow .sg.on{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1305;border-color:transparent}
+.foot{font-size:10.5px;color:var(--text2);padding:2px 8px;line-height:1.5}
+
+/* ===== PREVIEW screen ===== */
+.bgapp{position:absolute;inset:0;background:linear-gradient(160deg,#3a4f7a,#243a63 38%,#5a4a6e);overflow:hidden}
+.bgapp:before{content:"";position:absolute;inset:0;background:radial-gradient(420px 300px at 78% 12%,rgba(255,255,255,.12),transparent 60%)}
+.bg-status{display:flex;justify-content:space-between;padding:13px 22px 0;font-size:12px;font-weight:700;color:#fff;opacity:.9}
+.bg-clock{text-align:center;color:#fff;margin-top:28px}
+.bg-clock .big{font-size:56px;font-weight:300;line-height:1}.bg-clock .day{font-size:12px;opacity:.85;margin-top:6px}
+.bg-grid{position:absolute;left:0;right:0;bottom:88px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px 12px;padding:0 24px}
+.bg-ic .sq{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(255,255,255,.16)}
+.bg-ic{display:flex;flex-direction:column;align-items:center;gap:5px}.bg-ic .nm{font-size:9px;color:#fff;opacity:.85}
+.bg-dock{position:absolute;left:13px;right:13px;bottom:18px;height:66px;border-radius:24px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:space-around;padding:0 8px}
+.bg-dock .sq{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:21px;background:rgba(255,255,255,.2)}
+.scrim{position:absolute;inset:0;background:rgba(8,11,20,.5);opacity:0;pointer-events:none;transition:.25s;z-index:30}
+.scrim.show{opacity:1;pointer-events:auto}
+.layer{position:absolute;inset:0;z-index:40}
+.tryhint{position:absolute;left:0;right:0;bottom:96px;text-align:center;font-size:11px;color:#fff;opacity:.7;z-index:35;pointer-events:none}
+
+/* ball / pill / drawer / walker (shared with the option styles) */
+.ball{position:absolute;width:58px;height:58px;border-radius:50%;cursor:grab;z-index:45;touch-action:none;padding:3px;background:conic-gradient(var(--gold) var(--cp,0%),rgba(255,255,255,.28) 0);box-shadow:0 9px 24px -8px rgba(0,0,0,.6),0 0 0 1px rgba(212,164,76,.3)}
+.ball .disc{width:100%;height:100%;border-radius:50%;background:linear-gradient(155deg,var(--navy-500),var(--navy-900));display:flex;align-items:center;justify-content:center;position:relative;border:2.5px solid rgba(255,255,255,.12)}
+.ball .disc .g{font-size:24px}.ball .disc.morn .g{color:#ffd97a}.ball .disc.eve .g{color:#cdd9ff}
+.ball .bdg{position:absolute;top:-3px;right:-3px;min-width:21px;height:21px;padding:0 5px;border-radius:11px;background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#1a1305;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--card)}
+.dismiss{position:absolute;left:50%;bottom:28px;transform:translate(-50%,40px);width:56px;height:56px;border-radius:50%;background:rgba(20,26,40,.55);border:1.5px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;opacity:0;transition:.2s;z-index:41}
+.dismiss.show{opacity:1;transform:translate(-50%,0)}.dismiss.armed{background:#d65a5a;width:68px;height:68px}
+
+.panel{position:absolute;width:256px;background:var(--bg);border-radius:22px;overflow:hidden;box-shadow:var(--shadow),0 0 0 1px var(--line);z-index:44}
+.ph{display:flex;align-items:center;gap:10px;padding:12px;color:var(--on-navy);background:linear-gradient(150deg,var(--navy-700),var(--navy-900))}
+.ph.eve{background:linear-gradient(150deg,#27355a,#101a30)}
+.ph .av{width:36px;height:36px;border-radius:50%;background:var(--navy-500);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none}
+.ph .tt{flex:1;min-width:0}.ph .tt .t{font-size:13.5px;font-weight:800}.ph .tt .s{font-size:10.5px;color:var(--on-navy-dim);display:flex;align-items:center;gap:5px}
+.ph .tt .s .liv{width:5px;height:5px;border-radius:50%;background:#5fd29a}
+.ph .xx{width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;cursor:pointer}
+.dots{display:flex;gap:3px;padding:8px 12px 2px}.dots .dt{flex:1;height:3px;border-radius:3px;background:var(--muted)}.dots .dt.done{background:var(--gold)}.dots .dt.cur{background:var(--gold-soft)}
+.pbody{padding:6px 14px 12px;display:flex;flex-direction:column;align-items:center}
+.aar{font-family:'Amiri',serif;font-size:18px;line-height:1.85;color:var(--text);direction:rtl;text-align:center;max-height:92px;overflow-y:auto;width:100%}.aar::-webkit-scrollbar{width:0}
+.aref{font-size:10px;color:var(--text2);margin-top:6px}
+.walk{display:flex;align-items:center;gap:12px;margin-top:10px}
+.ar2{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--text2);font-size:17px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.dial{width:110px;height:110px;border-radius:50%;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center}.dial:active{transform:scale(.96)}
+.dial .dr{position:absolute;inset:0;border-radius:50%;background:conic-gradient(var(--gold) var(--dp,0%),var(--muted) 0)}
+.dial .di{position:absolute;inset:6px;border-radius:50%;background:linear-gradient(155deg,var(--card),var(--bg));border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dial .di .n{font-size:34px;font-weight:800;color:var(--text);line-height:1}.dial .di .x{font-size:10px;color:var(--text2);font-weight:700}.dial .di .tp{font-size:8px;color:var(--gold);font-weight:800;margin-top:2px;text-transform:uppercase}
+.dial.cmp .di{background:linear-gradient(155deg,#2f6e4f,#1c4c34)}.dial.cmp .di .n{color:#fff}.dial.cmp .di .x,.dial.cmp .di .tp{color:rgba(255,255,255,.7)}
+.pfoot{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-top:1px solid var(--line);background:var(--card)}.pfoot .st{font-size:10.5px;color:var(--text2)}.pfoot .st b{color:var(--gold);font-weight:800;font-size:13px}.pfoot .fb{font-size:10px;font-weight:700;color:var(--text2);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:5px 9px}
+[dir="rtl"] .walk{flex-direction:row-reverse}[dir="rtl"] .ph .tt{text-align:right}
+
+.pill{position:absolute;height:54px;width:240px;border-radius:27px;background:var(--bg);box-shadow:var(--shadow),0 0 0 1px var(--line);display:flex;align-items:center;gap:9px;padding:5px 6px 5px 5px;z-index:45}
+.pill .pc{width:44px;height:44px;border-radius:50%;padding:2.5px;background:conic-gradient(var(--gold) var(--cp,0%),var(--muted) 0);flex:none;cursor:pointer}
+.pill .pc .d{width:100%;height:100%;border-radius:50%;background:linear-gradient(155deg,var(--navy-500),var(--navy-900));display:flex;align-items:center;justify-content:center;font-size:18px}.pill .pc .d.morn{color:#ffd97a}.pill .pc .d.eve{color:#cdd9ff}
+.pill .pbody2{flex:1;min-width:0;cursor:pointer}
+.pill .pa{font-family:'Amiri',serif;font-size:15px;direction:rtl;color:var(--text);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill .px{font-size:10px;color:var(--text2);font-weight:700;margin-top:1px}.pill .px .tg{color:var(--gold)}
+.pill .pcount{width:38px;height:38px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-weight:800;color:#1a1305;background:linear-gradient(135deg,var(--gold-light),var(--gold));cursor:pointer;font-size:15px}
+.pill .pcount.cmp{background:linear-gradient(135deg,#46b07e,#2f6e4f);color:#fff}
+.pill .plist{width:36px;height:36px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text2);background:var(--card);border:1px solid var(--line);cursor:pointer}
+
+.drawer{position:absolute;top:0;bottom:0;width:236px;background:var(--bg);z-index:44;box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .26s cubic-bezier(.2,.8,.2,1)}
+.drawer.right{right:0;transform:translateX(100%)}.drawer.right.open{transform:translateX(0)}
+.drawer.left{left:0;transform:translateX(-100%)}.drawer.left.open{transform:translateX(0)}
+.dh{display:flex;align-items:center;gap:10px;padding:13px 12px;color:var(--on-navy);background:linear-gradient(150deg,var(--navy-700),var(--navy-900))}.dh.eve{background:linear-gradient(150deg,#27355a,#101a30)}
+.dh .av{width:34px;height:34px;border-radius:50%;background:var(--navy-500);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+.dh .tt{flex:1;min-width:0}.dh .tt .t{font-size:13px;font-weight:800}.dh .tt .s{font-size:10px;color:var(--on-navy-dim)}
+.dh .bk{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;cursor:pointer}
+.dsw{display:flex;gap:5px;padding:9px 12px 3px}.dsw .w{flex:1;text-align:center;font-size:11px;font-weight:700;padding:6px;border-radius:9px;border:1px solid var(--line);color:var(--text2);background:var(--card);cursor:pointer}.dsw .w.on{background:linear-gradient(135deg,var(--gold),var(--gold-soft));color:#1a1305;border-color:transparent}
+.dlist{flex:1;overflow-y:auto;padding:4px 0}
+.drow{display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer;border-bottom:1px solid var(--line)}.drow.cur{background:linear-gradient(135deg,rgba(212,164,76,.14),rgba(212,164,76,.04))}
+.drow .dn{width:22px;height:22px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--text2);flex:none}.drow.cur .dn{background:var(--gold);color:#1a1305;border-color:transparent}
+.drow .da{flex:1;min-width:0;font-family:'Amiri',serif;font-size:15px;direction:rtl;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drow .dc{min-width:34px;height:28px;padding:0 8px;border-radius:14px;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--gold);flex:none}.drow.done .dc{background:#3a9d6b;color:#fff;border-color:transparent}
+
+.notes{flex:1;min-width:300px;max-width:400px;color:#cdd6ea}
+.note-card{background:#121a2b;border:1px solid #243150;border-radius:16px;padding:16px 18px;margin-bottom:14px}
+.note-card h4{margin:0 0 10px;font-size:13.5px;color:#fff;font-weight:800;display:flex;align-items:center;gap:8px}.note-card h4 .b{width:7px;height:7px;border-radius:50%;background:var(--gold-light)}
+.note-card ul{margin:0;padding-left:17px;font-size:12.8px;line-height:1.7;color:#aebbd6}.note-card ul li{margin-bottom:5px}.note-card ul li b{color:#e6ecf9}
+.kbd{font-family:monospace;font-size:11px;background:#1c2740;border:1px solid #2c3a5e;border-radius:5px;padding:1px 6px;color:#cdd6ea}.warn{color:#e7b66a}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="title"><span class="dot"></span>Floating Athkar Bubble — the user picks a style</h1>
+  <p class="sub">The app ships <b>three styles</b>; each person chooses one in <b>Settings</b>. Left phone = the in-app style picker. Right phone = a live preview of the selected style floating over another app. Tap a style on the left → the preview updates. Tap the preview bubble to try it. <span style="color:#cdd6ea">Toggle theme / language / Day-Night for both.</span></p>
+
+  <div class="controls">
+    <div class="seg"><span class="lbl">Preview session</span>
+      <button id="s-m" class="on" onclick="setSession('morning')">☀︎ Day</button>
+      <button id="s-e" onclick="setSession('evening')">☾ Night</button>
+    </div>
+    <div class="seg"><span class="lbl">Theme</span>
+      <button id="t-l" class="on" onclick="setTheme('light')">☀︎ Light</button>
+      <button id="t-d" onclick="setTheme('dark')">☾ Dark</button>
+    </div>
+    <div class="seg"><span class="lbl">Lang</span>
+      <button id="l-en" class="on" onclick="setLang('en')">EN</button>
+      <button id="l-ar" onclick="setLang('ar')">عربي</button>
+    </div>
+    <div class="hint"><b>Tip:</b> tap the option cards on the left.</div>
+  </div>
+
+  <div class="stage">
+    <div class="phone-col">
+      <div class="phone-cap">In-app · Settings → Floating bubble</div>
+      <div class="phone"><div class="notch"></div><div class="screen"><div class="set" id="setScreen"></div></div></div>
+    </div>
+    <div class="phone-col">
+      <div class="phone-cap">Live preview · over any app</div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="bgapp">
+          <div class="bg-status"><span>7:14</span><span>📶 🔋</span></div>
+          <div class="bg-clock"><div class="big">7:14</div><div class="day">Wednesday, June 24</div></div>
+          <div class="bg-grid"><div class="bg-ic"><div class="sq">💬</div><div class="nm">Chat</div></div><div class="bg-ic"><div class="sq">📷</div><div class="nm">Photos</div></div><div class="bg-ic"><div class="sq">🗺️</div><div class="nm">Maps</div></div><div class="bg-ic"><div class="sq">🎵</div><div class="nm">Music</div></div></div>
+          <div class="bg-dock"><div class="sq">📞</div><div class="sq">💬</div><div class="sq">🌐</div><div class="sq">📷</div></div>
+        </div>
+        <div class="tryhint" id="tryhint">tap the bubble ↑</div>
+        <div class="scrim" id="scrim" onclick="closeP()"></div>
+        <div class="layer" id="layer"></div>
+      </div></div>
+    </div>
+
+    <div class="notes">
+      <div class="note-card">
+        <h4><span class="b"></span>What this is</h4>
+        <ul>
+          <li>One feature, <b>three interchangeable styles</b>: <b>A Chat-head</b>, <b>C Edge drawer</b>, <b>D Mini-pill</b>.</li>
+          <li>Chosen in <span class="kbd">AthanSettingsActivity</span> (a new “Floating bubble” section), persisted in <span class="kbd">SharedPreferences</span> (e.g. <span class="kbd">bubble_style</span>).</li>
+          <li>The floating overlay reads that pref and renders the chosen style — same content + counters either way.</li>
+        </ul>
+      </div>
+      <div class="note-card">
+        <h4><span class="b"></span>Build reality (from the scan)</h4>
+        <ul>
+          <li>✅ <span class="kbd">SYSTEM_ALERT_WINDOW</span> + overlay-grant UX already exist (this picker lives right beside it).</li>
+          <li>✅ FGS template <span class="kbd">AthanPlaybackService</span>; content/counters from <span class="kbd">AthkarActivity</span> + <span class="kbd">TasbihActivity</span>.</li>
+          <li>🆕 New: the <span class="kbd">WindowManager</span> overlay with 3 swappable layouts.</li>
+          <li class="warn">⚠︎ FGS = persistent notification + Play “special use” justification.</li>
+        </ul>
+      </div>
+      <div class="note-card">
+        <h4><span class="b"></span>Last calls before the spec</h4>
+        <ul>
+          <li><b>Show during</b> Day/Night windows, or always-on? (toggle shown in the picker)</li>
+          <li><b>Drag-to-✕</b> = hide till next window, or disable?</li>
+          <li>Shared daily “done” with the Stories feature? (recommend yes)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const STR={
+ en:{title:"Floating Athkar Bubble",hero:"Floating Bubble",heroP:"A draggable bubble that floats over other apps for your day & night athkar.",
+     show:"Show floating bubble",showS:"Off until you enable it",perm:"Draw over other apps",granted:"Granted",style:"Bubble style",
+     showDuring:"Show during",windows:"Day & Night windows",always:"Always on",morning:"Morning Athkar",evening:"Evening Athkar",day:"Day",night:"Night",
+     active:"now · after Fajr",later:"later",of:(a,b)=>`${a}/${b}`,x:"×",left:"left",tap:"tap",today:"Today",open:"Open full",done:"done",min:"Minimize",
+     aName:"Chat-head",aDesc:"A round bubble → focused one-dhikr counter. The Messenger feel.",
+     cName:"Edge drawer",cDesc:"A slim edge tab → the whole set as a tappable list.",
+     dName:"Mini-pill",dDesc:"A small bar that shows the current dhikr at rest; tap to expand.",
+     footp:"While on, a quiet ongoing notification keeps the bubble alive."},
+ ar:{title:"فقاعة الأذكار العائمة",hero:"الفقاعة العائمة",heroP:"فقاعة عائمة فوق التطبيقات الأخرى لأذكار الصباح والمساء.",
+     show:"إظهار الفقاعة العائمة",showS:"متوقفة حتى تفعّلها",perm:"العرض فوق التطبيقات",granted:"مُفعّل",style:"شكل الفقاعة",
+     showDuring:"الظهور خلال",windows:"أوقات الصباح والمساء",always:"دائمًا",morning:"أذكار الصباح",evening:"أذكار المساء",day:"الصباح",night:"المساء",
+     active:"الآن · بعد الفجر",later:"لاحقًا",of:(a,b)=>`${a}/${b}`,x:"×",left:"باقٍ",tap:"اضغط",today:"اليوم",open:"فتح الكل",done:"تمّ",min:"تصغير",
+     aName:"الفقاعة",aDesc:"فقاعة دائرية ← عدّاد ذكر واحد. شكل المسنجر.",
+     cName:"الدُّرج الجانبي",cDesc:"لسان على الحافة ← المجموعة كاملة كقائمة قابلة للنقر.",
+     dName:"الشريط الصغير",dDesc:"شريط صغير يعرض الذكر الحالي؛ اضغط للتوسيع.",
+     footp:"أثناء التشغيل، إشعار خفيف دائم يُبقي الفقاعة عاملة."}
+};
+const SESS={
+ morning:{g:"☀︎",cls:"morn",items:[
+   {ar:"اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ",c:1,ref:"Al-Baqarah 255"},
+   {ar:"أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ",c:1,ref:"Muslim"},
+   {ar:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",c:100,ref:"Al-Bukhari & Muslim"},
+   {ar:"بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ",c:3,ref:"Abu Dawud"},
+   {ar:"حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ، عَلَيْهِ تَوَكَّلْتُ",c:7,ref:"Abu Dawud"}
+ ]},
+ evening:{g:"☾",cls:"eve",items:[
+   {ar:"اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ",c:1,ref:"Al-Baqarah 255"},
+   {ar:"أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ",c:1,ref:"Muslim"},
+   {ar:"أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",c:3,ref:"Muslim"},
+   {ar:"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",c:100,ref:"Al-Bukhari & Muslim"},
+   {ar:"اللَّهُمَّ بِكَ أَمْسَيْنَا وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا وَبِكَ نَمُوتُ",c:1,ref:"At-Tirmidhi"}
+ ]}
+};
+let style="A", session="morning", theme="light", lang="en", showDuring="windows";
+let remaining=SESS.morning.items.map(i=>i.c), pOpen=false, ballY=232, side="right";
+const $=id=>document.getElementById(id);
+
+function items(){return SESS[session].items;}
+function doneN(){return remaining.filter(r=>r<=0).length;}
+function frac(){return doneN()/items().length;}
+function current(){const i=remaining.findIndex(r=>r>0);return i<0?items().length-1:i;}
+
+/* -------- settings -------- */
+function renderSettings(){
+  const t=STR[lang];
+  const opt=(id,name,desc,thumb)=>`<div class="ocard ${style===id?'on':''}" onclick="pickStyle('${id}')">
+     <div class="thumb">${thumb}</div><div class="od"><div class="t">${id} · ${name}</div><div class="s">${desc}</div></div><div class="radio"></div></div>`;
+  $('setScreen').innerHTML=`
+    <div class="set-hero"><div class="nav"><span class="bk">‹</span><span class="t">${t.title}</span></div>
+      <div class="h2"><span class="em">🫧</span>${t.hero}</div><div class="p">${t.heroP}</div></div>
+    <div class="set-body">
+      <div class="scard">
+        <div class="srow"><div class="ic">🫧</div><div class="tx"><div class="t">${t.show}</div><div class="s">${t.showS}</div></div><div class="sw on"><div class="k"></div></div></div>
+        <div class="srow"><div class="ic">🪟</div><div class="tx"><div class="t">${t.perm}</div></div><div class="chk">✓ ${t.granted}</div></div>
+      </div>
+      <div class="sect">${t.style}</div>
+      <div class="opts">
+        ${opt('A',t.aName,t.aDesc,'<div class="th-panel"></div><div class="th-ball"></div>')}
+        ${opt('C',t.cName,t.cDesc,'<div class="th-tab"></div><div class="th-draw"><i></i><i></i><i></i></div>')}
+        ${opt('D',t.dName,t.dDesc,'<div class="th-pill"></div>')}
+      </div>
+      <div class="sect" style="margin-top:10px">${t.showDuring}</div>
+      <div class="scard"><div class="segrow">
+        <div class="sg ${showDuring==='windows'?'on':''}" onclick="setShow('windows')">${t.windows}</div>
+        <div class="sg ${showDuring==='always'?'on':''}" onclick="setShow('always')">${t.always}</div>
+      </div></div>
+      <div class="foot">${t.footp}</div>
+    </div>`;
+}
+function pickStyle(s){ style=s; pOpen=false; renderSettings(); renderPreview(); }
+function setShow(v){ showDuring=v; renderSettings(); }
+
+/* -------- preview -------- */
+function walker(){
+  const t=STR[lang], s=SESS[session], cur=current(), it=items()[cur], rem=remaining[cur], dp=Math.round((it.c-rem)/it.c*100);
+  return `<div class="ph ${s.cls==='eve'?'eve':''}"><div class="av">${s.g}</div>
+      <div class="tt"><div class="t">${session==='morning'?t.morning:t.evening}</div><div class="s">${session==='morning'?`<span class="liv"></span>${t.active}`:t.later}</div></div>
+      <div class="xx" onclick="closeP(event)">–</div></div>
+    <div class="dots">${items().map((x,i)=>`<div class="dt ${remaining[i]<=0?'done':(i===cur?'cur':'')}"></div>`).join('')}</div>
+    <div class="pbody"><div class="aar">${it.ar}</div><div class="aref">${it.ref} · ${t.of(cur+1,items().length)}</div>
+      <div class="walk"><div class="ar2" onclick="stepCur(-1,event)">‹</div>
+        <div class="dial ${rem<=0?'cmp':''}" style="--dp:${dp}%" onclick="countCur(event)"><div class="dr"></div>
+          <div class="di">${rem<=0?`<div class="n">✓</div>`:`<div class="n">${rem}</div><div class="x">${t.x}${it.c}</div><div class="tp">${t.tap}</div>`}</div></div>
+        <div class="ar2" onclick="stepCur(1,event)">›</div></div></div>
+    <div class="pfoot"><div class="st">${t.today} · <b>${doneN()}</b>/${items().length} ${t.done}</div><div class="fb">${t.open}</div></div>`;
+}
+function renderPreview(){
+  const t=STR[lang], s=SESS[session], cur=current(), it=items()[cur], rem=remaining[cur];
+  const layer=$('layer'); $('scrim').classList.toggle('show', pOpen && style!=='D'? (style==='C'):false);
+  $('scrim').classList.toggle('show', pOpen);
+  $('tryhint').style.display = pOpen?'none':'block';
+  let html=`<div class="dismiss" id="dismiss">✕</div>`;
+  if(style==='A'){
+    html+=`<div class="ball" id="ball" style="${side}:14px;top:${ballY}px;--cp:${Math.round(frac()*100)}%"><div class="disc ${s.cls}"><span class="g">${s.g}</span><span class="bdg">${rem<=0?'✓':rem}</span></div></div>`;
+    if(pOpen) html+=`<div class="panel" style="${side}:12px;top:96px">${walker()}</div>`;
+  } else if(style==='D'){
+    const dp=Math.round((it.c-rem)/it.c*100);
+    html+=`<div class="pill" style="${side}:12px;top:${ballY}px;--cp:${Math.round(frac()*100)}%">
+        <div class="pc" onclick="toggleP(event)"><div class="d ${s.cls}">${s.g}</div></div>
+        <div class="pbody2" onclick="countCur(event)"><div class="pa">${it.ar}</div><div class="px"><span class="tg">${t.x}${it.c}</span> · ${rem<=0?'✓':rem+' '+t.left} · ${t.of(cur+1,items().length)}</div></div>
+        <div class="pcount ${rem<=0?'cmp':''}" onclick="countCur(event)">${rem<=0?'✓':'+'}</div>
+        <div class="plist" onclick="toggleP(event)">▤</div></div>`;
+    if(pOpen) html+=`<div class="panel" style="${side}:12px;top:90px">${walker()}</div>`;
+  } else if(style==='C'){
+    const dside=(lang==='ar')?'left':'right';
+    html+=`<div class="ball" id="ball" style="${dside}:0;top:${ballY}px;width:30px;height:62px;border-radius:16px 0 0 16px;padding:0;background:linear-gradient(155deg,var(--navy-500),var(--navy-900));border:1px solid rgba(212,164,76,.4)"><div class="disc ${s.cls}" style="background:transparent;border:0"><span class="g">${s.g}</span></div></div>`;
+    html+=`<div class="drawer ${dside} ${pOpen?'open':''}">
+        <div class="dh ${s.cls==='eve'?'eve':''}"><div class="av">${s.g}</div><div class="tt"><div class="t">${session==='morning'?t.morning:t.evening}</div><div class="s">${doneN()}/${items().length} ${t.done}</div></div><div class="bk" onclick="closeP(event)">${dside==='right'?'›':'‹'}</div></div>
+        <div class="dsw"><div class="w ${session==='morning'?'on':''}" onclick="setSession('morning')">☀︎ ${t.day}</div><div class="w ${session==='evening'?'on':''}" onclick="setSession('evening')">☾ ${t.night}</div></div>
+        <div class="dlist">${items().map((x,i)=>`<div class="drow ${remaining[i]<=0?'done':''} ${i===cur?'cur':''}" onclick="countRow(${i},event)"><div class="dn">${i+1}</div><div class="da">${x.ar}</div><div class="dc">${remaining[i]<=0?'✓':remaining[i]}</div></div>`).join('')}</div></div>`;
+  }
+  layer.innerHTML=html;
+  if(style==='A') makeDrag();
+}
+function toggleP(e){ if(e)e.stopPropagation(); pOpen=!pOpen; renderPreview(); }
+function closeP(e){ if(e)e.stopPropagation(); pOpen=false; renderPreview(); }
+function countCur(e){ if(e)e.stopPropagation(); const c=current(); if(remaining[c]>0)remaining[c]--; renderPreview(); }
+function countRow(i,e){ if(e)e.stopPropagation(); if(remaining[i]>0)remaining[i]--; renderPreview(); }
+function stepCur(d,e){ if(e)e.stopPropagation(); /* manual move not needed: current()=auto */ renderPreview(); }
+
+function makeDrag(){
+  const b=$('ball'); if(!b)return; const sc=b.closest('.screen'), dm=$('dismiss'); let d=null;
+  b.addEventListener('pointerdown',e=>{const r=sc.getBoundingClientRect();d={sx:e.clientX,sy:e.clientY,ox:b.offsetLeft,oy:b.offsetTop,moved:false,r};b.setPointerCapture(e.pointerId);});
+  b.addEventListener('pointermove',e=>{if(!d)return;const dx=e.clientX-d.sx,dy=e.clientY-d.sy;if(Math.abs(dx)+Math.abs(dy)>5)d.moved=true;if(!d.moved)return;
+    let nx=Math.max(8,Math.min(d.ox+dx,d.r.width-66)),ny=Math.max(42,Math.min(d.oy+dy,d.r.height-66));b.style.left=nx+'px';b.style.top=ny+'px';b.style.right='auto';
+    dm.classList.add('show');const bcx=nx+29,bcy=ny+29,dcx=d.r.width/2,dcy=d.r.height-56;if(Math.hypot(bcx-dcx,bcy-dcy)<74){dm.classList.add('armed');b.style.opacity=.85;}else{dm.classList.remove('armed');b.style.opacity=1;}});
+  b.addEventListener('pointerup',e=>{if(!d)return;b.style.opacity=1;const armed=dm.classList.contains('armed');dm.classList.remove('show','armed');
+    if(!d.moved){d=null;toggleP();return;} if(armed){d=null;renderPreview();return;}
+    const cx=b.offsetLeft+29;side=(cx<d.r.width/2?'left':'right');ballY=b.offsetTop;d=null;renderPreview();});
+}
+
+function setSession(v){session=v;remaining=SESS[v].items.map(i=>i.c);$('s-m').classList.toggle('on',v==='morning');$('s-e').classList.toggle('on',v==='evening');renderSettings();renderPreview();}
+function setTheme(v){theme=v;document.documentElement.setAttribute('data-theme',v);$('t-l').classList.toggle('on',v==='light');$('t-d').classList.toggle('on',v==='dark');}
+function setLang(v){lang=v;document.documentElement.setAttribute('dir',v==='ar'?'rtl':'ltr');$('l-en').classList.toggle('on',v==='en');$('l-ar').classList.toggle('on',v==='ar');renderSettings();renderPreview();}
+
+renderSettings(); renderPreview();
+</script>
+</body>
+</html>
