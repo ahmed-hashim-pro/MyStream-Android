@@ -19,8 +19,8 @@
         android:clipToPadding="false"
         android:paddingBottom="24dp">
 
-        <!-- settings_section_bubble already has its own "Floating Athkar Bubble" title
-             as its first child; the toolbar title above is the only screen header. -->
+        <!-- The toolbar above is the sole screen header; settings_section_bubble's own
+             in-section title was removed so it isn't shown twice. -->
         <include layout="@layout/settings_section_bubble" />
 
     </androidx.core.widget.NestedScrollView>
