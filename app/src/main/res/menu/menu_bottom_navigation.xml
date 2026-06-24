@@ -4,22 +4,22 @@
 
     <item
         android:id="@id/nav_home"
-        android:icon="@drawable/ic_home_24"
-        android:title="@string/menu_home" />
+        android:icon="@drawable/ic_nav_home"
+        android:title="@string/nav_label_home" />
     <item
         android:id="@id/nav_quran"
-        android:icon="@drawable/holyquran"
-        android:title="@string/HolyQuran" />
+        android:icon="@drawable/ic_nav_quran"
+        android:title="@string/nav_label_quran" />
     <item
         android:id="@id/nav_radio"
-        android:icon="@drawable/outline_radio_24"
-        android:title="@string/Radio" />
+        android:icon="@drawable/ic_nav_radio"
+        android:title="@string/nav_label_radio" />
     <item
         android:id="@+id/nav_mushaf"
-        android:icon="@drawable/ramadan_quran_24px"
-        android:title="@string/TheHolyQuran" />
+        android:icon="@drawable/ic_nav_mushaf"
+        android:title="@string/nav_label_mushaf" />
     <item
         android:id="@id/nav_more"
-        android:icon="@drawable/outline_category_24"
-        android:title="@string/OtherCategories" />
+        android:icon="@drawable/ic_nav_more"
+        android:title="@string/nav_label_more" />
 </menu>

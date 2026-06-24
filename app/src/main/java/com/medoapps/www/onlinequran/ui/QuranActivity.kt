@@ -328,6 +328,12 @@ class QuranActivity : AppCompatActivity(),
     val i = Intent(this, PagerActivity::class.java)
     i.putExtra("page", page)
     i.putExtra(PagerActivity.EXTRA_JUMP_TO_TRANSLATION, settings.wasShowingTranslation)
+    // Forward the Home "read + listen" auto-play flag ONCE: consume it from this
+    // long-lived index activity so a later sura/juz tap doesn't re-trigger playback.
+    if (intent.getBooleanExtra(PagerActivity.EXTRA_AUTO_PLAY, false)) {
+      i.putExtra(PagerActivity.EXTRA_AUTO_PLAY, true)
+      intent.removeExtra(PagerActivity.EXTRA_AUTO_PLAY)
+    }
     startActivity(i)
   }
 

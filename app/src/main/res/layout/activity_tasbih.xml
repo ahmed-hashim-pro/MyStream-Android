@@ -329,7 +329,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="الإجمالي: 0"
+            android:text="@string/tasbih_total"
             android:textColor="@color/text_secondary"
             android:textSize="14sp" />
 
@@ -351,7 +351,7 @@
                 android:paddingTop="10dp"
                 android:paddingEnd="32dp"
                 android:paddingBottom="10dp"
-                android:text="إعادة"
+                android:text="@string/tasbih_reset"
                 android:textColor="@color/text_on_gold"
                 android:textSize="16sp"
                 android:textStyle="bold" />

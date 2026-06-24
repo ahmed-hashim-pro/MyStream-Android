@@ -137,7 +137,8 @@ public class OtherCategoryFragment extends Fragment implements AdapterView.OnIte
     }
 
     private void loadItems(){
-        OtherCategoryListLanguageClass lc = new OtherCategoryListLanguageClass(getContext());
+        OtherCategoryListLanguageClass lc = new OtherCategoryListLanguageClass(
+                AppLanguage.localizedContext(requireContext()));
         listCategory = lc.CategoryList();
 
         lVRecites.setAdapter(new CategoryAdapter(listCategory));

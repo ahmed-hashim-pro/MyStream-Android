@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A normal text line on the mini mushaf thumbnail. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#CDBF9F" />
+    <corners android:radius="2dp" />
+</shape>

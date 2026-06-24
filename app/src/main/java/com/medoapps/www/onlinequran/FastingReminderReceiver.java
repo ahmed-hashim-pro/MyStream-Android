@@ -35,8 +35,8 @@ public class FastingReminderReceiver extends BroadcastReceiver {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID, "تذكير السحور", NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription("تنبيه لوقت السحور قبل الفجر");
+                    CHANNEL_ID, context.getString(R.string.notif_fasting_channel_name), NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription(context.getString(R.string.notif_fasting_channel_desc));
             nm.createNotificationChannel(channel);
         }
 
@@ -47,10 +47,11 @@ public class FastingReminderReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_fasting)
-                .setContentTitle("تذكير السحور")
-                .setContentText("حان وقت السحور، لا تنسَ نية الصيام")
+                .setContentTitle(context.getString(R.string.notif_fasting_title))
+                .setContentText(context.getString(R.string.notif_fasting_body))
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("حان وقت السحور، لا تنسَ نية الصيام\nقال ﷺ: «تسحروا فإن في السحور بركة»"))
+                        .bigText(context.getString(R.string.notif_fasting_body)
+                                + "\nقال ﷺ: «تسحروا فإن في السحور بركة»"))
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

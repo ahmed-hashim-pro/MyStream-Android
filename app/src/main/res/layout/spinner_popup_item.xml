@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Styled rewayah dropdown row (navy popup, white text, gold press highlight). -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="46dp"
+    android:gravity="center_vertical"
+    android:paddingStart="18dp"
+    android:paddingEnd="18dp"
+    android:background="@drawable/bg_dropdown_item"
+    android:textColor="@color/text_on_navy"
+    android:textSize="15sp"
+    android:singleLine="true"
+    android:ellipsize="end" />

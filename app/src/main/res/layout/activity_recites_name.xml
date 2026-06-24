@@ -94,7 +94,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_toStartOf="@+id/headerActions"
                 android:layout_toEndOf="@+id/headerAvatar"
-                android:layout_marginStart="12dp"
+                android:layout_marginStart="56dp"
                 android:text="@string/home_reciters_header" />
 
         </RelativeLayout>

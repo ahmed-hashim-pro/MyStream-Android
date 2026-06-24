@@ -42,8 +42,9 @@ public class Settings extends AppCompatActivity {
 
         loadBannerAd();
 
-        // Toolbar back button
-        findViewById(R.id.backBTN).setOnClickListener(v -> finish());
+        // Navy hero header (static, centered)
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
+        HeroController.attach(this).back().centered().title(R.string.action_settings).apply();
 
         setupGeneralSection();
         setupNotificationsSection();
@@ -59,18 +60,15 @@ public class Settings extends AppCompatActivity {
         SettingSaved settings = new SettingSaved(getApplication());
         settings.LoadData();
 
-        // Language switch
+        // App language picker (System / Arabic / English) — like the theme picker
         View langItem = findViewById(R.id.item_language);
         ((ImageView) langItem.findViewById(R.id.imgchannel)).setImageResource(R.drawable.outline_translate_24);
-        ((TextView) langItem.findViewById(R.id.title)).setText(R.string.ListLanguages);
-        setSubtitle(langItem, R.id.subtitle, getString(R.string.settings_subtitle_language));
-        SwitchCompat langSwitch = langItem.findViewById(R.id.switch1);
-        langSwitch.setChecked(settings.LanguageSelect == 1);
-        langSwitch.setOnCheckedChangeListener((btn, checked) -> {
-            settings.LanguageSelect = checked ? 1 : 2;
-            settings.SaveData();
-            Toast.makeText(this, R.string.language_take_effect, Toast.LENGTH_SHORT).show();
-        });
+        ((TextView) langItem.findViewById(R.id.title)).setText(R.string.settings_language);
+        setSubtitle(langItem, R.id.subtitle, AppLanguage.currentLabel(this));
+        langItem.findViewById(R.id.switch1).setVisibility(View.GONE);
+        View langArrow = langItem.findViewById(R.id.arrow);
+        if (langArrow != null) langArrow.setVisibility(View.VISIBLE);
+        langItem.setOnClickListener(v -> AppLanguage.showPicker(this, false));
 
         // Startup Sound switch
         View soundItem = findViewById(R.id.item_startup_sound);

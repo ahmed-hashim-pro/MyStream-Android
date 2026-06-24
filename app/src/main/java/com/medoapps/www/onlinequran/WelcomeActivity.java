@@ -86,12 +86,21 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
 
         setContentView(R.layout.activity_welcome);
 
+        // Ask the user's language once as part of the welcome flow (default = System).
+        android.content.SharedPreferences langPrefs =
+                androidx.preference.PreferenceManager.getDefaultSharedPreferences(this);
+        if (!langPrefs.getBoolean("onb_language_asked", false)) {
+            langPrefs.edit().putBoolean("onb_language_asked", true).apply();
+            AppLanguage.showPicker(this, true);
+        }
+
         root = findViewById(R.id.onb_root);
         pager = findViewById(R.id.onb_pager);
         dotsLayout = findViewById(R.id.onb_dots);
         bottomBar = findViewById(R.id.onb_bottom_bar);
         btnSkip = findViewById(R.id.onb_skip);
         btnNext = findViewById(R.id.onb_next);
+        findViewById(R.id.onb_lang).setOnClickListener(v -> AppLanguage.showPicker(this, false));
 
         // Edge-to-edge inset handling. The nav-bar inset (plus a 20dp gap) becomes
         // the root's bottom padding, so the Skip/Next bar sits 20dp above the nav

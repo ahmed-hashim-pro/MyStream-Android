@@ -172,7 +172,7 @@ public class OtherCategoryListLanguageClass {
 
         // Settings
         OtherCategoryListInfo.add(new OtherCategory(
-                "الإعدادات",
+                context.getString(R.string.menu_settings),
                 R.drawable.ic_settings_gear,
                 null, Settings.class));
 

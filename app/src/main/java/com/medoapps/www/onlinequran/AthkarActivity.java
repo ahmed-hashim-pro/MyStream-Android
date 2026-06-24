@@ -41,12 +41,13 @@ public class AthkarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_athkar);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.morning_athkar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
+        HeroController.attach(this)
+                .back()
+                .centered()
+                .title(R.string.morning_athkar)
+                .apply();
 
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.background_main));
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.background_main));
 
         recyclerView = findViewById(R.id.recycler_athkar);
@@ -78,7 +79,7 @@ public class AthkarActivity extends AppCompatActivity {
     private List<AthkarItem> getAthkarList() {
         List<AthkarItem> list = new ArrayList<>();
 
-        list.add(new AthkarItem("أذكار الصباح", true));
+        list.add(new AthkarItem(getString(R.string.athkar_section_morning), true));
 
         list.add(new AthkarItem(
                 "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لاَ إِلَـهَ إِلاَّ اللهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
@@ -125,7 +126,7 @@ public class AthkarActivity extends AppCompatActivity {
                 "100 مرة", false));
 
         // ===== أذكار المساء =====
-        list.add(new AthkarItem("أذكار المساء", true));
+        list.add(new AthkarItem(getString(R.string.athkar_section_evening), true));
 
         list.add(new AthkarItem(
                 "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ للهِ، وَالْحَمْدُ للهِ، لاَ إِلَهَ إِلاَّ اللهُ وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
@@ -184,7 +185,7 @@ public class AthkarActivity extends AppCompatActivity {
                 "مرة واحدة", false));
 
         // ===== أذكار بعد الصلاة =====
-        list.add(new AthkarItem("أذكار بعد الصلاة", true));
+        list.add(new AthkarItem(getString(R.string.athkar_section_after_prayer), true));
 
         list.add(new AthkarItem(
                 "أَسْتَغْفِرُ اللهَ، أَسْتَغْفِرُ اللهَ، أَسْتَغْفِرُ اللهَ",
@@ -231,7 +232,7 @@ public class AthkarActivity extends AppCompatActivity {
                 "3 مرات", false));
 
         // ===== أذكار النوم =====
-        list.add(new AthkarItem("أذكار النوم", true));
+        list.add(new AthkarItem(getString(R.string.athkar_section_sleep), true));
 
         list.add(new AthkarItem(
                 "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
@@ -274,7 +275,7 @@ public class AthkarActivity extends AppCompatActivity {
                 "3 مرات", false));
 
         // ===== أذكار الاستيقاظ =====
-        list.add(new AthkarItem("أذكار الاستيقاظ من النوم", true));
+        list.add(new AthkarItem(getString(R.string.athkar_section_waking), true));
 
         list.add(new AthkarItem(
                 "الْحَمْدُ للهِ الَّذِي أَحْيَانَا بَعْدَمَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
@@ -285,7 +286,7 @@ public class AthkarActivity extends AppCompatActivity {
                 "مرة واحدة", false));
 
         // ===== أذكار متنوعة =====
-        list.add(new AthkarItem("أذكار متنوعة", true));
+        list.add(new AthkarItem(getString(R.string.athkar_section_misc), true));
 
         list.add(new AthkarItem(
                 "دعاء دخول المسجد: اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
@@ -397,7 +398,7 @@ public class AthkarActivity extends AppCompatActivity {
         // Add favorites section at top if there are any
         Set<String> favorites = getFavorites();
         if (!favorites.isEmpty()) {
-            AthkarItem favHeader = new AthkarItem("المفضلة ⭐", true);
+            AthkarItem favHeader = new AthkarItem(getString(R.string.athkar_favorites), true);
             favHeader.expanded = true;
             display.add(favHeader);
             for (AthkarItem section : allSections) {
@@ -519,7 +520,7 @@ public class AthkarActivity extends AppCompatActivity {
                         ivh.card.setCardBackgroundColor(
                                 ContextCompat.getColor(v.getContext(), R.color.gold_accent_faint));
                     } else {
-                        ivh.count.setText("\u0628\u0627\u0642\u064A: " + item.remainingCount);
+                        ivh.count.setText(ivh.itemView.getContext().getString(R.string.athkar_remaining_count, item.remainingCount));
                     }
                 });
             }

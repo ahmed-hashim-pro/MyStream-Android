@@ -171,10 +171,13 @@ public class PagerActivity extends AppCompatActivity implements
       "LAST_READING_MODE_IS_TRANSLATION";
   private static final String LAST_ACTIONBAR_STATE = "LAST_ACTIONBAR_STATE";
   private static final String LAST_AUDIO_REQUEST = "LAST_AUDIO_REQUEST";
+  private static final String STATE_AUTO_PLAY_CONSUMED = "autoPlayConsumed";
 
   public static final String EXTRA_JUMP_TO_TRANSLATION = "jumpToTranslation";
   public static final String EXTRA_HIGHLIGHT_SURA = "highlightSura";
   public static final String EXTRA_HIGHLIGHT_AYAH = "highlightAyah";
+  /** When true, the reader auto-starts recitation once open (Home "read+listen"). */
+  public static final String EXTRA_AUTO_PLAY = "autoPlay";
   public static final String LAST_WAS_DUAL_PAGES = "wasDualPages";
 
   private static final long DEFAULT_HIDE_AFTER_TIME = 2000;
@@ -182,6 +185,9 @@ public class PagerActivity extends AppCompatActivity implements
   private long lastPopupTime = 0;
   private boolean isActionBarHidden = true;
   private AudioStatusBar audioStatusBar = null;
+  /** One-shot guards for the Home "read + listen" auto-start. */
+  private boolean autoPlayConsumed = false;
+  private boolean forceStreamOnce = false;
   private ViewPager viewPager = null;
   private QuranPageAdapter pagerAdapter = null;
   private boolean shouldReconnect = false;
@@ -323,6 +329,8 @@ public class PagerActivity extends AppCompatActivity implements
       boolean lastWasDualPages = savedInstanceState.getBoolean(LAST_WAS_DUAL_PAGES, isDualPages);
       shouldAdjustPageNumber = (lastWasDualPages != isDualPages);
       this.lastAudioRequest = savedInstanceState.getParcelable(LAST_AUDIO_REQUEST);
+      // Don't re-trigger the Home read+listen auto-start after a recreate.
+      autoPlayConsumed = savedInstanceState.getBoolean(STATE_AUTO_PLAY_CONSUMED, false);
     } else {
       Intent intent = getIntent();
       Bundle extras = intent.getExtras();
@@ -781,6 +789,23 @@ public class PagerActivity extends AppCompatActivity implements
           }));
     }
 
+    // Home "read + listen": auto-start recitation once, after the audio service
+    // connects. Stream this one-shot so it never blocks on a download dialog.
+    if (!autoPlayConsumed
+        && getIntent() != null
+        && getIntent().getBooleanExtra(EXTRA_AUTO_PLAY, false)) {
+      autoPlayConsumed = true;
+      // Clear the flag from the launch intent so a later recreate can't re-fire it.
+      getIntent().removeExtra(EXTRA_AUTO_PLAY);
+      setIntent(getIntent());
+      foregroundDisposable.add(Completable.timer(900, TimeUnit.MILLISECONDS)
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe(() -> {
+            forceStreamOnce = true;
+            onPlayPressed();
+          }));
+    }
+
     updateNavigationBar(quranSettings.isNightMode());
   }
 
@@ -1017,6 +1042,7 @@ public class PagerActivity extends AppCompatActivity implements
     state.putBoolean(LAST_READING_MODE_IS_TRANSLATION, showingTranslation);
     state.putBoolean(LAST_ACTIONBAR_STATE, isActionBarHidden);
     state.putBoolean(LAST_WAS_DUAL_PAGES, isDualPages);
+    state.putBoolean(STATE_AUTO_PLAY_CONSUMED, autoPlayConsumed);
     if (lastAudioRequest != null) {
       state.putParcelable(LAST_AUDIO_REQUEST, lastAudioRequest);
     }
@@ -1518,6 +1544,7 @@ public class PagerActivity extends AppCompatActivity implements
   public void onPlayPressed() {
     if (audioStatusBar.getCurrentMode() == AudioStatusBar.PAUSED_MODE) {
       // if we are "paused," just un-pause.
+      forceStreamOnce = false; // never carry a stale one-shot into an un-pause
       handlePlayback(null);
       return;
     }
@@ -1539,6 +1566,9 @@ public class PagerActivity extends AppCompatActivity implements
         (startingSuraList.size() == 1 && startingSuraList.get(0) == startSura)) {
       playFromAyah(page, startSura, startAyah);
     } else {
+      // The multi-sura chooser is interactive; don't carry the one-shot stream flag
+      // into the deferred (or dismissed) selection.
+      forceStreamOnce = false;
       promptForMultipleChoicePlay(page, startSura, startAyah, startingSuraList);
     }
   }
@@ -1557,6 +1587,12 @@ public class PagerActivity extends AppCompatActivity implements
                            int verseRepeat,
                            int rangeRepeat,
                            boolean enforceRange) {
+    // Consume the one-shot stream flag up front so it can never leak into a later
+    // play (e.g. an early-return below). forceStream lets the Home read+listen
+    // auto-start stream without a download dialog.
+    final boolean forceStream = forceStreamOnce;
+    forceStreamOnce = false;
+
     final SuraAyah ending = end != null ? end :
         audioUtils.getLastAyahToPlay(start, page,
             quranSettings.getPreferredDownloadAmount(), isDualPageVisible());
@@ -1566,7 +1602,7 @@ public class PagerActivity extends AppCompatActivity implements
           ending + " - original: " + end + " -- " +
           quranSettings.getPreferredDownloadAmount());
       final QariItem item = audioStatusBar.getAudioInfo();
-      final boolean shouldStream = quranSettings.shouldStream();
+      final boolean shouldStream = forceStream || quranSettings.shouldStream();
       audioPresenter.play(
           start, ending, item, verseRepeat, rangeRepeat, enforceRange, shouldStream);
     }

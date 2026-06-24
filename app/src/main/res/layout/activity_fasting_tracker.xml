@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_main"
-    android:fillViewport="true">
+    android:layoutDirection="locale"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <include layout="@layout/hero_static" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layoutDirection="rtl"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layoutDirection="rtl"
+            android:orientation="vertical"
+            android:padding="20dp">
 
         <!-- ============================================================ -->
         <!-- Stats cards row                                              -->
@@ -55,7 +64,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="\u0647\u0630\u0627 \u0627\u0644\u0634\u0647\u0631"
+                        android:text="@string/fasting_this_month"
                         android:textColor="@color/text_secondary"
                         android:textSize="13sp" />
 
@@ -96,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="\u0647\u0630\u0627 \u0627\u0644\u0639\u0627\u0645"
+                        android:text="@string/fasting_this_year"
                         android:textColor="@color/text_secondary"
                         android:textSize="13sp" />
 
@@ -136,7 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="\u062a\u062a\u0627\u0628\u0639"
+                        android:text="@string/fasting_streak"
                         android:textColor="@color/text_secondary"
                         android:textSize="13sp" />
 
@@ -186,7 +195,7 @@
                     android:id="@+id/tv_today_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="\u0644\u0645 \u064a\u062a\u0645 \u0627\u0644\u062a\u0633\u062c\u064a\u0644 \u0628\u0639\u062f"
+                    android:text="@string/fasting_not_logged_yet"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -211,7 +220,7 @@
                         android:gravity="center"
                         android:paddingTop="14dp"
                         android:paddingBottom="14dp"
-                        android:text="\u062a\u0633\u062c\u064a\u0644 \u0635\u064a\u0627\u0645 \u0627\u0644\u064a\u0648\u0645"
+                        android:text="@string/fasting_log_today"
                         android:textColor="@color/text_on_gold"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -233,7 +242,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="\u0646\u0648\u0639 \u0627\u0644\u0635\u064a\u0627\u0645"
+            android:text="@string/fasting_type_header"
             android:textColor="@color/text_primary"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -266,7 +275,7 @@
                     android:paddingTop="6dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="6dp"
-                    android:text="\u0627\u0644\u0625\u062b\u0646\u064a\u0646"
+                    android:text="@string/fasting_chip_monday"
                     android:textColor="@color/text_primary"
                     android:textSize="13sp" />
 
@@ -290,7 +299,7 @@
                     android:paddingTop="6dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="6dp"
-                    android:text="\u0627\u0644\u062e\u0645\u064a\u0633"
+                    android:text="@string/fasting_chip_thursday"
                     android:textColor="@color/text_primary"
                     android:textSize="13sp" />
 
@@ -314,7 +323,7 @@
                     android:paddingTop="6dp"
                     android:paddingEnd="12dp"
                     android:paddingBottom="6dp"
-                    android:text="\u0623\u064a\u0627\u0645 \u0627\u0644\u0628\u064a\u0636"
+                    android:text="@string/fasting_chip_white_days"
                     android:textColor="@color/text_primary"
                     android:textSize="13sp" />
 
@@ -333,7 +342,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="\u0623\u064a\u0627\u0645 \u0627\u0644\u0635\u064a\u0627\u0645 \u0627\u0644\u0642\u0627\u062f\u0645\u0629"
+            android:text="@string/fasting_upcoming_days_header"
             android:textColor="@color/text_primary"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -371,7 +380,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="\u0633\u062c\u0644 \u0627\u0644\u0635\u064a\u0627\u0645"
+            android:text="@string/fasting_log_header"
             android:textColor="@color/text_primary"
             android:textSize="17sp"
             android:textStyle="bold" />
@@ -403,6 +412,8 @@
             android:layout_width="0dp"
             android:layout_height="32dp" />
 
-    </LinearLayout>
+        </LinearLayout>
 
-</ScrollView>
+    </ScrollView>
+
+</LinearLayout>

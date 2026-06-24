@@ -823,4 +823,315 @@
     <string name="onb_ready_desc">سنطلب بعض الأذونات حتى تصلك التذكيرات والأذان في وقتها.</string>
     <string name="onb_grant_exact_alarm">اسمح بالمنبهات الدقيقة لمواقيت أذان دقيقة</string>
 
+    <!-- Home hub (Arabic overrides) -->
+    <string name="home_greeting">السلام عليكم ورحمة الله</string>
+    <!-- سطر الاسم في رأس الصفحة عند عدم تسجيل الدخول -->
+    <string name="home_welcome">أهلاً بك</string>
+    <string name="home_continue_reading">تابع القراءة</string>
+    <string name="home_start_reading">ابدأ القراءة</string>
+    <string name="home_hero_next">الصلاة القادمة</string>
+    <string name="home_hero_remaining">باقي</string>
+    <string name="home_hero_countdown">بعد %1$s س %2$s د</string>
+    <string name="home_hero_countdown_min">بعد %1$s د</string>
+    <string name="home_hero_now">الآن</string>
+    <string name="home_continue_subtitle">تابع القراءة</string>
+    <string name="home_continue_goal">هدف اليوم · %1$d من %2$d صفحات</string>
+    <string name="home_stat_pages">%1$d / %2$d صفحات</string>
+    <string name="home_streak_count">%1$d يوم</string>
+    <string name="home_streak_pill">%1$d أيام 🔥</string>
+    <string name="home_reading_nudge">ابدأ رحلتك في القراءة</string>
+    <string name="home_prayer_timeline_title">أوقات الصلاة</string>
+    <string name="home_prayers_title">مواقيت اليوم</string>
+    <string name="home_prayers_action">الأذان</string>
+    <string name="home_quick_actions_title">إجراءات سريعة</string>
+    <string name="home_verse_title">آية اليوم</string>
+    <string name="home_verse_copy">نسخ</string>
+    <string name="home_verse_copied">تم نسخ الآية</string>
+    <string name="home_verse_listen">استماع</string>
+    <string name="home_verse_stop">إيقاف</string>
+    <string name="home_verse_audio_error">تعذّر تشغيل الصوت</string>
+    <string name="home_quran_section">القرآن الكريم</string>
+    <string name="home_quran_rl_title">استمع واقرأ في المصحف</string>
+    <string name="home_quran_rl_sub">تتبّع الآية المُضاءة مع صوت القارئ</string>
+    <string name="home_quran_rl_chip">🎧 اختر القارئ</string>
+    <string name="home_quran_read_title">قراءة</string>
+    <string name="home_quran_read_sub">تصفّح المصحف</string>
+    <string name="home_quran_listen_title">استماع</string>
+    <string name="home_quran_listen_sub">أكثر من ٦٠ قارئًا</string>
+    <string name="qa_label_mushaf">المصحف</string>
+    <string name="qa_label_radio">راديو</string>
+    <string name="qa_label_athkar">الأذكار</string>
+    <string name="qa_label_qibla">القبلة</string>
+    <string name="discover_athkar_title">أذكار الصباح والمساء</string>
+    <string name="discover_athkar_sub">للصباح والمساء</string>
+    <string name="discover_events_title">مناسبات إسلامية</string>
+    <string name="discover_events_chip">قريباً</string>
+    <string name="home_live_badge">مباشر</string>
+    <string name="home_discover_header">اكتشف</string>
+    <string name="nav_label_home">الرئيسية</string>
+    <string name="nav_label_quran">القرآن</string>
+    <string name="nav_label_radio">راديو</string>
+    <string name="nav_label_mushaf">المصحف</string>
+    <string name="nav_label_more">أخرى</string>
+    <string name="home_reciters_header">القرّاء</string>
+    <string name="radio_stations_header">الإذاعات</string>
+    <string name="more_tab_header">المزيد</string>
+
+    <!-- Language picker -->
+    <string name="settings_language">اللغة</string>
+    <string name="language_system">لغة النظام</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_english">الإنجليزية</string>
+    <string name="onb_language_title">اختر لغتك</string>
+    <string name="onb_language_subtitle">يمكنك تغييرها لاحقًا من الإعدادات</string>
+
+    <!-- General / notifications / radio / features (Arabic overrides) -->
+    <string name="action_rewards">المكافآت</string>
+    <string name="makkah_live">بث مباشر - مكة المكرمة</string>
+    <string name="madinah_live">بث مباشر - المدينة المنورة</string>
+    <string name="quran_radio_live">إذاعة القرآن الكريم</string>
+    <string name="prayer_times">مواقيت الصلاة</string>
+    <string name="qibla_finder">اتجاه القبلة</string>
+    <string name="morning_athkar">أذكار الصباح والمساء</string>
+    <string name="tasbih_counter">المسبحة الرقمية</string>
+    <string name="dua_collection">الأدعية</string>
+    <string name="reading_progress">سجل القراءة</string>
+    <string name="daily_ayah_notification_time">وقت إشعار آية اليوم</string>
+    <string name="daily_ayah_time_set">تم ضبط الإشعار على %02d:%02d</string>
+    <string name="morning_athkar_notification">تنبيه أذكار الصباح</string>
+    <string name="evening_athkar_notification">تنبيه أذكار المساء</string>
+    <string name="athkar_notification_set">تم ضبط التنبيه على %02d:%02d</string>
+    <string name="athkar_notification_cancelled">تم إلغاء التنبيه</string>
+    <string name="widget_daily_ayah_label">آية اليوم</string>
+    <string name="widget_daily_ayah_desc">عرض آية قرآنية يومية</string>
+    <string name="widget_prayer_times_label">مواقيت الصلاة</string>
+    <string name="widget_prayer_times_desc">عرض أوقات الصلاة القادمة</string>
+    <string name="playlist_header">قائمة السور</string>
+    <string name="cd_toggle_view">تبديل العرض</string>
+    <string name="view_mode_list">عرض قائمة</string>
+    <string name="view_mode_grid">عرض شبكي</string>
+    <string name="view_mode_compact">عرض مضغوط</string>
+    <string name="asmaul_husna">أسماء الله الحسنى</string>
+    <string name="zakat_calculator">حاسبة الزكاة</string>
+    <string name="fasting_tracker">متتبع الصيام</string>
+    <string name="daily_hadith">حديث اليوم</string>
+    <string name="islamic_events">المناسبات الإسلامية</string>
+    <string name="hisn_al_muslim">حصن المسلم</string>
+    <string name="daily_hadith_notification_time">وقت إشعار حديث اليوم</string>
+    <string name="daily_hadith_time_set">تم ضبط إشعار الحديث على %02d:%02d</string>
+    <string name="asmaul_husna_notification">إشعار اسم الله اليوم</string>
+    <string name="asmaul_husna_notification_set">تم ضبط إشعار أسماء الله الحسنى على %02d:%02d</string>
+    <string name="fasting_reminder">تذكير السحور</string>
+    <string name="fasting_reminder_set">تم ضبط تذكير السحور على %02d:%02d</string>
+    <string name="hisn_notification">إشعار دعاء اليوم</string>
+    <string name="hisn_notification_set">تم ضبط إشعار الدعاء على %02d:%02d</string>
+    <string name="notification_time_set">تم ضبط الإشعار على %02d:%02d</string>
+    <string name="focus_mode">وضع التركيز</string>
+    <string name="focus_mode_on">تم تفعيل وضع التركيز</string>
+    <string name="focus_mode_off">تم إيقاف وضع التركيز</string>
+    <string name="notification_permission_denied">يرجى السماح بالإشعارات من إعدادات التطبيق</string>
+    <string name="settings_section_general">عام</string>
+    <string name="settings_section_notifications">الإشعارات</string>
+    <string name="settings_section_data">البيانات</string>
+    <string name="settings_section_about">حول التطبيق</string>
+    <string name="notification_settings">إعدادات الإشعارات</string>
+    <string name="notif_section_quran">القرآن الكريم</string>
+    <string name="notif_section_athkar">الأذكار والأدعية</string>
+    <string name="notif_section_daily">تذكيرات يومية</string>
+    <string name="notif_time_format">الوقت: %02d:%02d</string>
+    <string name="notif_not_set">غير مفعّل</string>
+    <string name="settings_subtitle_language">تغيير لغة قوائم القراء</string>
+    <string name="settings_subtitle_dark_mode">تخصيص مظهر التطبيق</string>
+    <string name="settings_subtitle_notifications">آية اليوم، أذكار، حديث، وأكثر</string>
+    <string name="settings_subtitle_prayer_alarm">ضبط منبه الصلاة</string>
+    <string name="settings_subtitle_downloads">إدارة التحميلات</string>
+    <string name="settings_subtitle_bookmarks">المفضلة المحفوظة</string>
+    <string name="theme_status_system">سيتبع وضع النظام تلقائياً</string>
+    <string name="theme_status_dark">الوضع الداكن مفعّل</string>
+    <string name="theme_status_light">الوضع الفاتح مفعّل</string>
+    <string name="reminder_status_active">المنبه مفعّل — الساعة %d:%02d</string>
+    <string name="reminder_status_select_time">اختر وقت التذكير</string>
+    <string name="reminder_status_off">المنبه غير مفعّل</string>
+
+    <!-- Feature screens (Arabic overrides) -->
+    <string name="zakat_header_title">احسب زكاة أموالك</string>
+    <string name="zakat_header_subtitle">أدخل قيمة أصولك المالية لحساب الزكاة المستحقة (٢.٥٪)</string>
+    <string name="zakat_metal_prices_label">أسعار المعادن (للجرام الواحد)</string>
+    <string name="zakat_gold_price_hint">سعر جرام الذهب</string>
+    <string name="zakat_silver_price_hint">سعر جرام الفضة</string>
+    <string name="zakat_assets_label">الأصول المالية</string>
+    <string name="zakat_cash_hint">نقود</string>
+    <string name="zakat_gold_weight_hint">ذهب (بالجرام)</string>
+    <string name="zakat_silver_weight_hint">فضة (بالجرام)</string>
+    <string name="zakat_investments_hint">استثمارات</string>
+    <string name="zakat_debts_hint">ديون عليك (تُخصم)</string>
+    <string name="zakat_calculate_button">احسب الزكاة</string>
+    <string name="zakat_result_title">نتيجة حساب الزكاة</string>
+    <string name="zakat_total_wealth_label">إجمالي الثروة</string>
+    <string name="zakat_nisab_gold_label">نصاب الذهب (٨٥ جرام)</string>
+    <string name="zakat_nisab_silver_label">نصاب الفضة (٥٩٥ جرام)</string>
+    <string name="zakat_amount_due_label">مبلغ الزكاة المستحقة</string>
+    <string name="zakat_icon_desc">زكاة</string>
+    <string name="qibla_locating">جاري تحديد الموقع…</string>
+    <string name="dlplayer_untitled">بدون عنوان</string>
+    <string name="tasbih_total">الإجمالي: %d</string>
+    <string name="tasbih_reset">إعادة</string>
+    <string name="events_todays_hijri_date">التاريخ الهجري اليوم</string>
+
+    <!-- Feature-screen dynamic strings (Arabic overrides) -->
+    <string name="zakat_enter_price_prompt">أدخل سعر الذهب أو الفضة لتحديد النصاب</string>
+    <string name="zakat_nisab_reached">✔ ثروتك بلغت النصاب — الزكاة واجبة</string>
+    <string name="zakat_nisab_not_reached">لم تبلغ النصاب — لا زكاة مستحقة</string>
+    <string name="qibla_allow_location">يرجى السماح بإذن الموقع</string>
+    <string name="qibla_allow_location_for_direction">يرجى السماح بإذن الموقع لتحديد اتجاه القبلة</string>
+    <string name="qibla_location_failed_gps">تعذر تحديد الموقع - تأكد من تفعيل GPS</string>
+    <string name="qibla_searching_gps">جاري البحث عن GPS...</string>
+    <string name="qibla_location_failed">تعذر تحديد الموقع</string>
+    <string name="qibla_bearing_from_north">اتجاه القبلة من الشمال: %1$.0f° (%2$s)</string>
+    <string name="qibla_point_phone_arrow">وجه هاتفك نحو اتجاه السهم</string>
+    <string name="qibla_no_compass_status">⚠ هاتفك لا يحتوي على بوصلة\nاستخدم بوصلة خارجية لتحديد الاتجاه</string>
+    <string name="qibla_no_compass_sensor">الهاتف لا يدعم مستشعر البوصلة</string>
+    <string name="qibla_facing_qibla">✓ أنت تواجه القبلة</string>
+    <string name="qibla_calibration_low">دقة البوصلة منخفضة - قم بتحريك الهاتف بشكل رقم 8 لتحسين الدقة</string>
+    <string name="qibla_calibration_medium">دقة البوصلة متوسطة</string>
+    <string name="qibla_dir_north">شمال</string>
+    <string name="qibla_dir_northeast">شمال شرق</string>
+    <string name="qibla_dir_east">شرق</string>
+    <string name="qibla_dir_southeast">جنوب شرق</string>
+    <string name="qibla_dir_south">جنوب</string>
+    <string name="qibla_dir_southwest">جنوب غرب</string>
+    <string name="qibla_dir_west">غرب</string>
+    <string name="qibla_dir_northwest">شمال غرب</string>
+    <string name="events_title">الأحداث الإسلامية</string>
+    <string name="events_hijri_date_format">%1$d %2$s %3$d هـ</string>
+    <string name="events_gregorian_date_format">≈ %1$s م</string>
+    <string name="events_today">اليوم!</string>
+    <string name="events_days_remaining">بعد %1$d يوم</string>
+    <string name="events_islamic_new_year_name">رأس السنة الهجرية</string>
+    <string name="events_islamic_new_year_desc">بداية العام الهجري الجديد، يوم هجرة النبي ﷺ من مكة إلى المدينة</string>
+    <string name="events_ashura_name">يوم عاشوراء</string>
+    <string name="events_ashura_desc">يوم نجّى الله فيه موسى عليه السلام، يستحب صيامه ويوماً قبله أو بعده</string>
+    <string name="events_mawlid_name">المولد النبوي</string>
+    <string name="events_mawlid_desc">ذكرى مولد النبي محمد ﷺ في ربيع الأول</string>
+    <string name="events_isra_miraj_name">الإسراء والمعراج</string>
+    <string name="events_isra_miraj_desc">ذكرى رحلة الإسراء والمعراج، فُرضت فيها الصلوات الخمس</string>
+    <string name="events_mid_shaban_name">ليلة النصف من شعبان</string>
+    <string name="events_mid_shaban_desc">ليلة يُرفع فيها العمل إلى الله تعالى، يستحب فيها الدعاء والاستغفار</string>
+    <string name="events_start_ramadan_name">بداية شهر رمضان</string>
+    <string name="events_start_ramadan_desc">بداية شهر الصيام والقيام وتلاوة القرآن</string>
+    <string name="events_battle_of_badr_name">غزوة بدر</string>
+    <string name="events_battle_of_badr_desc">ذكرى غزوة بدر الكبرى، أول معركة فاصلة في الإسلام</string>
+    <string name="events_laylat_al_qadr_name">ليالي القدر</string>
+    <string name="events_laylat_al_qadr_desc">ليلة خير من ألف شهر، تُلتمس في الليالي الوتر من العشر الأواخر (21، 23، 25، 27، 29)</string>
+    <string name="events_eid_al_fitr_name">عيد الفطر</string>
+    <string name="events_eid_al_fitr_desc">عيد الفطر المبارك، يوم الجائزة بعد شهر رمضان</string>
+    <string name="events_tarwiyah_name">يوم التروية</string>
+    <string name="events_tarwiyah_desc">اليوم الثامن من ذي الحجة، بداية مناسك الحج</string>
+    <string name="events_arafah_name">يوم عرفة</string>
+    <string name="events_arafah_desc">خير يوم طلعت فيه الشمس، يستحب صيامه لغير الحاج</string>
+    <string name="events_eid_al_adha_name">عيد الأضحى</string>
+    <string name="events_eid_al_adha_desc">عيد الأضحى المبارك، يوم النحر وأعظم أيام السنة</string>
+    <string name="events_tashreeq_name">أيام التشريق</string>
+    <string name="events_tashreeq_desc">أيام التشريق (11-13 ذو الحجة)، أيام أكل وشرب وذكر لله</string>
+    <string-array name="events_hijri_months">
+        <item>محرم</item>
+        <item>صفر</item>
+        <item>ربيع الأول</item>
+        <item>ربيع الثاني</item>
+        <item>جمادى الأولى</item>
+        <item>جمادى الآخرة</item>
+        <item>رجب</item>
+        <item>شعبان</item>
+        <item>رمضان</item>
+        <item>شوال</item>
+        <item>ذو القعدة</item>
+        <item>ذو الحجة</item>
+    </string-array>
+
+    <!-- Content-screen + notification UI chrome (Arabic) -->
+    <string name="hadith_share_chooser">مشاركة الحديث</string>
+    <string name="athkar_section_morning">أذكار الصباح</string>
+    <string name="athkar_section_evening">أذكار المساء</string>
+    <string name="athkar_section_after_prayer">أذكار بعد الصلاة</string>
+    <string name="athkar_section_sleep">أذكار النوم</string>
+    <string name="athkar_section_waking">أذكار الاستيقاظ من النوم</string>
+    <string name="athkar_section_misc">أذكار متنوعة</string>
+    <string name="athkar_favorites">المفضلة ⭐</string>
+    <string name="athkar_remaining_count">باقي: %d</string>
+    <string name="dua_morning_evening">أدعية الصباح والمساء</string>
+    <string name="dua_travel">أدعية السفر</string>
+    <string name="dua_food">أدعية الطعام</string>
+    <string name="dua_sleep">أدعية النوم</string>
+    <string name="dua_prayer">أدعية الصلاة</string>
+    <string name="dua_misc">أدعية متنوعة</string>
+    <string name="fasting_title">عداد الصيام</string>
+    <string name="fasting_status_recorded">تم تسجيل الصيام</string>
+    <string name="fasting_btn_unmark">إلغاء التسجيل</string>
+    <string name="fasting_status_not_recorded">لم يتم التسجيل بعد</string>
+    <string name="fasting_btn_mark_today">تسجيل صيام اليوم</string>
+    <string name="fasting_no_upcoming_days">لا توجد أيام قادمة</string>
+    <string name="fasting_no_history">لا يوجد سجل بعد</string>
+    <string name="notif_ayah_channel_name">آية اليوم</string>
+    <string name="notif_ayah_channel_description">إشعار آية اليوم من القرآن الكريم</string>
+    <string name="notif_ayah_title">آية اليوم</string>
+    <string name="notif_athkar_morning_title">أذكار الصباح</string>
+    <string name="notif_athkar_evening_title">أذكار المساء</string>
+    <string name="notif_athkar_morning_body">حان وقت أذكار الصباح، لا تنسَ ذكر الله</string>
+    <string name="notif_athkar_evening_body">حان وقت أذكار المساء، لا تنسَ ذكر الله</string>
+    <string name="notif_athkar_channel_name">تنبيه الأذكار</string>
+    <string name="notif_athkar_channel_desc">إشعارات أذكار الصباح والمساء</string>
+    <string name="notif_prayer_channel_name">مواقيت الصلاة</string>
+    <string name="notif_prayer_default_name">الصلاة</string>
+    <string name="notif_prayer_alarm_title">حان وقت الصلاة</string>
+    <string name="notif_hisn_channel_name">دعاء اليوم</string>
+    <string name="notif_hisn_channel_desc">إشعار يومي بدعاء من حصن المسلم</string>
+    <string name="notif_hisn_content_title">دعاء اليوم — %1$s</string>
+    <string name="notif_asma_title">اسم الله اليوم: %1$s</string>
+    <string name="notif_asma_channel_name">اسم الله اليوم</string>
+    <string name="notif_asma_channel_desc">إشعار يومي بأحد أسماء الله الحسنى</string>
+    <string name="notif_fasting_channel_name">تذكير السحور</string>
+    <string name="notif_fasting_channel_desc">تنبيه لوقت السحور قبل الفجر</string>
+    <string name="notif_fasting_title">تذكير السحور</string>
+    <string name="notif_fasting_body">حان وقت السحور، لا تنسَ نية الصيام</string>
+    <string name="notif_alarm_daily_wird">استمع للورد اليومي</string>
+    <string name="prayer_alarm_fajr">صلاة الفجر</string>
+    <string name="prayer_alarm_dhuhr">صلاة الظهر</string>
+    <string name="prayer_alarm_asr">صلاة العصر</string>
+    <string name="prayer_alarm_maghrib">صلاة المغرب</string>
+    <string name="prayer_alarm_isha">صلاة العشاء</string>
+    <string name="notifpanel_content_title">القرءان الكريم</string>
+    <string name="reading_streak_format">%1$d يوم متتالي 🔥</string>
+    <string name="reading_total_pages_label">إجمالي الصفحات: %1$d</string>
+
+    <!-- Escaped-Arabic chrome (Arabic) -->
+    <string name="fasting_this_month">هذا الشهر</string>
+    <string name="fasting_this_year">هذا العام</string>
+    <string name="fasting_streak">تتابع</string>
+    <string name="fasting_not_logged_yet">لم يتم التسجيل بعد</string>
+    <string name="fasting_log_today">تسجيل صيام اليوم</string>
+    <string name="fasting_type_header">نوع الصيام</string>
+    <string name="fasting_chip_monday">الإثنين</string>
+    <string name="fasting_chip_thursday">الخميس</string>
+    <string name="fasting_chip_white_days">أيام البيض</string>
+    <string name="fasting_upcoming_days_header">أيام الصيام القادمة</string>
+    <string name="fasting_log_header">سجل الصيام</string>
+    <string name="reading_log_title">سجل القراءة اليومي</string>
+    <string name="reading_pages_today_label">صفحات اليوم</string>
+    <string name="reading_congrats">ما شاء الله! أكملت ورد اليوم</string>
+    <string name="reading_streak_default">0 يوم متتالي 🔥</string>
+    <string name="reading_total_default">إجمالي الصفحات: 0</string>
+    <string name="reading_daily_goal_label">الهدف اليومي</string>
+    <string name="hadith_title">حديث اليوم</string>
+    <string name="hadith_previous">السابق</string>
+    <string name="hadith_share">مشاركة</string>
+    <string name="hadith_next">التالي</string>
+    <string name="asma_title">أسماء الله الحسنى</string>
+    <string name="notif_hadith_channel_name">حديث اليوم</string>
+    <string name="notif_hadith_channel_description">إشعار حديث اليوم من السنة النبوية</string>
+    <string name="notif_hadith_title">حديث اليوم</string>
+    <!-- شارة عدد الآيات في قائمة السور (تصميم C) -->
+    <string name="ayah_count_chip">%1$d آية</string>
+    <!-- عنوان فرعي في رأس صفحة السور، مثل "١١٤ سورة" -->
+    <string name="surah_count">%1$d سورة</string>
+
 </resources>

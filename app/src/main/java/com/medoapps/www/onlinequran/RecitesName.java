@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -39,6 +40,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
@@ -190,6 +192,9 @@ public class RecitesName extends Fragment  {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         // This list filters reciters locally, so override the shared Quran searchable hint.
         searchView.setQueryHint(getString(R.string.search_reciter_hint));
+        // The header is a fixed-navy surface, so the SearchView's default theme text/icons
+        // (dark in light mode) are unreadable. Force on-navy colors that hold in both themes.
+        styleSearchViewForNavy();
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -246,6 +251,35 @@ public class RecitesName extends Fragment  {
             }
         });
     }
+
+    /**
+     * Colors the framework SearchView's internal views so they stay legible on the fixed-navy
+     * header in BOTH light and dark mode. text_on_navy / hint_on_navy are fixed (no night
+     * override); gold_accent adapts but stays gold on navy in both modes.
+     */
+    private void styleSearchViewForNavy() {
+        if (searchView == null) return;
+        int textOnNavy = ContextCompat.getColor(getContext(), R.color.text_on_navy);
+        int hintOnNavy = ContextCompat.getColor(getContext(), R.color.hint_on_navy);
+        int gold = ContextCompat.getColor(getContext(), R.color.gold_accent);
+
+        EditText queryText = searchView.findViewById(
+                getResources().getIdentifier("android:id/search_src_text", null, null));
+        if (queryText != null) {
+            queryText.setTextColor(textOnNavy);
+            queryText.setHintTextColor(hintOnNavy);
+        }
+        // Tint every icon (collapsed lens, expanded mag icon, clear button) to gold.
+        for (String idName : new String[]{
+                "android:id/search_button",      // lens shown while iconified/collapsed
+                "android:id/search_mag_icon",    // lens shown inside the expanded field
+                "android:id/search_close_btn"}) {
+            ImageView icon = searchView.findViewById(
+                    getResources().getIdentifier(idName, null, null));
+            if (icon != null) icon.setColorFilter(gold);
+        }
+    }
+
     public void getCurrentUser(){
         /*DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         rootRef.addListenerForSingleValueEvent(new ValueEventListener() {

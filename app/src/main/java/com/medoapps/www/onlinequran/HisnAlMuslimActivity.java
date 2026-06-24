@@ -27,12 +27,9 @@ public class HisnAlMuslimActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hisn_al_muslim);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("حصن المسلم");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
+        HeroController.attach(this).back().centered().title(R.string.hisn_al_muslim).apply();
 
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.background_main));
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.background_main));
 
         RecyclerView recyclerView = findViewById(R.id.recycler_hisn);

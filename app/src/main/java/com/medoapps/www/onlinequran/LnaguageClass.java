@@ -1023,6 +1023,16 @@ public class LnaguageClass {
 
 
     }
+    // Session cache of the MediaStore "downloaded file" lookup per reciter. The MediaStore query
+    // costs ~0.5s and ran on EVERY reciter open; results only change on download/delete, so we
+    // cache them and clear via clearAyaAvailabilityCache() from those two paths.
+    private static final java.util.Map<String, java.util.Map<String, String>> sAyaUriCache =
+            new java.util.concurrent.ConcurrentHashMap<>();
+
+    public static void clearAyaAvailabilityCache() {
+        sAyaUriCache.clear();
+    }
+
     public ArrayList<AuthorClass> GuranAya(String ReciteName, String Rewayat)
     {
 
@@ -1265,30 +1275,39 @@ public class LnaguageClass {
         ListAyaRanage.clear();
         //IsolatedStorageFile isoStore = IsolatedStorageFile.GetUserStoreForApplication();
         String AYAPAth;
+        // Resolve the download dir and the downloaded-file URIs ONCE (was 1 ContentResolver query
+        // per surah -> up to 114 IPC calls per list load; now a single batched MediaStore query).
+        SeparateFunctions sfBatch = new SeparateFunctions(context);
+        File downloadDir = sfBatch.getAppSpecificDownloadStorageDir(context, activity);
+        // Cached per reciter for the session; cleared on download/delete (clearAyaAvailabilityCache).
+        // The MediaStore query costs ~0.6-1s and previously ran on every reciter open.
+        java.util.Map<String, String> downloadedUris = sAyaUriCache.get(ReciteName);
+        if (downloadedUris == null) {
+            downloadedUris = sfBatch.findDownloadedAudioUris(ReciteName);
+            sAyaUriCache.put(ReciteName, downloadedUris);
+        }
+        // List the download dir ONCE instead of File.exists() per surah (was 114 disk-stat calls).
+        java.util.Set<String> existingFiles = new java.util.HashSet<>();
+        String[] downloadDirNames = (downloadDir != null) ? downloadDir.list() : null;
+        if (downloadDirNames != null) java.util.Collections.addAll(existingFiles, downloadDirNames);
         if (ListRange.separatesAya != null){
             // the separate aya system
             for (int i = 0; i < ListRange.separatesAya.length; i++) {
                 try{
-                    String folder_main = "My Stream";
                     AuthorClass ac = new AuthorClass();
                     ac = ListAya.get(ListRange.separatesAya[i]);
-                    //String SDPath = Environment.getExternalStorageDirectory().getPath() + "/";
-//                    File SDPath =  new File(Environment.getExternalStorageDirectory()+ "/" + folder_main,"Medo_"+"/");
 
-                    SeparateFunctions sf = new SeparateFunctions(context);
-                    File SDPath = sf.getAppSpecificDownloadStorageDir(context,activity);
-                    File SDPath2 =  new File(activity.getExternalFilesDir(null),   "MyStream/AhmedHashim_");
+                    File SDPath = downloadDir;
 
                     String displayName = "AhmedHashim_" + ReciteName + ac.ServerName + ".mp3";
                     AYAPAth = SDPath + "/" + displayName;
 
                     //    String[] fmyFilemyFileiles = isoStore.GetFileNames(RealServerFolder + ListAya[i].ServerName + ".mp3");
-                    File myFile = new File(AYAPAth);
-                    if (myFile.exists()) {
+                    if (existingFiles.contains(displayName)) {
                         ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName, avalible(), AYAPAth, Rewayat));
                     } else {
                         // MediaStore fallback: file may exist but be inaccessible via File API after reinstall
-                        String mediaStoreUri = sf.findAudioInMediaStore(displayName);
+                        String mediaStoreUri = downloadedUris.get(displayName);
                         if (mediaStoreUri != null) {
                             ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName, avalible(), mediaStoreUri, Rewayat));
                         } else {
@@ -1310,25 +1329,20 @@ public class LnaguageClass {
             for (int i = ListRange.beginR; i < ListRange.endread; i++) {
                 try{
 
-                    String folder_main = "My Stream";
                     AuthorClass ac = new AuthorClass();
                     ac = ListAya.get(i);
-                    //String SDPath = Environment.getExternalStorageDirectory().getPath() + "/";
-//                    File SDPath =  new File(Environment.getExternalStorageDirectory()+ "/" + folder_main,"Medo_"+"/");
-                    SeparateFunctions sf2 = new SeparateFunctions(context);
-                    File SDPath = sf2.getAppSpecificDownloadStorageDir(context,activity);
-                    File SDPath2 =  new File(activity.getExternalFilesDir(null),   "MyStream/AhmedHashim_");
+
+                    File SDPath = downloadDir;
 
                     String displayName = "AhmedHashim_" + ReciteName + ac.ServerName + ".mp3";
                     AYAPAth = SDPath + "/" + displayName;
 
                     //    String[] fmyFilemyFileiles = isoStore.GetFileNames(RealServerFolder + ListAya[i].ServerName + ".mp3");
-                    File myFile = new File(AYAPAth);
-                    if (myFile.exists()) {
+                    if (existingFiles.contains(displayName)) {
                         ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName, avalible(), AYAPAth, Rewayat));
                     } else {
                         // MediaStore fallback: file may exist but be inaccessible via File API after reinstall
-                        String mediaStoreUri = sf2.findAudioInMediaStore(displayName);
+                        String mediaStoreUri = downloadedUris.get(displayName);
                         if (mediaStoreUri != null) {
                             ListAyaRanage.add(new AuthorClass(ac.ServerName, ac.RealName, avalible(), mediaStoreUri, Rewayat));
                         } else {

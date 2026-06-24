@@ -71,4 +71,28 @@
         <item>O you who have believed, seek help through patience and prayer. Indeed, Allah is with the patient.</item>
     </string-array>
 
+    <!-- sura:ayah for each verse (kept in sync) — used to stream the ayah audio -->
+    <string-array name="verse_sura_ayah" translatable="false">
+        <item>2:255</item>
+        <item>2:216</item>
+        <item>94:6</item>
+        <item>94:5</item>
+        <item>65:3</item>
+        <item>18:24</item>
+        <item>2:201</item>
+        <item>20:114</item>
+        <item>2:153</item>
+        <item>2:155</item>
+        <item>3:173</item>
+        <item>57:4</item>
+        <item>11:88</item>
+        <item>9:120</item>
+        <item>12:87</item>
+        <item>20:25</item>
+        <item>17:80</item>
+        <item>2:152</item>
+        <item>29:45</item>
+        <item>2:153</item>
+    </string-array>
+
 </resources>

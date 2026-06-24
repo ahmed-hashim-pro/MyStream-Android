@@ -2,44 +2,44 @@ package com.medoapps.www.onlinequran.ui.home;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * Custom view that draws a gold countdown ring with a centered two-line text label.
+ * Bayt al-Noor (A) countdown ring: a FILLED gold sector sweeping over a faint
+ * white remainder, with a navy inner disc punched out of the middle — i.e. a
+ * gold/white progress band around a navy hole. The 3-line centre text
+ * (label · prayer name · countdown) is composed as TextViews layered on top in
+ * the layout, so this view draws geometry only.
  *
  * Usage:
- *   view.setProgress(fraction);              // 0..1 elapsed
- *   view.setCenterText("2:14:30", "باقي");  // big countdown, small label
+ *   view.setProgress(fraction);   // 0..1 elapsed since the previous prayer
  */
 public class PrayerCountdownRingView extends View {
 
-    // Gold track colour (faint)
-    private static final int COLOR_TRACK = 0x33D4A44C;
-    // Gold sweep colours
-    private static final int COLOR_GOLD_START = 0xFFD4A44C;
-    private static final int COLOR_GOLD_END   = 0xFFB8860B;
-    private static final int COLOR_WHITE      = 0xFFFFFFFF;
+    // Faint white remainder (A: rgba(255,255,255,.12))
+    private static final int COLOR_REMAINDER = 0x1FFFFFFF;
+    // Solid gold sweep (A conic #D4A44C)
+    private static final int COLOR_GOLD = 0xFFD4A44C;
+    // Navy inner disc radial stops (A radial #243150 -> #1b2740)
+    private static final int COLOR_NAVY_TOP = 0xFF243150;
+    private static final int COLOR_NAVY_BOTTOM = 0xFF1B2740;
 
-    private static final int DEFAULT_SIZE_DP = 96;
+    private static final int DEFAULT_SIZE_DP = 128;
+    /** Inner navy disc radius as a fraction of the outer radius (A band ≈ 14%). */
+    private static final float INNER_RADIUS_RATIO = 0.85f;
 
-    private final Paint trackPaint  = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint sweepPaint  = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint smallTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint bigTextPaint   = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint remainderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint goldPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint navyPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final RectF ovalRect = new RectF();
 
     private float progress = 0f;   // 0..1
-    private String bigText   = "";
-    private String smallText = "";
-
-    // ---------------------------------------------------------------------------
-    // Constructors
-    // ---------------------------------------------------------------------------
+    private float cx, cy, innerRadius;
 
     public PrayerCountdownRingView(Context context) {
         this(context, null);
@@ -51,42 +51,12 @@ public class PrayerCountdownRingView extends View {
 
     public PrayerCountdownRingView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        remainderPaint.setStyle(Paint.Style.FILL);
+        remainderPaint.setColor(COLOR_REMAINDER);
+        goldPaint.setStyle(Paint.Style.FILL);
+        goldPaint.setColor(COLOR_GOLD);
+        navyPaint.setStyle(Paint.Style.FILL);
     }
-
-    // ---------------------------------------------------------------------------
-    // Init
-    // ---------------------------------------------------------------------------
-
-    private void init() {
-        float density = getResources().getDisplayMetrics().density;
-        float strokeWidth = 6f * density;
-
-        trackPaint.setStyle(Paint.Style.STROKE);
-        trackPaint.setColor(COLOR_TRACK);
-        trackPaint.setStrokeWidth(strokeWidth);
-        trackPaint.setStrokeCap(Paint.Cap.ROUND);
-
-        sweepPaint.setStyle(Paint.Style.STROKE);
-        sweepPaint.setStrokeWidth(strokeWidth);
-        sweepPaint.setStrokeCap(Paint.Cap.ROUND);
-        // Gradient is applied in onSizeChanged when we know dimensions.
-
-        float smallSp = 12f * density;
-        float bigSp   = 20f * density;
-
-        smallTextPaint.setColor(COLOR_WHITE);
-        smallTextPaint.setTextSize(smallSp);
-        smallTextPaint.setTextAlign(Paint.Align.CENTER);
-
-        bigTextPaint.setColor(COLOR_WHITE);
-        bigTextPaint.setTextSize(bigSp);
-        bigTextPaint.setTextAlign(Paint.Align.CENTER);
-    }
-
-    // ---------------------------------------------------------------------------
-    // Public API
-    // ---------------------------------------------------------------------------
 
     /** Returns the current sweep progress (0..1). */
     public float getProgress() {
@@ -99,96 +69,45 @@ public class PrayerCountdownRingView extends View {
         invalidate();
     }
 
-    /**
-     * Set the two-line centre text.
-     *
-     * @param big   The large value shown below, e.g. "2:14:30".
-     * @param small The small label shown above, e.g. "باقي".
-     */
-    public void setCenterText(String big, String small) {
-        bigText   = big   != null ? big   : "";
-        smallText = small != null ? small : "";
-        invalidate();
-    }
-
-    // ---------------------------------------------------------------------------
-    // Measure
-    // ---------------------------------------------------------------------------
-
     @Override
     protected void onMeasure(int widthSpec, int heightSpec) {
         float density = getResources().getDisplayMetrics().density;
         int defaultPx = (int) (DEFAULT_SIZE_DP * density);
-
         int w = resolveSize(defaultPx, widthSpec);
         int h = resolveSize(defaultPx, heightSpec);
         setMeasuredDimension(w, h);
     }
 
-    // ---------------------------------------------------------------------------
-    // Size change — rebuild gradient
-    // ---------------------------------------------------------------------------
-
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        rebuildGradient(w, h);
-        updateOvalRect(w, h);
+        float margin = getResources().getDisplayMetrics().density; // 1dp
+        ovalRect.set(margin, margin, w - margin, h - margin);
+        cx = w / 2f;
+        cy = h / 2f;
+        float outerRadius = (Math.min(w, h) / 2f) - margin;
+        innerRadius = outerRadius * INNER_RADIUS_RATIO;
+        // Navy radial highlight centred slightly above middle (A: 50% 35%).
+        navyPaint.setShader(new RadialGradient(
+                cx, cy - outerRadius * 0.15f, innerRadius,
+                COLOR_NAVY_TOP, COLOR_NAVY_BOTTOM, Shader.TileMode.CLAMP));
     }
-
-    private void rebuildGradient(int w, int h) {
-        // Sweep from top-left to bottom-right for a visible gradient effect.
-        sweepPaint.setShader(new LinearGradient(
-                0, 0, w, h,
-                COLOR_GOLD_START, COLOR_GOLD_END,
-                Shader.TileMode.CLAMP));
-    }
-
-    private void updateOvalRect(int w, int h) {
-        float density = getResources().getDisplayMetrics().density;
-        float inset = (6f * density) / 2f + 1f * density; // half stroke + 1dp margin
-        ovalRect.set(inset, inset, w - inset, h - inset);
-    }
-
-    // ---------------------------------------------------------------------------
-    // Draw
-    // ---------------------------------------------------------------------------
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (ovalRect.isEmpty()) return;
 
-        // 1. Faint track (full circle)
-        canvas.drawArc(ovalRect, -90f, 360f, false, trackPaint);
+        // 1. Faint white remainder fills the whole disc.
+        canvas.drawArc(ovalRect, -90f, 360f, true, remainderPaint);
 
-        // 2. Gold sweep arc (from top, clockwise)
+        // 2. Gold sector from the top, clockwise, for the elapsed fraction.
         float sweep = progress * 360f;
         if (sweep > 0f) {
-            canvas.drawArc(ovalRect, -90f, sweep, false, sweepPaint);
+            canvas.drawArc(ovalRect, -90f, sweep, true, goldPaint);
         }
 
-        // 3. Centre text
-        float cx = getWidth() / 2f;
-        float cy = getHeight() / 2f;
-
-        float bigAscent  = bigTextPaint.ascent();
-        float bigDescent = bigTextPaint.descent();
-        float bigHeight  = bigDescent - bigAscent;
-
-        float smallAscent  = smallTextPaint.ascent();
-        float smallDescent = smallTextPaint.descent();
-        float smallHeight  = smallDescent - smallAscent;
-
-        float gap       = 4f * getResources().getDisplayMetrics().density;
-        float totalH    = smallHeight + gap + bigHeight;
-        float topOffset = cy - totalH / 2f;
-
-        // Small label (e.g. "باقي") above
-        float smallBaseline = topOffset - smallAscent; // ascent is negative
-        canvas.drawText(smallText, cx, smallBaseline, smallTextPaint);
-
-        // Big countdown (e.g. "2:14:30") below
-        float bigBaseline = smallBaseline + smallDescent + gap - bigAscent;
-        canvas.drawText(bigText, cx, bigBaseline, bigTextPaint);
+        // 3. Navy inner disc punches the band into a ring.
+        canvas.drawCircle(cx, cy, innerRadius, navyPaint);
     }
 }

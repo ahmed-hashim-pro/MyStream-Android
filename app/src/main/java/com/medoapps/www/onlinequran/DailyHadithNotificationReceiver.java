@@ -19,7 +19,6 @@ import java.util.Calendar;
 public class DailyHadithNotificationReceiver extends BroadcastReceiver {
 
     private static final String CHANNEL_ID = "daily_hadith_channel";
-    private static final String CHANNEL_NAME = "\u062d\u062f\u064a\u062b \u0627\u0644\u064a\u0648\u0645";
     private static final int NOTIFICATION_ID = 1002;
 
     @Override
@@ -42,10 +41,10 @@ public class DailyHadithNotificationReceiver extends BroadcastReceiver {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
-                    CHANNEL_NAME,
+                    context.getString(R.string.notif_hadith_channel_name),
                     NotificationManager.IMPORTANCE_DEFAULT
             );
-            channel.setDescription("\u0625\u0634\u0639\u0627\u0631 \u062d\u062f\u064a\u062b \u0627\u0644\u064a\u0648\u0645 \u0645\u0646 \u0627\u0644\u0633\u0646\u0629 \u0627\u0644\u0646\u0628\u0648\u064a\u0629");
+            channel.setDescription(context.getString(R.string.notif_hadith_channel_description));
             notificationManager.createNotificationChannel(channel);
         }
 
@@ -58,7 +57,7 @@ public class DailyHadithNotificationReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_hadith)
-                .setContentTitle("\u062d\u062f\u064a\u062b \u0627\u0644\u064a\u0648\u0645")
+                .setContentTitle(context.getString(R.string.notif_hadith_title))
                 .setContentText(hadithText)
                 .setSubText(hadithSource)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(hadithText))

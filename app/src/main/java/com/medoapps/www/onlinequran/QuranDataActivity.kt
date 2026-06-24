@@ -664,6 +664,11 @@ class QuranDataActivity : Activity(), SimpleDownloadListener, OnRequestPermissio
     i.putExtra(
         QuranActivity.EXTRA_SHOW_TRANSLATION_UPGRADE, quranSettings.haveUpdatedTranslations()
     )
+    // Forward the Home "read + listen" auto-play flag through to the reader.
+    i.putExtra(
+        com.medoapps.www.onlinequran.ui.PagerActivity.EXTRA_AUTO_PLAY,
+        intent.getBooleanExtra(com.medoapps.www.onlinequran.ui.PagerActivity.EXTRA_AUTO_PLAY, false)
+    )
     startActivity(i)
     finish()
   }

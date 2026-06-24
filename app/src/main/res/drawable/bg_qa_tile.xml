@@ -6,14 +6,17 @@
     <item android:id="@android:id/mask">
         <shape android:shape="rectangle">
             <solid android:color="@android:color/white" />
-            <corners android:radius="14dp" />
+            <corners android:radius="16dp" />
         </shape>
     </item>
-    <!-- Normal background: warm surface, 14dp rounded, subtle elevation via a hairline border -->
+    <!-- Normal background: white card with a warm hairline, 16dp rounded (A .bn-qcell) -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/md_theme_light_surface" />
-            <corners android:radius="14dp" />
+            <solid android:color="@color/background_card" />
+            <stroke
+                android:width="1dp"
+                android:color="@color/divider_warm_light" />
+            <corners android:radius="16dp" />
         </shape>
     </item>
 </ripple>

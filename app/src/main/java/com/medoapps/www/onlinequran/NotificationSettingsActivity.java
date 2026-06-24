@@ -26,7 +26,12 @@ public class NotificationSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification_settings);
 
-        findViewById(R.id.backBTN).setOnClickListener(v -> finish());
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
+        HeroController.attach(this)
+                .back()
+                .centered()
+                .title(R.string.settings_section_notifications)
+                .apply();
 
         setupClickListeners();
         refreshTimeLabels();

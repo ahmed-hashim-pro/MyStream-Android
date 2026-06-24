@@ -34,13 +34,13 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/ic_zakat"
-                    android:contentDescription="زكاة" />
+                    android:contentDescription="@string/zakat_icon_desc" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="احسب زكاة أموالك"
+                    android:text="@string/zakat_header_title"
                     android:textColor="@color/gold_accent"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:gravity="center"
-                    android:text="أدخل قيمة أصولك المالية لحساب الزكاة المستحقة (٢.٥٪)"
+                    android:text="@string/zakat_header_subtitle"
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
 
@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="أسعار المعادن (للجرام الواحد)"
+            android:text="@string/zakat_metal_prices_label"
             android:textColor="@color/gold_accent"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -72,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:hint="سعر جرام الذهب"
+            android:hint="@string/zakat_gold_price_hint"
             app:boxBackgroundColor="@color/background_card"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
@@ -98,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:hint="سعر جرام الفضة"
+            android:hint="@string/zakat_silver_price_hint"
             app:boxBackgroundColor="@color/background_card"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
@@ -124,7 +124,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="الأصول المالية"
+            android:text="@string/zakat_assets_label"
             android:textColor="@color/gold_accent"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -134,7 +134,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:hint="نقود"
+            android:hint="@string/zakat_cash_hint"
             app:boxBackgroundColor="@color/background_card"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
@@ -160,7 +160,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:hint="ذهب (بالجرام)"
+            android:hint="@string/zakat_gold_weight_hint"
             app:boxBackgroundColor="@color/background_card"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
@@ -186,7 +186,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:hint="فضة (بالجرام)"
+            android:hint="@string/zakat_silver_weight_hint"
             app:boxBackgroundColor="@color/background_card"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
@@ -212,7 +212,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:hint="استثمارات"
+            android:hint="@string/zakat_investments_hint"
             app:boxBackgroundColor="@color/background_card"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
@@ -238,7 +238,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:hint="ديون عليك (تُخصم)"
+            android:hint="@string/zakat_debts_hint"
             app:boxBackgroundColor="@color/background_card"
             app:boxCornerRadiusBottomEnd="12dp"
             app:boxCornerRadiusBottomStart="12dp"
@@ -277,7 +277,7 @@
                 android:gravity="center"
                 android:paddingTop="14dp"
                 android:paddingBottom="14dp"
-                android:text="احسب الزكاة"
+                android:text="@string/zakat_calculate_button"
                 android:textColor="@color/text_on_gold"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -306,7 +306,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="نتيجة حساب الزكاة"
+                    android:text="@string/zakat_result_title"
                     android:textColor="@color/gold_accent"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -331,7 +331,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="إجمالي الثروة"
+                        android:text="@string/zakat_total_wealth_label"
                         android:textColor="@color/text_secondary"
                         android:textSize="14sp" />
 
@@ -356,7 +356,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="نصاب الذهب (٨٥ جرام)"
+                        android:text="@string/zakat_nisab_gold_label"
                         android:textColor="@color/text_secondary"
                         android:textSize="14sp" />
 
@@ -379,7 +379,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="نصاب الفضة (٥٩٥ جرام)"
+                        android:text="@string/zakat_nisab_silver_label"
                         android:textColor="@color/text_secondary"
                         android:textSize="14sp" />
 
@@ -410,7 +410,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="مبلغ الزكاة المستحقة"
+                    android:text="@string/zakat_amount_due_label"
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
 

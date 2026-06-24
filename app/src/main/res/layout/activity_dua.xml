@@ -3,12 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_main"
+    android:layoutDirection="locale"
     android:orientation="vertical">
+
+    <include layout="@layout/hero_static" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_dua"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:clipToPadding="false"
         android:padding="16dp" />
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Navy hero header for AyaList: subtle navy gradient with rounded bottom corners, flows from
+     the navy status bar onto the cream body. navy_500/navy_700 are fixed (same in light + dark). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="@color/navy_700"
+        android:endColor="@color/navy_500" />
+    <corners
+        android:bottomLeftRadius="22dp"
+        android:bottomRightRadius="22dp" />
+</shape>

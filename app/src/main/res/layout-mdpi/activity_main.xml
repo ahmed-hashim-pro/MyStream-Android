@@ -4,7 +4,7 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layoutDirection="ltr"
+    android:layoutDirection="inherit"
     android:layout_height="match_parent"
     android:background="@color/background_main">
 
@@ -124,7 +124,7 @@
             app:cardElevation="0dp"
             app:cardMaxElevation="0dp"
             app:cardPreventCornerOverlap="true"
-            android:layoutDirection="locale"
+            android:layoutDirection="inherit"
             app:contentPadding="2dp">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -160,7 +160,7 @@
             app:cardElevation="0dp"
             app:cardMaxElevation="0dp"
             app:cardPreventCornerOverlap="true"
-            android:layoutDirection="locale"
+            android:layoutDirection="inherit"
             app:contentPadding="2dp">
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -323,7 +323,7 @@
         app:itemActiveIndicatorStyle="@style/Widget.MyStream.BottomNav.ActiveIndicator"
         app:itemTextAppearanceActive="@style/TextAppearance.MyStream.BottomNav.Active"
         app:itemTextAppearanceInactive="@style/TextAppearance.MyStream.BottomNav.Inactive"
-        app:itemIconSize="26dp"
+        app:itemIconSize="28dp"
         app:itemRippleColor="@color/gold_accent_faint"
         app:labelVisibilityMode="selected"
         android:layout_gravity="bottom"

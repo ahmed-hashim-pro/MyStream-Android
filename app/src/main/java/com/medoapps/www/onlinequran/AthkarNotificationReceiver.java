@@ -22,10 +22,12 @@ public class AthkarNotificationReceiver extends BroadcastReceiver {
         String type = intent.getStringExtra(EXTRA_TYPE);
         boolean isMorning = TYPE_MORNING.equals(type);
 
-        String title = isMorning ? "أذكار الصباح" : "أذكار المساء";
+        String title = isMorning
+                ? context.getString(R.string.notif_athkar_morning_title)
+                : context.getString(R.string.notif_athkar_evening_title);
         String body = isMorning
-                ? "حان وقت أذكار الصباح، لا تنسَ ذكر الله"
-                : "حان وقت أذكار المساء، لا تنسَ ذكر الله";
+                ? context.getString(R.string.notif_athkar_morning_body)
+                : context.getString(R.string.notif_athkar_evening_body);
         int notifId = isMorning ? 2001 : 2002;
 
         createChannel(context);
@@ -53,8 +55,8 @@ public class AthkarNotificationReceiver extends BroadcastReceiver {
     private void createChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID, "تنبيه الأذكار", NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription("إشعارات أذكار الصباح والمساء");
+                    CHANNEL_ID, context.getString(R.string.notif_athkar_channel_name), NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription(context.getString(R.string.notif_athkar_channel_desc));
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             if (manager != null) {
                 manager.createNotificationChannel(channel);

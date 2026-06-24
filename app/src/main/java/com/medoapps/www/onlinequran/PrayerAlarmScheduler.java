@@ -10,13 +10,15 @@ import java.util.Calendar;
 
 public class PrayerAlarmScheduler {
 
-    private static final String[] PRAYER_NAMES = {
-            "صلاة الفجر",
-            "صلاة الظهر",
-            "صلاة العصر",
-            "صلاة المغرب",
-            "صلاة العشاء"
-    };
+    private static String[] prayerNames(Context context) {
+        return new String[]{
+                context.getString(R.string.prayer_alarm_fajr),
+                context.getString(R.string.prayer_alarm_dhuhr),
+                context.getString(R.string.prayer_alarm_asr),
+                context.getString(R.string.prayer_alarm_maghrib),
+                context.getString(R.string.prayer_alarm_isha)
+        };
+    }
 
     /**
      * Schedule alarms for all five prayers (excluding sunrise).
@@ -34,6 +36,7 @@ public class PrayerAlarmScheduler {
     public static void schedulePrayerAlarms(Context context, String fajr, String sunrise,
                                             String dhuhr, String asr, String maghrib, String isha) {
         String[] times = {fajr, dhuhr, asr, maghrib, isha};
+        String[] prayerNames = prayerNames(context);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
@@ -80,7 +83,7 @@ public class PrayerAlarmScheduler {
             }
 
             Intent intent = new Intent(context, PrayerNotificationReceiver.class);
-            intent.putExtra("prayer_name", PRAYER_NAMES[i]);
+            intent.putExtra("prayer_name", prayerNames[i]);
 
             PendingIntent pendingIntent = PendingIntent.getBroadcast(
                     context,

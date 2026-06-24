@@ -49,8 +49,8 @@ public class FastingTrackerActivity extends AppCompatActivity {
 
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
-    // Arabic day names
-    private static final String[] ARABIC_DAY_NAMES = {
+    // Day names — populated from the current locale in onCreate (values below are a fallback only).
+    private String[] ARABIC_DAY_NAMES = {
             "\u0627\u0644\u0623\u062d\u062f",       // الأحد
             "\u0627\u0644\u0625\u062b\u0646\u064a\u0646",   // الإثنين
             "\u0627\u0644\u062b\u0644\u0627\u062b\u0627\u0621", // الثلاثاء
@@ -60,8 +60,8 @@ public class FastingTrackerActivity extends AppCompatActivity {
             "\u0627\u0644\u0633\u0628\u062a"         // السبت
     };
 
-    // Arabic month names
-    private static final String[] ARABIC_MONTH_NAMES = {
+    // Month names — populated from the current locale in onCreate (values below are a fallback only).
+    private String[] ARABIC_MONTH_NAMES = {
             "\u064a\u0646\u0627\u064a\u0631",   // يناير
             "\u0641\u0628\u0631\u0627\u064a\u0631",  // فبراير
             "\u0645\u0627\u0631\u0633",         // مارس
@@ -81,14 +81,20 @@ public class FastingTrackerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fasting_tracker);
 
-        // ActionBar setup
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("\u0639\u062f\u0627\u062f \u0627\u0644\u0635\u064a\u0627\u0645"); // عداد الصيام
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        // Localize day/month names to the current app language (Sun=1..Sat=7; months 0..11).
+        java.util.Locale dateLocale = androidx.core.os.ConfigurationCompat
+                .getLocales(getResources().getConfiguration()).get(0);
+        java.text.DateFormatSymbols dfs = new java.text.DateFormatSymbols(dateLocale);
+        String[] weekdays = dfs.getWeekdays();
+        ARABIC_DAY_NAMES = new String[]{weekdays[1], weekdays[2], weekdays[3],
+                weekdays[4], weekdays[5], weekdays[6], weekdays[7]};
+        ARABIC_MONTH_NAMES = dfs.getMonths();
 
-        // Status bar and nav bar colors
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.background_main));
+        // Navy hero header
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
+        HeroController.attach(this).back().centered().title(R.string.fasting_title).apply();
+
+        // Nav bar color
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.background_main));
 
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -179,15 +185,15 @@ public class FastingTrackerActivity extends AppCompatActivity {
         // -- Today status --
         boolean fastedToday = dates.contains(todayStr);
         if (fastedToday) {
-            tvTodayStatus.setText("\u062a\u0645 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u0635\u064a\u0627\u0645"); // تم تسجيل الصيام
+            tvTodayStatus.setText(getString(R.string.fasting_status_recorded)); // تم تسجيل الصيام
             tvTodayStatus.setTextColor(ContextCompat.getColor(this, R.color.gold_accent));
-            tvBtnMarkToday.setText("\u0625\u0644\u063a\u0627\u0621 \u0627\u0644\u062a\u0633\u062c\u064a\u0644"); // إلغاء التسجيل
+            tvBtnMarkToday.setText(getString(R.string.fasting_btn_unmark)); // إلغاء التسجيل
             btnMarkToday.setCardBackgroundColor(ContextCompat.getColor(this, R.color.background_input_button));
             tvBtnMarkToday.setTextColor(ContextCompat.getColor(this, R.color.text_primary));
         } else {
-            tvTodayStatus.setText("\u0644\u0645 \u064a\u062a\u0645 \u0627\u0644\u062a\u0633\u062c\u064a\u0644 \u0628\u0639\u062f"); // لم يتم التسجيل بعد
+            tvTodayStatus.setText(getString(R.string.fasting_status_not_recorded)); // لم يتم التسجيل بعد
             tvTodayStatus.setTextColor(ContextCompat.getColor(this, R.color.text_primary));
-            tvBtnMarkToday.setText("\u062a\u0633\u062c\u064a\u0644 \u0635\u064a\u0627\u0645 \u0627\u0644\u064a\u0648\u0645"); // تسجيل صيام اليوم
+            tvBtnMarkToday.setText(getString(R.string.fasting_btn_mark_today)); // تسجيل صيام اليوم
             btnMarkToday.setCardBackgroundColor(ContextCompat.getColor(this, R.color.gold_accent));
             tvBtnMarkToday.setTextColor(ContextCompat.getColor(this, R.color.text_on_gold));
         }
@@ -290,15 +296,15 @@ public class FastingTrackerActivity extends AppCompatActivity {
             int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
             if (dayOfWeek == Calendar.MONDAY || dayOfWeek == Calendar.THURSDAY) {
                 addUpcomingDayRow(cal, dayOfWeek == Calendar.MONDAY
-                        ? "\u0627\u0644\u0625\u062b\u0646\u064a\u0646" // الإثنين
-                        : "\u0627\u0644\u062e\u0645\u064a\u0633"); // الخميس
+                        ? ARABIC_DAY_NAMES[1]   // Monday (locale-aware)
+                        : ARABIC_DAY_NAMES[4]); // Thursday (locale-aware)
                 count++;
             }
             cal.add(Calendar.DAY_OF_YEAR, 1);
         }
 
         if (count == 0) {
-            addEmptyRow(llUpcomingDays, "\u0644\u0627 \u062a\u0648\u062c\u062f \u0623\u064a\u0627\u0645 \u0642\u0627\u062f\u0645\u0629"); // لا توجد أيام قادمة
+            addEmptyRow(llUpcomingDays, getString(R.string.fasting_no_upcoming_days)); // لا توجد أيام قادمة
         }
     }
 
@@ -358,7 +364,7 @@ public class FastingTrackerActivity extends AppCompatActivity {
         llHistory.removeAllViews();
 
         if (dates.isEmpty()) {
-            addEmptyRow(llHistory, "\u0644\u0627 \u064a\u0648\u062c\u062f \u0633\u062c\u0644 \u0628\u0639\u062f"); // لا يوجد سجل بعد
+            addEmptyRow(llHistory, getString(R.string.fasting_no_history)); // لا يوجد سجل بعد
             return;
         }
 

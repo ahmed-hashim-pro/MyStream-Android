@@ -23,15 +23,15 @@ public class AsmaulHusnaNotificationReceiver extends BroadcastReceiver {
         int index = dayOfYear % AsmaulHusnaActivity.getNameCount();
         String[] name = AsmaulHusnaActivity.getName(index);
 
-        String title = "اسم الله اليوم: " + name[0];
+        String title = context.getString(R.string.notif_asma_title, name[0]);
         String body = name[1];
 
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID, "اسم الله اليوم", NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription("إشعار يومي بأحد أسماء الله الحسنى");
+                    CHANNEL_ID, context.getString(R.string.notif_asma_channel_name), NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(context.getString(R.string.notif_asma_channel_desc));
             nm.createNotificationChannel(channel);
         }
 

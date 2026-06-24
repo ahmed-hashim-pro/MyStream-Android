@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-    <solid android:color="@color/gold_accent" />
-</shape>
+<!-- Next-prayer dot (A .bn-dot.next): soft gold halo behind a bright gold core.
+     Designed to fill a 16dp View; inner inset gives an ~8dp bright core. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#3AD4A44C" />
+        </shape>
+    </item>
+    <item
+        android:top="4dp"
+        android:bottom="4dp"
+        android:left="4dp"
+        android:right="4dp">
+        <shape android:shape="oval">
+            <solid android:color="@color/gold_light" />
+        </shape>
+    </item>
+</layer-list>

@@ -191,6 +191,40 @@ public class SeparateFunctions {
         return null;
     }
 
+    /**
+     * Batched variant of {@link #findAudioInMediaStore}: runs ONE MediaStore query for all
+     * downloaded files of a reciter and returns a displayName -> content-uri map. Replaces the
+     * old pattern of one ContentResolver query per surah (up to 114 IPC calls per list load).
+     */
+    public java.util.Map<String, String> findDownloadedAudioUris(String reciteName) {
+        java.util.Map<String, String> result = new java.util.HashMap<>();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return result;
+
+        Uri audioCollection = getAudioCollection();
+        String[] projection = { MediaStore.Audio.Media._ID, MediaStore.Audio.Media.DISPLAY_NAME };
+        // DISPLAY_NAME is "AhmedHashim_" + reciteName + <surah> + ".mp3"; match the reciter prefix.
+        String selection = MediaStore.Audio.Media.RELATIVE_PATH + "=? AND "
+                + MediaStore.Audio.Media.DISPLAY_NAME + " LIKE ?";
+        String[] selectionArgs = { Environment.DIRECTORY_MUSIC + "/MyStream/",
+                "AhmedHashim_" + reciteName + "%" };
+
+        try (Cursor cursor = context.getContentResolver().query(
+                audioCollection, projection, selection, selectionArgs, null)) {
+            if (cursor != null) {
+                int idCol = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID);
+                int nameCol = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME);
+                while (cursor.moveToNext()) {
+                    long id = cursor.getLong(idCol);
+                    result.put(cursor.getString(nameCol),
+                            ContentUris.withAppendedId(audioCollection, id).toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public void changeAppThemeGlobally(){
         SettingSaved settingSaved = new SettingSaved(context);
         settingSaved.LoadData();

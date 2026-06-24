@@ -41,20 +41,24 @@
         <item name="android:ellipsize">end</item>
     </style>
 
-    <!-- Section header: "Title ... See all" -->
+    <!-- Section header: "Title ... action" (A .bn-sec rhythm: 20/11 with a 2dp inset;
+         rtl so the title sits far right and the action far left, like A space-between). -->
     <style name="Widget.MyStream.SectionHeader">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">8dp</item>
+        <item name="android:layoutDirection">rtl</item>
+        <item name="android:paddingStart">2dp</item>
+        <item name="android:paddingEnd">2dp</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingBottom">11dp</item>
     </style>
 
     <style name="Widget.MyStream.SectionHeader.Title">
-        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textColor">@color/text_primary</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <!-- Quick-action tile: rounded elevated warm-surface card with gold-faint ripple -->
@@ -73,16 +77,23 @@
         <item name="android:elevation">2dp</item>
     </style>
 
-    <!-- Standard content card -->
+    <!-- Standard content card: white panel on the cream page, warm hairline, 18dp (A .bn-card) -->
     <style name="Widget.MyStream.Card" parent="Widget.Material3.CardView.Elevated">
-        <item name="cardCornerRadius">16dp</item>
+        <item name="cardCornerRadius">18dp</item>
         <item name="cardElevation">2dp</item>
-        <item name="contentPadding">14dp</item>
+        <item name="contentPadding">15dp</item>
+        <item name="cardBackgroundColor">@color/background_card</item>
+        <item name="strokeColor">@color/divider_warm_light</item>
+        <item name="strokeWidth">1dp</item>
     </style>
 
-    <!-- Navy feature card (continue reading) -->
+    <!-- Navy feature card (continue reading): gradient applied on the inner content
+         (cardBackgroundColor cannot be a gradient), so the card itself is transparent
+         with no padding/stroke and the LinearLayout carries bg_card_continue. -->
     <style name="Widget.MyStream.Card.Feature" parent="Widget.MyStream.Card">
-        <item name="cardBackgroundColor">@color/navy_700</item>
+        <item name="cardBackgroundColor">@android:color/transparent</item>
+        <item name="contentPadding">0dp</item>
+        <item name="strokeWidth">0dp</item>
     </style>
 
     <!-- BottomNav intermediate style (required for Widget.MyStream.BottomNav.ActiveIndicator) -->

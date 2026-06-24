@@ -55,14 +55,11 @@ public class ReadingProgressActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reading_progress);
 
-        // ActionBar setup
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("\u0633\u062c\u0644 \u0627\u0644\u0642\u0631\u0627\u0621\u0629"); // سجل القراءة
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        // Navy hero header
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
+        HeroController.attach(this).back().centered().title(R.string.reading_progress).apply();
 
-        // Status bar and nav bar colors
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.background_main));
+        // Nav bar color
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.background_main));
 
         // Init vibrator and prefs
@@ -196,10 +193,10 @@ public class ReadingProgressActivity extends AppCompatActivity {
         tvProgressCount.setText(todayPages + " / " + dailyGoal);
 
         // Streak display
-        tvStreak.setText(streakDays + " \u064a\u0648\u0645 \u0645\u062a\u062a\u0627\u0644\u064a \uD83D\uDD25"); // يوم متتالي 🔥
+        tvStreak.setText(getString(R.string.reading_streak_format, streakDays));
 
         // Total pages
-        tvTotal.setText("\u0625\u062c\u0645\u0627\u0644\u064a \u0627\u0644\u0635\u0641\u062d\u0627\u062a: " + totalPages); // إجمالي الصفحات:
+        tvTotal.setText(getString(R.string.reading_total_pages_label, totalPages));
 
         // Congrats visibility
         if (todayPages >= dailyGoal) {

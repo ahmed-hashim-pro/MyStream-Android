@@ -24,8 +24,8 @@ public class HisnNotificationReceiver extends BroadcastReceiver {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID, "دعاء اليوم", NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription("إشعار يومي بدعاء من حصن المسلم");
+                    CHANNEL_ID, context.getString(R.string.notif_hisn_channel_name), NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(context.getString(R.string.notif_hisn_channel_desc));
             nm.createNotificationChannel(channel);
         }
 
@@ -36,7 +36,7 @@ public class HisnNotificationReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_hisn)
-                .setContentTitle("دعاء اليوم — " + dua[0])
+                .setContentTitle(context.getString(R.string.notif_hisn_content_title, dua[0]))
                 .setContentText(dua[1])
                 .setSubText(dua[2])
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(dua[1]))

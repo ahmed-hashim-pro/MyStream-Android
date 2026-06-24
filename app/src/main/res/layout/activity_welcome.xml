@@ -42,6 +42,20 @@
             android:text="@string/onb_skip"
             android:textColor="@color/onb_text_secondary" />
 
+        <!-- Language re-pick (also available later in Settings) -->
+        <Button
+            android:id="@+id/onb_lang"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableStart="@drawable/outline_translate_24"
+            android:drawablePadding="6dp"
+            android:drawableTint="@color/onb_text_secondary"
+            android:textAllCaps="false"
+            android:text="@string/settings_language"
+            android:textColor="@color/onb_text_secondary" />
+
         <Button
             android:id="@+id/onb_next"
             android:layout_width="wrap_content"

@@ -53,7 +53,7 @@ public class NotificationPanel {
         // TODO Auto-generated constructor stub
         this.parent = parent;
         nBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(parent,CHANNEL_ID)
-                .setContentTitle("القرءان الكريم")
+                .setContentTitle(parent.getString(R.string.notifpanel_content_title))
                 .setSmallIcon(getNotificationIcon())
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setSound(null)

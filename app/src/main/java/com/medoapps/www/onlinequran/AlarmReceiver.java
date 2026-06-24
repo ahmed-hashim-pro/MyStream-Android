@@ -42,7 +42,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(
                 context,CHANNEL_ID).setSmallIcon(getNotificationIcon())
                 .setContentTitle("My Stream")
-                .setContentText("استمع للورد اليومي").setSound(alarmSound)
+                .setContentText(context.getString(R.string.notif_alarm_daily_wird)).setSound(alarmSound)
                 .setAutoCancel(true).setWhen(when)
                 .setContentIntent(createContentIntent(context))
                 ;

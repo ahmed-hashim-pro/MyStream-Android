@@ -203,7 +203,7 @@ public class TasbihActivity extends AppCompatActivity {
     }
 
     private void updateTotalDisplay() {
-        tvTotalCount.setText("\u0627\u0644\u0625\u062c\u0645\u0627\u0644\u064a: " + totalCount); // الإجمالي:
+        tvTotalCount.setText(getString(R.string.tasbih_total, totalCount));
     }
 
     private void resetCounter() {

@@ -54,12 +54,9 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qibla);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.qibla_finder);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
+        HeroController.attach(this).back().centered().title(R.string.qibla_finder).apply();
 
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.background_main));
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.background_main));
 
         compassImage = findViewById(R.id.compass_image);
@@ -89,11 +86,11 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
     private void fetchLocationForQibla() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            tvStatus.setText("يرجى السماح بإذن الموقع");
+            tvStatus.setText(getString(R.string.qibla_allow_location));
             return;
         }
 
-        tvStatus.setText("جاري تحديد الموقع...");
+        tvStatus.setText(getString(R.string.qibla_locating));
 
         fusedLocationClient.getLastLocation()
             .addOnSuccessListener(this, location -> {
@@ -104,7 +101,7 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
                 }
             })
             .addOnFailureListener(this, e -> {
-                tvStatus.setText("تعذر تحديد الموقع - تأكد من تفعيل GPS");
+                tvStatus.setText(getString(R.string.qibla_location_failed_gps));
             });
     }
 
@@ -114,7 +111,7 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
             return;
         }
 
-        tvStatus.setText("جاري البحث عن GPS...");
+        tvStatus.setText(getString(R.string.qibla_searching_gps));
 
         LocationRequest request = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
                 .setMaxUpdates(1)
@@ -128,7 +125,7 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
                 if (loc != null) {
                     setQiblaFromLocation(loc.getLatitude(), loc.getLongitude());
                 } else {
-                    tvStatus.setText("تعذر تحديد الموقع");
+                    tvStatus.setText(getString(R.string.qibla_location_failed));
                 }
                 fusedLocationClient.removeLocationUpdates(this);
             }
@@ -141,11 +138,11 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
         qiblaBearing = calculateQiblaDirection(lat, lng);
         hasQiblaBearing = true;
         String dir = getDirectionName(qiblaBearing);
-        tvQiblaBearing.setText(String.format("اتجاه القبلة من الشمال: %.0f° (%s)", qiblaBearing, dir));
+        tvQiblaBearing.setText(getString(R.string.qibla_bearing_from_north, qiblaBearing, dir));
         if (noCompassSensor) {
             showStaticQiblaInfo();
         } else {
-            tvStatus.setText("وجه هاتفك نحو اتجاه السهم");
+            tvStatus.setText(getString(R.string.qibla_point_phone_arrow));
             tvDegree.setText("--°");
         }
     }
@@ -154,21 +151,21 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
         // No compass sensor - show bearing as the big number
         compassImage.setRotation(0);
         tvDegree.setText(String.format("%.0f°", qiblaBearing));
-        tvStatus.setText("⚠ هاتفك لا يحتوي على بوصلة\nاستخدم بوصلة خارجية لتحديد الاتجاه");
+        tvStatus.setText(getString(R.string.qibla_no_compass_status));
         tvCalibration.setVisibility(View.VISIBLE);
-        tvCalibration.setText("الهاتف لا يدعم مستشعر البوصلة");
+        tvCalibration.setText(getString(R.string.qibla_no_compass_sensor));
         tvCalibration.setTextColor(Color.parseColor("#E65100"));
     }
 
     private String getDirectionName(float bearing) {
-        if (bearing >= 337.5 || bearing < 22.5) return "شمال";
-        if (bearing < 67.5) return "شمال شرق";
-        if (bearing < 112.5) return "شرق";
-        if (bearing < 157.5) return "جنوب شرق";
-        if (bearing < 202.5) return "جنوب";
-        if (bearing < 247.5) return "جنوب غرب";
-        if (bearing < 292.5) return "غرب";
-        return "شمال غرب";
+        if (bearing >= 337.5 || bearing < 22.5) return getString(R.string.qibla_dir_north);
+        if (bearing < 67.5) return getString(R.string.qibla_dir_northeast);
+        if (bearing < 112.5) return getString(R.string.qibla_dir_east);
+        if (bearing < 157.5) return getString(R.string.qibla_dir_southeast);
+        if (bearing < 202.5) return getString(R.string.qibla_dir_south);
+        if (bearing < 247.5) return getString(R.string.qibla_dir_southwest);
+        if (bearing < 292.5) return getString(R.string.qibla_dir_west);
+        return getString(R.string.qibla_dir_northwest);
     }
 
     private float calculateQiblaDirection(double lat, double lng) {
@@ -297,12 +294,12 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
             compassView.setCircleColor(green);
             tvDegree.setTextColor(green);
             compassImage.setColorFilter(green);
-            tvStatus.setText("✓ أنت تواجه القبلة");
+            tvStatus.setText(getString(R.string.qibla_facing_qibla));
         } else {
             compassView.setCircleColor(gold);
             tvDegree.setTextColor(gold);
             compassImage.setColorFilter(gold);
-            tvStatus.setText("وجه هاتفك نحو اتجاه السهم");
+            tvStatus.setText(getString(R.string.qibla_point_phone_arrow));
         }
     }
 
@@ -310,11 +307,11 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         if (accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE || accuracy == SensorManager.SENSOR_STATUS_ACCURACY_LOW) {
             tvCalibration.setVisibility(View.VISIBLE);
-            tvCalibration.setText("دقة البوصلة منخفضة - قم بتحريك الهاتف بشكل رقم 8 لتحسين الدقة");
+            tvCalibration.setText(getString(R.string.qibla_calibration_low));
             tvCalibration.setTextColor(Color.parseColor("#E65100"));
         } else if (accuracy == SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM) {
             tvCalibration.setVisibility(View.VISIBLE);
-            tvCalibration.setText("دقة البوصلة متوسطة");
+            tvCalibration.setText(getString(R.string.qibla_calibration_medium));
             tvCalibration.setTextColor(ContextCompat.getColor(this, R.color.gold_accent));
         } else if (accuracy == SensorManager.SENSOR_STATUS_ACCURACY_HIGH) {
             tvCalibration.setVisibility(View.GONE);
@@ -328,7 +325,7 @@ public class QiblaActivity extends AppCompatActivity implements SensorEventListe
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 fetchLocationForQibla();
             } else {
-                tvStatus.setText("يرجى السماح بإذن الموقع لتحديد اتجاه القبلة");
+                tvStatus.setText(getString(R.string.qibla_allow_location_for_direction));
             }
         }
     }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Mini mushaf "page" thumbnail behind the read+listen hero (warm paper). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#FBF4E6" />
+    <corners android:radius="7dp" />
+</shape>

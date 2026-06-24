@@ -229,7 +229,7 @@ public class RadioFragment extends Fragment implements  AdapterView.OnItemSelect
         spinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> adapter =new  ArrayAdapter<String>(getActivity(),R.layout.spinner_dropdown_item,
                 getRewayahList());
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner_popup_item);
         spinner.setAdapter(adapter);
         int spinnerPosition = adapter.getPosition(getString(R.string.All));
         spinner.setSelection(spinnerPosition);

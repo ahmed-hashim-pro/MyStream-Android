@@ -47,6 +47,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -169,6 +170,13 @@ public class AyaList extends AppCompatActivity {
     private TextView selectAllBTN;
     private View downloadAllArrow;
 
+    // Navy-hero identity views (hidden during selection mode to free the row for the pill).
+    private View heroAvatar;
+    private View heroIdentity;
+    private TextView heroSubtitle;
+    private TextView collapsedReciterName;   // reciter name shown in the toolbar when collapsed
+    private boolean searchExpanded = false;
+
     private ImageButton toggleViewBTN;
     private static final int VIEW_MODE_LIST = 0;
     private static final int VIEW_MODE_GRID = 1;
@@ -176,12 +184,36 @@ public class AyaList extends AppCompatActivity {
     private int viewMode = VIEW_MODE_LIST;
     private static final String PREF_VIEW_MODE = "ayalist_view_mode";
 
+    // Canonical ayah counts (Hafs), indexed by surah number 1..114; index 0 unused.
+    // Used by the design-C ayah-count chip. The aya list is always the 114 surahs in order.
+    private static final int[] AYAH_COUNTS = {
+        0,
+        7, 286, 200, 176, 120, 165, 206, 75, 129, 109,
+        123, 111, 43, 52, 99, 128, 111, 110, 98, 135,
+        112, 78, 118, 64, 77, 227, 93, 88, 69, 60,
+        34, 30, 73, 54, 45, 83, 182, 88, 75, 85,
+        54, 53, 89, 59, 37, 35, 38, 29, 18, 45,
+        60, 49, 62, 55, 78, 96, 29, 22, 24, 13,
+        14, 11, 11, 18, 12, 12, 30, 52, 52, 44,
+        28, 28, 20, 56, 40, 31, 50, 40, 46, 42,
+        29, 19, 36, 25, 22, 17, 19, 26, 30, 20,
+        15, 21, 11, 8, 8, 19, 5, 8, 8, 11,
+        11, 8, 3, 9, 5, 4, 7, 3, 6, 3,
+        5, 4, 5, 6
+    };
+
     private ShimmerLayout loader;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setAnimation();
         setContentView(R.layout.activity_aya_list);
+
+        // Navy TabHeader -> match the status bar (fixed navy) with light icons in both themes.
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.navy_700));
+        androidx.core.view.WindowInsetsControllerCompat __wic =
+                androidx.core.view.WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (__wic != null) __wic.setAppearanceLightStatusBars(false);
 
 
         /*getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -219,12 +251,16 @@ public class AyaList extends AppCompatActivity {
         ActivityReciter = lc.SetTextFont(ActivityReciter,"");
         ActivityReciter.setText(RealRecitesName);
         ActivityReciter.setSelected(true);
+        setupCollapsingHero();
 
         backBTN = (ImageButton) findViewById(R.id.backBTN);
         downloadAllBTN = (CardView) findViewById(R.id.downloadAllBTN);
         downloadAllText = (TextView) findViewById(R.id.downloadAllText);
         selectAllBTN = (TextView) findViewById(R.id.selectAllBTN);
         downloadAllArrow = findViewById(R.id.downloadAllArrow);
+        heroAvatar = findViewById(R.id.heroAvatar);
+        heroIdentity = findViewById(R.id.heroIdentity);
+        heroSubtitle = (TextView) findViewById(R.id.heroSubtitle);
         selectAllBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -371,6 +407,12 @@ public class AyaList extends AppCompatActivity {
             applyLayoutMode();
             loader.stopShimmerAnimation();
             loader.setVisibility(View.GONE);
+
+            // Navy-hero subtitle: surah count (locale-formatted digits).
+            if (heroSubtitle != null) {
+                int cnt = (listrecitesAya != null) ? listrecitesAya.size() : 0;
+                heroSubtitle.setText(getString(R.string.surah_count, cnt));
+            }
         }
 
 
@@ -651,6 +693,11 @@ public class AyaList extends AppCompatActivity {
     }
 
     private void updateDownloadCard() {
+        // In selection mode, hide the hero identity so the download pill + select-all get the row.
+        int identityVis = selectionMode ? View.GONE : View.VISIBLE;
+        if (heroAvatar != null) heroAvatar.setVisibility(identityVis);
+        if (heroIdentity != null) heroIdentity.setVisibility(identityVis);
+
         if (selectionMode && !selectedPositions.isEmpty()) {
             downloadAllText.setText(String.format(getString(R.string.download_selected), selectedPositions.size()));
         } else if (selectionMode) {
@@ -840,6 +887,7 @@ public class AyaList extends AppCompatActivity {
             LayoutLoading.setVisibility(View.GONE);
             downloadAllBTN.setEnabled(true);
             downloadAllBTN.setAlpha(1.0f);
+            LnaguageClass.clearAyaAvailabilityCache();   // a download finished -> availability changed
             LoadAya();
         }
     };
@@ -978,17 +1026,69 @@ public class AyaList extends AppCompatActivity {
         // Load the banner ad.
         adView.loadAd(new AdRequest.Builder().build());
     }
+    /**
+     * Wires the collapsing navy hero: as the AppBarLayout collapses on scroll, the expanded
+     * identity row fades out and the reciter name fades into the pinned toolbar.
+     */
+    private void setupCollapsingHero() {
+        final View expanded = findViewById(R.id.heroExpanded);
+        collapsedReciterName = (TextView) findViewById(R.id.collapsedReciterName);
+        com.google.android.material.appbar.AppBarLayout appBar = findViewById(R.id.appbar);
+        if (collapsedReciterName != null) collapsedReciterName.setText(RealRecitesName);
+        if (appBar == null) return;
+        appBar.addOnOffsetChangedListener(
+                new com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(com.google.android.material.appbar.AppBarLayout bar, int verticalOffset) {
+                int range = bar.getTotalScrollRange();
+                float fraction = (range > 0) ? Math.min(1f, Math.abs(verticalOffset) / (float) range) : 0f;
+                if (expanded != null) expanded.setAlpha(1f - fraction);
+                // Don't reveal the collapsed title while the search field is open over the toolbar.
+                if (collapsedReciterName != null && !searchExpanded) {
+                    collapsedReciterName.setAlpha(fraction);
+                }
+            }
+        });
+    }
+
+    /**
+     * Colors the framework SearchView's internal views so they stay legible on the fixed-navy
+     * TabHeader in both light and dark mode (mirrors RecitesName). text_on_navy / hint_on_navy
+     * are fixed; gold_accent adapts but stays gold on navy in both modes.
+     */
+    private void styleSearchViewForNavy() {
+        if (searchView == null) return;
+        int textOnNavy = ContextCompat.getColor(this, R.color.text_on_navy);
+        int hintOnNavy = ContextCompat.getColor(this, R.color.hint_on_navy);
+        int gold = ContextCompat.getColor(this, R.color.gold_accent);
+
+        EditText queryText = searchView.findViewById(
+                getResources().getIdentifier("android:id/search_src_text", null, null));
+        if (queryText != null) {
+            queryText.setTextColor(textOnNavy);
+            queryText.setHintTextColor(hintOnNavy);
+        }
+        for (String idName : new String[]{
+                "android:id/search_button", "android:id/search_mag_icon", "android:id/search_close_btn"}) {
+            ImageView icon = searchView.findViewById(getResources().getIdentifier(idName, null, null));
+            if (icon != null) icon.setColorFilter(gold);
+        }
+    }
+
     private void searchManager(){
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
         searchView = (SearchView) findViewById(R.id.search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        // The header is now the fixed-navy TabHeader; color the SearchView internals to stay legible.
+        styleSearchViewForNavy();
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
 //                ActivityTitle.setVisibility(View.VISIBLE);
                 ActivityReciter.setVisibility(View.VISIBLE);
-
+                searchExpanded = false;
+                if (collapsedReciterName != null) collapsedReciterName.setVisibility(View.VISIBLE);
                 return false;
             }
         });
@@ -997,7 +1097,9 @@ public class AyaList extends AppCompatActivity {
             public void onClick(View view) {
 //                ActivityTitle.setVisibility(View.GONE);
                 ActivityReciter.setVisibility(View.GONE);
-
+                // Hide the collapsed-title overlay so the search field has the toolbar to itself.
+                searchExpanded = true;
+                if (collapsedReciterName != null) collapsedReciterName.setVisibility(View.GONE);
             }
         });
         //final Context co=this;
@@ -1783,6 +1885,7 @@ public class AyaList extends AppCompatActivity {
             }
 
             if (deleted) {
+                LnaguageClass.clearAyaAvailabilityCache();   // a file was removed -> availability changed
                 // Rebuild the streaming URL
                 LnaguageClass lc = new LnaguageClass(AyaList.this, AyaList.this);
                 String streamUrl;
@@ -2094,6 +2197,30 @@ public class AyaList extends AppCompatActivity {
                 holder.title.setText(temp.RealName);
                 holder.cost.setText(temp.StateName);// it updated
 
+                // Design-C medallion number + ayah-count chip (List mode only; null in grid/compact).
+                if (holder.surahNumber != null || holder.chipAyah != null) {
+                    int surahNum = -1;
+                    try { surahNum = Integer.parseInt(temp.ServerName.trim()); }
+                    catch (Exception ignored) {}
+                    if (holder.surahNumber != null) {
+                        if (surahNum > 0) {
+                            // Localize digits to match the (locale-formatted) ayah chip — Arabic-Indic in AR.
+                            Locale numLocale = (SettingSaved.LanguageSelect == 2) ? Locale.ENGLISH : new Locale("ar");
+                            holder.surahNumber.setText(String.format(numLocale, "%d", surahNum));
+                        } else {
+                            holder.surahNumber.setText("");
+                        }
+                    }
+                    if (holder.chipAyah != null) {
+                        if (surahNum >= 1 && surahNum <= 114) {
+                            holder.chipAyah.setVisibility(View.VISIBLE);
+                            holder.chipAyah.setText(getString(R.string.ayah_count_chip, AYAH_COUNTS[surahNum]));
+                        } else {
+                            holder.chipAyah.setVisibility(View.GONE);
+                        }
+                    }
+                }
+
                 if (isDownloaded) {
                     holder.statusIcon.setImageResource(R.drawable.ic_offline);
                     holder.statusIcon.setVisibility(View.VISIBLE);
@@ -2193,6 +2320,8 @@ public class AyaList extends AppCompatActivity {
 
             TextView title ;
             TextView cost ;
+            TextView surahNumber ;   // design-C medallion (List mode only)
+            TextView chipAyah ;      // design-C ayah-count chip (List mode only)
             ImageView image ;
             ImageButton budownload ;
             ImageButton ShareButton ;
@@ -2208,6 +2337,9 @@ public class AyaList extends AppCompatActivity {
 
                  title=(TextView) itemView.findViewById( R.id.textView1);
                  cost=(TextView) itemView.findViewById( R.id.textView2);
+                 // Present only in the List layout (single_rowayalist); null in grid/compact.
+                 surahNumber=(TextView) itemView.findViewById( R.id.surahNumber);
+                 chipAyah=(TextView) itemView.findViewById( R.id.chipAyah);
                  image =(ImageView) itemView.findViewById( R.id.imageView);
                  budownload =(ImageButton) itemView.findViewById( R.id.button);
                  ShareButton =(ImageButton) itemView.findViewById( R.id.buttonShare);

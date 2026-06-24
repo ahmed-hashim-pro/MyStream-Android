@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,13 +22,8 @@ public class AsmaulHusnaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_asmaul_husna);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("\u0623\u0633\u0645\u0627\u0621 \u0627\u0644\u0644\u0647 \u0627\u0644\u062d\u0633\u0646\u0649");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.background_main));
-        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.background_main));
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
+        HeroController.attach(this).back().centered().title(R.string.asma_title).apply();
 
         RecyclerView recyclerView = findViewById(R.id.recycler_asmaul_husna);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

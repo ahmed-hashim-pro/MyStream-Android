@@ -13,13 +13,12 @@ import androidx.core.app.NotificationCompat;
 public class PrayerNotificationReceiver extends BroadcastReceiver {
 
     private static final String CHANNEL_ID = "prayer_times_channel";
-    private static final String CHANNEL_NAME = "مواقيت الصلاة";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String prayerName = intent.getStringExtra("prayer_name");
         if (prayerName == null) {
-            prayerName = "الصلاة";
+            prayerName = context.getString(R.string.notif_prayer_default_name);
         }
 
         NotificationManager notificationManager =
@@ -29,7 +28,7 @@ public class PrayerNotificationReceiver extends BroadcastReceiver {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
-                    CHANNEL_NAME,
+                    context.getString(R.string.notif_prayer_channel_name),
                     NotificationManager.IMPORTANCE_HIGH
             );
             channel.enableVibration(true);
@@ -48,7 +47,7 @@ public class PrayerNotificationReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_prayer_times)
-                .setContentTitle("حان وقت الصلاة")
+                .setContentTitle(context.getString(R.string.notif_prayer_alarm_title))
                 .setContentText(prayerName)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

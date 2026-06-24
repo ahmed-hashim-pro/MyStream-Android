@@ -18,7 +18,7 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/home_collapsing"
             android:layout_width="match_parent"
-            android:layout_height="380dp"
+            android:layout_height="315dp"
             android:minHeight="?attr/actionBarSize"
             android:background="@drawable/bg_header_navy"
             android:fitsSystemWindows="true"
@@ -63,14 +63,41 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/home_avatar"
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
+                    <!-- Hero avatar: navy disc + gold ring; shows photo > initial > person glyph
+                         (never an empty blob). Bound in HomeFragment.bindUser(). -->
+                    <FrameLayout
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
                         android:layout_marginEnd="10dp"
-                        android:src="@mipmap/ic_launcher_new_transparent9"
-                        app:civ_border_color="@color/gold_accent"
-                        app:civ_border_width="1.5dp" />
+                        android:background="@drawable/bg_avatar_navy_ring">
+
+                        <ImageView
+                            android:id="@+id/home_avatar_glyph"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_avatar_person" />
+
+                        <TextView
+                            android:id="@+id/home_avatar_initial"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textColor="@color/gold_light"
+                            android:textSize="17sp"
+                            android:textStyle="bold"
+                            android:visibility="gone"
+                            tools:text="هـ" />
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/home_avatar"
+                            android:layout_width="46dp"
+                            android:layout_height="46dp"
+                            android:visibility="gone"
+                            app:civ_border_color="@color/gold_accent"
+                            app:civ_border_width="2dp" />
+                    </FrameLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -82,37 +109,38 @@
                             android:id="@+id/home_greeting"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:alpha="0.85"
+                            android:alpha="0.7"
                             android:text="@string/home_greeting"
                             android:textColor="#FFFFFF"
-                            android:textSize="13sp" />
+                            android:textSize="11sp" />
 
                         <TextView
                             android:id="@+id/home_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="#FFFFFF"
-                            android:textSize="20sp"
+                            android:textSize="19sp"
                             android:textStyle="bold"
-                            tools:text="Hashim" />
+                            tools:text="هاشم" />
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/home_streak"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/bg_listrow_badge"
-                        android:paddingStart="10dp"
-                        android:paddingTop="5dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="5dp"
-                        android:textColor="@color/gold_accent"
+                        android:background="@drawable/bg_streak_pill"
+                        android:paddingStart="11dp"
+                        android:paddingTop="6dp"
+                        android:paddingEnd="11dp"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/gold_light"
                         android:textSize="12sp"
                         android:textStyle="bold"
-                        tools:text="🔥 7" />
+                        tools:text="٧ أيام 🔥" />
                 </LinearLayout>
 
-                <!-- A centerpiece: large CENTERED gold countdown ring -->
+                <!-- A centerpiece: filled gold countdown ring with a 3-line centre stack:
+                     label · prayer name · countdown (drawn over the navy inner disc). -->
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -120,26 +148,22 @@
 
                     <com.medoapps.www.onlinequran.ui.home.PrayerCountdownRingView
                         android:id="@+id/hero_ring"
-                        android:layout_width="138dp"
-                        android:layout_height="138dp"
+                        android:layout_width="128dp"
+                        android:layout_height="128dp"
                         android:layout_gravity="center_horizontal" />
 
-                    <!-- Next-prayer name + time overlaid in the ring center.
-                         The ring view draws the small "باقي" label + countdown
-                         below; the name sits at the top of the centre stack. -->
                     <LinearLayout
-                        android:layout_width="138dp"
-                        android:layout_height="138dp"
+                        android:layout_width="128dp"
+                        android:layout_height="128dp"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center"
-                        android:orientation="vertical"
-                        android:paddingBottom="56dp">
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.6"
-                            android:letterSpacing="0.1"
+                            android:letterSpacing="0.08"
                             android:text="@string/home_hero_next"
                             android:textColor="#FFFFFF"
                             android:textSize="10sp" />
@@ -149,14 +173,24 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="22sp"
+                            android:textColor="@color/gold_light"
+                            android:textSize="23sp"
                             android:textStyle="bold"
                             tools:text="المغرب" />
+
+                        <TextView
+                            android:id="@+id/hero_countdown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:alpha="0.85"
+                            android:textColor="#FFFFFF"
+                            android:textSize="11sp"
+                            tools:text="بعد ٢ س ١٤ د" />
                     </LinearLayout>
                 </FrameLayout>
 
-                <!-- Hijri + Gregorian caption (centered under the ring, A) -->
+                <!-- Hijri · Gregorian caption (centered under the ring, A .bn-date) -->
                 <TextView
                     android:id="@+id/home_hijri"
                     android:layout_width="match_parent"
@@ -165,65 +199,19 @@
                     android:alpha="0.7"
                     android:gravity="center"
                     android:textColor="#FFFFFF"
-                    android:textSize="12sp"
-                    tools:text="14 Dhul-Hijjah 1447" />
+                    android:textSize="11.5sp"
+                    tools:text="١٤ ذو الحجة ١٤٤٧ هـ · ١٩ يونيو" />
 
-                <!-- Next-prayer time caption (kept id hero_prayer_time, centered) -->
-                <TextView
-                    android:id="@+id/hero_prayer_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:alpha="0.85"
-                    android:gravity="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="13sp"
-                    tools:text="18:42" />
-
-                <!-- 5-dot prayer progress strip (centered row, A) -->
+                <!-- 5 prayer dots with per-prayer labels, built in HomeFragment.renderPrayerDots().
+                     Follows the locale: Fajr is rightmost in RTL (Arabic), leftmost in LTR (English). -->
                 <LinearLayout
                     android:id="@+id/prayer_dots"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
+                    android:layoutDirection="locale"
                     android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <View
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
-                        android:layout_marginStart="9dp"
-                        android:layout_marginEnd="9dp"
-                        android:background="@drawable/dot_prayer_filled" />
-
-                    <View
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
-                        android:layout_marginStart="9dp"
-                        android:layout_marginEnd="9dp"
-                        android:background="@drawable/dot_prayer_filled" />
-
-                    <View
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
-                        android:layout_marginStart="9dp"
-                        android:layout_marginEnd="9dp"
-                        android:background="@drawable/dot_prayer_outline" />
-
-                    <View
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
-                        android:layout_marginStart="9dp"
-                        android:layout_marginEnd="9dp"
-                        android:background="@drawable/dot_prayer_outline" />
-
-                    <View
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
-                        android:layout_marginStart="9dp"
-                        android:layout_marginEnd="9dp"
-                        android:background="@drawable/dot_prayer_outline" />
-                </LinearLayout>
+                    android:orientation="horizontal" />
             </LinearLayout>
 
             <!-- Collapsed pin bar. Background is transparent when expanded;
@@ -243,13 +231,227 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:padding="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="104dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:orientation="vertical">
+
+            <!-- ============================================================ -->
+            <!-- Quran modes: hero (read+listen in mushaf) + Read + Listen    -->
+            <!-- ============================================================ -->
+            <!-- Tight top padding: this is the first section, right under the header -->
+            <LinearLayout
+                style="@style/Widget.MyStream.SectionHeader"
+                android:paddingTop="6dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@style/Widget.MyStream.SectionHeader.Title"
+                    android:text="@string/home_quran_section" />
+            </LinearLayout>
+
+            <!-- HERO: read + listen in the mushaf with synced ayah highlighting -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/quran_rl"
+                style="@style/Widget.MyStream.Card.Feature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card_continue"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="14dp">
+
+                    <!-- Mini mushaf page; the middle line is the "playing" ayah, gold -->
+                    <LinearLayout
+                        android:layout_width="56dp"
+                        android:layout_height="72dp"
+                        android:background="@drawable/bg_mushaf_thumb"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingStart="7dp"
+                        android:paddingEnd="7dp">
+
+                        <View android:layout_width="match_parent" android:layout_height="3dp" android:background="@drawable/mushaf_line" />
+                        <View android:layout_width="match_parent" android:layout_height="3dp" android:layout_marginTop="5dp" android:background="@drawable/mushaf_line" />
+                        <View android:layout_width="match_parent" android:layout_height="5dp" android:layout_marginTop="5dp" android:background="@drawable/mushaf_line_glow" />
+                        <View android:layout_width="match_parent" android:layout_height="3dp" android:layout_marginTop="5dp" android:background="@drawable/mushaf_line" />
+                        <View android:layout_width="match_parent" android:layout_height="3dp" android:layout_marginTop="5dp" android:background="@drawable/mushaf_line" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="13dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/home_quran_rl_title"
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:alpha="0.72"
+                            android:text="@string/home_quran_rl_sub"
+                            android:textColor="#FFFFFF"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="9dp"
+                            android:background="@drawable/bg_streak_pill"
+                            android:paddingStart="10dp"
+                            android:paddingTop="5dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="5dp"
+                            android:text="@string/home_quran_rl_chip"
+                            android:textColor="@color/gold_light"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_marginStart="12dp"
+                        android:background="@drawable/bg_continue_resume"
+                        android:contentDescription="@string/home_quran_rl_title"
+                        android:padding="11dp"
+                        android:src="@drawable/round_play_arrow_24"
+                        app:tint="@color/navy_700" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Read (mushaf) + Listen (reciters audio player) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/quran_read"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/bg_qa_tile"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:elevation="2dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <FrameLayout
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_qa_icon_tile">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="📖"
+                            android:textSize="19sp" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/home_quran_read_title"
+                            android:textColor="@color/text_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/home_quran_read_sub"
+                            android:textColor="@color/sura_details_color"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/quran_listen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/bg_qa_tile"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:elevation="2dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <FrameLayout
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/bg_qa_icon_tile">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="🎧"
+                            android:textSize="19sp" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/home_quran_listen_title"
+                            android:textColor="@color/text_primary"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/home_quran_listen_sub"
+                            android:textColor="@color/sura_details_color"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
 
             <!-- A §1 Verse of the Day (moved directly under header; cream card,
                  large gold quote glyph, centered Arabic ayah, ref chip, actions) -->
@@ -280,12 +482,13 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <!-- Section label + reference chip row (A .bn-vhead) -->
+                        <!-- Section label + reference chip row (A .bn-vhead: title right, chip left) -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:gravity="center_vertical"
+                            android:layoutDirection="rtl"
                             android:orientation="horizontal">
 
                             <TextView
@@ -302,12 +505,13 @@
                                 android:id="@+id/verse_ref"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginEnd="6dp"
                                 android:background="@drawable/bg_listrow_badge"
                                 android:paddingStart="9dp"
                                 android:paddingTop="3dp"
                                 android:paddingEnd="9dp"
                                 android:paddingBottom="3dp"
-                                android:textColor="@color/colorPrimaryDark"
+                                android:textColor="@color/gold_accent"
                                 android:textSize="11sp"
                                 android:textStyle="bold"
                                 tools:text="الشرح ٦" />
@@ -320,25 +524,13 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:layoutDirection="rtl"
-                            android:lineSpacingMultiplier="1.6"
+                            android:lineSpacingMultiplier="1.7"
                             android:paddingTop="4dp"
                             android:paddingBottom="6dp"
-                            android:textColor="@color/navy_700"
-                            android:textSize="21sp"
+                            android:textColor="@color/text_primary"
+                            android:textSize="22sp"
                             android:textStyle="bold"
                             tools:text="وَقُل رَّبِّ زِدْنِي عِلْمًا" />
-
-                        <!-- Translation (muted, centered) -->
-                        <TextView
-                            android:id="@+id/verse_translation"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:alpha="0.7"
-                            android:gravity="center"
-                            android:lineSpacingMultiplier="1.4"
-                            android:textSize="12sp"
-                            tools:text="Indeed, with hardship will be ease." />
 
                         <!-- Ghost action buttons (A .bn-vacts: full-width split) -->
                         <LinearLayout
@@ -356,12 +548,14 @@
                                 android:background="@drawable/bg_verse_ghost"
                                 android:drawableStart="@drawable/round_content_copy_24"
                                 android:drawablePadding="6dp"
-                                android:drawableTint="@color/colorPrimaryDark"
+                                android:drawableTint="@color/gold_accent"
                                 android:gravity="center"
+                                android:paddingStart="14dp"
                                 android:paddingTop="8dp"
+                                android:paddingEnd="14dp"
                                 android:paddingBottom="8dp"
-                                android:text="نسخ"
-                                android:textColor="@color/colorPrimaryDark"
+                                android:text="@string/home_verse_copy"
+                                android:textColor="@color/gold_accent"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
 
@@ -374,12 +568,14 @@
                                 android:background="@drawable/bg_verse_ghost"
                                 android:drawableStart="@drawable/round_play_arrow_24"
                                 android:drawablePadding="6dp"
-                                android:drawableTint="@color/colorPrimaryDark"
+                                android:drawableTint="@color/gold_accent"
                                 android:gravity="center"
+                                android:paddingStart="14dp"
                                 android:paddingTop="8dp"
+                                android:paddingEnd="14dp"
                                 android:paddingBottom="8dp"
-                                android:text="استمع"
-                                android:textColor="@color/colorPrimaryDark"
+                                android:text="@string/home_verse_listen"
+                                android:textColor="@color/gold_accent"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -398,7 +594,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:background="@drawable/bg_card_continue"
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
                     <!-- Text row: subtitle + title on the left, resume button on the right -->
                     <LinearLayout
@@ -430,10 +628,10 @@
                                 android:textColor="#FFFFFF"
                                 android:textSize="17sp"
                                 android:textStyle="bold"
-                                tools:text="صفحة 255 · البقرة" />
+                                tools:text="صفحة ٢٥٥ · البقرة" />
                         </LinearLayout>
 
-                        <!-- Circular gold resume button -->
+                        <!-- Circular gold resume button (navy glyph, A .bn-play) -->
                         <ImageView
                             android:id="@+id/continue_resume"
                             android:layout_width="46dp"
@@ -443,7 +641,7 @@
                             android:contentDescription="@string/home_continue_reading"
                             android:padding="11dp"
                             android:src="@drawable/round_play_arrow_24"
-                            app:tint="#FFFFFF" />
+                            app:tint="@color/navy_700" />
                     </LinearLayout>
 
                     <!-- Thin gold progress bar under the row (A .bn-prog) -->
@@ -456,6 +654,17 @@
                         android:max="604"
                         android:progress="0"
                         android:progressDrawable="@drawable/bg_continue_progress" />
+
+                    <!-- Daily-goal line under the bar (A .bn-goal) -->
+                    <TextView
+                        android:id="@+id/continue_goal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:alpha="0.7"
+                        android:textColor="#FFFFFF"
+                        android:textSize="11sp"
+                        tools:text="هدف اليوم · ٣ من ٥ صفحات" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -499,6 +708,7 @@
                             android:id="@+id/stat_pages"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/text_primary"
                             android:textSize="15sp"
                             android:textStyle="bold"
                             tools:text="4 / 7 صفحات" />
@@ -517,6 +727,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
+                            android:textColor="@color/text_secondary"
                             android:textSize="13sp"
                             tools:text="7 يوم" />
 
@@ -546,8 +757,14 @@
                     android:text="@string/home_prayers_title" />
 
                 <TextView
+                    android:id="@+id/prayers_action"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:paddingStart="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="4dp"
                     android:text="@string/home_prayers_action"
                     android:textColor="@color/gold_accent"
                     android:textSize="12sp"
@@ -563,10 +780,13 @@
                 android:clipToPadding="false"
                 android:scrollbars="none">
 
+                <!-- Follows the locale: Fajr rightmost in RTL (Arabic), leftmost in LTR (English).
+                     Set on the row only; the scroll view inherits the locale direction. -->
                 <LinearLayout
                     android:id="@+id/prayer_timeline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layoutDirection="locale"
                     android:orientation="horizontal" />
             </HorizontalScrollView>
 
@@ -632,7 +852,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="مباشر"
+                                android:text="@string/home_live_badge"
                                 android:textColor="#E53935"
                                 android:textSize="11sp"
                                 android:textStyle="bold" />
@@ -675,8 +895,8 @@
             </com.google.android.material.card.MaterialCardView>
 
             <!-- A §4 Quick actions: section header + 4 tiles.
-                 A order (RTL, right→left): القبلة · الأذكار · راديو · المصحف.
-                 Ids kept; rtl direction places qa_athkar(القبلة) rightmost. -->
+                 A order (RTL, right→left): المصحف · راديو · الأذكار · القبلة.
+                 Ids kept (qa_athan→Athkar, qa_athkar→Qibla per bindQuickActions). -->
             <LinearLayout style="@style/Widget.MyStream.SectionHeader">
                 <TextView
                     android:layout_width="0dp"
@@ -691,82 +911,108 @@
                 android:layout_height="wrap_content"
                 android:layoutDirection="rtl"
                 android:orientation="horizontal"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:layout_marginTop="2dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="14dp"
                 android:layout_marginHorizontal="-5dp">
 
-                <!-- القبلة (qa_athkar id → QiblaActivity) -->
-                <LinearLayout android:id="@+id/qa_athkar" style="@style/Widget.MyStream.QuickAction">
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        app:srcCompat="@drawable/ic_qibla"
-                        app:tint="@color/gold_accent"
-                        android:contentDescription="@string/qa_label_qibla" />
+                <!-- المصحف (qa_quran id → QuranDataActivity) — rightmost -->
+                <LinearLayout android:id="@+id/qa_quran" style="@style/Widget.MyStream.QuickAction">
+                    <FrameLayout
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:background="@drawable/bg_qa_icon_tile">
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/holyquran"
+                            app:tint="@color/gold_accent"
+                            android:contentDescription="@string/qa_label_mushaf" />
+                    </FrameLayout>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
-                        android:text="@string/qa_label_qibla"
-                        android:textSize="12sp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textStyle="bold"
-                        android:gravity="center" />
-                </LinearLayout>
-
-                <!-- الأذكار (qa_athan id → AthkarActivity) -->
-                <LinearLayout android:id="@+id/qa_athan" style="@style/Widget.MyStream.QuickAction">
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        app:srcCompat="@drawable/ic_athkar"
-                        app:tint="@color/gold_accent"
-                        android:contentDescription="@string/qa_label_athkar" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp"
-                        android:text="@string/qa_label_athkar"
-                        android:textSize="12sp"
-                        android:textColor="?attr/colorOnSurface"
+                        android:text="@string/qa_label_mushaf"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_primary"
                         android:textStyle="bold"
                         android:gravity="center" />
                 </LinearLayout>
 
                 <!-- راديو (qa_radio id → Radio tab) -->
                 <LinearLayout android:id="@+id/qa_radio" style="@style/Widget.MyStream.QuickAction">
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        app:srcCompat="@drawable/outline_radio_24"
-                        app:tint="@color/gold_accent"
-                        android:contentDescription="@string/qa_label_radio" />
+                    <FrameLayout
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:background="@drawable/bg_qa_icon_tile">
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/outline_radio_24"
+                            app:tint="@color/gold_accent"
+                            android:contentDescription="@string/qa_label_radio" />
+                    </FrameLayout>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
                         android:text="@string/qa_label_radio"
-                        android:textSize="12sp"
-                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_primary"
                         android:textStyle="bold"
                         android:gravity="center" />
                 </LinearLayout>
 
-                <!-- المصحف (qa_quran id → QuranDataActivity) -->
-                <LinearLayout android:id="@+id/qa_quran" style="@style/Widget.MyStream.QuickAction">
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        app:srcCompat="@drawable/holyquran"
-                        app:tint="@color/gold_accent"
-                        android:contentDescription="@string/qa_label_mushaf" />
+                <!-- الأذكار (qa_athan id → AthkarActivity) -->
+                <LinearLayout android:id="@+id/qa_athan" style="@style/Widget.MyStream.QuickAction">
+                    <FrameLayout
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:background="@drawable/bg_qa_icon_tile">
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_athkar"
+                            app:tint="@color/gold_accent"
+                            android:contentDescription="@string/qa_label_athkar" />
+                    </FrameLayout>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
-                        android:text="@string/qa_label_mushaf"
-                        android:textSize="12sp"
-                        android:textColor="?attr/colorOnSurface"
+                        android:text="@string/qa_label_athkar"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_primary"
+                        android:textStyle="bold"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <!-- القبلة (qa_athkar id → QiblaActivity) — leftmost -->
+                <LinearLayout android:id="@+id/qa_athkar" style="@style/Widget.MyStream.QuickAction">
+                    <FrameLayout
+                        android:layout_width="38dp"
+                        android:layout_height="38dp"
+                        android:background="@drawable/bg_qa_icon_tile">
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_qibla"
+                            app:tint="@color/gold_accent"
+                            android:contentDescription="@string/qa_label_qibla" />
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:text="@string/qa_label_qibla"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_primary"
                         android:textStyle="bold"
                         android:gravity="center" />
                 </LinearLayout>
@@ -782,7 +1028,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     style="@style/Widget.MyStream.SectionHeader.Title"
-                    android:text="اكتشف" />
+                    android:text="@string/home_discover_header" />
             </LinearLayout>
 
             <LinearLayout
@@ -790,95 +1036,121 @@
                 android:layout_height="wrap_content"
                 android:layoutDirection="rtl"
                 android:orientation="horizontal"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="14dp">
 
-                <!-- Discover: Islamic Events (A first / rightmost) -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/discover_events"
-                    style="@style/Widget.MyStream.Discover"
+                <!-- Discover: Athkar (A .bn-d1 — gold gradient, rightmost) -->
+                <FrameLayout
+                    android:id="@+id/discover_athkar"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="6dp"
-                    app:rippleColor="@color/gold_accent_faint">
+                    android:background="@drawable/bg_discover_gold"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:minHeight="108dp"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|right"
+                        android:alpha="0.9"
+                        android:text="🌅"
+                        android:textSize="22sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="4dp">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            app:srcCompat="@drawable/ic_islamic_events"
-                            app:tint="@color/gold_accent"
-                            android:contentDescription="@null"
-                            android:layout_marginBottom="8dp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/discover_events_title"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:textColor="?attr/colorOnSurface"
-                            android:lineSpacingMultiplier="1.2"
-                            android:maxLines="2"
-                            android:layout_marginBottom="8dp" />
-
-                        <!-- Upcoming chip -->
-                        <com.google.android.material.chip.Chip
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/discover_events_chip"
-                            android:textSize="11sp"
-                            app:chipBackgroundColor="@color/gold_accent_faint"
-                            app:chipStrokeColor="@color/gold_accent"
-                            app:chipStrokeWidth="1dp"
-                            android:textColor="@color/gold_accent"
-                            app:ensureMinTouchTargetSize="false"
-                            style="@style/Widget.Material3.Chip.Suggestion" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Discover: Athkar (A second) -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/discover_athkar"
-                    style="@style/Widget.MyStream.Discover"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="6dp"
-                    app:rippleColor="@color/gold_accent_faint">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="4dp">
-
-                        <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            app:srcCompat="@drawable/ic_athkar"
-                            app:tint="@color/gold_accent"
-                            android:contentDescription="@null"
-                            android:layout_marginBottom="8dp" />
+                        android:layout_gravity="bottom"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/discover_athkar_title"
+                            android:textColor="#FFFFFF"
                             android:textSize="13sp"
                             android:textStyle="bold"
-                            android:textColor="?attr/colorOnSurface"
                             android:lineSpacingMultiplier="1.2"
                             android:maxLines="2" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:alpha="0.85"
+                            android:text="@string/discover_athkar_sub"
+                            android:textColor="#FFFFFF"
+                            android:textSize="10sp" />
                     </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                </FrameLayout>
+
+                <!-- Discover: Islamic Events (A .bn-d2 — navy gradient, left) -->
+                <FrameLayout
+                    android:id="@+id/discover_events"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:background="@drawable/bg_discover_navy"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:minHeight="108dp"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|right"
+                        android:alpha="0.9"
+                        android:text="🕌"
+                        android:textSize="22sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/discover_events_title"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:lineSpacingMultiplier="1.2"
+                            android:maxLines="2" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:background="@drawable/bg_chip_event"
+                            android:paddingStart="8dp"
+                            android:paddingTop="2dp"
+                            android:paddingEnd="8dp"
+                            android:paddingBottom="2dp"
+                            android:text="@string/discover_events_chip"
+                            android:textColor="#8B6508"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </FrameLayout>
             </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <!-- A .bn-fade: content fades into the cream page above the floating nav dock -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_home_bottom_fade"
+        android:clickable="false"
+        android:focusable="false" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

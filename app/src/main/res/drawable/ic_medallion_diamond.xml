@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Design-C medallion: double-outline gold diamond holding the surah number. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="46dp"
+    android:height="46dp"
+    android:viewportWidth="46"
+    android:viewportHeight="46">
+    <path
+        android:pathData="M23,2 L44,23 L23,44 L2,23 Z"
+        android:strokeColor="@color/gold_accent"
+        android:strokeWidth="1.5"
+        android:fillColor="@android:color/transparent" />
+    <path
+        android:pathData="M23,7 L39,23 L23,39 L7,23 Z"
+        android:strokeColor="@color/gold_accent"
+        android:strokeWidth="0.6"
+        android:strokeAlpha="0.5"
+        android:fillColor="@android:color/transparent" />
+</vector>

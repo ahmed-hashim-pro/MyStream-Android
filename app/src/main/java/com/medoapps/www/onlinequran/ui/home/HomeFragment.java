@@ -102,6 +102,7 @@ public class HomeFragment extends Fragment {
         bindNowPlaying();
         bindVerseOfDay();
         bindQuickActions();
+        bindQuranModes();
         bindCollapseTitle();
     }
 
@@ -147,12 +148,17 @@ public class HomeFragment extends Fragment {
         super.onPause();
         stopHeroTicker();
         cancelAnimators();
+        stopVerseAudio();
     }
 
     private void bindProfile() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            binding.homeName.setText("");
+            // Not signed in: welcome line + default person glyph (never an empty avatar).
+            binding.homeName.setText(R.string.home_welcome);
+            binding.homeAvatar.setVisibility(View.GONE);
+            binding.homeAvatarInitial.setVisibility(View.GONE);
+            binding.homeAvatarGlyph.setVisibility(View.VISIBLE);
             return;
         }
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference()
@@ -163,11 +169,25 @@ public class HomeFragment extends Fragment {
                 if (binding == null || !isAdded()) return;
                 User u = snapshot.getValue(User.class);
                 if (u == null) return;
-                binding.homeName.setText(u.firstname != null ? u.firstname : "");
+                String name = u.firstname != null ? u.firstname : "";
+                binding.homeName.setText(name.isEmpty() ? getString(R.string.home_welcome) : name);
+                binding.homeAvatarInitial.setText(initialOf(name));
                 if (u.photourl != null && !u.photourl.isEmpty()) {
+                    // photo > initial > glyph
+                    binding.homeAvatar.setVisibility(View.VISIBLE);
+                    binding.homeAvatarInitial.setVisibility(View.GONE);
+                    binding.homeAvatarGlyph.setVisibility(View.GONE);
                     Glide.with(HomeFragment.this).load(u.photourl)
                             .placeholder(R.mipmap.ic_launcher_new_transparent9)
                             .into(binding.homeAvatar);
+                } else if (!name.isEmpty()) {
+                    binding.homeAvatar.setVisibility(View.GONE);
+                    binding.homeAvatarInitial.setVisibility(View.VISIBLE);
+                    binding.homeAvatarGlyph.setVisibility(View.GONE);
+                } else {
+                    binding.homeAvatar.setVisibility(View.GONE);
+                    binding.homeAvatarInitial.setVisibility(View.GONE);
+                    binding.homeAvatarGlyph.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -176,8 +196,19 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    /** First display character used for the gold avatar fallback. */
+    private static String initialOf(String name) {
+        if (name == null) return "";
+        String trimmed = name.trim();
+        return trimmed.isEmpty() ? "" : trimmed.substring(0, 1);
+    }
+
     private void bindHijri() {
-        binding.homeHijri.setText(HijriDate.todayString(requireContext()));
+        java.util.Calendar now = java.util.Calendar.getInstance();
+        java.util.Locale loc = androidx.core.os.ConfigurationCompat
+                .getLocales(getResources().getConfiguration()).get(0);
+        String gregorian = new java.text.SimpleDateFormat("d MMMM", loc).format(now.getTime());
+        binding.homeHijri.setText(HijriDate.todayString(requireContext()) + " · " + gregorian);
     }
 
     // ---------------------------------------------------------------------
@@ -215,17 +246,14 @@ public class HomeFragment extends Fragment {
 
         heroPrayerName = getString(PrayerTimeEngine.PRAYER_NAME_RES[idx]);
         binding.heroPrayerName.setText(heroPrayerName);
-        binding.heroPrayerTime.setText(PrayerTimeEngine.formatTime(ctx, times[idx]));
 
         float targetProgress = RingMath.sweepFraction(prevMillis, nextMillis, now);
         float fromProgress = binding.heroRing.getProgress();
         animateRingTo(fromProgress, targetProgress);
-        heroRemainingText = formatHms(HomeCountdown.remainingMillis(now, nextMillis));
-        binding.heroRing.setCenterText(
-                heroRemainingText,
-                getString(R.string.home_hero_remaining));
+        heroRemainingText = formatRemaining(HomeCountdown.remainingMillis(now, nextMillis));
+        binding.heroCountdown.setText(heroRemainingText);
 
-        renderPrayerDots(times, now);
+        renderPrayerDots(times, now, idx);
     }
 
     /**
@@ -248,25 +276,106 @@ public class HomeFragment extends Fragment {
         return prev;
     }
 
-    /** Fills dots for prayers already passed today, outline for upcoming. */
-    private void renderPrayerDots(Date[] times, long now) {
-        ViewGroup dots = binding.prayerDots;
-        int n = Math.min(dots.getChildCount(), PRAYER_ORDER.length);
-        for (int i = 0; i < n; i++) {
-            boolean passed = times[PRAYER_ORDER[i]].getTime() <= now;
-            dots.getChildAt(i).setBackgroundResource(
-                    passed ? R.drawable.dot_prayer_filled : R.drawable.dot_prayer_outline);
+    /**
+     * Builds the 5 header prayer dots (A .bn-dots): a dot over its Arabic name,
+     * with past / next / future states. The next prayer gets a haloed gold dot
+     * and a gold bold label; past and future labels are faint white.
+     */
+    private void renderPrayerDots(Date[] times, long now, int nextIdx) {
+        LinearLayout dots = binding.prayerDots;
+        dots.removeAllViews();
+        Context ctx = requireContext();
+        float density = getResources().getDisplayMetrics().density;
+        int slotPx    = (int) (18 * density);
+        int dotPx     = (int) (8  * density);
+        int nextDotPx = (int) (16 * density);
+        int hMargin   = (int) (9  * density);
+
+        for (int i = 0; i < PRAYER_ORDER.length; i++) {
+            int p = PRAYER_ORDER[i];
+            boolean isNext = (p == nextIdx);
+            boolean isPast = !isNext && times[p].getTime() <= now;
+
+            LinearLayout col = new LinearLayout(ctx);
+            col.setOrientation(LinearLayout.VERTICAL);
+            col.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
+            LinearLayout.LayoutParams colLp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            colLp.setMarginStart(hMargin);
+            colLp.setMarginEnd(hMargin);
+            col.setLayoutParams(colLp);
+
+            // Fixed-height slot keeps labels aligned across the differing dot sizes.
+            android.widget.FrameLayout slot = new android.widget.FrameLayout(ctx);
+            slot.setLayoutParams(new LinearLayout.LayoutParams(slotPx, slotPx));
+            View dot = new View(ctx);
+            int size = isNext ? nextDotPx : dotPx;
+            dot.setLayoutParams(new android.widget.FrameLayout.LayoutParams(
+                    size, size, android.view.Gravity.CENTER));
+            if (isNext) {
+                dot.setBackgroundResource(R.drawable.bg_prayer_node_next);
+            } else if (isPast) {
+                dot.setBackgroundResource(R.drawable.hdr_dot_past);
+            } else {
+                dot.setBackgroundResource(R.drawable.dot_prayer_outline);
+            }
+            slot.addView(dot);
+            col.addView(slot);
+
+            TextView label = new TextView(ctx);
+            label.setText(getString(PrayerTimeEngine.PRAYER_NAME_RES[p]));
+            label.setTextSize(9.5f);
+            label.setGravity(android.view.Gravity.CENTER);
+            if (isNext) {
+                label.setTextColor(ctx.getColor(R.color.gold_light));
+                label.setTypeface(label.getTypeface(), android.graphics.Typeface.BOLD);
+            } else {
+                label.setTextColor(0x8CFFFFFF);
+            }
+            LinearLayout.LayoutParams labelLp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            labelLp.topMargin = (int) (5 * density);
+            label.setLayoutParams(labelLp);
+            col.addView(label);
+
+            dots.addView(col);
         }
     }
 
-    /** Renders remaining millis as H:MM:SS (e.g. "2:14:30"). */
-    private static String formatHms(long millis) {
+    /** Renders remaining millis as A's "بعد ٢ س ١٤ د" / "بعد ١٤ د" / "الآن". */
+    private String formatRemaining(long millis) {
         if (millis < 0) millis = 0;
-        long totalSec = millis / 1000L;
-        long h = totalSec / 3600L;
-        long m = (totalSec % 3600L) / 60L;
-        long s = totalSec % 60L;
-        return String.format(java.util.Locale.US, "%d:%02d:%02d", h, m, s);
+        long totalMin = millis / 60_000L;
+        long h = totalMin / 60L;
+        long m = totalMin % 60L;
+        if (h <= 0 && m <= 0) {
+            return getString(R.string.home_hero_now);
+        }
+        if (h > 0) {
+            return getString(R.string.home_hero_countdown, localeNum(h), localeNum(m));
+        }
+        return getString(R.string.home_hero_countdown_min, localeNum(m));
+    }
+
+    /** Number rendered in the UI's digit system: Arabic-Indic when the UI is Arabic, else Latin. */
+    private String localeNum(long value) {
+        String s = Long.toString(value);
+        return isArabicUi() ? toArabicDigits(s) : s;
+    }
+
+    private boolean isArabicUi() {
+        return "ar".equals(androidx.core.os.ConfigurationCompat
+                .getLocales(getResources().getConfiguration()).get(0).getLanguage());
+    }
+
+    /** Converts ASCII digits to Arabic-Indic (٠-٩); other chars pass through. */
+    private static String toArabicDigits(String s) {
+        StringBuilder sb = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            sb.append(c >= '0' && c <= '9' ? (char) ('٠' + (c - '0')) : c);
+        }
+        return sb.toString();
     }
 
     private void startHeroTicker() {
@@ -281,9 +390,8 @@ public class HomeFragment extends Fragment {
                     // Prayer reached — recompute the next one (also refreshes the ring sweep).
                     bindHero();
                 } else {
-                    heroRemainingText = formatHms(remaining);
-                    binding.heroRing.setCenterText(
-                            heroRemainingText, getString(R.string.home_hero_remaining));
+                    heroRemainingText = formatRemaining(remaining);
+                    binding.heroCountdown.setText(heroRemainingText);
                 }
                 heroHandler.postDelayed(this, TICK_INTERVAL_MS);
             }
@@ -302,7 +410,7 @@ public class HomeFragment extends Fragment {
         SharedPreferences prefs = requireContext()
                 .getSharedPreferences("reading_progress", Context.MODE_PRIVATE);
         int streak = prefs.getInt("streak_days", 0);
-        binding.homeStreak.setText("🔥 " + streak);
+        binding.homeStreak.setText(getString(R.string.home_streak_pill, streak));
     }
 
     private void bindContinueReading() {
@@ -310,7 +418,8 @@ public class HomeFragment extends Fragment {
         int page = prefs.getInt(PagerActivity.HOME_LAST_READ_PAGE, -1);
         if (page > 0) {
             binding.continueSubtitle.setText(R.string.home_continue_subtitle);
-            binding.continueTitle.setText(getString(R.string.quran_page) + " " + page);
+            binding.continueTitle.setText(getString(R.string.home_continue_page,
+                    getString(R.string.quran_page), localeNum(page)));
             binding.continueProgress.setMax(604);
             binding.continueProgress.setProgress(page);
         } else {
@@ -318,6 +427,12 @@ public class HomeFragment extends Fragment {
             binding.continueTitle.setText(R.string.HolyQuran);
             binding.continueProgress.setProgress(0);
         }
+        // A goal line: today's pages vs daily goal (reading_progress prefs).
+        SharedPreferences rp = requireContext()
+                .getSharedPreferences("reading_progress", Context.MODE_PRIVATE);
+        int todayPages = rp.getInt("today_pages", 0);
+        int dailyGoal  = Math.max(1, rp.getInt("daily_goal", 5));
+        binding.continueGoal.setText(getString(R.string.home_continue_goal, todayPages, dailyGoal));
         View.OnClickListener openQuran = v ->
                 startActivity(new Intent(requireContext(), QuranDataActivity.class));
         binding.cardContinue.setOnClickListener(openQuran);
@@ -516,14 +631,13 @@ public class HomeFragment extends Fragment {
         if (binding == null || !isAdded()) return;
         String[] arabic      = getResources().getStringArray(com.medoapps.www.onlinequran.R.array.verse_arabic);
         String[] refs        = getResources().getStringArray(com.medoapps.www.onlinequran.R.array.verse_ref);
-        String[] translation = getResources().getStringArray(com.medoapps.www.onlinequran.R.array.verse_translation);
+        String[] suraAyah    = getResources().getStringArray(com.medoapps.www.onlinequran.R.array.verse_sura_ayah);
 
         int n = arabic.length;
         int i = java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_YEAR) % n;
 
         binding.verseArabic.setText(arabic[i]);
         binding.verseRef.setText(refs[i]);
-        binding.verseTranslation.setText(translation[i]);
 
         final String copyArabic = arabic[i];
         final String copyRef    = refs[i];
@@ -532,12 +646,88 @@ public class HomeFragment extends Fragment {
                     requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
             if (cm != null) {
                 cm.setPrimaryClip(ClipData.newPlainText("verse", copyArabic + " — " + copyRef));
-                Toast.makeText(requireContext(), "تم نسخ الآية", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.home_verse_copied), Toast.LENGTH_SHORT).show();
             }
         });
 
-        // verse_listen: no-op in this task (Task 9 will wire up audio)
-        binding.verseListen.setOnClickListener(v -> { /* TODO Task 9: play ayah audio */ });
+        // verse_listen: stream just this ayah's recitation (toggle play/stop)
+        final String ayahRef = (i < suraAyah.length) ? suraAyah[i] : null;
+        binding.verseListen.setOnClickListener(v -> toggleVerseAudio(ayahRef));
+    }
+
+    // -------------------------------------------------------------------------
+    // Verse-of-the-day ayah audio (streams a single ayah from the app's reciter CDN)
+    // -------------------------------------------------------------------------
+
+    private static final String AYAH_AUDIO_BASE =
+            "https://mirrors.quranicaudio.com/everyayah/Alafasy_128kbps/";
+
+    private android.media.MediaPlayer versePlayer;
+
+    /** Toggles playback of the current verse's recitation. */
+    private void toggleVerseAudio(String suraAyah) {
+        if (versePlayer != null) {            // already playing/loading → stop
+            stopVerseAudio();
+            return;
+        }
+        if (suraAyah == null || !suraAyah.contains(":")) return;
+        int sura, ayah;
+        try {
+            String[] parts = suraAyah.split(":");
+            sura = Integer.parseInt(parts[0].trim());
+            ayah = Integer.parseInt(parts[1].trim());
+        } catch (NumberFormatException e) {
+            return;
+        }
+        String url = AYAH_AUDIO_BASE
+                + String.format(java.util.Locale.US, "%03d%03d.mp3", sura, ayah);
+        try {
+            versePlayer = new android.media.MediaPlayer();
+            versePlayer.setAudioAttributes(new android.media.AudioAttributes.Builder()
+                    .setUsage(android.media.AudioAttributes.USAGE_MEDIA)
+                    .setContentType(android.media.AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build());
+            versePlayer.setDataSource(url);
+            versePlayer.setOnPreparedListener(android.media.MediaPlayer::start);
+            versePlayer.setOnCompletionListener(mp -> stopVerseAudio());
+            versePlayer.setOnErrorListener((mp, what, extra) -> {
+                stopVerseAudio();
+                if (isAdded()) {
+                    Toast.makeText(requireContext(), R.string.home_verse_audio_error,
+                            Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            });
+            versePlayer.prepareAsync();
+            setVerseListenPlaying(true);
+        } catch (Exception e) {
+            stopVerseAudio();
+        }
+    }
+
+    private void stopVerseAudio() {
+        if (versePlayer != null) {
+            try {
+                versePlayer.reset();
+                versePlayer.release();
+            } catch (Exception ignored) {
+            }
+            versePlayer = null;
+        }
+        setVerseListenPlaying(false);
+    }
+
+    /** Swaps the listen button between play and pause states (keeping the gold tint). */
+    private void setVerseListenPlaying(boolean playing) {
+        if (binding == null) return;
+        binding.verseListen.setText(playing ? R.string.home_verse_stop : R.string.home_verse_listen);
+        binding.verseListen.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                playing ? R.drawable.baseline_pause_circle_24 : R.drawable.round_play_arrow_24,
+                0, 0, 0);
+        androidx.core.widget.TextViewCompat.setCompoundDrawableTintList(
+                binding.verseListen,
+                android.content.res.ColorStateList.valueOf(
+                        requireContext().getColor(R.color.gold_accent)));
     }
 
     private void bindQuickActions() {
@@ -557,6 +747,35 @@ public class HomeFragment extends Fragment {
                 startActivity(new Intent(requireContext(), AthkarActivity.class)));
         binding.discoverEvents.setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), IslamicEventsActivity.class)));
+        // الأذان — open the Athan / prayer-times settings
+        binding.prayersAction.setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), AthanSettingsActivity.class)));
+    }
+
+    // -------------------------------------------------------------------------
+    // Quran modes: Listen (reciters) / Read (mushaf) / Read + Listen (mushaf+audio)
+    // -------------------------------------------------------------------------
+
+    private void bindQuranModes() {
+        // Read + Listen: open the mushaf and auto-start recitation (synced ayah highlight)
+        binding.quranRl.setOnClickListener(v -> openMushaf(true));
+        // Read: open the mushaf for plain reading
+        binding.quranRead.setOnClickListener(v -> openMushaf(false));
+        // Listen: the reciters tab → built-in audio player
+        binding.quranListen.setOnClickListener(v -> openTab(R.id.nav_quran));
+    }
+
+    /**
+     * Opens the mushaf (via the QuranDataActivity download/permission gate). When
+     * {@code autoPlay} is true, threads EXTRA_AUTO_PLAY so the reader starts the
+     * recitation automatically once a page opens — the read+listen experience.
+     */
+    private void openMushaf(boolean autoPlay) {
+        Intent i = new Intent(requireContext(), QuranDataActivity.class);
+        if (autoPlay) {
+            i.putExtra(PagerActivity.EXTRA_AUTO_PLAY, true);
+        }
+        startActivity(i);
     }
 
     /**

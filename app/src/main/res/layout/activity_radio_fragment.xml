@@ -48,6 +48,12 @@
                     android:layout_marginEnd="4dp"
                     android:textColor="@color/gold_accent"
                     android:background="@drawable/bg_spinner_navy"
+                    android:spinnerMode="dropdown"
+                    android:overlapAnchor="false"
+                    android:popupBackground="@drawable/bg_spinner_popup"
+                    android:popupElevation="10dp"
+                    android:dropDownWidth="240dp"
+                    android:dropDownVerticalOffset="6dp"
                     android:paddingStart="8dp"
                     android:paddingEnd="24dp" />
 

@@ -43,7 +43,7 @@ public class ZakatCalculatorActivity extends AppCompatActivity {
 
         // ActionBar
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("\u062d\u0627\u0633\u0628\u0629 \u0627\u0644\u0632\u0643\u0627\u0629"); // حاسبة الزكاة
+            getSupportActionBar().setTitle(getString(R.string.zakat_calculator));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -116,18 +116,18 @@ public class ZakatCalculatorActivity extends AppCompatActivity {
 
         // Display results
         tvTotalWealth.setText(df.format(totalWealth));
-        tvNisabGold.setText(goldPrice > 0 ? df.format(nisabGoldValue) : "\u2014"); // em dash
-        tvNisabSilver.setText(silverPrice > 0 ? df.format(nisabSilverValue) : "\u2014");
+        tvNisabGold.setText(goldPrice > 0 ? df.format(nisabGoldValue) : "—"); // em dash
+        tvNisabSilver.setText(silverPrice > 0 ? df.format(nisabSilverValue) : "—");
 
         if (nisabThreshold <= 0) {
             // No prices entered
-            tvNisabStatus.setText("\u0623\u062f\u062e\u0644 \u0633\u0639\u0631 \u0627\u0644\u0630\u0647\u0628 \u0623\u0648 \u0627\u0644\u0641\u0636\u0629 \u0644\u062a\u062d\u062f\u064a\u062f \u0627\u0644\u0646\u0635\u0627\u0628"); // أدخل سعر الذهب أو الفضة لتحديد النصاب
+            tvNisabStatus.setText(getString(R.string.zakat_enter_price_prompt));
             tvNisabStatus.setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
         } else if (reachesNisab) {
-            tvNisabStatus.setText("\u2714 \u062b\u0631\u0648\u062a\u0643 \u0628\u0644\u063a\u062a \u0627\u0644\u0646\u0635\u0627\u0628 \u2014 \u0627\u0644\u0632\u0643\u0627\u0629 \u0648\u0627\u062c\u0628\u0629"); // ✔ ثروتك بلغت النصاب — الزكاة واجبة
+            tvNisabStatus.setText(getString(R.string.zakat_nisab_reached));
             tvNisabStatus.setTextColor(ContextCompat.getColor(this, R.color.gold_accent));
         } else {
-            tvNisabStatus.setText("\u0644\u0645 \u062a\u0628\u0644\u063a \u0627\u0644\u0646\u0635\u0627\u0628 \u2014 \u0644\u0627 \u0632\u0643\u0627\u0629 \u0645\u0633\u062a\u062d\u0642\u0629"); // لم تبلغ النصاب — لا زكاة مستحقة
+            tvNisabStatus.setText(getString(R.string.zakat_nisab_not_reached));
             tvNisabStatus.setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
         }
 

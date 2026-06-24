@@ -25,12 +25,9 @@ public class DuaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dua);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.dua_collection);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
+        HeroController.attach(this).back().centered().title(R.string.dua_collection).apply();
 
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.background_main));
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.background_main));
 
         RecyclerView recyclerView = findViewById(R.id.recycler_dua);
@@ -42,7 +39,7 @@ public class DuaActivity extends AppCompatActivity {
         List<DuaItem> list = new ArrayList<>();
 
         // أدعية الصباح والمساء
-        list.add(new DuaItem("أدعية الصباح والمساء", true));
+        list.add(new DuaItem(getString(R.string.dua_morning_evening), true));
 
         list.add(new DuaItem(
                 "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا",
@@ -53,7 +50,7 @@ public class DuaActivity extends AppCompatActivity {
                 "رواه البخاري", false));
 
         // أدعية السفر
-        list.add(new DuaItem("أدعية السفر", true));
+        list.add(new DuaItem(getString(R.string.dua_travel), true));
 
         list.add(new DuaItem(
                 "اللَّهُمَّ إِنَّا نَسْأَلُكَ فِي سَفَرِنَا هَذَا الْبِرَّ وَالتَّقْوَى، وَمِنَ الْعَمَلِ مَا تَرْضَى",
@@ -64,7 +61,7 @@ public class DuaActivity extends AppCompatActivity {
                 "سورة الزخرف: 13-14", false));
 
         // أدعية الطعام
-        list.add(new DuaItem("أدعية الطعام", true));
+        list.add(new DuaItem(getString(R.string.dua_food), true));
 
         list.add(new DuaItem(
                 "اللَّهُمَّ بَارِكْ لَنَا فِيمَا رَزَقْتَنَا وَقِنَا عَذَابَ النَّارِ، بِسْمِ اللهِ",
@@ -75,7 +72,7 @@ public class DuaActivity extends AppCompatActivity {
                 "رواه الترمذي", false));
 
         // أدعية النوم
-        list.add(new DuaItem("أدعية النوم", true));
+        list.add(new DuaItem(getString(R.string.dua_sleep), true));
 
         list.add(new DuaItem(
                 "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
@@ -86,7 +83,7 @@ public class DuaActivity extends AppCompatActivity {
                 "رواه أبو داود", false));
 
         // أدعية الصلاة
-        list.add(new DuaItem("أدعية الصلاة", true));
+        list.add(new DuaItem(getString(R.string.dua_prayer), true));
 
         list.add(new DuaItem(
                 "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
@@ -97,7 +94,7 @@ public class DuaActivity extends AppCompatActivity {
                 "متفق عليه", false));
 
         // أدعية متنوعة
-        list.add(new DuaItem("أدعية متنوعة", true));
+        list.add(new DuaItem(getString(R.string.dua_misc), true));
 
         list.add(new DuaItem(
                 "رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي",

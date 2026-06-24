@@ -21,13 +21,6 @@ import java.util.List;
 
 public class IslamicEventsActivity extends AppCompatActivity {
 
-    // Hijri month names in Arabic
-    private static final String[] HIJRI_MONTHS = {
-            "محرم", "صفر", "ربيع الأول", "ربيع الثاني",
-            "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان",
-            "رمضان", "شوال", "ذو القعدة", "ذو الحجة"
-    };
-
     // Hijri month lengths (alternating 30/29, with month 12 having 30 in leap years)
     private static final int[] HIJRI_MONTH_LENGTHS = {
             30, 29, 30, 29, 30, 29, 30, 29, 30, 29, 30, 29
@@ -38,12 +31,9 @@ public class IslamicEventsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_islamic_events);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("الأحداث الإسلامية");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
+        HeroController.attach(this).back().centered().title(R.string.events_title).apply();
 
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.background_main));
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.background_main));
 
         // Show today's Hijri date
@@ -52,7 +42,9 @@ public class IslamicEventsActivity extends AppCompatActivity {
                 Calendar.getInstance().get(Calendar.YEAR),
                 Calendar.getInstance().get(Calendar.MONTH) + 1,
                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-        String hijriDateStr = todayHijri[2] + " " + HIJRI_MONTHS[todayHijri[1] - 1] + " " + todayHijri[0] + " هـ";
+        String[] hijriMonths = getResources().getStringArray(R.array.events_hijri_months);
+        String hijriDateStr = getString(R.string.events_hijri_date_format,
+                todayHijri[2], hijriMonths[todayHijri[1] - 1], todayHijri[0]);
         tvHijriDate.setText(hijriDateStr);
 
         // Build events list
@@ -67,82 +59,82 @@ public class IslamicEventsActivity extends AppCompatActivity {
         List<IslamicEvent> events = new ArrayList<>();
 
         events.add(new IslamicEvent(
-                "رأس السنة الهجرية",
+                getString(R.string.events_islamic_new_year_name),
                 "Islamic New Year",
                 1, 1,
-                "بداية العام الهجري الجديد، يوم هجرة النبي ﷺ من مكة إلى المدينة"));
+                getString(R.string.events_islamic_new_year_desc)));
 
         events.add(new IslamicEvent(
-                "يوم عاشوراء",
+                getString(R.string.events_ashura_name),
                 "Ashura",
                 10, 1,
-                "يوم نجّى الله فيه موسى عليه السلام، يستحب صيامه ويوماً قبله أو بعده"));
+                getString(R.string.events_ashura_desc)));
 
         events.add(new IslamicEvent(
-                "المولد النبوي",
+                getString(R.string.events_mawlid_name),
                 "Prophet's Birthday",
                 12, 3,
-                "ذكرى مولد النبي محمد ﷺ في ربيع الأول"));
+                getString(R.string.events_mawlid_desc)));
 
         events.add(new IslamicEvent(
-                "الإسراء والمعراج",
+                getString(R.string.events_isra_miraj_name),
                 "Isra and Mi'raj",
                 27, 7,
-                "ذكرى رحلة الإسراء والمعراج، فُرضت فيها الصلوات الخمس"));
+                getString(R.string.events_isra_miraj_desc)));
 
         events.add(new IslamicEvent(
-                "ليلة النصف من شعبان",
+                getString(R.string.events_mid_shaban_name),
                 "Mid-Sha'ban",
                 15, 8,
-                "ليلة يُرفع فيها العمل إلى الله تعالى، يستحب فيها الدعاء والاستغفار"));
+                getString(R.string.events_mid_shaban_desc)));
 
         events.add(new IslamicEvent(
-                "بداية شهر رمضان",
+                getString(R.string.events_start_ramadan_name),
                 "Start of Ramadan",
                 1, 9,
-                "بداية شهر الصيام والقيام وتلاوة القرآن"));
+                getString(R.string.events_start_ramadan_desc)));
 
         events.add(new IslamicEvent(
-                "غزوة بدر",
+                getString(R.string.events_battle_of_badr_name),
                 "Battle of Badr",
                 17, 9,
-                "ذكرى غزوة بدر الكبرى، أول معركة فاصلة في الإسلام"));
+                getString(R.string.events_battle_of_badr_desc)));
 
         events.add(new IslamicEvent(
-                "ليالي القدر",
+                getString(R.string.events_laylat_al_qadr_name),
                 "Laylat al-Qadr nights",
                 21, 9,
-                "ليلة خير من ألف شهر، تُلتمس في الليالي الوتر من العشر الأواخر (21، 23، 25، 27، 29)"));
+                getString(R.string.events_laylat_al_qadr_desc)));
 
         events.add(new IslamicEvent(
-                "عيد الفطر",
+                getString(R.string.events_eid_al_fitr_name),
                 "Eid al-Fitr",
                 1, 10,
-                "عيد الفطر المبارك، يوم الجائزة بعد شهر رمضان"));
+                getString(R.string.events_eid_al_fitr_desc)));
 
         events.add(new IslamicEvent(
-                "يوم التروية",
+                getString(R.string.events_tarwiyah_name),
                 "Day of Tarwiyah",
                 8, 12,
-                "اليوم الثامن من ذي الحجة، بداية مناسك الحج"));
+                getString(R.string.events_tarwiyah_desc)));
 
         events.add(new IslamicEvent(
-                "يوم عرفة",
+                getString(R.string.events_arafah_name),
                 "Day of Arafah",
                 9, 12,
-                "خير يوم طلعت فيه الشمس، يستحب صيامه لغير الحاج"));
+                getString(R.string.events_arafah_desc)));
 
         events.add(new IslamicEvent(
-                "عيد الأضحى",
+                getString(R.string.events_eid_al_adha_name),
                 "Eid al-Adha",
                 10, 12,
-                "عيد الأضحى المبارك، يوم النحر وأعظم أيام السنة"));
+                getString(R.string.events_eid_al_adha_desc)));
 
         events.add(new IslamicEvent(
-                "أيام التشريق",
+                getString(R.string.events_tashreeq_name),
                 "Days of Tashreeq",
                 11, 12,
-                "أيام التشريق (11-13 ذو الحجة)، أيام أكل وشرب وذكر لله"));
+                getString(R.string.events_tashreeq_desc)));
 
         // Calculate days remaining and approximate Gregorian dates
         for (IslamicEvent event : events) {
@@ -161,10 +153,11 @@ public class IslamicEventsActivity extends AppCompatActivity {
      * Approximate Gregorian to Hijri conversion using the Kuwaiti algorithm.
      * Not 100% accurate (can be off by 1-2 days) but reasonable for display.
      */
-    public static String getTodayHijriString() {
+    public static String getTodayHijriString(android.content.Context context) {
         Calendar cal = Calendar.getInstance();
         int[] h = gregorianToHijri(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
-        return h[2] + " " + HIJRI_MONTHS[h[1] - 1] + " " + h[0] + " هـ";
+        String[] hijriMonths = context.getResources().getStringArray(R.array.events_hijri_months);
+        return context.getString(R.string.events_hijri_date_format, h[2], hijriMonths[h[1] - 1], h[0]);
     }
 
     static int[] gregorianToHijri(int gYear, int gMonth, int gDay) {
@@ -295,8 +288,8 @@ public class IslamicEventsActivity extends AppCompatActivity {
             this.description = description;
         }
 
-        String getHijriDateString() {
-            return hijriDay + " " + HIJRI_MONTHS[hijriMonth - 1];
+        String getHijriDateString(String[] hijriMonths) {
+            return hijriDay + " " + hijriMonths[hijriMonth - 1];
         }
     }
 
@@ -324,20 +317,21 @@ public class IslamicEventsActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull EventVH holder, int position) {
             IslamicEvent event = events.get(position);
 
+            String[] hijriMonths = getResources().getStringArray(R.array.events_hijri_months);
             holder.tvName.setText(event.nameArabic);
-            holder.tvHijriDate.setText(event.getHijriDateString());
+            holder.tvHijriDate.setText(event.getHijriDateString(hijriMonths));
             holder.tvDescription.setText(event.description);
-            holder.tvGregorianDate.setText("≈ " + event.gregorianDate + " م");
+            holder.tvGregorianDate.setText(getString(R.string.events_gregorian_date_format, event.gregorianDate));
 
             if (event.daysRemaining == 0) {
-                holder.tvDaysRemaining.setText("اليوم!");
+                holder.tvDaysRemaining.setText(getString(R.string.events_today));
                 holder.tvDaysRemaining.setTextColor(
                         ContextCompat.getColor(holder.itemView.getContext(), R.color.gold_accent));
                 holder.card.setStrokeColor(
                         ContextCompat.getColor(holder.itemView.getContext(), R.color.gold_accent));
                 holder.card.setStrokeWidth(2);
             } else {
-                holder.tvDaysRemaining.setText("بعد " + event.daysRemaining + " يوم");
+                holder.tvDaysRemaining.setText(getString(R.string.events_days_remaining, event.daysRemaining));
                 holder.tvDaysRemaining.setTextColor(
                         ContextCompat.getColor(holder.itemView.getContext(), R.color.text_secondary));
                 // Highlight upcoming events (within 30 days)

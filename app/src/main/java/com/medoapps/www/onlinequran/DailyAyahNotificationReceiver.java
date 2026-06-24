@@ -21,7 +21,6 @@ import java.util.Calendar;
 public class DailyAyahNotificationReceiver extends BroadcastReceiver {
 
     private static final String CHANNEL_ID = "daily_ayah_channel";
-    private static final String CHANNEL_NAME = "آية اليوم";
     private static final int NOTIFICATION_ID = 1001;
 
     private static final String[] AYAH_TEXTS = {
@@ -113,10 +112,10 @@ public class DailyAyahNotificationReceiver extends BroadcastReceiver {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
-                    CHANNEL_NAME,
+                    context.getString(R.string.notif_ayah_channel_name),
                     NotificationManager.IMPORTANCE_DEFAULT
             );
-            channel.setDescription("إشعار آية اليوم من القرآن الكريم");
+            channel.setDescription(context.getString(R.string.notif_ayah_channel_description));
             notificationManager.createNotificationChannel(channel);
         }
 
@@ -129,7 +128,7 @@ public class DailyAyahNotificationReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_athkar)
-                .setContentTitle("آية اليوم")
+                .setContentTitle(context.getString(R.string.notif_ayah_title))
                 .setContentText(ayahText)
                 .setSubText(ayahReference)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(ayahText))

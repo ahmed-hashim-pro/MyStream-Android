@@ -44,6 +44,8 @@ open class QuranApplication : Application(), QuranApplicationComponentProvider,A
 
   override fun onCreate() {
     super.onCreate()
+    // Keep the lists/RTL/number flag aligned with the (persisted) app language.
+    AppLanguage.syncArabicNames(this)
     setupTimber()
     applicationComponent = initializeInjector()
     applicationComponent.inject(this)

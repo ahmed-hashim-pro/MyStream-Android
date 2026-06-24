@@ -37,8 +37,13 @@
     <!-- ============================================================ -->
     <color name="navy_700">#1F2A44</color>
     <color name="navy_500">#2C3A5E</color>
+    <color name="navy_900">#172033</color>
     <color name="divider_warm">#EFE6D2</color>
+    <color name="divider_warm_light">#F1E8D6</color>
     <color name="badge_gold_bg">#F3E7C9</color>
+    <!-- A (Bayt al-Noor) accents: bright light-gold for hero name/streak, cream icon tile -->
+    <color name="gold_light">#E9C778</color>
+    <color name="cream_icon_tile">#FBF3E1</color>
 
     <!-- ============================================================ -->
     <!-- Legacy / backward-compat aliases (mapped to M3 tokens)       -->
@@ -58,6 +63,11 @@
     <color name="black">#FF040303</color>
     <color name="Black2">#FF040303</color>
     <color name="white">#FFFFFF</color>
+    <!-- Always-white text for fixed-navy surfaces (filter pill/dropdown). NOT overridden in night,
+         unlike @color/white which becomes black there. -->
+    <color name="text_on_navy">#FFFFFFFF</color>
+    <!-- Muted always-white hint for fixed-navy surfaces. Fixed (no night override), like text_on_navy. -->
+    <color name="hint_on_navy">#99FFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="black_overlay">#66000000</color>
 

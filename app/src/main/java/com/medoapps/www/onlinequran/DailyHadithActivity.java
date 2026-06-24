@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.card.MaterialCardView;
@@ -502,13 +501,12 @@ public class DailyHadithActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_hadith);
 
-        // Status bar & nav bar
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.background_main));
+        // Nav bar
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.background_main));
 
-        // Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar_daily_hadith);
-        toolbar.setNavigationOnClickListener(v -> finish());
+        // Navy hero header
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
+        HeroController.attach(this).back().centered().title(R.string.hadith_title).apply();
 
         // Views
         tvHadithText = findViewById(R.id.tv_hadith_text);
@@ -571,7 +569,7 @@ public class DailyHadithActivity extends AppCompatActivity {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-        startActivity(Intent.createChooser(shareIntent, "\u0645\u0634\u0627\u0631\u0643\u0629 \u0627\u0644\u062d\u062f\u064a\u062b"));
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.hadith_share_chooser)));
     }
 
     // ── Swipe gesture listener ────────────────────────────────────────────

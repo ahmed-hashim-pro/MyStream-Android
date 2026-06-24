@@ -192,6 +192,12 @@ public  class  MainActivity extends BaseActivity {
         }
 
         setContentView(R.layout.activity_main);
+        // Drive layout direction from the effective locale, not Locale.getDefault() — the latter is
+        // stale after a runtime switch to System, which left the home LTR under an Arabic system.
+        getWindow().getDecorView().setLayoutDirection(
+                AppLanguage.isRtl(this)
+                        ? android.view.View.LAYOUT_DIRECTION_RTL
+                        : android.view.View.LAYOUT_DIRECTION_LTR);
         instance8Ref = new WeakReference<>(this);
 
         // Keep athan alarms in place on every app open; must never break launch.
@@ -229,6 +235,7 @@ public  class  MainActivity extends BaseActivity {
                 .findFragmentById(R.id.nav_host_fragment);
         navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        applyDockEmojiIcons();
 
         navController.addOnDestinationChangedListener((controller, destination, args) -> {
             if (appbar == null) return;
@@ -367,7 +374,7 @@ public  class  MainActivity extends BaseActivity {
         // Show Hijri date in toolbar
         TextView tvHijriMain = findViewById(R.id.tv_hijri_date_main);
         if (tvHijriMain != null) {
-            tvHijriMain.setText(IslamicEventsActivity.getTodayHijriString());
+            tvHijriMain.setText(IslamicEventsActivity.getTodayHijriString(this));
         }
         adminPostPhoto = findViewById(R.id.admin_post);
         AdminPostText = findViewById(R.id.post_author);
@@ -1288,6 +1295,45 @@ public  class  MainActivity extends BaseActivity {
         if (bottomNavigationView != null) {
             bottomNavigationView.setSelectedItemId(itemId);
         }
+    }
+
+    /**
+     * Renders Design-A's literal emoji as the dock icons (🏠 📖 📻 🕋 ⋯). Icon
+     * tint is disabled so the full-colour emoji show as in A; the active state is
+     * carried by the cream pill + gold label. Color-emoji ignore the paint colour;
+     * the monochrome ⋯ glyph uses it.
+     */
+    private void applyDockEmojiIcons() {
+        if (bottomNavigationView == null) return;
+        bottomNavigationView.setItemIconTintList(null);
+        android.view.Menu menu = bottomNavigationView.getMenu();
+        setDockIcon(menu, R.id.nav_home, "🏠");
+        setDockIcon(menu, R.id.nav_quran, "🎧");   // القرآن — recitations (listening)
+        setDockIcon(menu, R.id.nav_radio, "📻");
+        setDockIcon(menu, R.id.nav_mushaf, "📖");  // المصحف — mushaf (reading)
+        setDockIcon(menu, R.id.nav_more, "⋯");
+    }
+
+    private void setDockIcon(android.view.Menu menu, int itemId, String glyph) {
+        android.view.MenuItem item = menu.findItem(itemId);
+        if (item != null) item.setIcon(emojiIcon(glyph));
+    }
+
+    /** Draws a glyph (emoji or text symbol) into a square BitmapDrawable for the dock. */
+    private android.graphics.drawable.Drawable emojiIcon(String glyph) {
+        float density = getResources().getDisplayMetrics().density;
+        int size = (int) (40 * density);
+        android.graphics.Bitmap bmp =
+                android.graphics.Bitmap.createBitmap(size, size, android.graphics.Bitmap.Config.ARGB_8888);
+        android.graphics.Canvas canvas = new android.graphics.Canvas(bmp);
+        android.graphics.Paint paint = new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG);
+        paint.setTextAlign(android.graphics.Paint.Align.CENTER);
+        paint.setColor(0xFF8A8A8A); // used by the ⋯ text glyph; colour-emoji ignore it
+        paint.setTextSize(size * 0.78f);
+        android.graphics.Paint.FontMetrics fm = paint.getFontMetrics();
+        float y = size / 2f - (fm.ascent + fm.descent) / 2f;
+        canvas.drawText(glyph, size / 2f, y, paint);
+        return new android.graphics.drawable.BitmapDrawable(getResources(), bmp);
     }
 
     public void message(View view) {

@@ -74,6 +74,10 @@
     <color name="cardAackground">#282828</color>
     <color name="colorLine">#383838</color>
 
+    <!-- Home hub (dark): icon tile + warm card hairline adapt to the dark surfaces -->
+    <color name="cream_icon_tile">#383838</color>
+    <color name="divider_warm_light">#1FFFFFFF</color>
+
     <!-- Text (dark) -->
     <color name="primary_text">#FFFFFF</color>
     <color name="secondary_text">#B3B3B3</color>

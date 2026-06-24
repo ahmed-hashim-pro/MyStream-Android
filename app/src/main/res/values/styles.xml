@@ -381,7 +381,7 @@
     <!-- Bottom Navigation active indicator                           -->
     <!-- ============================================================ -->
     <style name="Widget.MyStream.BottomNav.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
-        <item name="android:color">@color/badge_gold_bg</item>
+        <item name="android:color">@color/bottom_nav_indicator</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.MyStream.PillIndicator</item>
     </style>
 

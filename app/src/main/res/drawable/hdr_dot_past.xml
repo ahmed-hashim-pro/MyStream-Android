@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Passed-prayer dot in the header strip (A .bn-dot.past): faint gold fill. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="#8CD4A44C" />
+</shape>

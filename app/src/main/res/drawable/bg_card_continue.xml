@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Continue-reading card (A .bn-cont): navy diagonal gradient, 18dp corners. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="315"
+        android:startColor="@color/navy_700"
+        android:endColor="@color/navy_500" />
+    <corners android:radius="18dp" />
+</shape>

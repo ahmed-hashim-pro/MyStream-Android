@@ -1,44 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="locale"
+    android:orientation="vertical"
     android:background="@color/background_main">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background_app_bar"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/AppTheme.Settings">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:id="@+id/backBTN"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@null"
-                app:tint="@color/icon_primary"
-                app:srcCompat="@drawable/outline_arrow_back_ios_24" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:gravity="center"
-                android:text="@string/settings_section_notifications"
-                android:textColor="@color/text_primary"
-                android:textStyle="bold" />
-        </RelativeLayout>
-    </androidx.appcompat.widget.Toolbar>
+    <include layout="@layout/hero_static" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:clipToPadding="false"
         android:paddingBottom="16dp">
 
@@ -503,4 +477,4 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-</RelativeLayout>
+</LinearLayout>
