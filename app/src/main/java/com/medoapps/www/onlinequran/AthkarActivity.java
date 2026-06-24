@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class AthkarActivity extends AppCompatActivity {
 
@@ -353,40 +351,6 @@ public class AthkarActivity extends AppCompatActivity {
             }
         }
         return sections;
-    }
-
-    private static int parseCount(String countStr) {
-        if (countStr == null || countStr.isEmpty()) return 1;
-        if (countStr.contains("واحدة")) return 1;
-        Matcher matcher = Pattern.compile("\\d+").matcher(countStr);
-        if (matcher.find()) {
-            return Integer.parseInt(matcher.group());
-        }
-        return 1;
-    }
-
-    // Inner model class
-    static class AthkarItem {
-        String text;
-        String count;
-        boolean isHeader;
-        int remainingCount;
-        boolean expanded = true; // for headers only
-        List<AthkarItem> children; // for headers only
-
-        AthkarItem(String text, boolean isHeader) {
-            this.text = text;
-            this.isHeader = isHeader;
-            this.remainingCount = 0;
-            if (isHeader) this.children = new ArrayList<>();
-        }
-
-        AthkarItem(String text, String count, boolean isHeader) {
-            this.text = text;
-            this.count = count;
-            this.isHeader = isHeader;
-            this.remainingCount = parseCount(count);
-        }
     }
 
     // Build flat display list from sections
