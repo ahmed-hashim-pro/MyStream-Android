@@ -129,7 +129,7 @@ public class BubbleOverlayController {
         bubbleView = LayoutInflater.from(inflationContext).inflate(layout, null);
         bubbleLp = baseParams(w, dp(62));
         bubbleLp.gravity = Gravity.TOP | Gravity.START;
-        bubbleLp.x = "left".equals(prefs.getSide()) ? dp(8) : screenW() - w - dp(8);
+        bubbleLp.x = clamp(prefs.getPosX(screenW() - w - dp(8)), 0, screenW() - w);
         bubbleLp.y = prefs.getPosY(dp(220));
         renderCollapsed();
         attachDrag(bubbleView);
@@ -188,12 +188,11 @@ public class BubbleOverlayController {
                             }
                             return true;
                         }
+                        // Free placement: leave the bubble where it was dropped and remember it.
                         int w2 = v.getWidth() > 0 ? v.getWidth() : dp(62);
-                        boolean left = bubbleLp.x + w2 / 2 < screenW() / 2;
-                        bubbleLp.x = left ? dp(8) : screenW() - w2 - dp(8);
-                        prefs.setSide(left ? "left" : "right");
+                        prefs.setPosX(bubbleLp.x);
                         prefs.setPosY(bubbleLp.y);
-                        wm.updateViewLayout(bubbleView, bubbleLp);
+                        prefs.setSide(bubbleLp.x + w2 / 2 < screenW() / 2 ? "left" : "right");
                         return true;
                 }
                 return false;
