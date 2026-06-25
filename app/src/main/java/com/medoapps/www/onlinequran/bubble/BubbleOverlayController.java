@@ -263,7 +263,11 @@ public class BubbleOverlayController {
                 .setText(session == BubbleSession.MORNING ? R.string.athkar_section_morning : R.string.athkar_section_evening);
         ((TextView) panelView.findViewById(R.id.walker_sub))
                 .setText((content.currentIndex() + 1) + "/" + content.size());
-        ((TextView) panelView.findViewById(R.id.walker_dhikr)).setText(it.text);
+        TextView dhikrTv = panelView.findViewById(R.id.walker_dhikr);
+        dhikrTv.setText(it.text);
+        // Long athkar (e.g. Ayat al-Kursi) exceed the panel; make the dhikr scrollable so the full text is reachable.
+        dhikrTv.setMovementMethod(new android.text.method.ScrollingMovementMethod());
+        dhikrTv.scrollTo(0, 0);
         ((TextView) panelView.findViewById(R.id.walker_ref)).setText(it.count);
         // Correction B: set text + fixed white-on-navy color so it stays legible in both themes
         TextView countTv = panelView.findViewById(R.id.walker_count);

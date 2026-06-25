@@ -4,7 +4,7 @@
     android:orientation="horizontal" android:gravity="center_vertical" android:padding="11dp"
     android:background="?attr/selectableItemBackground">
     <TextView android:id="@+id/row_text" android:layout_width="0dp" android:layout_weight="1"
-        android:layout_height="wrap_content" android:maxLines="1" android:ellipsize="end"
+        android:layout_height="wrap_content"
         android:textDirection="rtl" android:textColor="@color/text_primary" android:textSize="15sp" />
     <TextView android:id="@+id/row_count" android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:minWidth="34dp" android:gravity="center" android:paddingHorizontal="8dp" android:paddingVertical="4dp"
