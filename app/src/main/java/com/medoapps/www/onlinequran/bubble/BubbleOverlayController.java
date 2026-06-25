@@ -44,6 +44,7 @@ public class BubbleOverlayController {
     private View bubbleView;            // collapsed chat-head
     private View panelView;             // expanded walker (style A)
     private WindowManager.LayoutParams bubbleLp;
+    private WindowManager.LayoutParams panelLp;
     private BubbleSession session;
     private BubbleContentController content;
     private int dayOfYear;
@@ -202,11 +203,54 @@ public class BubbleOverlayController {
 
     private void togglePanel() { if (panelView == null) showPanel(); else removePanel(); }
 
+    /** Closes the open panel when the user taps anywhere outside it (needs FLAG_WATCH_OUTSIDE_TOUCH). */
+    private void dismissOnOutsideTouch(View root) {
+        root.setOnTouchListener((v, e) -> {
+            if (e.getActionMasked() == MotionEvent.ACTION_OUTSIDE) { removePanel(); return true; }
+            return false;
+        });
+    }
+
+    /** Lets the user drag the open panel (and the bubble with it) by a handle, e.g. the header. */
+    private void makePanelDraggable(View handle) {
+        if (handle == null) return;
+        handle.setOnTouchListener(new View.OnTouchListener() {
+            int pStartX, pStartY, bStartX, bStartY; float downRawX, downRawY;
+            @Override public boolean onTouch(View v, MotionEvent e) {
+                switch (e.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        pStartX = panelLp.x; pStartY = panelLp.y;
+                        bStartX = bubbleLp.x; bStartY = bubbleLp.y;
+                        downRawX = e.getRawX(); downRawY = e.getRawY();
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        int dx = (int) (e.getRawX() - downRawX);
+                        int dy = (int) (e.getRawY() - downRawY);
+                        int pw = panelView.getWidth() > 0 ? panelView.getWidth() : dp(280);
+                        panelLp.x = clamp(pStartX + dx, 0, screenW() - pw);
+                        panelLp.y = clamp(pStartY + dy, dp(8), screenH() - dp(120));
+                        wm.updateViewLayout(panelView, panelLp);
+                        int bw = bubbleView.getWidth() > 0 ? bubbleView.getWidth() : dp(62);
+                        bubbleLp.x = clamp(bStartX + dx, 0, screenW() - bw);
+                        bubbleLp.y = clamp(bStartY + dy, dp(40), screenH() - dp(80));
+                        wm.updateViewLayout(bubbleView, bubbleLp);
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        prefs.setPosX(bubbleLp.x);
+                        prefs.setPosY(bubbleLp.y);
+                        return true;
+                }
+                return false;
+            }
+        });
+    }
+
     private void showDrawer() {
         panelView = LayoutInflater.from(inflationContext).inflate(R.layout.bubble_drawer, null);
         int bw = (bubbleView != null && bubbleView.getWidth() > 0) ? bubbleView.getWidth() : dp(62);
         boolean left = bubbleLp.x + bw / 2 < screenW() / 2; // dock the drawer to the side the bubble is on
         WindowManager.LayoutParams lp = baseParams(dp(236), WindowManager.LayoutParams.MATCH_PARENT);
+        lp.flags |= WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
         lp.gravity = Gravity.TOP | (left ? Gravity.START : Gravity.END);
         ((TextView) panelView.findViewById(R.id.drawer_title))
                 .setText(session == BubbleSession.MORNING ? R.string.athkar_section_morning : R.string.athkar_section_evening);
@@ -229,25 +273,30 @@ public class BubbleOverlayController {
             });
             listView.addView(row);
         }
+        dismissOnOutsideTouch(panelView);
         wm.addView(panelView, lp);
     }
 
     private void showPanel() {
         panelView = LayoutInflater.from(inflationContext).inflate(R.layout.bubble_panel_walker, null);
         int pw = dp(280);
-        WindowManager.LayoutParams lp = baseParams(pw, WindowManager.LayoutParams.WRAP_CONTENT);
+        panelLp = baseParams(pw, WindowManager.LayoutParams.WRAP_CONTENT);
+        panelLp.flags |= WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
         int bw = (bubbleView != null && bubbleView.getWidth() > 0) ? bubbleView.getWidth() : dp(62);
         // Open the panel next to the bubble's current position (not a fixed edge), clamped on-screen.
         int px = (bubbleLp.x + bw / 2 < screenW() / 2) ? bubbleLp.x : (bubbleLp.x + bw - pw);
-        lp.gravity = Gravity.TOP | Gravity.START;
-        lp.x = clamp(px, dp(8), screenW() - pw - dp(8));
-        lp.y = clamp(bubbleLp.y - dp(40), dp(40), screenH() - dp(500));
+        panelLp.gravity = Gravity.TOP | Gravity.START;
+        panelLp.x = clamp(px, dp(8), screenW() - pw - dp(8));
+        panelLp.y = clamp(bubbleLp.y - dp(40), dp(40), screenH() - dp(500));
         bindPanel();
         panelView.findViewById(R.id.walker_close).setOnClickListener(x -> removePanel());
         panelView.findViewById(R.id.walker_prev).setOnClickListener(x -> { content.jumpTo(content.currentIndex() - 1); bindPanel(); });
         panelView.findViewById(R.id.walker_next).setOnClickListener(x -> { content.jumpTo(content.currentIndex() + 1); bindPanel(); });
         panelView.findViewById(R.id.walker_count).setOnClickListener(x -> onCount());
-        wm.addView(panelView, lp);
+        // Drag the open panel (and the bubble with it) by its header.
+        makePanelDraggable(panelView.findViewById(R.id.walker_header));
+        dismissOnOutsideTouch(panelView);
+        wm.addView(panelView, panelLp);
     }
 
     private void onCount() {
