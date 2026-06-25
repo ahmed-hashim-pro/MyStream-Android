@@ -204,7 +204,8 @@ public class BubbleOverlayController {
 
     private void showDrawer() {
         panelView = LayoutInflater.from(inflationContext).inflate(R.layout.bubble_drawer, null);
-        boolean left = service.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL;
+        int bw = (bubbleView != null && bubbleView.getWidth() > 0) ? bubbleView.getWidth() : dp(62);
+        boolean left = bubbleLp.x + bw / 2 < screenW() / 2; // dock the drawer to the side the bubble is on
         WindowManager.LayoutParams lp = baseParams(dp(236), WindowManager.LayoutParams.MATCH_PARENT);
         lp.gravity = Gravity.TOP | (left ? Gravity.START : Gravity.END);
         ((TextView) panelView.findViewById(R.id.drawer_title))
@@ -233,10 +234,14 @@ public class BubbleOverlayController {
 
     private void showPanel() {
         panelView = LayoutInflater.from(inflationContext).inflate(R.layout.bubble_panel_walker, null);
-        WindowManager.LayoutParams lp = baseParams(dp(280), WindowManager.LayoutParams.WRAP_CONTENT);
-        lp.gravity = Gravity.TOP | ("left".equals(prefs.getSide()) ? Gravity.START : Gravity.END);
-        lp.x = dp(12);
-        lp.y = clamp(bubbleLp.y - dp(120), dp(40), screenH() - dp(420));
+        int pw = dp(280);
+        WindowManager.LayoutParams lp = baseParams(pw, WindowManager.LayoutParams.WRAP_CONTENT);
+        int bw = (bubbleView != null && bubbleView.getWidth() > 0) ? bubbleView.getWidth() : dp(62);
+        // Open the panel next to the bubble's current position (not a fixed edge), clamped on-screen.
+        int px = (bubbleLp.x + bw / 2 < screenW() / 2) ? bubbleLp.x : (bubbleLp.x + bw - pw);
+        lp.gravity = Gravity.TOP | Gravity.START;
+        lp.x = clamp(px, dp(8), screenW() - pw - dp(8));
+        lp.y = clamp(bubbleLp.y - dp(40), dp(40), screenH() - dp(500));
         bindPanel();
         panelView.findViewById(R.id.walker_close).setOnClickListener(x -> removePanel());
         panelView.findViewById(R.id.walker_prev).setOnClickListener(x -> { content.jumpTo(content.currentIndex() - 1); bindPanel(); });
