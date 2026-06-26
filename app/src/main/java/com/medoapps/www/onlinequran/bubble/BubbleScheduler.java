@@ -26,23 +26,45 @@ public final class BubbleScheduler {
         if (am == null) return;
         PendingIntent pi = boundaryPi(ctx);
         am.cancel(pi);
-        if (!bp.isEnabled() || bp.isAlwaysOn()) return; // no boundary alarms needed
-        try {
-            Date[] t = PrayerTimeEngine.getTodayTimes(ctx);
-            long now = System.currentTimeMillis();
-            long fajr = t[PrayerSettings.PRAYER_FAJR].getTime();
-            long asr = t[PrayerSettings.PRAYER_ASR].getTime();
-            long next = now < fajr ? fajr : (now < asr ? asr : fajr + 24L * 3600_000L);
-            am.set(AlarmManager.RTC, next, pi);
-        } catch (Exception ignored) {}
+        if (!bp.isEnabled()) return; // disabled: no alarms
+        // Always arm the next Fajr/Asr boundary: it switches morning/evening content and,
+        // after a "Done ✓"/hold-to-close dismiss, revives the hidden bubble at the next session.
+        long next = nextBoundary(ctx);
+        if (next > 0) am.set(AlarmManager.RTC, next, pi);
     }
 
     public static void applyNow(Context ctx) {
         BubblePrefs bp = new BubblePrefs(ctx);
         Intent svc = new Intent(ctx, AthkarBubbleService.class);
-        boolean shouldShow = bp.isEnabled() && (bp.isAlwaysOn() || inWindow(ctx));
+        boolean dismissed = System.currentTimeMillis() < bp.getDismissUntil();
+        boolean shouldShow = bp.isEnabled() && (bp.isAlwaysOn() || inWindow(ctx)) && !dismissed;
         if (shouldShow) ContextCompat.startForegroundService(ctx, svc);
         else ctx.startService(svc.setAction(AthkarBubbleService.ACTION_STOP));
+    }
+
+    /** Hide the bubble until the next athkar window boundary (Fajr/Asr), then bring it back.
+     *  Called when the user reads the athkar ("Done ✓") or holds-to-close the bubble. */
+    public static void dismissUntilNextSession(Context ctx) {
+        long revive = nextBoundary(ctx);
+        long now = System.currentTimeMillis();
+        if (revive <= now) revive = now + 6L * 3600_000L; // fallback if prayer times unavailable
+        new BubblePrefs(ctx).setDismissUntil(revive);
+        applyNow(ctx); // now dismissed -> tears the overlay/service down
+        AlarmManager am = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
+        if (am != null) am.set(AlarmManager.RTC, revive, boundaryPi(ctx));
+    }
+
+    /** Next day/night boundary (Fajr or Asr) strictly after now; 0 if prayer times unavailable. */
+    private static long nextBoundary(Context ctx) {
+        try {
+            Date[] t = PrayerTimeEngine.getTodayTimes(ctx);
+            long now = System.currentTimeMillis();
+            long fajr = t[PrayerSettings.PRAYER_FAJR].getTime();
+            long asr = t[PrayerSettings.PRAYER_ASR].getTime();
+            return now < fajr ? fajr : (now < asr ? asr : fajr + 24L * 3600_000L);
+        } catch (Exception e) {
+            return 0L;
+        }
     }
 
     private static boolean inWindow(Context ctx) {

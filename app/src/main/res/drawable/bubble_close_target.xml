@@ -1,0 +1,6 @@
+<!-- res/drawable/bubble_close_target.xml -->
+<!-- Messenger-style "drop here to close" target. Fixed colors so it reads the same in light + dark. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <solid android:color="#E6B3261E" />
+    <stroke android:width="2dp" android:color="#FFFFFFFF" />
+</shape>

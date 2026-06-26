@@ -1159,5 +1159,7 @@
     <string name="bubble_channel_name">فقاعة الأذكار العائمة</string>
     <string name="bubble_notif_text">فقاعة الأذكار نشطة</string>
     <string name="bubble_today_done">اليوم · %1$d/%2$d تمّ</string>
+    <string name="bubble_mark_done">تمّ ✓</string>
+    <string name="bubble_dismissed_toast">ستعود الفقاعة في وقت الذكر القادم</string>
 
 </resources>

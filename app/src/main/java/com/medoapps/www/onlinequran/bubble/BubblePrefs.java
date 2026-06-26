@@ -28,4 +28,9 @@ public class BubblePrefs {
 
     public int getPosY(int def) { return p.getInt("bubble_pos_y", def); }
     public void setPosY(int y) { p.edit().putInt("bubble_pos_y", y).apply(); }
+
+    /** Epoch millis until which the bubble stays hidden after the user reads/dismisses it
+     *  ("Done ✓" or hold-to-close); 0 = not dismissed. Revived by the Fajr/Asr boundary alarm. */
+    public long getDismissUntil() { return p.getLong("bubble_dismiss_until", 0L); }
+    public void setDismissUntil(long t) { p.edit().putLong("bubble_dismiss_until", t).apply(); }
 }

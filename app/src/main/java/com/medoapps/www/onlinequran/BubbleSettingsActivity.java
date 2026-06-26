@@ -81,6 +81,7 @@ public class BubbleSettingsActivity extends AppCompatActivity {
             Intent svc = new Intent(this,
                     com.medoapps.www.onlinequran.bubble.AthkarBubbleService.class);
             if (checked) {
+                bp.setDismissUntil(0L); // explicit enable overrides any prior "Done"/hold-to-close dismissal
                 ContextCompat.startForegroundService(this, svc);
                 BubbleScheduler.reschedule(this);
             } else {

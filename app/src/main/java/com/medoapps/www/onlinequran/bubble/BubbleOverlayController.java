@@ -49,6 +49,9 @@ public class BubbleOverlayController {
     private BubbleContentController content;
     private int dayOfYear;
     private Context inflationContext;   // themed context used for all overlay inflations
+    private final android.os.Handler handler = new android.os.Handler(android.os.Looper.getMainLooper());
+    private View closeTargetView;       // Messenger-style "drop to close" target (shown on long-press)
+    private boolean overCloseTarget;    // is the bubble currently hovering the close target?
 
     public BubbleOverlayController(Service service) {
         this.service = service;
@@ -105,6 +108,8 @@ public class BubbleOverlayController {
     }
 
     public void hide() {
+        handler.removeCallbacksAndMessages(null);
+        hideCloseTarget();
         removePanel();
         if (bubbleView != null) { try { wm.removeView(bubbleView); } catch (Exception ignored) {} bubbleView = null; }
     }
@@ -160,27 +165,47 @@ public class BubbleOverlayController {
         }
     }
 
-    // --- drag + tap (Correction A: cleaner move detection with touch-slop) ---
+    // --- drag + tap + long-press-to-close (Messenger-style) ---
     private void attachDrag(final View v) {
         v.setOnTouchListener(new View.OnTouchListener() {
-            int startX, startY; float downRawX, downRawY; long downT; boolean moved;
+            int startX, startY; float downRawX, downRawY; long downT; boolean moved; boolean closeArmed;
+            // After a 450ms hold (without a real drag) the close target appears — like Messenger.
+            final Runnable longPress = () -> { closeArmed = true; showCloseTarget(); haptic(); updateOverCloseTarget(); };
             @Override public boolean onTouch(View view, MotionEvent e) {
                 switch (e.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
                         startX = bubbleLp.x; startY = bubbleLp.y;
                         downRawX = e.getRawX(); downRawY = e.getRawY();
-                        downT = System.currentTimeMillis(); moved = false;
+                        downT = System.currentTimeMillis(); moved = false; closeArmed = false;
+                        handler.postDelayed(longPress, 450);
                         return true;
                     case MotionEvent.ACTION_MOVE:
                         int dx = (int) (e.getRawX() - downRawX);
                         int dy = (int) (e.getRawY() - downRawY);
-                        if (Math.hypot(dx, dy) > dp(8)) moved = true;
+                        if (Math.hypot(dx, dy) > dp(8)) {
+                            moved = true;
+                            if (!closeArmed) handler.removeCallbacks(longPress); // it's a drag, not a hold
+                        }
                         int w = v.getWidth() > 0 ? v.getWidth() : dp(62);
                         bubbleLp.x = clamp(startX + dx, 0, screenW() - w);
                         bubbleLp.y = clamp(startY + dy, dp(40), screenH() - dp(80));
                         wm.updateViewLayout(bubbleView, bubbleLp);
+                        if (closeArmed) updateOverCloseTarget();
                         return true;
+                    case MotionEvent.ACTION_CANCEL:
                     case MotionEvent.ACTION_UP:
+                        handler.removeCallbacks(longPress);
+                        int w2 = v.getWidth() > 0 ? v.getWidth() : dp(62);
+                        if (closeArmed) {
+                            boolean over = overCloseTarget;
+                            hideCloseTarget();
+                            closeArmed = false;
+                            if (over && e.getActionMasked() == MotionEvent.ACTION_UP) { dismiss(); return true; }
+                            // Released without dropping on the target: keep the bubble where it is.
+                            prefs.setPosX(bubbleLp.x); prefs.setPosY(bubbleLp.y);
+                            prefs.setSide(bubbleLp.x + w2 / 2 < screenW() / 2 ? "left" : "right");
+                            return true;
+                        }
                         if (!moved && System.currentTimeMillis() - downT < 250) {
                             if (prefs.getStyle() == BubbleStyle.DRAWER) {
                                 if (panelView == null) showDrawer(); else removePanel();
@@ -190,7 +215,6 @@ public class BubbleOverlayController {
                             return true;
                         }
                         // Free placement: leave the bubble where it was dropped and remember it.
-                        int w2 = v.getWidth() > 0 ? v.getWidth() : dp(62);
                         prefs.setPosX(bubbleLp.x);
                         prefs.setPosY(bubbleLp.y);
                         prefs.setSide(bubbleLp.x + w2 / 2 < screenW() / 2 ? "left" : "right");
@@ -199,6 +223,56 @@ public class BubbleOverlayController {
                 return false;
             }
         });
+    }
+
+    // --- Messenger-style hold-to-close target ---
+    private void showCloseTarget() {
+        if (closeTargetView != null) return;
+        overCloseTarget = false;
+        TextView x = new TextView(inflationContext);
+        x.setText("✕");
+        x.setGravity(Gravity.CENTER);
+        x.setTextSize(24); // sp
+        x.setTextColor(ContextCompat.getColor(service, R.color.text_on_navy));
+        x.setBackgroundResource(R.drawable.bubble_close_target);
+        WindowManager.LayoutParams lp = baseParams(dp(60), dp(60));
+        lp.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+        lp.y = dp(90);
+        closeTargetView = x;
+        try { wm.addView(x, lp); } catch (Exception ignored) { closeTargetView = null; }
+    }
+
+    private void hideCloseTarget() {
+        overCloseTarget = false;
+        if (closeTargetView != null) { try { wm.removeView(closeTargetView); } catch (Exception ignored) {} closeTargetView = null; }
+    }
+
+    /** Updates the "is the bubble over the close target" state + the target's hover highlight. */
+    private void updateOverCloseTarget() {
+        if (closeTargetView == null || bubbleView == null) return;
+        int bw = bubbleView.getWidth() > 0 ? bubbleView.getWidth() : dp(62);
+        int bh = bubbleView.getHeight() > 0 ? bubbleView.getHeight() : dp(62);
+        int bcx = bubbleLp.x + bw / 2;
+        int bcy = bubbleLp.y + bh / 2;
+        int tcx = screenW() / 2;
+        int tcy = screenH() - dp(90) - dp(30); // bottom gravity, y=90 offset, half of 60dp height
+        boolean over = Math.hypot(bcx - tcx, bcy - tcy) < dp(64);
+        if (over != overCloseTarget) {
+            overCloseTarget = over;
+            closeTargetView.setScaleX(over ? 1.3f : 1f);
+            closeTargetView.setScaleY(over ? 1.3f : 1f);
+            if (over) haptic();
+        }
+    }
+
+    /** User read the athkar ("Done ✓") or held-to-close: hide the bubble until the next athkar time. */
+    private void dismiss() {
+        haptic();
+        try {
+            android.widget.Toast.makeText(service, R.string.bubble_dismissed_toast,
+                    android.widget.Toast.LENGTH_SHORT).show();
+        } catch (Exception ignored) {}
+        BubbleScheduler.dismissUntilNextSession(service); // sets dismissUntil, stops the service, arms revive alarm
     }
 
     private void togglePanel() { if (panelView == null) showPanel(); else removePanel(); }
@@ -273,6 +347,8 @@ public class BubbleOverlayController {
             });
             listView.addView(row);
         }
+        View done = panelView.findViewById(R.id.drawer_done);
+        if (done != null) done.setOnClickListener(x -> dismiss());
         dismissOnOutsideTouch(panelView);
         wm.addView(panelView, lp);
     }
@@ -295,6 +371,8 @@ public class BubbleOverlayController {
         panelView.findViewById(R.id.walker_count).setOnClickListener(x -> onCount());
         // Drag the open panel (and the bubble with it) by its header.
         makePanelDraggable(panelView.findViewById(R.id.walker_header));
+        View done = panelView.findViewById(R.id.walker_done);
+        if (done != null) done.setOnClickListener(x -> dismiss());
         dismissOnOutsideTouch(panelView);
         wm.addView(panelView, panelLp);
     }
