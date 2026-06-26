@@ -8,16 +8,15 @@
     <LinearLayout android:id="@+id/walker_header" android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="horizontal" android:gravity="center_vertical"
         android:padding="12dp" android:background="@drawable/bg_navy_hero">
-        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-            android:orientation="vertical">
-        </TextView>
         <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
             android:orientation="vertical">
             <TextView android:id="@+id/walker_title" android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:textColor="@color/text_on_navy"
-                android:textStyle="bold" android:textSize="14sp" android:text="@string/athkar_section_morning" />
+                android:textStyle="bold" android:textSize="14sp" android:textAlignment="viewStart"
+                android:text="@string/athkar_section_morning" />
             <TextView android:id="@+id/walker_sub" android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:textColor="@color/hint_on_navy" android:textSize="11sp" />
+                android:layout_height="wrap_content" android:textColor="@color/hint_on_navy"
+                android:textAlignment="viewStart" android:textSize="11sp" />
         </LinearLayout>
         <TextView android:id="@+id/walker_close" android:layout_width="30dp" android:layout_height="30dp"
             android:gravity="center" android:text="–" android:textColor="@color/text_on_navy" android:textSize="18sp" />
