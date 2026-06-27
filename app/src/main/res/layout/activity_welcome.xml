@@ -42,13 +42,18 @@
             android:text="@string/onb_skip"
             android:textColor="@color/onb_text_secondary" />
 
-        <!-- Language re-pick (also available later in Settings) -->
+        <!-- Language re-pick (also available later in Settings). Anchored to the START side of the
+             Continue button (not center-in-parent) with a logical end margin, so the wider English
+             "Language" label keeps a gap from Continue and never overlaps it. marginEnd/toStartOf are
+             locale-aware, so this holds in both LTR (EN) and RTL (AR). -->
         <Button
             android:id="@+id/onb_lang"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/onb_next"
+            android:layout_marginEnd="12dp"
             android:drawableStart="@drawable/outline_translate_24"
             android:drawablePadding="6dp"
             android:drawableTint="@color/onb_text_secondary"
