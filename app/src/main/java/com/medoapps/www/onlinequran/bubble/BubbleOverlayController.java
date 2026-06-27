@@ -233,11 +233,11 @@ public class BubbleOverlayController {
         x.setText("✕");
         x.setGravity(Gravity.CENTER);
         x.setTextSize(24); // sp
-        x.setTextColor(ContextCompat.getColor(service, R.color.text_on_navy));
-        x.setBackgroundResource(R.drawable.bubble_close_target);
-        WindowManager.LayoutParams lp = baseParams(dp(60), dp(60));
+        x.setTextColor(ContextCompat.getColor(inflationContext, R.color.gold_accent)); // idle: gold ✕
+        x.setBackgroundResource(R.drawable.bubble_close_target);                        // idle: navy core, gold ring
+        WindowManager.LayoutParams lp = baseParams(dp(84), dp(84));
         lp.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
-        lp.y = dp(90);
+        lp.y = dp(80);
         closeTargetView = x;
         try { wm.addView(x, lp); } catch (Exception ignored) { closeTargetView = null; }
     }
@@ -255,12 +255,14 @@ public class BubbleOverlayController {
         int bcx = bubbleLp.x + bw / 2;
         int bcy = bubbleLp.y + bh / 2;
         int tcx = screenW() / 2;
-        int tcy = screenH() - dp(90) - dp(30); // bottom gravity, y=90 offset, half of 60dp height
-        boolean over = Math.hypot(bcx - tcx, bcy - tcy) < dp(64);
+        int tcy = screenH() - dp(80) - dp(42); // bottom gravity, y=80 offset, half of 84dp height
+        boolean over = Math.hypot(bcx - tcx, bcy - tcy) < dp(72);
         if (over != overCloseTarget) {
             overCloseTarget = over;
-            closeTargetView.setScaleX(over ? 1.3f : 1f);
-            closeTargetView.setScaleY(over ? 1.3f : 1f);
+            TextView tv = (TextView) closeTargetView;
+            tv.setBackgroundResource(over ? R.drawable.bubble_close_target_armed : R.drawable.bubble_close_target);
+            tv.setTextColor(ContextCompat.getColor(inflationContext,
+                    over ? R.color.text_on_navy : R.color.gold_accent)); // armed: white ✕, idle: gold ✕
             if (over) haptic();
         }
     }

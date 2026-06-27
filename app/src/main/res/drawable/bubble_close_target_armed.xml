@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/bubble_close_target_armed.xml -->
+<!-- Hold-to-close target — ARMED state (Option B): red core ringed in gold, wrapped in a soft
+     gold halo. Smaller insets than the idle drawable so it reads as a bloom/grow on hover. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- soft gold halo -->
+    <item android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp">
+        <shape android:shape="oval">
+            <solid android:color="#40B8860B" />
+        </shape>
+    </item>
+    <!-- red core with gold ring -->
+    <item android:left="9dp" android:top="9dp" android:right="9dp" android:bottom="9dp">
+        <shape android:shape="oval">
+            <solid android:color="#B3261E" />
+            <stroke android:width="2.5dp" android:color="@color/gold_accent" />
+        </shape>
+    </item>
+</layer-list>

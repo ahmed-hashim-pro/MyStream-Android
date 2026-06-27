@@ -1,6 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!-- res/drawable/bubble_close_target.xml -->
-<!-- Messenger-style "drop here to close" target. Fixed colors so it reads the same in light + dark. -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
-    <solid android:color="#E6B3261E" />
-    <stroke android:width="2dp" android:color="#FFFFFFFF" />
-</shape>
+<!-- Hold-to-close target — IDLE state (Option B): navy core with a gold ring.
+     Drawn inset inside an 84dp window so the ARMED variant can "bloom" larger without clipping. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:left="13dp" android:top="13dp" android:right="13dp" android:bottom="13dp">
+        <shape android:shape="oval">
+            <solid android:color="@color/navy_700" />
+            <stroke android:width="2.5dp" android:color="@color/gold_accent" />
+        </shape>
+    </item>
+</layer-list>
