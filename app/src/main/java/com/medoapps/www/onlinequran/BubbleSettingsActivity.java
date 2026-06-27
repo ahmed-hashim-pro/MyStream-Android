@@ -219,13 +219,7 @@ public class BubbleSettingsActivity extends AppCompatActivity {
 
     /** Plays the bubble's appear-sound once, as a preview when the user enables the sound. */
     private void playSoundPreview() {
-        try {
-            android.media.MediaPlayer mp = android.media.MediaPlayer.create(this, R.raw.sound);
-            if (mp != null) {
-                mp.setOnCompletionListener(android.media.MediaPlayer::release);
-                mp.start();
-            }
-        } catch (Exception ignored) {}
+        com.medoapps.www.onlinequran.bubble.AthkarBubbleService.playNotificationTone(this);
     }
 
     // --------------------------------------------------- overlay permission

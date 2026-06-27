@@ -7,7 +7,6 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 
@@ -77,26 +76,26 @@ public class AthkarBubbleService extends Service {
         return overlay.show();
     }
 
-    /** Plays the short appear-sound, honoring the user's on/off pref. Uses the notification
-     *  usage so it respects notification volume / Do Not Disturb. */
+    /** Plays the appear-sound, honoring the user's on/off pref. */
     private void maybePlaySound() {
-        if (!new BubblePrefs(this).isSoundOn()) return;
+        if (new BubblePrefs(this).isSoundOn()) playNotificationTone(this);
+    }
+
+    /** Plays the device's default NOTIFICATION tone once (notification usage so it respects the
+     *  user's notification sound / volume / Do Not Disturb). */
+    public static void playNotificationTone(Context ctx) {
         try {
-            MediaPlayer mp;
-            android.media.AudioManager am = (android.media.AudioManager) getSystemService(AUDIO_SERVICE);
-            if (am != null) {
-                android.media.AudioAttributes attrs = new android.media.AudioAttributes.Builder()
-                        .setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION)
-                        .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .build();
-                mp = MediaPlayer.create(this, R.raw.sound, attrs, am.generateAudioSessionId());
-            } else {
-                mp = MediaPlayer.create(this, R.raw.sound);
-            }
-            if (mp != null) {
-                mp.setOnCompletionListener(MediaPlayer::release);
-                mp.start();
-            }
+            android.net.Uri uri = android.media.RingtoneManager.getDefaultUri(
+                    android.media.RingtoneManager.TYPE_NOTIFICATION);
+            if (uri == null) return;
+            android.media.Ringtone r = android.media.RingtoneManager.getRingtone(
+                    ctx.getApplicationContext(), uri);
+            if (r == null) return;
+            r.setAudioAttributes(new android.media.AudioAttributes.Builder()
+                    .setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION)
+                    .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build());
+            r.play();
         } catch (Exception ignored) {}
     }
     private void detachOverlay() {
