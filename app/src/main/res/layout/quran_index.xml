@@ -9,13 +9,15 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/mushaf_header_background"
+        android:background="@drawable/bg_header_navy"
+        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.Material3.Light"
         style="@style/ToolBarArea"/>
     <com.medoapps.www.onlinequran.view.SlidingTabLayout
         android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/mushaf_header_background"
+        android:background="@color/navy_700"
         style="@style/ToolBarArea"
         />
     <com.medoapps.www.onlinequran.view.QuranViewPager

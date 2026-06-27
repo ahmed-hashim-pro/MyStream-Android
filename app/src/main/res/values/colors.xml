@@ -183,8 +183,8 @@
 
     <!-- Mushaf header (light) -->
     <color name="mushaf_header_background">#FFF8F0</color>
-    <color name="mushaf_tab_selected">#3E2700</color>
-    <color name="mushaf_tab_unselected">#7F7667</color>
+    <color name="mushaf_tab_selected">#FFFFFFFF</color>
+    <color name="mushaf_tab_unselected">#99FFFFFF</color>
     <color name="mushaf_tab_indicator">#B8860B</color>
 
     <!-- Quran reader colors -->
