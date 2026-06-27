@@ -1165,6 +1165,10 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="onb_athan_toggle_desc">Adhan at every prayer, offline</string>
     <string name="onb_athan_shortcut">Set your location &amp; athan voice</string>
 
+    <string name="onb_section_bubble">Floating Bubble</string>
+    <string name="onb_bubble_toggle_title">Athkar Bubble</string>
+    <string name="onb_bubble_toggle_desc">A floating bubble with athkar over your apps</string>
+
     <string name="onb_reminder_daily_ayah">Daily Ayah</string>
     <string name="onb_reminder_morning_athkar">Morning Athkar</string>
     <string name="onb_reminder_evening_athkar">Evening Athkar</string>
@@ -1180,6 +1184,23 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="onb_ready_title">You\'re all set</string>
     <string name="onb_ready_desc">We\'ll ask for a couple of permissions so reminders and the athan can reach you on time.</string>
     <string name="onb_grant_exact_alarm">Allow exact alarms for accurate athan times</string>
+
+    <!-- Permissions gate (final onboarding page) -->
+    <string name="onb_perm_title">Enable your features</string>
+    <string name="onb_perm_sub">Grant these so the features you chose work — or turn a feature off to skip it.</string>
+    <string name="onb_perm_hint">Grant all, or turn a feature off, to continue.</string>
+    <string name="onb_perm_grant">Grant</string>
+    <string name="onb_perm_granted">✓ Granted</string>
+    <string name="onb_perm_notif_name">Notifications</string>
+    <string name="onb_perm_notif_why">Athan &amp; daily reminders</string>
+    <string name="onb_perm_loc_name">Location</string>
+    <string name="onb_perm_loc_why">Calculate prayer times for your place</string>
+    <string name="onb_perm_exact_name">Exact alarms</string>
+    <string name="onb_perm_exact_why">Athan exactly on time</string>
+    <string name="onb_perm_batt_name">Unrestricted battery</string>
+    <string name="onb_perm_batt_why">Reliable delivery in the background</string>
+    <string name="onb_perm_overlay_name">Display over other apps</string>
+    <string name="onb_perm_overlay_why">Float the athkar bubble over apps</string>
 
     <!-- Home hub (default = English; Arabic in values-ar/strings.xml) -->
     <string name="home_greeting">Assalamu alaikum</string>

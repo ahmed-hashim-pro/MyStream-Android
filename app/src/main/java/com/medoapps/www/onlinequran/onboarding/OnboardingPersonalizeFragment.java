@@ -59,6 +59,11 @@ public class OnboardingPersonalizeFragment extends Fragment {
         shortcut.setOnClickListener(view ->
                 startActivity(new Intent(requireContext(), AthanSettingsActivity.class)));
 
+        // Floating Bubble toggle — gates the overlay permission asked for on the Ready step.
+        MaterialSwitch bubbleSwitch = v.findViewById(R.id.onb_switch_bubble);
+        bubbleSwitch.setChecked(state.bubbleEnabled);
+        bubbleSwitch.setOnCheckedChangeListener((btn, checked) -> state.bubbleEnabled = checked);
+
         // Reminder switches — one row per Reminder, in enum order
         LinearLayout remindersContainer = v.findViewById(R.id.onb_reminders_container);
         Reminder[] reminders = Reminder.values();

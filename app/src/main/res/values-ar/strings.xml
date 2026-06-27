@@ -807,6 +807,10 @@
     <string name="onb_athan_toggle_desc">أذان عند كل صلاة وبدون إنترنت</string>
     <string name="onb_athan_shortcut">حدّد موقعك وصوت الأذان</string>
 
+    <string name="onb_section_bubble">الفقاعة العائمة</string>
+    <string name="onb_bubble_toggle_title">فقاعة الأذكار</string>
+    <string name="onb_bubble_toggle_desc">فقاعة عائمة بالأذكار فوق تطبيقاتك</string>
+
     <string name="onb_reminder_daily_ayah">آية اليوم</string>
     <string name="onb_reminder_morning_athkar">أذكار الصباح</string>
     <string name="onb_reminder_evening_athkar">أذكار المساء</string>
@@ -822,6 +826,23 @@
     <string name="onb_ready_title">كل شيء جاهز</string>
     <string name="onb_ready_desc">سنطلب بعض الأذونات حتى تصلك التذكيرات والأذان في وقتها.</string>
     <string name="onb_grant_exact_alarm">اسمح بالمنبهات الدقيقة لمواقيت أذان دقيقة</string>
+
+    <!-- Permissions gate (final onboarding page) -->
+    <string name="onb_perm_title">فعّل مزاياك</string>
+    <string name="onb_perm_sub">امنح هذه الأذونات لتعمل المزايا التي اخترتها — أو أوقف ميزة لتخطّيها.</string>
+    <string name="onb_perm_hint">امنح الكل، أو أوقف ميزة، للمتابعة.</string>
+    <string name="onb_perm_grant">السماح</string>
+    <string name="onb_perm_granted">✓ ممنوح</string>
+    <string name="onb_perm_notif_name">الإشعارات</string>
+    <string name="onb_perm_notif_why">الأذان والتذكيرات اليومية</string>
+    <string name="onb_perm_loc_name">الموقع</string>
+    <string name="onb_perm_loc_why">حساب مواقيت الصلاة لمكانك</string>
+    <string name="onb_perm_exact_name">المنبهات الدقيقة</string>
+    <string name="onb_perm_exact_why">الأذان في وقته تماماً</string>
+    <string name="onb_perm_batt_name">بطارية بلا قيود</string>
+    <string name="onb_perm_batt_why">وصول موثوق في الخلفية</string>
+    <string name="onb_perm_overlay_name">العرض فوق التطبيقات</string>
+    <string name="onb_perm_overlay_why">إظهار فقاعة الأذكار فوق التطبيقات</string>
 
     <!-- Home hub (Arabic overrides) -->
     <string name="home_greeting">السلام عليكم ورحمة الله</string>

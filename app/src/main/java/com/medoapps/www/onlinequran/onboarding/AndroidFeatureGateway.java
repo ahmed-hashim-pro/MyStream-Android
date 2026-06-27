@@ -1,6 +1,11 @@
 package com.medoapps.www.onlinequran.onboarding;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.provider.Settings;
+
+import androidx.core.content.ContextCompat;
 
 import com.medoapps.www.onlinequran.AsmaulHusnaScheduler;
 import com.medoapps.www.onlinequran.AthkarAlarmScheduler;
@@ -11,6 +16,9 @@ import com.medoapps.www.onlinequran.HisnNotificationScheduler;
 import com.medoapps.www.onlinequran.SettingSaved;
 import com.medoapps.www.onlinequran.athan.AthanScheduler;
 import com.medoapps.www.onlinequran.athan.PrayerSettings;
+import com.medoapps.www.onlinequran.bubble.AthkarBubbleService;
+import com.medoapps.www.onlinequran.bubble.BubblePrefs;
+import com.medoapps.www.onlinequran.bubble.BubbleScheduler;
 import com.medoapps.www.onlinequran.util.SeparateFunctions;
 
 /** Production {@link FeatureGateway} backed by the app's existing schedulers. */
@@ -29,6 +37,35 @@ public class AndroidFeatureGateway implements FeatureGateway {
         // rescheduleAll cancels everything when the feature is off and
         // (re)schedules with the Doze-proof exact/inexact fallback when on.
         AthanScheduler.rescheduleAll(context);
+    }
+
+    @Override
+    public void setBubbleEnabled(boolean enabled) {
+        BubblePrefs bp = new BubblePrefs(context);
+        if (enabled) {
+            // Only start the bubble if it can actually draw over apps; the Ready step surfaces the
+            // overlay grant, but the user may have skipped it. Leaving it off avoids a "running"
+            // bubble that can never appear.
+            boolean canOverlay = Build.VERSION.SDK_INT < Build.VERSION_CODES.M
+                    || Settings.canDrawOverlays(context);
+            if (canOverlay) {
+                bp.setEnabled(true);
+                bp.setDismissUntil(0L); // explicit enable overrides any prior dismissal
+                ContextCompat.startForegroundService(context,
+                        new Intent(context, AthkarBubbleService.class));
+                BubbleScheduler.reschedule(context);
+            } else {
+                bp.setEnabled(false);
+            }
+        } else {
+            boolean wasEnabled = bp.isEnabled();
+            bp.setEnabled(false);
+            // Only message the service if it could be running; avoids starting it just to stop it.
+            if (wasEnabled) {
+                context.startService(new Intent(context, AthkarBubbleService.class)
+                        .setAction(AthkarBubbleService.ACTION_STOP));
+            }
+        }
     }
 
     @Override
@@ -93,6 +130,11 @@ public class AndroidFeatureGateway implements FeatureGateway {
     @Override
     public boolean isAthanEnabled() {
         return PrayerSettings.isAthanFeatureEnabled(context);
+    }
+
+    @Override
+    public boolean isBubbleEnabled() {
+        return new BubblePrefs(context).isEnabled();
     }
 
     @Override

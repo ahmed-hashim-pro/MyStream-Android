@@ -18,15 +18,18 @@ public class OnboardingFeatureControllerTest {
     /** Records what the controller asked the gateway to do. */
     private static class FakeGateway implements FeatureGateway {
         Boolean athanSet = null;
+        Boolean bubbleSet = null;
         final Set<Reminder> enabled = EnumSet.noneOf(Reminder.class);
         final Set<Reminder> disabled = EnumSet.noneOf(Reminder.class);
         final List<Integer> themeModes = new ArrayList<>();
 
         @Override public void setAthanEnabled(boolean enabled) { athanSet = enabled; }
+        @Override public void setBubbleEnabled(boolean enabled) { bubbleSet = enabled; }
         @Override public void enableReminder(Reminder r) { this.enabled.add(r); }
         @Override public void disableReminder(Reminder r) { this.disabled.add(r); }
         @Override public void setThemeMode(int nightMode) { themeModes.add(nightMode); }
         @Override public boolean isAthanEnabled() { return false; }
+        @Override public boolean isBubbleEnabled() { return false; }
         @Override public boolean isReminderEnabled(Reminder r) { return false; }
         @Override public int currentThemeMode() { return AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM; }
     }
@@ -37,6 +40,20 @@ public class OnboardingFeatureControllerTest {
         OnboardingState s = OnboardingState.defaults(); // athan on by default
         new OnboardingFeatureController(gw).apply(s);
         assertTrue(gw.athanSet);
+    }
+
+    @Test
+    public void apply_setsBubbleFromState() {
+        FakeGateway gw = new FakeGateway();
+        OnboardingState s = OnboardingState.defaults(); // bubble on by default
+        new OnboardingFeatureController(gw).apply(s);
+        assertTrue(gw.bubbleSet);
+
+        FakeGateway gw2 = new FakeGateway();
+        OnboardingState s2 = OnboardingState.defaults();
+        s2.bubbleEnabled = false;
+        new OnboardingFeatureController(gw2).apply(s2);
+        assertFalse(gw2.bubbleSet);
     }
 
     @Test

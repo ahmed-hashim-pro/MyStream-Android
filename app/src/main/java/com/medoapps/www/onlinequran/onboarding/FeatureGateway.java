@@ -9,6 +9,12 @@ public interface FeatureGateway {
 
     void setAthanEnabled(boolean enabled);
 
+    /**
+     * Enable/disable the Floating Athkar Bubble. Enabling only takes effect if the overlay
+     * (draw-over-apps) permission is granted; otherwise the bubble is left off.
+     */
+    void setBubbleEnabled(boolean enabled);
+
     void enableReminder(Reminder reminder);
 
     void disableReminder(Reminder reminder);
@@ -18,6 +24,8 @@ public interface FeatureGateway {
     // --- reads used to seed initial toggle positions ---
 
     boolean isAthanEnabled();
+
+    boolean isBubbleEnabled();
 
     boolean isReminderEnabled(Reminder reminder);
 

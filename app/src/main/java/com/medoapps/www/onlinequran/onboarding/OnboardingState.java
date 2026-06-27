@@ -9,6 +9,7 @@ import java.util.Map;
 public class OnboardingState {
 
     public boolean athanEnabled;
+    public boolean bubbleEnabled;
     public int themeMode; // an AppCompatDelegate.MODE_NIGHT_* value
     private final Map<Reminder, Boolean> reminders = new EnumMap<>(Reminder.class);
 
@@ -18,10 +19,13 @@ public class OnboardingState {
         }
     }
 
-    /** App defaults: athan on, all reminders off, theme follows system. */
+    /** App defaults: athan on, bubble on, all reminders off, theme follows system. */
     public static OnboardingState defaults() {
         OnboardingState s = new OnboardingState();
         s.athanEnabled = true;
+        // Feature-forward: bubble defaults on. It only actually starts if the user grants the
+        // overlay permission on the Ready step, so this is safe — it just surfaces that grant.
+        s.bubbleEnabled = true;
         s.themeMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
         return s;
     }

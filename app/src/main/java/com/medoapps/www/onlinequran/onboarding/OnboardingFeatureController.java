@@ -11,6 +11,7 @@ public class OnboardingFeatureController {
 
     public void apply(OnboardingState state) {
         gateway.setAthanEnabled(state.athanEnabled);
+        gateway.setBubbleEnabled(state.bubbleEnabled);
         for (Reminder r : Reminder.values()) {
             if (state.isReminderEnabled(r)) {
                 gateway.enableReminder(r);

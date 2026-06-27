@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:paddingTop="40dp"
+        android:paddingBottom="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/onb_perm_title"
+            android:textColor="@color/onb_text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="@string/onb_perm_sub"
+            android:textColor="@color/onb_text_secondary"
+            android:textSize="12sp" />
+
+        <!-- Athan feature card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_onboarding_card"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/onb_athan_toggle_title"
+                    android:textColor="@color/onb_text_primary"
+                    android:textStyle="bold"
+                    android:textSize="15sp" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/onb_perm_athan_toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <!-- permission rows added programmatically -->
+            <LinearLayout
+                android:id="@+id/onb_perm_athan_rows"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- Bubble feature card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_onboarding_card"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/onb_bubble_toggle_title"
+                    android:textColor="@color/onb_text_primary"
+                    android:textStyle="bold"
+                    android:textSize="15sp" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/onb_perm_bubble_toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/onb_perm_bubble_rows"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/onb_perm_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:gravity="center"
+            android:text="@string/onb_perm_hint"
+            android:textColor="@color/onb_text_secondary"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/onb_perm_enter"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_onboarding_button"
+            android:text="@string/onb_enter_app"
+            android:textColor="@color/onb_on_accent"
+            android:textStyle="bold" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

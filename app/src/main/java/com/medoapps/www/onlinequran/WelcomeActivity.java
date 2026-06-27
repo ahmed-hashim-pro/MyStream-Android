@@ -25,8 +25,8 @@ import com.medoapps.www.onlinequran.onboarding.AndroidFeatureGateway;
 import com.medoapps.www.onlinequran.onboarding.OnboardingFeatureController;
 import com.medoapps.www.onlinequran.onboarding.OnboardingHost;
 import com.medoapps.www.onlinequran.onboarding.OnboardingIntroFragment;
+import com.medoapps.www.onlinequran.onboarding.OnboardingPermissionsFragment;
 import com.medoapps.www.onlinequran.onboarding.OnboardingPersonalizeFragment;
-import com.medoapps.www.onlinequran.onboarding.OnboardingReadyFragment;
 import com.medoapps.www.onlinequran.onboarding.OnboardingState;
 import com.medoapps.www.onlinequran.onboarding.OnboardingTourFragment;
 import com.medoapps.www.onlinequran.service.AuthService;
@@ -132,7 +132,9 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
         buildDots();
         updateChromeForPage(0);
 
-        btnSkip.setOnClickListener(v -> finishOnboarding());
+        // Skip the tour, but NOT the permission gate: jump to the final permissions page rather
+        // than finishing onboarding, so features can't be left enabled without their permissions.
+        btnSkip.setOnClickListener(v -> pager.setCurrentItem(OnboardingPagerAdapter.PAGE_COUNT - 1, true));
         btnNext.setOnClickListener(v -> goToNextPage());
     }
 
@@ -261,7 +263,7 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
                 case 6:
                     return new OnboardingPersonalizeFragment();
                 default:
-                    return new OnboardingReadyFragment();
+                    return new OnboardingPermissionsFragment();
             }
         }
 
