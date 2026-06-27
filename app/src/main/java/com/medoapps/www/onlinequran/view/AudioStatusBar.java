@@ -559,6 +559,15 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
 
   private void addButton(@NonNull ImageView button, int imageId, boolean withWeight) {
     button.setImageResource(imageId);
+    // Gold-accent the primary play/pause control to match the My Stream design;
+    // other controls keep their default (white-on-navy) tint.
+    if (imageId == R.drawable.ic_play || imageId == R.drawable.ic_pause) {
+      button.setColorFilter(
+          androidx.core.content.ContextCompat.getColor(context, R.color.gold_accent),
+          android.graphics.PorterDuff.Mode.SRC_IN);
+    } else {
+      button.clearColorFilter();
+    }
     button.setScaleType(ImageView.ScaleType.CENTER);
     button.setOnClickListener(onClickListener);
     button.setOnLongClickListener(onLongClickListener);

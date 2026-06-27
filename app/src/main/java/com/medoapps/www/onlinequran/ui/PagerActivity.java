@@ -1091,8 +1091,7 @@ public class PagerActivity extends AppCompatActivity implements
 
     MenuItem nightMode = menu.findItem(R.id.night_mode);
     if (nightMode != null) {
-      SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-      final boolean isNightMode = prefs.getBoolean(Constants.PREF_NIGHT_MODE, false);
+      final boolean isNightMode = quranSettings.isNightMode();
       nightMode.setChecked(isNightMode);
       nightMode.setIcon(isNightMode ? R.drawable.ic_night_mode : R.drawable.ic_day_mode);
     }

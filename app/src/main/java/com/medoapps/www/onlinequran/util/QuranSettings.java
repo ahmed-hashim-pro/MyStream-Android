@@ -71,7 +71,15 @@ public class QuranSettings {
   }
 
   public boolean isNightMode() {
-    return prefs.getBoolean(Constants.PREF_NIGHT_MODE, false);
+    // Default the Mushaf night reading mode to follow the system dark theme until
+    // the user explicitly picks a mode (keeps the reader page in step with light/dark).
+    return prefs.getBoolean(Constants.PREF_NIGHT_MODE, isSystemDarkMode());
+  }
+
+  public boolean isSystemDarkMode() {
+    return (appContext.getResources().getConfiguration().uiMode
+        & android.content.res.Configuration.UI_MODE_NIGHT_MASK)
+        == android.content.res.Configuration.UI_MODE_NIGHT_YES;
   }
 
   public boolean useNewBackground() {
