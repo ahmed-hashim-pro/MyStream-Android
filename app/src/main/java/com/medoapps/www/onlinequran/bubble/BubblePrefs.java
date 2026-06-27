@@ -33,4 +33,8 @@ public class BubblePrefs {
      *  ("Done ✓" or hold-to-close); 0 = not dismissed. Revived by the Fajr/Asr boundary alarm. */
     public long getDismissUntil() { return p.getLong("bubble_dismiss_until", 0L); }
     public void setDismissUntil(long t) { p.edit().putLong("bubble_dismiss_until", t).apply(); }
+
+    /** Play a short sound when the bubble appears (athkar time / when enabled). Default on. */
+    public boolean isSoundOn() { return p.getBoolean("bubble_sound", true); }
+    public void setSoundOn(boolean v) { p.edit().putBoolean("bubble_sound", v).apply(); }
 }

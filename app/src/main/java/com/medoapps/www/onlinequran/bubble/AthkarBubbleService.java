@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 
@@ -33,10 +34,13 @@ public class AthkarBubbleService extends Service {
         }
         createChannel(this);
         startForeground(NOTIF_ID, buildNotification());
-        if (ACTION_REFRESH.equals(action)) {
+        boolean refresh = ACTION_REFRESH.equals(action);
+        if (refresh) {
             detachOverlay(); // tear down the old overlay so the new style/session is rebuilt below
         }
-        attachOverlay();
+        boolean newlyShown = attachOverlay();
+        // Chime only when the bubble genuinely appears (athkar time / enable), not on an in-place refresh.
+        if (newlyShown && !refresh) maybePlaySound();
         return START_STICKY;
     }
 
@@ -67,9 +71,33 @@ public class AthkarBubbleService extends Service {
     private BubbleOverlayController overlay;
 
     // --- overlay hooks ---
-    private void attachOverlay() {
+    /** @return true iff the bubble was newly added (i.e. it wasn't already showing). */
+    private boolean attachOverlay() {
         if (overlay == null) overlay = new BubbleOverlayController(this);
-        overlay.show();
+        return overlay.show();
+    }
+
+    /** Plays the short appear-sound, honoring the user's on/off pref. Uses the notification
+     *  usage so it respects notification volume / Do Not Disturb. */
+    private void maybePlaySound() {
+        if (!new BubblePrefs(this).isSoundOn()) return;
+        try {
+            MediaPlayer mp;
+            android.media.AudioManager am = (android.media.AudioManager) getSystemService(AUDIO_SERVICE);
+            if (am != null) {
+                android.media.AudioAttributes attrs = new android.media.AudioAttributes.Builder()
+                        .setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION)
+                        .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build();
+                mp = MediaPlayer.create(this, R.raw.sound, attrs, am.generateAudioSessionId());
+            } else {
+                mp = MediaPlayer.create(this, R.raw.sound);
+            }
+            if (mp != null) {
+                mp.setOnCompletionListener(MediaPlayer::release);
+                mp.start();
+            }
+        } catch (Exception ignored) {}
     }
     private void detachOverlay() {
         if (overlay != null) overlay.hide();

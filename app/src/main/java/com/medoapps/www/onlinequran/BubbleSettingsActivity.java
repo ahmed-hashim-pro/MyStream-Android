@@ -92,6 +92,13 @@ public class BubbleSettingsActivity extends AppCompatActivity {
 
         findViewById(R.id.row_bubble_overlay).setOnClickListener(v -> requestOverlayPermission());
 
+        SwitchCompat sndSwitch = findViewById(R.id.switch_bubble_sound);
+        sndSwitch.setChecked(bp.isSoundOn());
+        sndSwitch.setOnCheckedChangeListener((b, checked) -> {
+            bp.setSoundOn(checked);
+            if (checked) playSoundPreview(); // let the user hear what they just turned on
+        });
+
         bindStyleCards(bp);
         bindShowDuring(bp);
         refreshBubbleStatus();
@@ -208,6 +215,17 @@ public class BubbleSettingsActivity extends AppCompatActivity {
             if (thumbDDhikr != null) thumbDDhikr.setText(first.text);
             if (thumbDCount != null) thumbDCount.setText("×" + first.remainingCount);
         }
+    }
+
+    /** Plays the bubble's appear-sound once, as a preview when the user enables the sound. */
+    private void playSoundPreview() {
+        try {
+            android.media.MediaPlayer mp = android.media.MediaPlayer.create(this, R.raw.sound);
+            if (mp != null) {
+                mp.setOnCompletionListener(android.media.MediaPlayer::release);
+                mp.start();
+            }
+        } catch (Exception ignored) {}
     }
 
     // --------------------------------------------------- overlay permission

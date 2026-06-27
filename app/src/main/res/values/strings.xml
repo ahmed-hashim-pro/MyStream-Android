@@ -1462,5 +1462,7 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="bubble_today_done">Today · %1$d/%2$d done</string>
     <string name="bubble_mark_done">Close</string>
     <string name="bubble_dismissed_toast">Will return at the next athkar time</string>
+    <string name="bubble_sound">Notification sound</string>
+    <string name="bubble_sound_sub">Play a sound when the bubble appears at athkar time</string>
 
 </resources>

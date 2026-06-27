@@ -67,12 +67,14 @@ public class BubbleOverlayController {
                 : WindowManager.LayoutParams.TYPE_PHONE;
     }
 
-    public void show() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(service)) return;
-        if (bubbleView != null) return;
+    /** @return true iff the bubble was newly added (false if already showing or no overlay permission). */
+    public boolean show() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(service)) return false;
+        if (bubbleView != null) return false;
         inflationContext = themedContext();
         loadSession();
         addBubble();
+        return true;
     }
 
     /**

@@ -1161,5 +1161,7 @@
     <string name="bubble_today_done">اليوم · %1$d/%2$d تمّ</string>
     <string name="bubble_mark_done">إغلاق</string>
     <string name="bubble_dismissed_toast">ستعود الفقاعة في وقت الذكر القادم</string>
+    <string name="bubble_sound">صوت التنبيه</string>
+    <string name="bubble_sound_sub">تشغيل صوت عند ظهور الفقاعة في وقت الذكر</string>
 
 </resources>

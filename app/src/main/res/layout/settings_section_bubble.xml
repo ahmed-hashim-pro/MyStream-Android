@@ -25,6 +25,20 @@
             android:layout_height="wrap_content" android:textColor="@color/text_secondary" android:textSize="13sp" />
     </LinearLayout>
 
+    <!-- notification sound on/off -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:gravity="center_vertical" android:minHeight="56dp">
+        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/bubble_sound" android:textColor="@color/text_primary" android:textSize="15sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/bubble_sound_sub" android:textColor="@color/text_secondary" android:textSize="13sp" />
+        </LinearLayout>
+        <androidx.appcompat.widget.SwitchCompat android:id="@+id/switch_bubble_sound"
+            android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    </LinearLayout>
+
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="@string/bubble_style" android:textColor="@color/text_secondary"
         android:textStyle="bold" android:textSize="11sp" android:paddingTop="8dp" android:paddingBottom="4dp" />
