@@ -200,7 +200,7 @@
     <color name="sura_number_color">#B8860B</color>
     <color name="sura_details_color">#7F7667</color>
     <color name="transparent_actionbar_color">#AA000000</color>
-    <color name="panel_background_color">#FF424242</color>
+    <color name="panel_background_color">@color/navy_700</color>
     <color name="translation_hdr_color">#FF777777</color>
     <color name="translation_sura_header">#FFF1ECD8</color>
     <color name="translation_sura_header_night">#FF424242</color>
@@ -220,8 +220,8 @@
     <color name="note_highlight">#40EBEB21</color>
     <color name="bookmark_highlight">#40A4A4A4</color>
     <color name="translation_highlight">#FF33B5E5</color>
-    <color name="toolbar_item_pressed">#552BFF36</color>
-    <color name="indicator_color">@color/accent_color</color>
+    <color name="toolbar_item_pressed">#55B8860B</color>
+    <color name="indicator_color">@color/gold_accent</color>
     <color name="panel_label">@color/accent_color</color>
     <color name="notification_color">#FF112E44</color>
     <color name="audio_notification_color">@color/download_button_background</color>

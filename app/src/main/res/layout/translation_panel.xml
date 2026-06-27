@@ -20,7 +20,7 @@
         android:layout_marginEnd="@dimen/translation_left_right_margin"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:textColor="@color/accent_color"
+        android:textColor="@color/gold_accent"
         />
     <com.medoapps.www.onlinequran.view.InlineTranslationView
         android:id="@+id/translation_view"
