@@ -221,7 +221,8 @@ public class AyaList extends AppCompatActivity {
         instance2=this;
         SettingSaved settingSaved=new SettingSaved(AyaList.this);
         settingSaved.LoadData();
-        new SeparateFunctions(AyaList.this).getAppSpecificDownloadStorageDir(AyaList.this,AyaList.this);
+        // The download dir is (re)created lazily off the main thread inside the background list load
+        // (GuranAya -> getAppSpecificDownloadStorageDir), so no main-thread disk I/O is needed here.
         separateFunctions = new SeparateFunctions(this);
         mAdView = findViewById(R.id.adView);
         mAdView.setVisibility(View.GONE);
@@ -289,10 +290,9 @@ public class AyaList extends AppCompatActivity {
         });
 
         searchManager();
-        loadad();//to load ads full screen
-
-        //load interstial ad by atimer
-        AdmobInterstitial.loadInterstitial(this);
+        // Ad-SDK init (full-screen + interstitial + rewarded) is deferred to after the first frame —
+        // see the decorView.post(...) block at the end of onCreate — so loading ads on the main
+        // thread doesn't stall the activity entrance / shared-element transition.
 
         //load full screan ad
         /*/*if (mInterstitialAd.isLoaded()) {
@@ -353,7 +353,15 @@ public class AyaList extends AppCompatActivity {
                 }
             }
         });
-        loadRewardedAd();
+        // Defer all ad-SDK init off the activity entrance so the open + first frame aren't blocked by
+        // ad loading on the main thread; this runs one frame later, after the first layout pass.
+        getWindow().getDecorView().post(new Runnable() {
+            @Override public void run() {
+                loadad();                                  // full-screen ad
+                AdmobInterstitial.loadInterstitial(AyaList.this);
+                loadRewardedAd();
+            }
+        });
 
     }
     private void asyncLoadAya(){
@@ -888,7 +896,9 @@ public class AyaList extends AppCompatActivity {
             downloadAllBTN.setEnabled(true);
             downloadAllBTN.setAlpha(1.0f);
             LnaguageClass.clearAyaAvailabilityCache();   // a download finished -> availability changed
-            LoadAya();
+            // Refresh off the main thread (GuranAya re-runs the availability scan) to avoid an
+            // ANR/jank on the UI thread after each download; reuses the initial-load async path.
+            asyncLoadAya();
         }
     };
 

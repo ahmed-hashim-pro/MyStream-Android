@@ -183,6 +183,10 @@ public class RecitesName extends Fragment  {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Pre-warm the downloaded-audio availability scan off the main thread now, while the user is
+        // still on the reciters list, so opening a reciter's surahs list (AyaList) doesn't pay the
+        // ~0.5-1s MediaStore query on its shimmer path.
+        LnaguageClass.prewarmAyaAvailability(inflater.getContext().getApplicationContext());
         return inflater.inflate(R.layout.activity_recites_name, container, false);
     }
 

@@ -1023,14 +1023,47 @@ public class LnaguageClass {
 
 
     }
-    // Session cache of the MediaStore "downloaded file" lookup per reciter. The MediaStore query
-    // costs ~0.5s and ran on EVERY reciter open; results only change on download/delete, so we
-    // cache them and clear via clearAyaAvailabilityCache() from those two paths.
-    private static final java.util.Map<String, java.util.Map<String, String>> sAyaUriCache =
-            new java.util.concurrent.ConcurrentHashMap<>();
+    // Session cache of the MediaStore "downloaded file" lookup. The query costs ~0.5-1s and used to
+    // run on the FIRST open of EVERY reciter (it was cached per reciter), so browsing many reciters
+    // paid it again and again. It is now a SINGLE all-reciters scan cached for the whole session
+    // (display names embed the reciter, so one map serves every reciter) and pre-warmed off the main
+    // thread from the reciters list, so the first open of any reciter is already warm. Results only
+    // change on download/delete, so we clear via clearAyaAvailabilityCache() from those two paths.
+    private static volatile java.util.Map<String, String> sAllDownloadedUris = null;
+    // The download dir path is stable for the process; cache the File so we skip the exists()/mkdirs()
+    // stat on every GuranAya call.
+    private static volatile File sDownloadDir = null;
 
     public static void clearAyaAvailabilityCache() {
-        sAyaUriCache.clear();
+        sAllDownloadedUris = null;
+    }
+
+    /**
+     * Off-main-thread pre-warm of the all-reciters downloaded-file scan so the first AyaList open is
+     * warm instead of paying the ~0.5-1s MediaStore query on the UI/shimmer path. Safe to call
+     * repeatedly and from any thread; no-ops once the cache is populated.
+     */
+    public static void prewarmAyaAvailability(final Context appContext) {
+        if (sAllDownloadedUris != null || appContext == null) return;
+        new Thread(new Runnable() {
+            @Override public void run() {
+                try {
+                    if (sAllDownloadedUris == null) {
+                        sAllDownloadedUris = new SeparateFunctions(appContext).findDownloadedAudioUris("");
+                    }
+                } catch (Exception ignored) {}
+            }
+        }, "aya-availability-prewarm").start();
+    }
+
+    /** Cached all-reciters downloaded-URI map (displayName -> content uri), computed lazily on miss. */
+    private java.util.Map<String, String> getDownloadedUris() {
+        java.util.Map<String, String> cached = sAllDownloadedUris;
+        if (cached == null) {
+            cached = new SeparateFunctions(context).findDownloadedAudioUris(""); // "" -> all reciters
+            sAllDownloadedUris = cached;
+        }
+        return cached;
     }
 
     public ArrayList<AuthorClass> GuranAya(String ReciteName, String Rewayat)
@@ -1275,17 +1308,17 @@ public class LnaguageClass {
         ListAyaRanage.clear();
         //IsolatedStorageFile isoStore = IsolatedStorageFile.GetUserStoreForApplication();
         String AYAPAth;
-        // Resolve the download dir and the downloaded-file URIs ONCE (was 1 ContentResolver query
-        // per surah -> up to 114 IPC calls per list load; now a single batched MediaStore query).
-        SeparateFunctions sfBatch = new SeparateFunctions(context);
-        File downloadDir = sfBatch.getAppSpecificDownloadStorageDir(context, activity);
-        // Cached per reciter for the session; cleared on download/delete (clearAyaAvailabilityCache).
-        // The MediaStore query costs ~0.6-1s and previously ran on every reciter open.
-        java.util.Map<String, String> downloadedUris = sAyaUriCache.get(ReciteName);
-        if (downloadedUris == null) {
-            downloadedUris = sfBatch.findDownloadedAudioUris(ReciteName);
-            sAyaUriCache.put(ReciteName, downloadedUris);
+        // Resolve the download dir and the downloaded-file URIs ONCE per load (was 1 ContentResolver
+        // query + File.exists() PER surah -> up to 114 IPC/stat calls). The dir File is cached for the
+        // process, and the MediaStore scan is a single all-reciters query cached for the session and
+        // pre-warmed off the main thread (see getDownloadedUris / prewarmAyaAvailability), so the
+        // first open of any reciter is warm. displayName embeds the reciter, so one map serves all.
+        File downloadDir = sDownloadDir;
+        if (downloadDir == null) {
+            downloadDir = new SeparateFunctions(context).getAppSpecificDownloadStorageDir(context, activity);
+            sDownloadDir = downloadDir;
         }
+        java.util.Map<String, String> downloadedUris = getDownloadedUris();
         // List the download dir ONCE instead of File.exists() per surah (was 114 disk-stat calls).
         java.util.Set<String> existingFiles = new java.util.HashSet<>();
         String[] downloadDirNames = (downloadDir != null) ? downloadDir.list() : null;
