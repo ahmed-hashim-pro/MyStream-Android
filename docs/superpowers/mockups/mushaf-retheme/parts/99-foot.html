@@ -1,0 +1,45 @@
+  </main>
+</div>
+<script>
+/* ---- theme + language engine ---------------------------------------- */
+const root = document.documentElement;
+
+function syncPaper(t){
+  const want = t === 'dark' ? 'night' : 'sepia';
+  document.querySelectorAll('.page.auto-paper').forEach(p => {
+    p.classList.toggle('night', want === 'night');
+    p.classList.toggle('sepia', want === 'sepia');
+    p.classList.remove('day');
+  });
+  document.querySelectorAll('[data-paper-chip]').forEach(c =>
+    c.classList.toggle('solid', c.getAttribute('data-paper-chip') === want));
+}
+function setTheme(t){
+  root.setAttribute('data-theme', t);
+  document.querySelectorAll('[data-theme-btn]').forEach(b =>
+    b.classList.toggle('on', b.getAttribute('data-theme-btn') === t));
+  syncPaper(t);
+}
+function setLang(l){
+  root.setAttribute('data-lang', l);
+  root.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+  root.setAttribute('lang', l);
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const v = l === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+    if (v !== null) el.textContent = v;
+  });
+  document.querySelectorAll('[data-lang-btn]').forEach(b =>
+    b.classList.toggle('on', b.getAttribute('data-lang-btn') === l));
+}
+
+document.querySelectorAll('[data-theme-btn]').forEach(b =>
+  b.addEventListener('click', () => setTheme(b.getAttribute('data-theme-btn'))));
+document.querySelectorAll('[data-lang-btn]').forEach(b =>
+  b.addEventListener('click', () => setLang(b.getAttribute('data-lang-btn'))));
+
+/* initialise (EN / light) */
+setTheme('light');
+setLang('en');
+</script>
+</body>
+</html>

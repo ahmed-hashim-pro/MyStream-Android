@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mushaf re-theme — design preview · My Stream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MY STREAM — MUSHAF RE-THEME · DESIGN TOKENS
+   Values mirror app res/values/colors.xml + values-night/colors.xml
+   ============================================================ */
+:root{
+  /* gold accent (primary action) */
+  --gold:#B8860B; --gold-2:#d9b24a; --gold-light:#E9C778;
+  --gold-faint:rgba(184,134,11,.15);    /* icon frames / faint bg  */
+  --gold-semi:rgba(184,134,11,.40);     /* dividers / outlines     */
+  /* navy hero — FIXED in both light & dark */
+  --navy-900:#172033; --navy-700:#1F2A44; --navy-500:#2C3A5E;
+  --on-navy:#FFFFFF; --on-navy-dim:rgba(255,255,255,.62);
+  /* surfaces / text */
+  --bg:#FFF8F0; --surface:#FFFFFF; --card:#FFFFFF;
+  --text:#1C1B1F; --text2:#49454E; --muted:#cdbfa9;
+  --line:#EFE6D2; --line-soft:rgba(28,27,31,.08);
+  --badge-bg:#F3E7C9; --badge-tx:#7a5a12;
+  --ok:#3a9d6b; --warn:#C2641E; --danger:#C84B4B;
+  --shadow:0 16px 38px -18px rgba(23,32,51,.40);
+  --shadow-sm:0 6px 16px -10px rgba(23,32,51,.5);
+  /* reading-page paper modes */
+  --paper:#FFFFFF; --paper-ink:#1d1a12; --paper-edge:rgba(0,0,0,.06);
+}
+[data-theme="dark"]{
+  --gold:#D4A44C; --gold-2:#caa24f; --gold-light:#E9C778;
+  --gold-faint:rgba(212,164,76,.15); --gold-semi:rgba(212,164,76,.40);
+  --bg:#121212; --surface:#1E1E1E; --card:#282828;
+  --text:#FFFFFF; --text2:#B3B3B3; --muted:#4a443a;
+  --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.07);
+  --badge-bg:#3a3320; --badge-tx:#E9C778;
+  --shadow:0 18px 44px -18px rgba(0,0,0,.75);
+  --shadow-sm:0 8px 18px -10px rgba(0,0,0,.7);
+  --paper:#161310; --paper-ink:#e9e0cf; --paper-edge:rgba(255,255,255,.06);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans','Cairo',system-ui,sans-serif;color:#e8eaf0;min-height:100vh;
+  padding:26px 22px 70px;
+  background:radial-gradient(1100px 520px at 12% -8%,#20304f 0,transparent 60%),
+             radial-gradient(900px 480px at 100% 0,#11182a 0,transparent 55%),#0c111d;}
+[dir="rtl"] body{font-family:'Cairo','Plus Jakarta Sans',system-ui,sans-serif}
+.wrap{max-width:1320px;margin:0 auto}
+
+/* ---------- page header + controls ---------- */
+h1.title{font-size:23px;font-weight:800;letter-spacing:-.02em;margin:0 0 3px;display:flex;align-items:center;gap:10px;color:#fff}
+h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 12px var(--gold-light)}
+.sub{color:#9fb0d0;font-size:13.5px;margin:0 0 18px;max-width:980px;line-height:1.55}
+.sub code{background:#161d2e;border:1px solid #273350;border-radius:5px;padding:1px 6px;font-size:12px;color:#cdd6ea}
+.controls{position:sticky;top:0;z-index:200;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 -22px 24px;
+  padding:14px 22px;background:rgba(9,13,22,.82);backdrop-filter:blur(10px);border-bottom:1px solid #1c2335}
+.seg{display:inline-flex;background:#161d2e;border:1px solid #273350;border-radius:12px;padding:4px;gap:3px}
+.seg .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#5f6f8e;padding:0 6px;align-self:center;font-weight:800}
+.seg button{font:inherit;font-size:12.5px;font-weight:700;color:#9fb0d0;background:transparent;border:0;padding:7px 15px;border-radius:9px;cursor:pointer;transition:.15s}
+.seg button.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305;box-shadow:0 4px 14px -6px var(--gold)}
+.hint{color:#7e8db0;font-size:12px;margin-inline-start:auto}.hint b{color:#cdd6ea}
+
+/* ---------- grid of phones ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(312px,1fr));gap:40px 26px;justify-items:center}
+.phone-col{display:flex;flex-direction:column;align-items:center;gap:12px;width:312px}
+.phone-cap{text-align:center}
+.phone-cap .n{font-size:12.5px;font-weight:800;letter-spacing:.03em;color:#e7ecf7}
+.phone-cap .d{font-size:11px;color:#7e8db0;margin-top:2px;line-height:1.35}
+.phone{width:312px;height:680px;border-radius:40px;background:#05070c;padding:9px;flex:none;position:relative;
+  box-shadow:0 34px 80px -30px rgba(0,0,0,.85),0 0 0 2px #1c2335,inset 0 0 0 2px #000}
+.screen{width:100%;height:100%;border-radius:32px;overflow:hidden;position:relative;background:var(--bg);color:var(--text);
+  display:flex;flex-direction:column}
+.notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:100px;height:22px;background:#05070c;border-radius:0 0 14px 14px;z-index:120}
+
+/* ---------- status bar (phone) ---------- */
+.sb{height:30px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:11.5px;font-weight:700;z-index:80}
+.sb .r{display:flex;gap:5px;align-items:center}
+.sb.on-navy{background:var(--navy-700);color:var(--on-navy)} .sb.on-paper{background:var(--paper);color:var(--paper-ink)}
+.sb-dots:after{content:"●●●";letter-spacing:1px;font-size:7px}
+
+/* ---------- app bar / hero (navy) ---------- */
+.bar{background:linear-gradient(150deg,var(--navy-700),var(--navy-900));color:var(--on-navy);position:relative;
+  padding:4px 12px 12px;flex:none;box-shadow:0 6px 18px -12px rgba(0,0,0,.6)}
+.bar.round{border-radius:0 0 22px 22px}
+.bar:before{content:"";position:absolute;inset:0;border-radius:inherit;
+  background:radial-gradient(220px 120px at 88% -20%,rgba(212,164,76,.30),transparent 70%);pointer-events:none}
+.bar .nav{display:flex;align-items:center;gap:10px;position:relative;min-height:40px}
+.bar .ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--gold);flex:none}
+.bar .bk{font-size:21px;color:var(--gold)}
+.bar .ttl{flex:1;min-width:0}
+.bar .ttl .t{font-size:17px;font-weight:800;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .ttl .s{font-size:11px;color:var(--on-navy-dim);margin-top:1px}
+[dir="rtl"] .bar .bk{transform:scaleX(-1)}
+.bar .acts{display:flex;gap:2px;align-items:center}
+
+/* hero block (big title under nav, for index/landing) */
+.hero-h{position:relative;margin-top:10px}
+.hero-h .big{font-size:21px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.hero-h .big .em{font-size:22px}
+.hero-h .p{font-size:11.5px;color:var(--on-navy-dim);margin-top:4px;line-height:1.45}
+
+/* ---------- tabs strip ---------- */
+.tabs{display:flex;position:relative}
+.tabs.in-bar{margin:12px -4px -4px}
+.tabs .tab{flex:1;text-align:center;font-size:12.5px;font-weight:700;padding:10px 4px 11px;color:var(--on-navy-dim);position:relative;cursor:pointer}
+.tabs .tab.on{color:var(--on-navy)}
+.tabs .tab.on:after{content:"";position:absolute;left:18%;right:18%;bottom:0;height:3px;border-radius:3px;background:var(--gold)}
+/* light tabs (on surface) */
+.tabs.light .tab{color:var(--text2)} .tabs.light .tab.on{color:var(--gold)}
+.tabs.light .tab.on:after{background:var(--gold)}
+
+/* ---------- search field ---------- */
+.search{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);
+  border-radius:13px;padding:9px 13px;margin-top:12px;color:var(--on-navy);position:relative}
+.search .ph{font-size:12.5px;color:var(--on-navy-dim)}
+.search.onlight{background:var(--surface);border:1px solid var(--line);color:var(--text);box-shadow:var(--shadow-sm)}
+.search.onlight .ph{color:var(--text2)}
+.search .lens{font-size:15px;color:var(--gold)}
+
+/* ---------- body / scroller ---------- */
+.body{flex:1;overflow:hidden;position:relative}
+.scroll{position:absolute;inset:0;overflow-y:auto;padding:12px 12px 22px}
+.scroll::-webkit-scrollbar{width:0}
+.pad{padding:12px 12px 22px}
+
+/* ---------- section header ---------- */
+.sec{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--text2);padding:14px 8px 8px;display:flex;align-items:center;gap:8px}
+.sec .ln{flex:1;height:1px;background:var(--line)}
+
+/* ---------- classic list row (Widget.MyStream.ListRow) ---------- */
+.list{display:flex;flex-direction:column}
+.row{display:flex;align-items:center;gap:13px;padding:12px 12px;min-height:62px;position:relative;cursor:pointer}
+.row+.row:before{content:"";position:absolute;top:0;inset-inline:12px;height:1px;background:var(--line-soft)}
+.row .num{width:40px;height:40px;border-radius:11px;background:var(--gold-faint);color:var(--gold);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex:none;line-height:1}
+.row .num .nm{font-size:7px;font-weight:700;color:var(--text2);margin-top:1px;text-transform:uppercase;letter-spacing:.04em}
+.row .ic{width:40px;height:40px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:19px;flex:none}
+.row .tx{flex:1;min-width:0}
+.row .tx .t{font-size:15px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:7px}
+.row .tx .t .ar{font-family:'Amiri',serif;font-size:17px;font-weight:700}
+.row .tx .s{font-size:12px;color:var(--text2);margin-top:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.row .end{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex:none;text-align:end}
+.row .end .pg{font-size:11px;font-weight:700;color:var(--text2)}
+.row .chev{color:var(--muted);font-size:17px;flex:none}
+[dir="rtl"] .row .chev{transform:scaleX(-1)}
+.row .star{font-size:16px;color:var(--gold)}
+.dot-sep{width:3px;height:3px;border-radius:50%;background:var(--muted);display:inline-block}
+.pill-min{font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;background:var(--gold-faint);color:var(--gold)}
+
+/* ---------- card ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:13px}
+.card.flat{box-shadow:none}
+.crow{display:flex;align-items:center;gap:12px;padding:13px 14px}
+.crow+.crow{border-top:1px solid var(--line-soft)}
+
+/* ---------- preference row + controls ---------- */
+.prow{display:flex;align-items:center;gap:12px;padding:13px 14px}
+.prow+.prow{border-top:1px solid var(--line-soft)}
+.prow .ic{width:38px;height:38px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.prow .tx{flex:1;min-width:0}
+.prow .tx .t{font-size:13.5px;font-weight:700;color:var(--text)}
+.prow .tx .s{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.35}
+.prow .val{font-size:11.5px;font-weight:700;color:var(--gold)}
+.prow .chev{color:var(--muted);font-size:16px}
+[dir="rtl"] .prow .chev{transform:scaleX(-1)}
+.sw{width:44px;height:26px;border-radius:14px;background:var(--muted);position:relative;flex:none;transition:.2s}
+.sw.on{background:linear-gradient(135deg,var(--gold),var(--gold-2))}
+.sw .k{position:absolute;top:3px;inset-inline-start:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sw.on .k{inset-inline-start:21px}
+.cbx{width:22px;height:22px;border-radius:7px;border:2px solid var(--muted);flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
+.cbx.on{background:var(--gold);border-color:var(--gold)}
+.radio{width:22px;height:22px;border-radius:50%;border:2px solid var(--muted);flex:none;display:flex;align-items:center;justify-content:center}
+.radio.on{border-color:var(--gold)} .radio.on:after{content:"";width:11px;height:11px;border-radius:50%;background:var(--gold)}
+
+/* segmented control (inside a screen) */
+.seg2{display:flex;gap:6px;padding:4px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
+.seg2 .sg{flex:1;text-align:center;font-size:11.5px;font-weight:700;padding:8px 6px;border-radius:9px;color:var(--text2);cursor:pointer}
+.seg2 .sg.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305}
+
+/* ---------- buttons / chips ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-size:13px;font-weight:800;
+  padding:11px 16px;border-radius:13px;border:0;cursor:pointer}
+.btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305;box-shadow:0 8px 18px -8px var(--gold)}
+.btn.ghost{background:transparent;border:1.5px solid var(--gold-semi);color:var(--gold)}
+.btn.block{display:flex;width:100%}
+.btn.nav-cta{background:var(--gold);color:#1a1305}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px;background:var(--gold-faint);color:var(--gold)}
+.chip.outline{background:transparent;border:1px solid var(--gold-semi)}
+.chip.solid{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305}
+
+/* ---------- progress ---------- */
+.prog{height:6px;border-radius:6px;background:var(--gold-faint);overflow:hidden}
+.prog > i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--gold-2))}
+
+/* ---------- empty state ---------- */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:100%;padding:30px;gap:12px}
+.empty .glyph{width:74px;height:74px;border-radius:22px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:34px}
+.empty .t{font-size:15px;font-weight:800;color:var(--text)}
+.empty .s{font-size:12px;color:var(--text2);line-height:1.5;max-width:230px}
+
+/* ---------- bottom sheet / ayah action panel ---------- */
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-radius:22px 22px 0 0;box-shadow:0 -18px 40px -16px rgba(0,0,0,.5);z-index:60;display:flex;flex-direction:column}
+.sheet .grab{width:42px;height:5px;border-radius:5px;background:var(--muted);margin:9px auto 4px}
+.sheet .sh-head{display:flex;align-items:center;gap:10px;padding:6px 16px 12px}
+.sheet .sh-head .t{flex:1;font-size:14px;font-weight:800;color:var(--text)}
+.sheet .sh-head .x{color:var(--text2);font-size:18px}
+.dots{display:flex;gap:6px;justify-content:center;padding:4px 0 12px}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.dots i.on{background:var(--gold);width:18px;border-radius:4px}
+.scrim{position:absolute;inset:0;background:rgba(8,11,20,.45);z-index:55}
+
+/* ---------- READING PAGE (paper) ---------- */
+.page{position:absolute;inset:0;background:var(--paper);color:var(--paper-ink);display:flex;flex-direction:column}
+.page.sepia{--paper:#F6ECCD;--paper-ink:#4a3b22;--paper-edge:rgba(74,59,34,.10)}
+.page.night{--paper:#15171C;--paper-ink:#d7d2c4;--paper-edge:rgba(255,255,255,.06)}
+.page .surah-band{text-align:center;font-family:'Amiri',serif;font-size:16px;font-weight:700;color:var(--gold);
+  padding:14px 0 10px;margin:14px 16px 6px;border:1.5px solid var(--gold-semi);border-radius:12px;background:var(--gold-faint)}
+.page .quran{flex:1;overflow:hidden;padding:6px 20px;font-family:'Amiri','Scheherazade New',serif;direction:rtl;
+  font-size:24px;line-height:2.15;text-align:justify;text-align-last:center;color:var(--paper-ink)}
+.page .quran .mk{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;margin:0 2px;
+  font-size:12px;color:var(--gold);font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;vertical-align:middle;position:relative}
+.page .quran .mk:before{content:"۝";position:absolute;font-family:'Amiri',serif;font-size:30px;color:var(--gold-semi)}
+.page .pageno{text-align:center;font-size:11px;font-weight:700;color:var(--paper-ink);opacity:.6;padding:8px 0 12px}
+
+/* ---------- audio bar ---------- */
+.audiobar{background:linear-gradient(150deg,var(--navy-700),var(--navy-900));color:var(--on-navy);padding:11px 14px;flex:none;display:flex;align-items:center;gap:12px;position:relative;z-index:40}
+.audiobar .av{width:38px;height:38px;border-radius:11px;background:rgba(212,164,76,.2);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--gold-light);flex:none}
+.audiobar .meta{flex:1;min-width:0}
+.audiobar .meta .t{font-size:12.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.audiobar .meta .s{font-size:10.5px;color:var(--on-navy-dim);margin-top:1px}
+.audiobar .play{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.audiobar .ctl{font-size:18px;color:var(--on-navy)}
+[dir="rtl"] .audiobar .ctl.fwd{transform:scaleX(-1)}
+.aprog{position:absolute;left:0;right:0;top:0;height:3px;background:rgba(255,255,255,.14)}
+.aprog > i{display:block;height:100%;background:var(--gold)}
+
+/* ---------- floating ayah toolbar ---------- */
+.ayatb{position:absolute;inset-inline:18px;display:flex;gap:4px;justify-content:space-around;background:var(--surface);
+  border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:8px 6px;z-index:50}
+.ayatb .b{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text2);font-size:9px;font-weight:700;flex:1}
+.ayatb .b .g{font-size:18px;color:var(--gold)}
+
+/* ---------- dialog ---------- */
+.dialog{position:absolute;inset-inline:22px;top:50%;transform:translateY(-50%);background:var(--surface);border-radius:20px;box-shadow:var(--shadow);z-index:60;overflow:hidden}
+.dialog .dh{padding:16px 18px 4px;font-size:16px;font-weight:800;color:var(--text)}
+.dialog .db{padding:8px 18px 14px}
+.dialog .df{display:flex;justify-content:flex-end;gap:8px;padding:8px 14px 14px}
+.field{margin-top:12px}
+.field .lab{font-size:11px;font-weight:700;color:var(--text2);margin-bottom:5px}
+.field .inp{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;font-size:13px;color:var(--text);background:var(--bg)}
+.field .inp.focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-faint)}
+.field .inp .ph{color:var(--muted)}
+.txtlink{font-size:13px;font-weight:800;color:var(--gold)}
+
+/* notice / warning banner */
+.notice{display:flex;gap:10px;align-items:flex-start;background:var(--gold-faint);border:1px solid var(--gold-semi);border-radius:13px;padding:11px 13px;margin:12px;color:var(--text)}
+.notice .g{font-size:18px;color:var(--gold);flex:none}
+.notice .t{font-size:12px;line-height:1.45} .notice .t b{font-weight:800}
+
+/* misc helpers */
+.muted{color:var(--text2)} .gold{color:var(--gold)} .grow{flex:1}
+.center{display:flex;align-items:center;justify-content:center}
+.stack{display:flex;flex-direction:column}
+.between{display:flex;align-items:center;justify-content:space-between}
+.quran-inline{font-family:'Amiri',serif}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="title"><span class="dot"></span> Mushaf re-theme — design preview</h1>
+  <p class="sub">Re-skinning the embedded <b>Quran for Android</b> reader to My Stream's navy + gold Material-3 language.
+     Toggle <b>theme</b> and <b>language</b> below — every screen reflows live. Reader keeps readable <b>paper / sepia / night</b> modes under navy chrome.
+     Mockup only; Quran text is rendered in Amiri for preview (real app uses the madani/naskh page images).</p>
+  <div class="controls">
+    <div class="seg"><span class="lbl">Theme</span>
+      <button data-theme-btn="light" class="on">☀︎ Light</button>
+      <button data-theme-btn="dark">☾ Dark</button>
+    </div>
+    <div class="seg"><span class="lbl">Language</span>
+      <button data-lang-btn="en" class="on">EN</button>
+      <button data-lang-btn="ar">العربية</button>
+    </div>
+    <span class="hint">18 screens · <b>tap a toggle</b> to flip them all</span>
+  </div>
+  <main class="grid">
+    <!-- ============ 01 · QURAN INDEX — SURAH TAB ============ -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Quran Index · Surahs" data-ar="فهرس المصحف · السور"></div>
+        <div class="d" data-en="QuranActivity — first screen after the Mushaf tab" data-ar="QuranActivity — أول شاشة بعد تبويب المصحف"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar round">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t" data-en="Mushaf" data-ar="المصحف"></div>
+              <div class="s" data-en="The Noble Qur'an" data-ar="القرآن الكريم"></div>
+            </div>
+            <div class="acts"><span class="ico">🔍</span><span class="ico">⋮</span></div>
+          </div>
+          <div class="search">
+            <span class="lens">🔍</span>
+            <span class="ph" data-en="Search surah, juz' or page" data-ar="ابحث عن سورة أو جزء أو صفحة"></span>
+          </div>
+          <div class="tabs in-bar">
+            <div class="tab on" data-en="Surahs" data-ar="السور"></div>
+            <div class="tab" data-en="Juz'" data-ar="الأجزاء"></div>
+            <div class="tab" data-en="Bookmarks" data-ar="العلامات"></div>
+          </div>
+        </div>
+        <div class="body"><div class="scroll">
+          <div class="card">
+            <div class="crow">
+              <span class="ic">📖</span>
+              <div class="tx grow">
+                <div class="t" style="font-size:13px;font-weight:800;color:var(--text)" data-en="Continue reading" data-ar="متابعة القراءة"></div>
+                <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px" data-en="Al-Baqarah · page 49" data-ar="البقرة · صفحة 49"></div>
+              </div>
+              <span class="btn gold" style="padding:8px 14px">▸ <span data-en="Read" data-ar="قراءة"></span></span>
+            </div>
+          </div>
+
+          <div class="list">
+            <div class="row">
+              <div class="num">1</div>
+              <div class="tx"><div class="t"><span class="ar">الفاتحة</span></div>
+                <div class="s"><span data-en="Al-Fatihah · Meccan · 7 verses" data-ar="الفاتحة · مكية · 7 آيات"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 1" data-ar="صفحة 1"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="num">2</div>
+              <div class="tx"><div class="t"><span class="ar">البقرة</span></div>
+                <div class="s"><span data-en="Al-Baqarah · Medinan · 286 verses" data-ar="البقرة · مدنية · 286 آية"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 2" data-ar="صفحة 2"></span></div>
+              <span class="star">★</span>
+            </div>
+            <div class="row">
+              <div class="num">3</div>
+              <div class="tx"><div class="t"><span class="ar">آل عمران</span></div>
+                <div class="s"><span data-en="Aal-'Imran · Medinan · 200 verses" data-ar="آل عمران · مدنية · 200 آية"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 50" data-ar="صفحة 50"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="num">4</div>
+              <div class="tx"><div class="t"><span class="ar">النساء</span></div>
+                <div class="s"><span data-en="An-Nisa' · Medinan · 176 verses" data-ar="النساء · مدنية · 176 آية"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 77" data-ar="صفحة 77"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="num">5</div>
+              <div class="tx"><div class="t"><span class="ar">المائدة</span></div>
+                <div class="s"><span data-en="Al-Ma'idah · Medinan · 120 verses" data-ar="المائدة · مدنية · 120 آية"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 106" data-ar="صفحة 106"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="num">6</div>
+              <div class="tx"><div class="t"><span class="ar">الأنعام</span></div>
+                <div class="s"><span data-en="Al-An'am · Meccan · 165 verses" data-ar="الأنعام · مكية · 165 آية"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 128" data-ar="صفحة 128"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="num">7</div>
+              <div class="tx"><div class="t"><span class="ar">الأعراف</span></div>
+                <div class="s"><span data-en="Al-A'raf · Meccan · 206 verses" data-ar="الأعراف · مكية · 206 آية"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 151" data-ar="صفحة 151"></span></div>
+              <span class="chev">›</span>
+            </div>
+          </div>
+        </div></div>
+      </div></div>
+    </div>
+<!-- ====== 02 · QURAN INDEX — JUZ' TAB ====== -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Quran Index · Juz'" data-ar="فهرس المصحف · الأجزاء"></div>
+        <div class="d" data-en="Juz' tab of QuranActivity" data-ar="تبويب الأجزاء في QuranActivity"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar round">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t" data-en="Mushaf" data-ar="المصحف"></div>
+              <div class="s" data-en="The Noble Qur'an" data-ar="القرآن الكريم"></div>
+            </div>
+            <div class="acts"><span class="ico">🔍</span><span class="ico">⋮</span></div>
+          </div>
+          <div class="search">
+            <span class="lens">🔍</span>
+            <span class="ph" data-en="Search surah, juz' or page" data-ar="ابحث عن سورة أو جزء أو صفحة"></span>
+          </div>
+          <div class="tabs in-bar">
+            <div class="tab" data-en="Surahs" data-ar="السور"></div>
+            <div class="tab on" data-en="Juz'" data-ar="الأجزاء"></div>
+            <div class="tab" data-en="Bookmarks" data-ar="العلامات"></div>
+          </div>
+        </div>
+        <div class="body"><div class="scroll">
+          <div class="sec"><span data-en="Juz' 1–10" data-ar="الأجزاء ١-١٠"></span><span class="ln"></span></div>
+
+          <div class="list">
+            <div class="row">
+              <div class="num">1</div>
+              <div class="tx"><div class="t"><span class="ar">الجزء الأول</span></div>
+                <div class="s"><span data-en="Starts at Al-Fatihah : 1" data-ar="يبدأ من الفاتحة : 1"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 1" data-ar="صفحة 1"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="num">2</div>
+              <div class="tx"><div class="t"><span class="ar">الجزء الثاني</span></div>
+                <div class="s"><span data-en="Starts at Al-Baqarah : 142" data-ar="يبدأ من البقرة : 142"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 22" data-ar="صفحة 22"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="num">3</div>
+              <div class="tx"><div class="t"><span class="ar">الجزء الثالث</span></div>
+                <div class="s"><span data-en="Starts at Al-Baqarah : 253" data-ar="يبدأ من البقرة : 253"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 42" data-ar="صفحة 42"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="num">4</div>
+              <div class="tx"><div class="t"><span class="ar">الجزء الرابع</span></div>
+                <div class="s"><span data-en="Starts at Aal-'Imran : 92" data-ar="يبدأ من آل عمران : 92"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 62" data-ar="صفحة 62"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="num">5</div>
+              <div class="tx"><div class="t"><span class="ar">الجزء الخامس</span></div>
+                <div class="s"><span data-en="Starts at An-Nisa' : 24" data-ar="يبدأ من النساء : 24"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 82" data-ar="صفحة 82"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="num">6</div>
+              <div class="tx"><div class="t"><span class="ar">الجزء السادس</span></div>
+                <div class="s"><span data-en="Starts at An-Nisa' : 148" data-ar="يبدأ من النساء : 148"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 102" data-ar="صفحة 102"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="num">7</div>
+              <div class="tx"><div class="t"><span class="ar">الجزء السابع</span></div>
+                <div class="s"><span data-en="Starts at Al-Ma'idah : 82" data-ar="يبدأ من المائدة : 82"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 122" data-ar="صفحة 122"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="num">8</div>
+              <div class="tx"><div class="t"><span class="ar">الجزء الثامن</span></div>
+                <div class="s"><span data-en="Starts at Al-An'am : 111" data-ar="يبدأ من الأنعام : 111"></span></div></div>
+              <div class="end"><span class="pg" data-en="Page 142" data-ar="صفحة 142"></span></div>
+              <span class="chev">›</span>
+            </div>
+          </div>
+        </div></div>
+      </div></div>
+    </div>
+<!-- ====== 03 · QURAN INDEX — BOOKMARKS TAB ====== -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Quran Index · Bookmarks" data-ar="فهرس المصحف · العلامات"></div>
+        <div class="d" data-en="Saved ayat, grouped by tag" data-ar="الآيات المحفوظة، مجمّعة بالوسوم"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar round">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t" data-en="Mushaf" data-ar="المصحف"></div>
+              <div class="s" data-en="The Noble Qur'an" data-ar="القرآن الكريم"></div>
+            </div>
+            <div class="acts"><span class="ico">🔍</span><span class="ico">⋮</span></div>
+          </div>
+          <div class="search">
+            <span class="lens">🔍</span>
+            <span class="ph" data-en="Search bookmarks or tags" data-ar="ابحث في العلامات أو الوسوم"></span>
+          </div>
+          <div class="tabs in-bar">
+            <div class="tab" data-en="Surahs" data-ar="السور"></div>
+            <div class="tab" data-en="Juz'" data-ar="الأجزاء"></div>
+            <div class="tab on" data-en="Bookmarks" data-ar="العلامات"></div>
+          </div>
+        </div>
+        <div class="body"><div class="scroll">
+
+          <div class="sec"><span data-en="Memorizing" data-ar="الحفظ"></span><span class="ln"></span></div>
+          <div class="list">
+            <div class="row">
+              <div class="ic">★</div>
+              <div class="tx">
+                <div class="t"><span class="ar">البقرة ٢٥٥</span></div>
+                <div class="s"><span data-en="Al-Baqarah : 255 · Page 42" data-ar="البقرة : ٢٥٥ · صفحة 42"></span><span class="chip" data-en="Ayat al-Kursi" data-ar="آية الكرسي"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="Page 42" data-ar="صفحة 42"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="ic">★</div>
+              <div class="tx">
+                <div class="t"><span class="ar">آل عمران ١٩</span></div>
+                <div class="s"><span data-en="Aal-'Imran : 19 · Page 52" data-ar="آل عمران : ١٩ · صفحة 52"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="Page 52" data-ar="صفحة 52"></span></div>
+              <span class="chev">›</span>
+            </div>
+          </div>
+
+          <div class="sec"><span data-en="Favorites" data-ar="المفضلة"></span><span class="ln"></span></div>
+          <div class="list">
+            <div class="row">
+              <div class="ic">★</div>
+              <div class="tx">
+                <div class="t"><span class="ar">الفاتحة ٦</span></div>
+                <div class="s"><span data-en="Al-Fatihah : 6 · Page 1 · 2 days ago" data-ar="الفاتحة : ٦ · صفحة 1 · قبل يومين"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="Page 1" data-ar="صفحة 1"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="ic">★</div>
+              <div class="tx">
+                <div class="t"><span class="ar">يس ٩</span></div>
+                <div class="s"><span data-en="Ya-Sin : 9 · Page 440 · last week" data-ar="يس : ٩ · صفحة 440 · الأسبوع الماضي"></span><span class="chip" data-en="Du'a" data-ar="دعاء"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="Page 440" data-ar="صفحة 440"></span></div>
+              <span class="chev">›</span>
+            </div>
+            <div class="row">
+              <div class="ic">★</div>
+              <div class="tx">
+                <div class="t"><span class="ar">الكهف ١٠</span></div>
+                <div class="s"><span data-en="Al-Kahf : 10 · Page 294 · last Friday" data-ar="الكهف : ١٠ · صفحة 294 · الجمعة الماضية"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="Page 294" data-ar="صفحة 294"></span></div>
+              <span class="chev">›</span>
+            </div>
+          </div>
+
+        </div></div>
+      </div></div>
+    </div>
+    <!-- ============ 04 · PAGE READER (navy chrome + paper) ============ -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Page Reader" data-ar="قارئ الصفحة"></div>
+        <div class="d" data-en="PagerActivity — navy chrome, readable paper/sepia/night page" data-ar="PagerActivity — إطار كحلي وصفحة ورقية/داكنة قابلة للقراءة"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t"><span class="ar">البقرة</span></div>
+              <div class="s"><span data-en="Page 49 · Juz' 1" data-ar="صفحة 49 · الجزء 1"></span></div>
+            </div>
+            <div class="acts"><span class="ico">☆</span><span class="ico">🌙</span><span class="ico">⋮</span></div>
+          </div>
+        </div>
+
+        <div class="grow" style="position:relative;flex:1;overflow:hidden">
+          <!-- paper page (auto: sepia in light app theme, night in dark) -->
+          <div class="page auto-paper sepia">
+            <div class="surah-band">سُورَةُ البَقَرَة</div>
+            <div class="quran">
+              الٓمٓ <span class="mk">1</span> ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ <span class="mk">2</span> ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَٰهُمْ يُنفِقُونَ <span class="mk">3</span> وَٱلَّذِينَ يُؤْمِنُونَ بِمَآ أُنزِلَ إِلَيْكَ وَمَآ أُنزِلَ مِن قَبْلِكَ وَبِٱلْءَاخِرَةِ هُمْ يُوقِنُونَ <span class="mk">4</span>
+            </div>
+            <div class="pageno">٤٩</div>
+          </div>
+
+          <!-- floating reading-mode chooser -->
+          <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:30;
+                      display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);
+                      border-radius:22px;box-shadow:var(--shadow);padding:6px">
+            <span class="chip" data-paper-chip="day" data-en="Day" data-ar="نهار"></span>
+            <span class="chip solid" data-paper-chip="sepia" data-en="Sepia" data-ar="ورقي"></span>
+            <span class="chip" data-paper-chip="night" data-en="Night" data-ar="ليل"></span>
+          </div>
+        </div>
+
+        <div class="audiobar">
+          <div class="aprog"><i style="width:38%"></i></div>
+          <span class="av">🎙️</span>
+          <div class="meta">
+            <div class="t" data-en="Mishary Alafasy" data-ar="مشاري العفاسي"></div>
+            <div class="s" data-en="Al-Baqarah 2 · 1:02 / 2:48" data-ar="البقرة 2 · 1:02 / 2:48"></div>
+          </div>
+          <span class="ctl">⏮</span>
+          <span class="play">⏸</span>
+          <span class="ctl fwd">⏭</span>
+        </div>
+      </div></div>
+    </div>
+<!-- ====== 05 · AYAH PANEL — TRANSLATION ====== -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Ayah Panel · Translation" data-ar="لوحة الآية · الترجمة"></div>
+    <div class="d" data-en="Tap an ayah → sliding panel" data-ar="انقر آية ← لوحة منزلقة"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+
+    <!-- reader behind -->
+    <div class="bar">
+      <div class="nav">
+        <span class="bk">‹</span>
+        <div class="ttl">
+          <div class="t"><span class="ar">البقرة</span></div>
+          <div class="s"><span data-en="Page 49 · Juz' 1" data-ar="صفحة 49 · الجزء 1"></span></div>
+        </div>
+        <div class="acts"><span class="ico">☆</span><span class="ico">🌙</span><span class="ico">⋮</span></div>
+      </div>
+    </div>
+
+    <div class="grow" style="position:relative;flex:1;overflow:hidden">
+      <div class="page auto-paper sepia">
+        <div class="surah-band">سُورَةُ البَقَرَة</div>
+        <div class="quran">
+          الٓمٓ <span class="mk">1</span> ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ <span class="mk">2</span> ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَٰهُمْ يُنفِقُونَ <span class="mk">3</span>
+        </div>
+      </div>
+
+      <!-- dim + sheet -->
+      <div class="scrim"></div>
+      <div class="sheet">
+        <div class="grab"></div>
+        <div class="sh-head">
+          <div class="t"><span class="ar">البقرة ٢:٢</span></div>
+          <span class="x">✕</span>
+        </div>
+        <div class="dots"><i class="on"></i><i></i><i></i></div>
+        <div class="pad" style="padding:0 16px 18px">
+          <div class="field" style="margin-top:0">
+            <div class="lab" data-en="Translation" data-ar="الترجمة"></div>
+            <div class="inp"><span class="grow" data-en="Saheeh International ▾" data-ar="صحيح إنترناشونال ▾"></span></div>
+          </div>
+
+          <div class="quran-inline" style="direction:rtl;text-align:center;font-size:21px;line-height:1.9;color:var(--text);margin:16px 0 4px">ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ</div>
+
+          <div style="font-size:14px;line-height:1.6;color:var(--text2);padding:8px 2px 4px" data-en="This is the Book about which there is no doubt, a guidance for those conscious of Allah." data-ar="ذٰلك الكتابُ لا ريبَ فيه، هدًى للمتقين."></div>
+
+          <div style="display:flex;gap:10px;margin-top:16px">
+            <span class="btn ghost grow"><span class="chev">‹</span><span data-en="Prev" data-ar="السابق"></span></span>
+            <span class="btn gold grow"><span data-en="Next" data-ar="التالي"></span><span class="chev">›</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div>
+<!-- ====== 06 · AYAH ACTION PANEL — PLAYBACK ====== -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Ayah Panel · Playback" data-ar="لوحة الآية · التشغيل"></div>
+    <div class="d" data-en="Set audio repeat range" data-ar="تحديد نطاق تكرار الصوت"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+    <div class="bar">
+      <div class="nav">
+        <span class="bk">‹</span>
+        <div class="ttl">
+          <div class="t"><span class="ar">البقرة</span></div>
+          <div class="s"><span data-en="Page 49 · Juz' 1" data-ar="صفحة 49 · الجزء 1"></span></div>
+        </div>
+        <div class="acts"><span class="ico">☆</span><span class="ico">🌙</span><span class="ico">⋮</span></div>
+      </div>
+    </div>
+
+    <div class="grow" style="position:relative;flex:1;overflow:hidden">
+      <!-- dimmed reader page behind the sheet -->
+      <div class="page auto-paper sepia">
+        <div class="surah-band">سُورَةُ البَقَرَة</div>
+        <div class="quran">
+          الٓمٓ <span class="mk">1</span> ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ <span class="mk">2</span> ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَٰهُمْ يُنفِقُونَ <span class="mk">3</span> وَٱلَّذِينَ يُؤْمِنُونَ بِمَآ أُنزِلَ إِلَيْكَ وَمَآ أُنزِلَ مِن قَبْلِكَ وَبِٱلْءَاخِرَةِ هُمْ يُوقِنُونَ <span class="mk">4</span>
+        </div>
+        <div class="pageno">٤٩</div>
+      </div>
+
+      <!-- scrim -->
+      <div class="scrim"></div>
+
+      <!-- playback range sheet -->
+      <div class="sheet">
+        <div class="grab"></div>
+        <div class="sh-head">
+          <div class="t" data-en="Playback range" data-ar="نطاق التشغيل"></div>
+          <span class="x">✕</span>
+        </div>
+        <div class="dots"><i></i><i class="on"></i><i></i></div>
+        <div class="pad" style="padding-top:2px">
+
+          <div class="field">
+            <div class="lab" data-en="From" data-ar="من"></div>
+            <div style="display:flex;gap:8px">
+              <div class="inp" style="flex:2"><span class="ar">البقرة</span></div>
+              <div class="inp" style="flex:1"><span>2</span></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="lab" data-en="To" data-ar="إلى"></div>
+            <div style="display:flex;gap:8px">
+              <div class="inp" style="flex:2"><span class="ar">البقرة</span></div>
+              <div class="inp" style="flex:1"><span>5</span></div>
+            </div>
+          </div>
+
+          <div class="card flat" style="margin-top:14px">
+            <div class="prow">
+              <span class="ic">🔁</span>
+              <div class="tx"><div class="t" data-en="Repeat each verse" data-ar="تكرار كل آية"></div></div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="chip outline">−</span>
+                <span class="val" style="min-width:24px;text-align:center">2×</span>
+                <span class="chip solid">+</span>
+              </div>
+            </div>
+            <div class="prow">
+              <span class="ic">🔂</span>
+              <div class="tx"><div class="t" data-en="Repeat range" data-ar="تكرار النطاق"></div></div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span class="chip outline">−</span>
+                <span class="val" style="min-width:24px;text-align:center">1×</span>
+                <span class="chip solid">+</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="crow" style="padding-inline:4px">
+            <div class="cbx on">✓</div>
+            <div class="tx" style="flex:1">
+              <div class="t" data-en="Restrict reading to range" data-ar="حصر القراءة في النطاق" style="font-size:13.5px;font-weight:700;color:var(--text)"></div>
+            </div>
+          </div>
+
+          <button class="btn gold block" style="margin-top:14px" data-en="Apply" data-ar="تطبيق"></button>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div>
+<!-- ====== 07 · AYAH ACTION PANEL — TAGS TAB ====== -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Ayah Panel · Tags" data-ar="لوحة الآية · الوسوم"></div>
+    <div class="d" data-en="Tag the selected ayah" data-ar="وسم الآية المحددة"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+    <div class="bar">
+      <div class="nav">
+        <span class="bk">‹</span>
+        <div class="ttl">
+          <div class="t"><span class="ar">البقرة</span></div>
+          <div class="s"><span data-en="Page 49 · Juz' 1" data-ar="صفحة 49 · الجزء 1"></span></div>
+        </div>
+        <div class="acts"><span class="ico">☆</span><span class="ico">🌙</span><span class="ico">⋮</span></div>
+      </div>
+    </div>
+
+    <div class="grow" style="position:relative;flex:1;overflow:hidden">
+      <!-- dimmed reader behind the sheet -->
+      <div class="page auto-paper sepia">
+        <div class="surah-band">سُورَةُ البَقَرَة</div>
+        <div class="quran">
+          الٓمٓ <span class="mk">1</span> ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ <span class="mk">2</span> ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَٰهُمْ يُنفِقُونَ <span class="mk">3</span> وَٱلَّذِينَ يُؤْمِنُونَ بِمَآ أُنزِلَ إِلَيْكَ وَمَآ أُنزِلَ مِن قَبْلِكَ وَبِٱلْءَاخِرَةِ هُمْ يُوقِنُونَ <span class="mk">4</span>
+        </div>
+        <div class="pageno">٤٩</div>
+      </div>
+
+      <!-- scrim -->
+      <div class="scrim"></div>
+
+      <!-- tags sheet -->
+      <div class="sheet">
+        <div class="grab"></div>
+        <div class="sh-head">
+          <div class="t" data-en="Add to tags" data-ar="إضافة إلى الوسوم"></div>
+          <span class="x">✕</span>
+        </div>
+        <div class="dots"><i></i><i></i><i class="on"></i></div>
+
+        <div class="card flat" style="margin:0 12px 12px">
+          <div class="crow">
+            <span style="width:10px;height:10px;border-radius:50%;background:var(--ok);flex:none"></span>
+            <div class="tx grow"><div class="t" style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Memorizing" data-ar="الحفظ"></div></div>
+            <div class="cbx on">✓</div>
+          </div>
+          <div class="crow">
+            <span style="width:10px;height:10px;border-radius:50%;background:var(--gold);flex:none"></span>
+            <div class="tx grow"><div class="t" style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Favorites" data-ar="المفضلة"></div></div>
+            <div class="cbx"></div>
+          </div>
+          <div class="crow">
+            <span style="width:10px;height:10px;border-radius:50%;background:var(--warn);flex:none"></span>
+            <div class="tx grow"><div class="t" style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Tafsir" data-ar="تفسير"></div></div>
+            <div class="cbx"></div>
+          </div>
+          <div class="crow">
+            <span style="width:10px;height:10px;border-radius:50%;background:var(--danger);flex:none"></span>
+            <div class="tx grow"><div class="t" style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Difficult" data-ar="صعبة"></div></div>
+            <div class="cbx"></div>
+          </div>
+          <div class="crow">
+            <span class="ic" style="width:24px;height:24px;border-radius:8px;font-size:16px">＋</span>
+            <div class="tx grow"><div class="t" style="font-size:13.5px;font-weight:800;color:var(--gold)" data-en="New tag" data-ar="وسم جديد"></div></div>
+          </div>
+        </div>
+
+        <div class="df" style="padding:0 14px 16px">
+          <span class="btn ghost" data-en="Cancel" data-ar="إلغاء"></span>
+          <span class="btn gold" data-en="Save" data-ar="حفظ"></span>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div>
+<!-- ====== 08 · FULL-PAGE TRANSLATION VIEW ====== -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Full Translation View" data-ar="عرض الترجمة الكامل"></div>
+    <div class="d" data-en="Swipe from the page to read the translation" data-ar="اسحب من الصفحة لقراءة الترجمة"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+    <div class="bar">
+      <div class="nav">
+        <span class="bk">‹</span>
+        <div class="ttl">
+          <div class="t"><span class="ar">البقرة</span></div>
+          <div class="s"><span data-en="Saheeh International" data-ar="صحيح إنترناشونال"></span></div>
+        </div>
+        <div class="acts"><span class="ico">📖</span><span class="ico">⋮</span></div>
+      </div>
+    </div>
+
+    <div class="body"><div class="scroll">
+      <div style="display:flex;justify-content:center;padding:6px 0 14px">
+        <span class="chip outline" data-en="Saheeh International" data-ar="صحيح إنترناشونال"></span>
+      </div>
+
+      <!-- Ayah 1 -->
+      <div style="display:flex;align-items:flex-start;gap:12px">
+        <div class="num">1</div>
+        <div style="flex:1;min-width:0">
+          <div class="quran-inline" dir="rtl" style="font-size:21px;line-height:1.95;color:var(--text);text-align:right">الٓمٓ</div>
+          <div style="font-size:13.5px;line-height:1.6;color:var(--text2);margin-top:8px" data-en="Alif, Lam, Meem." data-ar="الٓمٓ (حروف مقطّعة في أوائل بعض السور)"></div>
+        </div>
+      </div>
+      <div style="height:1px;background:var(--line);margin:12px 0"></div>
+
+      <!-- Ayah 2 -->
+      <div style="display:flex;align-items:flex-start;gap:12px">
+        <div class="num">2</div>
+        <div style="flex:1;min-width:0">
+          <div class="quran-inline" dir="rtl" style="font-size:21px;line-height:1.95;color:var(--text);text-align:right">ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ</div>
+          <div style="font-size:13.5px;line-height:1.6;color:var(--text2);margin-top:8px" data-en="This is the Book about which there is no doubt, a guidance for those conscious of Allah." data-ar="هذا القرآن لا شكَّ أنه من عند الله، هدايةٌ للمتقين."></div>
+        </div>
+      </div>
+      <div style="height:1px;background:var(--line);margin:12px 0"></div>
+
+      <!-- Ayah 3 -->
+      <div style="display:flex;align-items:flex-start;gap:12px">
+        <div class="num">3</div>
+        <div style="flex:1;min-width:0">
+          <div class="quran-inline" dir="rtl" style="font-size:21px;line-height:1.95;color:var(--text);text-align:right">ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَٰهُمْ يُنفِقُونَ</div>
+          <div style="font-size:13.5px;line-height:1.6;color:var(--text2);margin-top:8px" data-en="Who believe in the unseen, establish prayer, and spend out of what We have provided for them." data-ar="الذين يصدِّقون بالغيب ويؤدُّون الصلاة وينفقون مما رزقناهم."></div>
+        </div>
+      </div>
+      <div style="height:1px;background:var(--line);margin:12px 0"></div>
+
+      <!-- Ayah 4 -->
+      <div style="display:flex;align-items:flex-start;gap:12px">
+        <div class="num">4</div>
+        <div style="flex:1;min-width:0">
+          <div class="quran-inline" dir="rtl" style="font-size:21px;line-height:1.95;color:var(--text);text-align:right">وَٱلَّذِينَ يُؤْمِنُونَ بِمَآ أُنزِلَ إِلَيْكَ وَمَآ أُنزِلَ مِن قَبْلِكَ وَبِٱلْءَاخِرَةِ هُمْ يُوقِنُونَ</div>
+          <div style="font-size:13.5px;line-height:1.6;color:var(--text2);margin-top:8px" data-en="And who believe in what has been revealed to you and what was revealed before you, and of the Hereafter they are certain." data-ar="والذين يصدِّقون بما أُنزل إليك وما أُنزل من قبلك، وهم بالآخرة موقنون."></div>
+        </div>
+      </div>
+      <div style="height:1px;background:var(--line);margin:12px 0"></div>
+    </div></div>
+  </div></div>
+</div>
+<!-- ====== 09 · SEARCH ====== -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Search" data-ar="البحث"></div>
+    <div class="d" data-en="Keyword search across the Mushaf" data-ar="بحث بالكلمات في المصحف"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+    <div class="bar round">
+      <div class="nav">
+        <span class="bk">‹</span>
+        <div class="search" style="flex:1;margin-top:0">
+          <span class="lens">🔍</span>
+          <span class="ph" data-en="mercy" data-ar="رحمة"></span>
+          <span class="grow"></span>
+          <span style="font-size:15px;color:var(--on-navy-dim)">✕</span>
+        </div>
+      </div>
+    </div>
+    <div class="body"><div class="scroll" style="padding:0 0 22px">
+      <div class="notice">
+        <span class="g">⚠</span>
+        <div class="t">
+          <b data-en="Arabic search needs a data file." data-ar="بحث العربية يحتاج ملف بيانات."></b>
+          <span> </span>
+          <span class="txtlink" data-en="Download" data-ar="تنزيل"></span>
+        </div>
+      </div>
+
+      <div class="sec"><span data-en="12 results" data-ar="١٢ نتيجة"></span><span class="ln"></span></div>
+
+      <div class="list">
+        <div class="row">
+          <div class="ic">📍</div>
+          <div class="tx">
+            <div class="t"><span class="ar">كَتَبَ رَبُّكُمْ عَلَىٰ نَفْسِهِ ٱل<b>رَّحْمَةَ</b></span></div>
+            <div class="s"><span data-en="Al-An'am : 54 · Page 134" data-ar="الأنعام : ٥٤ · صفحة 134"></span></div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+        <div class="row">
+          <div class="ic">📍</div>
+          <div class="tx">
+            <div class="t"><span class="ar">أُو۟لَـٰٓئِكَ يَرْجُونَ <b>رَحْمَتَ</b> ٱللَّهِ</span></div>
+            <div class="s"><span data-en="Al-Baqarah : 218 · Page 34" data-ar="البقرة : ٢١٨ · صفحة 34"></span></div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+        <div class="row">
+          <div class="ic">📍</div>
+          <div class="tx">
+            <div class="t"><span class="ar">وَ<b>رَحْمَتِى</b> وَسِعَتْ كُلَّ شَىْءٍ</span></div>
+            <div class="s"><span data-en="Al-A'raf : 156 · Page 170" data-ar="الأعراف : ١٥٦ · صفحة 170"></span></div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+        <div class="row">
+          <div class="ic">📍</div>
+          <div class="tx">
+            <div class="t"><span class="ar">إِنَّ <b>رَحْمَتَ</b> ٱللَّهِ قَرِيبٌ مِّنَ ٱلْمُحْسِنِينَ</span></div>
+            <div class="s"><span data-en="Al-A'raf : 56 · Page 157" data-ar="الأعراف : ٥٦ · صفحة 157"></span></div>
+          </div>
+          <span class="chev">›</span>
+        </div>
+      </div>
+    </div></div>
+  </div></div>
+</div>
+<!-- ====== 10 · JUMP TO AYAH ====== -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Jump to Ayah" data-ar="الانتقال إلى آية"></div>
+    <div class="d" data-en="Quick navigation dialog" data-ar="نافذة تنقّل سريع"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+
+    <!-- dimmed reader behind the dialog -->
+    <div class="bar">
+      <div class="nav">
+        <span class="bk">‹</span>
+        <div class="ttl">
+          <div class="t"><span class="ar">البقرة</span></div>
+          <div class="s"><span data-en="Page 49 · Juz' 1" data-ar="صفحة 49 · الجزء 1"></span></div>
+        </div>
+        <div class="acts"><span class="ico">☆</span><span class="ico">🌙</span><span class="ico">⋮</span></div>
+      </div>
+    </div>
+
+    <div class="grow" style="position:relative;flex:1;overflow:hidden">
+      <div class="page auto-paper sepia">
+        <div class="surah-band">سُورَةُ البَقَرَة</div>
+        <div class="quran">
+          الٓمٓ <span class="mk">1</span> ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ <span class="mk">2</span> ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَٰهُمْ يُنفِقُونَ <span class="mk">3</span>
+        </div>
+        <div class="pageno">٤٩</div>
+      </div>
+
+      <!-- scrim + dialog -->
+      <div class="scrim"></div>
+      <div class="dialog">
+        <div class="dh" data-en="Jump to" data-ar="الانتقال إلى"></div>
+        <div class="db">
+          <div class="field">
+            <div class="lab" data-en="Page number" data-ar="رقم الصفحة"></div>
+            <div class="inp"><span>49</span><span class="grow"></span><span class="ph" data-en="1–604" data-ar="1–604"></span></div>
+          </div>
+
+          <div class="center" style="font-size:11px;font-weight:700;color:var(--muted);padding:12px 0 2px">
+            <span data-en="— or —" data-ar="— أو —"></span>
+          </div>
+
+          <div class="field">
+            <div class="lab" data-en="Surah" data-ar="السورة"></div>
+            <div class="inp focus"><span class="ar">البقرة</span><span class="grow"></span><span class="gold">▾</span></div>
+          </div>
+
+          <div class="field">
+            <div class="lab" data-en="Ayah" data-ar="الآية"></div>
+            <div class="inp"><span>255</span><span class="grow"></span><span class="ph" data-en="1–286" data-ar="1–286"></span></div>
+          </div>
+        </div>
+        <div class="df">
+          <span class="btn ghost" data-en="Cancel" data-ar="إلغاء"></span>
+          <span class="btn gold" data-en="Go" data-ar="انتقال"></span>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div>
+<!-- ====== 11 · BOOKMARKS — SELECTION / CONTEXTUAL ACTION MODE ====== -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Bookmarks · Selection" data-ar="العلامات · التحديد"></div>
+    <div class="d" data-en="Batch tag, edit or delete bookmarks" data-ar="وسم أو تعديل أو حذف العلامات دفعةً"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+    <div class="bar round">
+      <div class="nav">
+        <span class="bk">✕</span>
+        <div class="ttl">
+          <div class="t" data-en="2 selected" data-ar="2 محدد"></div>
+        </div>
+        <div class="acts">
+          <span class="ico">🏷️</span>
+          <span class="ico">✎</span>
+          <span class="ico">🗑️</span>
+        </div>
+      </div>
+    </div>
+    <div class="body"><div class="scroll">
+      <div class="list">
+
+        <div class="row" style="background:var(--gold-faint)">
+          <div class="cbx on">✓</div>
+          <div class="tx">
+            <div class="t"><span class="ar">البقرة ٢٥٥</span></div>
+            <div class="s">
+              <span data-en="Al-Baqarah · page 42" data-ar="البقرة · صفحة 42"></span>
+              <span class="dot-sep"></span>
+              <span class="chip" data-en="Memorize" data-ar="حفظ"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <span class="ic">★</span>
+          <div class="tx">
+            <div class="t"><span class="ar">آل عمران ١٩</span></div>
+            <div class="s">
+              <span data-en="Aal-'Imran · page 52" data-ar="آل عمران · صفحة 52"></span>
+              <span class="dot-sep"></span>
+              <span class="chip" data-en="Tafsir" data-ar="تفسير"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="background:var(--gold-faint)">
+          <div class="cbx on">✓</div>
+          <div class="tx">
+            <div class="t"><span class="ar">الكهف ١٠</span></div>
+            <div class="s">
+              <span data-en="Al-Kahf · page 294" data-ar="الكهف · صفحة 294"></span>
+              <span class="dot-sep"></span>
+              <span class="chip" data-en="Memorize" data-ar="حفظ"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <span class="ic">★</span>
+          <div class="tx">
+            <div class="t"><span class="ar">يس ٩</span></div>
+            <div class="s">
+              <span data-en="Ya-Sin · page 440" data-ar="يس · صفحة 440"></span>
+              <span class="dot-sep"></span>
+              <span class="chip" data-en="Favorites" data-ar="مفضلة"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <span class="ic">★</span>
+          <div class="tx">
+            <div class="t"><span class="ar">الرحمن ١٣</span></div>
+            <div class="s">
+              <span data-en="Ar-Rahman · page 531" data-ar="الرحمن · صفحة 531"></span>
+              <span class="dot-sep"></span>
+              <span class="chip" data-en="Daily" data-ar="يومي"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div></div>
+  </div></div>
+</div>
+    <!-- ============ 12 · QURAN SETTINGS ============ -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Quran Settings" data-ar="إعدادات المصحف"></div>
+        <div class="d" data-en="QuranPreferenceActivity — themed preference cards" data-ar="QuranPreferenceActivity — بطاقات إعدادات بالهوية"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar round">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl"><div class="t" data-en="Settings" data-ar="الإعدادات"></div>
+              <div class="s" data-en="Display · reading · audio" data-ar="العرض · القراءة · الصوت"></div></div>
+          </div>
+        </div>
+        <div class="body"><div class="scroll">
+          <div class="sec"><span data-en="Display" data-ar="العرض"></span><span class="ln"></span></div>
+          <div class="card">
+            <div class="prow"><span class="ic">🔤</span>
+              <div class="tx"><div class="t" data-en="Arabic surah names" data-ar="أسماء السور بالعربية"></div>
+                <div class="s" data-en="Show names in Arabic script" data-ar="عرض الأسماء بالخط العربي"></div></div>
+              <div class="sw on"><div class="k"></div></div></div>
+            <div class="prow"><span class="ic">🎨</span>
+              <div class="tx"><div class="t" data-en="Reading background" data-ar="خلفية القراءة"></div>
+                <div class="s" data-en="Paper tone for the page" data-ar="لون الورق للصفحة"></div></div>
+              <span class="val" data-en="Sepia" data-ar="ورقي"></span></div>
+            <div class="prow"><span class="ic">🔒</span>
+              <div class="tx"><div class="t" data-en="Lock orientation" data-ar="قفل الاتجاه"></div>
+                <div class="s" data-en="Keep portrait while reading" data-ar="إبقاء الوضع الرأسي أثناء القراءة"></div></div>
+              <div class="sw"><div class="k"></div></div></div>
+          </div>
+
+          <div class="sec"><span data-en="Reading" data-ar="القراءة"></span><span class="ln"></span></div>
+          <div class="card">
+            <div class="prow"><span class="ic">📄</span>
+              <div class="tx"><div class="t" data-en="Page type" data-ar="نوع الصفحة"></div>
+                <div class="s" data-en="Mushaf image set" data-ar="مجموعة صور المصحف"></div></div>
+              <span class="val" data-en="Madani" data-ar="مدني"></span></div>
+            <div class="prow"><span class="ic">ℹ️</span>
+              <div class="tx"><div class="t" data-en="Page info overlay" data-ar="معلومات الصفحة"></div>
+                <div class="s" data-en="Show surah & juz' on page" data-ar="عرض السورة والجزء على الصفحة"></div></div>
+              <div class="sw on"><div class="k"></div></div></div>
+            <div class="prow"><span class="ic">👆</span>
+              <div class="tx"><div class="t" data-en="Ayah marker popups" data-ar="نوافذ علامة الآية"></div>
+                <div class="s" data-en="Tap a marker for actions" data-ar="انقر العلامة للإجراءات"></div></div>
+              <div class="sw on"><div class="k"></div></div></div>
+          </div>
+
+          <div class="sec"><span data-en="Translation" data-ar="الترجمة"></span><span class="ln"></span></div>
+          <div class="card">
+            <div class="prow"><span class="ic">🌐</span>
+              <div class="tx"><div class="t" data-en="Manage translations" data-ar="إدارة الترجمات"></div>
+                <div class="s" data-en="3 installed" data-ar="3 مُثبّتة"></div></div>
+              <span class="chev">›</span></div>
+            <div class="prow"><span class="ic">🔠</span>
+              <div class="tx"><div class="t" data-en="Translation text size" data-ar="حجم نص الترجمة"></div></div>
+              <span class="val" data-en="Medium" data-ar="متوسط"></span></div>
+          </div>
+
+          <div class="sec"><span data-en="Audio & advanced" data-ar="الصوت والمتقدم"></span><span class="ln"></span></div>
+          <div class="card">
+            <div class="prow"><span class="ic">🎙️</span>
+              <div class="tx"><div class="t" data-en="Default reciter" data-ar="القارئ الافتراضي"></div></div>
+              <span class="val" data-en="Mishary Alafasy" data-ar="مشاري العفاسي"></span></div>
+            <div class="prow"><span class="ic">⚙️</span>
+              <div class="tx"><div class="t" data-en="Advanced settings" data-ar="الإعدادات المتقدمة"></div>
+                <div class="s" data-en="Backup, storage, logs" data-ar="نسخ احتياطي، تخزين، سجلات"></div></div>
+              <span class="chev">›</span></div>
+            <div class="prow"><span class="ic">ℹ️</span>
+              <div class="tx"><div class="t" data-en="About & help" data-ar="حول والمساعدة"></div></div>
+              <span class="chev">›</span></div>
+          </div>
+        </div></div>
+      </div></div>
+    </div>
+<!-- ====== 13 · ADVANCED SETTINGS ====== -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Advanced Settings" data-ar="الإعدادات المتقدمة"></div>
+        <div class="d" data-en="Backup, storage & diagnostics" data-ar="النسخ والتخزين والتشخيص"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar round">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl"><div class="t" data-en="Advanced" data-ar="متقدم"></div>
+              <div class="s" data-en="Backup · storage · logs" data-ar="نسخ · تخزين · سجلات"></div></div>
+          </div>
+        </div>
+        <div class="body"><div class="scroll">
+          <div class="sec"><span data-en="Backup & restore" data-ar="النسخ والاستعادة"></span><span class="ln"></span></div>
+          <div class="card">
+            <div class="prow"><span class="ic">📥</span>
+              <div class="tx"><div class="t" data-en="Import bookmarks" data-ar="استيراد العلامات"></div>
+                <div class="s" data-en="Restore from a backup file" data-ar="استعادة من ملف نسخ احتياطي"></div></div>
+              <span class="chev">›</span></div>
+            <div class="prow"><span class="ic">📤</span>
+              <div class="tx"><div class="t" data-en="Export bookmarks" data-ar="تصدير العلامات"></div>
+                <div class="s" data-en="Save bookmarks to a file" data-ar="حفظ العلامات في ملف"></div></div>
+              <span class="chev">›</span></div>
+            <div class="prow"><span class="ic">📊</span>
+              <div class="tx"><div class="t" data-en="Export reading progress (CSV)" data-ar="تصدير تقدّم القراءة (CSV)"></div>
+                <div class="s" data-en="Khatmah & session history" data-ar="سجل الختمات والجلسات"></div></div>
+              <span class="chev">›</span></div>
+          </div>
+
+          <div class="sec"><span data-en="Storage" data-ar="التخزين"></span><span class="ln"></span></div>
+          <div class="card">
+            <div class="prow"><span class="ic">💾</span>
+              <div class="tx"><div class="t" data-en="App storage location" data-ar="مكان تخزين التطبيق"></div>
+                <div class="s" data-en="Where pages & audio are kept" data-ar="مكان حفظ الصفحات والصوت"></div></div>
+              <span class="val" data-en="Internal" data-ar="داخلي"></span></div>
+            <div class="prow"><span class="ic">📦</span>
+              <div class="tx"><div class="t" data-en="Quran data size" data-ar="حجم بيانات المصحف"></div>
+                <div class="s" data-en="Pages, audio & translations" data-ar="الصفحات والصوت والترجمات"></div></div>
+              <span class="val" data-en="248 MB" data-ar="248 م.ب"></span></div>
+          </div>
+
+          <div class="sec"><span data-en="Diagnostics" data-ar="التشخيص"></span><span class="ln"></span></div>
+          <div class="card">
+            <div class="prow"><span class="ic">🛟</span>
+              <div class="tx"><div class="t" data-en="Send logs to developers" data-ar="إرسال السجلات للمطورين"></div>
+                <div class="s" data-en="Help diagnose a problem" data-ar="للمساعدة في تشخيص مشكلة"></div></div>
+              <span class="chev">›</span></div>
+            <div class="prow"><span class="ic" style="background:var(--gold-faint);color:var(--danger)">↺</span>
+              <div class="tx"><div class="t" data-en="Reset all settings" data-ar="إعادة تعيين الإعدادات"></div>
+                <div class="s" style="color:var(--danger)" data-en="Restore defaults — can't be undone" data-ar="استعادة الافتراضيات — لا يمكن التراجع"></div></div>
+              <span class="chev">›</span></div>
+          </div>
+        </div></div>
+      </div></div>
+    </div>
+<!-- ====== 14 · ABOUT & HELP ====== -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="About & Help" data-ar="حول والمساعدة"></div>
+    <div class="d" data-en="App info, sources & contact" data-ar="معلومات التطبيق والمصادر والتواصل"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+    <div class="bar round">
+      <div class="nav">
+        <span class="bk">‹</span>
+        <div class="ttl"><div class="t" data-en="About & Help" data-ar="حول والمساعدة"></div></div>
+      </div>
+    </div>
+    <div class="body"><div class="scroll">
+      <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:18px 12px 8px">
+        <div style="width:64px;height:64px;border-radius:18px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:32px">📖</div>
+        <div style="font-size:16px;font-weight:800;color:var(--text)" data-en="My Stream — Mushaf" data-ar="ماي ستريم — المصحف"></div>
+        <div style="font-size:11.5px;font-weight:700;color:var(--text2)" data-en="v4.2.1" data-ar="v4.2.1"></div>
+      </div>
+
+      <div class="sec"><span data-en="About" data-ar="حول"></span><span class="ln"></span></div>
+      <div class="card">
+        <div style="padding:14px;font-size:12.5px;line-height:1.6;color:var(--text2)" data-en="A calm navy-and-gold Qur'an reader built on the open-source Quran for Android project. Read the Mushaf, follow verse-by-verse audio, and bookmark your place — all in My Stream's design language." data-ar="مصحف هادئ بالأزرق الداكن والذهبي مبني على مشروع Quran for Android مفتوح المصدر. اقرأ المصحف وتابع الصوت آية بآية واحفظ موضعك — كل ذلك بهوية ماي ستريم."></div>
+      </div>
+
+      <div class="sec"><span data-en="Quran text sources" data-ar="مصادر نص المصحف"></span><span class="ln"></span></div>
+      <div class="card">
+        <div class="prow"><span class="ic">📄</span>
+          <div class="tx"><div class="t" data-en="Madani" data-ar="مدني"></div>
+            <div class="s" data-en="King Fahd Complex" data-ar="مجمع الملك فهد"></div></div></div>
+        <div class="prow"><span class="ic">📄</span>
+          <div class="tx"><div class="t" data-en="Naskh" data-ar="نسخ"></div>
+            <div class="s" data-en="King Fahd Complex" data-ar="مجمع الملك فهد"></div></div></div>
+        <div class="prow"><span class="ic">📄</span>
+          <div class="tx"><div class="t" data-en="Qaloon" data-ar="قالون"></div>
+            <div class="s" data-en="King Fahd Complex" data-ar="مجمع الملك فهد"></div></div></div>
+        <div class="prow"><span class="ic">📄</span>
+          <div class="tx"><div class="t" data-en="Warsh" data-ar="ورش"></div>
+            <div class="s" data-en="King Fahd Complex" data-ar="مجمع الملك فهد"></div></div></div>
+      </div>
+
+      <div class="sec"><span data-en="Support" data-ar="الدعم"></span><span class="ln"></span></div>
+      <div class="card">
+        <div class="prow"><span class="ic">❓</span>
+          <div class="tx"><div class="t" data-en="Help & FAQ" data-ar="المساعدة والأسئلة"></div></div>
+          <span class="chev">›</span></div>
+        <div class="prow"><span class="ic">✉️</span>
+          <div class="tx"><div class="t" data-en="Contact us" data-ar="تواصل معنا"></div></div>
+          <span class="chev">›</span></div>
+        <div class="prow"><span class="ic">⭐</span>
+          <div class="tx"><div class="t" data-en="Rate the app" data-ar="قيّم التطبيق"></div></div>
+          <span class="chev">›</span></div>
+      </div>
+    </div></div>
+  </div></div>
+</div>
+<!-- ====== 15 · TRANSLATION MANAGER ====== -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Translation Manager" data-ar="مدير الترجمات"></div>
+    <div class="d" data-en="Download & order translations" data-ar="تنزيل وترتيب الترجمات"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+    <div class="bar round">
+      <div class="nav">
+        <span class="bk">‹</span>
+        <div class="ttl"><div class="t" data-en="Translations" data-ar="الترجمات"></div>
+          <div class="s" data-en="3 installed · tap & hold to reorder" data-ar="3 مُثبّتة · اضغط مطولاً لإعادة الترتيب"></div></div>
+        <div class="acts"><span class="ico">🔍</span></div>
+      </div>
+    </div>
+    <div class="body"><div class="scroll">
+
+      <div class="sec"><span data-en="Downloaded" data-ar="المُثبّتة"></span><span class="ln"></span></div>
+      <div class="card">
+        <div class="crow">
+          <span class="ic" style="background:transparent;color:var(--muted);font-size:16px">⠿</span>
+          <div class="tx grow">
+            <div class="t" style="font-size:14px;font-weight:700;color:var(--text)" data-en="Saheeh International" data-ar="صحيح إنترناشونال"></div>
+            <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px" data-en="English" data-ar="الإنجليزية"></div>
+          </div>
+          <div class="acts" style="gap:6px;font-size:15px;color:var(--muted)">
+            <span>▲</span><span>▼</span><span>🗑</span>
+          </div>
+        </div>
+        <div class="crow">
+          <span class="ic" style="background:transparent;color:var(--muted);font-size:16px">⠿</span>
+          <div class="tx grow">
+            <div class="t" style="font-size:14px;font-weight:700;color:var(--text)" data-en="التفسير الميسر" data-ar="التفسير الميسر"></div>
+            <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px" data-en="Arabic · Al-Muyassar" data-ar="العربية · الميسر"></div>
+          </div>
+          <div class="acts" style="gap:6px;font-size:15px;color:var(--muted)">
+            <span>▲</span><span>▼</span><span>🗑</span>
+          </div>
+        </div>
+        <div class="crow">
+          <span class="ic" style="background:transparent;color:var(--muted);font-size:16px">⠿</span>
+          <div class="tx grow">
+            <div class="t" style="font-size:14px;font-weight:700;color:var(--text)" data-en="Pickthall" data-ar="بيكثال"></div>
+            <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px;display:flex;align-items:center;gap:8px">
+              <span data-en="English · downloading…" data-ar="الإنجليزية · جاري التنزيل…"></span>
+            </div>
+            <div class="prog" style="margin-top:8px"><i style="width:64%"></i></div>
+          </div>
+          <span class="val" style="align-self:flex-start;font-size:11.5px;font-weight:800;color:var(--gold)">64%</span>
+        </div>
+      </div>
+
+      <div class="sec"><span data-en="Available" data-ar="المتاحة"></span><span class="ln"></span></div>
+      <div class="card">
+        <div class="crow">
+          <div class="tx grow">
+            <div class="t" style="font-size:14px;font-weight:700;color:var(--text)" data-en="Yusuf Ali" data-ar="يوسف علي"></div>
+            <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px" data-en="English" data-ar="الإنجليزية"></div>
+          </div>
+          <span class="ico" style="color:var(--gold);font-size:20px;width:auto;height:auto">⬇</span>
+        </div>
+        <div class="crow">
+          <div class="tx grow">
+            <div class="t" style="font-size:14px;font-weight:700;color:var(--text)" data-en="Muhammad Asad" data-ar="محمد أسد"></div>
+            <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px" data-en="English" data-ar="الإنجليزية"></div>
+          </div>
+          <span class="ico" style="color:var(--gold);font-size:20px;width:auto;height:auto">⬇</span>
+        </div>
+        <div class="crow">
+          <div class="tx grow">
+            <div class="t" style="font-size:14px;font-weight:700;color:var(--text)" data-en="Hilali-Khan" data-ar="الهلالي وخان"></div>
+            <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px" data-en="English" data-ar="الإنجليزية"></div>
+          </div>
+          <span class="ico" style="color:var(--gold);font-size:20px;width:auto;height:auto">⬇</span>
+        </div>
+        <div class="crow">
+          <div class="tx grow">
+            <div class="t" style="font-size:14px;font-weight:700;color:var(--text)" data-en="تفسير الجلالين" data-ar="تفسير الجلالين"></div>
+            <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px" data-en="Arabic · Al-Jalalayn" data-ar="العربية · الجلالين"></div>
+          </div>
+          <span class="ico" style="color:var(--gold);font-size:20px;width:auto;height:auto">⬇</span>
+        </div>
+      </div>
+
+    </div></div>
+  </div></div>
+</div>
+<!-- ====== 16 · RECITER / AUDIO MANAGER ====== -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Reciter Audio Manager" data-ar="مدير صوتيات القراء"></div>
+    <div class="d" data-en="Download recitations per reciter" data-ar="تنزيل التلاوات لكل قارئ"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+    <div class="bar round">
+      <div class="nav">
+        <span class="bk">‹</span>
+        <div class="ttl">
+          <div class="t" data-en="Reciters" data-ar="القرّاء"></div>
+          <div class="s" data-en="Manage downloaded audio" data-ar="إدارة الصوتيات المُنزّلة"></div>
+        </div>
+        <div class="acts"><span class="ico">🔍</span></div>
+      </div>
+    </div>
+    <div class="body"><div class="scroll">
+
+      <div class="card">
+        <div class="crow">
+          <span style="width:44px;height:44px;border-radius:50%;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:20px;flex:none">🎙️</span>
+          <div class="tx grow">
+            <div class="t" style="font-size:14px;font-weight:700;color:var(--text)" data-en="Mishary Alafasy" data-ar="مشاري العفاسي"></div>
+            <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px" data-en="114 / 114 surahs" data-ar="١١٤ / ١١٤ سورة"></div>
+          </div>
+          <span class="chip"><span data-en="Downloaded" data-ar="مُثبّت"></span></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="crow">
+          <span style="width:44px;height:44px;border-radius:50%;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:20px;flex:none">🎙️</span>
+          <div class="tx grow">
+            <div class="t" style="font-size:14px;font-weight:700;color:var(--text)" data-en="Abdul Basit" data-ar="عبد الباسط عبد الصمد"></div>
+            <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px" data-en="78 / 114 surahs" data-ar="٧٨ / ١١٤ سورة"></div>
+          </div>
+          <span class="ico" style="color:var(--gold)">⬇</span>
+        </div>
+        <div class="crow" style="gap:10px">
+          <div class="prog grow"><i style="width:72%"></i></div>
+          <span style="font-size:11px;font-weight:800;color:var(--gold);flex:none" data-en="72%" data-ar="٧٢٪"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="crow">
+          <span style="width:44px;height:44px;border-radius:50%;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:20px;flex:none">🎙️</span>
+          <div class="tx grow">
+            <div class="t" style="font-size:14px;font-weight:700;color:var(--text)" data-en="Abdurrahman As-Sudais" data-ar="عبد الرحمن السديس"></div>
+            <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px" data-en="112 / 114 surahs" data-ar="١١٢ / ١١٤ سورة"></div>
+          </div>
+          <span class="ico" style="color:var(--gold)">⬇</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="crow">
+          <span style="width:44px;height:44px;border-radius:50%;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:20px;flex:none">🎙️</span>
+          <div class="tx grow">
+            <div class="t" style="font-size:14px;font-weight:700;color:var(--text)" data-en="Maher Al-Muaiqly" data-ar="ماهر المعيقلي"></div>
+            <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px" data-en="114 / 114 surahs" data-ar="١١٤ / ١١٤ سورة"></div>
+          </div>
+          <span class="chip"><span data-en="Downloaded" data-ar="مُثبّت"></span></span>
+        </div>
+      </div>
+
+    </div></div>
+  </div></div>
+</div>
+<!-- ====== 17 · DATA DOWNLOAD & PERMISSIONS GATE ====== -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Data Download & Permissions" data-ar="تنزيل البيانات والأذونات"></div>
+    <div class="d" data-en="First-launch gate before the Mushaf opens" data-ar="بوابة أول تشغيل قبل فتح المصحف"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+    <div class="bar">
+      <div class="nav">
+        <div class="ttl" style="text-align:center">
+          <div class="t" data-en="Mushaf" data-ar="المصحف"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grow" style="background:linear-gradient(160deg,var(--navy-700),var(--navy-900));display:flex;flex-direction:column;position:relative;overflow:hidden">
+      <div class="empty" style="flex:1;height:auto;color:var(--on-navy)">
+        <div class="glyph">📖</div>
+        <div class="t" style="font-size:17px;font-weight:800;color:var(--on-navy)" data-en="Download Quran pages" data-ar="تنزيل صفحات المصحف"></div>
+        <div style="font-size:12.5px;line-height:1.5;color:var(--on-navy-dim);max-width:220px" data-en="Madani Mushaf · about 45 MB" data-ar="مصحف مدني · نحو 45 ميجابايت"></div>
+      </div>
+
+      <div style="padding:0 16px 16px">
+        <div class="card" style="margin-bottom:14px">
+          <div style="padding:14px">
+            <div class="between">
+              <div class="t" style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Downloading…" data-ar="جارٍ التنزيل…"></div>
+              <div style="font-size:13px;font-weight:800;color:var(--gold)">62%</div>
+            </div>
+            <div class="prog" style="margin-top:10px"><i style="width:62%"></i></div>
+            <div style="font-size:11.5px;color:var(--text2);margin-top:9px" data-en="page 374 of 604" data-ar="الصفحة 374 من 604"></div>
+          </div>
+        </div>
+
+        <button class="btn gold block" style="margin-bottom:9px" data-en="Download" data-ar="تنزيل"></button>
+        <button class="btn ghost block" data-en="Use streaming instead" data-ar="استخدام البث بدلاً من ذلك"></button>
+      </div>
+    </div>
+  </div></div>
+</div>
+<!-- ====== 18 · FULL-SCREEN AUDIO PLAYER ====== -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Audio Player" data-ar="مشغّل الصوت"></div>
+    <div class="d" data-en="Full-screen recitation player" data-ar="مشغّل التلاوة بملء الشاشة"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+
+    <div style="position:absolute;inset:0;background:linear-gradient(160deg,var(--navy-700),var(--navy-900));color:var(--on-navy);display:flex;flex-direction:column">
+
+      <!-- top row -->
+      <div class="between" style="padding:8px 14px 4px">
+        <span class="ico" style="font-size:22px;color:var(--gold)">⌄</span>
+        <div class="t" data-en="Now playing" data-ar="يُشغّل الآن" style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--on-navy-dim)"></div>
+        <span class="ico" style="font-size:20px;color:var(--gold)">⋮</span>
+      </div>
+
+      <!-- artwork + titles -->
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px;gap:6px">
+        <div style="width:180px;height:180px;border-radius:50%;border:3px solid var(--gold);background:radial-gradient(circle at 50% 38%,var(--navy-500),var(--navy-900));box-shadow:0 0 0 6px var(--gold-faint),var(--shadow);display:flex;align-items:center;justify-content:center;margin-bottom:18px">
+          <span class="ar" style="font-family:'Amiri',serif;font-size:52px;color:var(--gold-light)">۩</span>
+        </div>
+        <div class="ar" style="font-family:'Amiri',serif;font-size:23px;font-weight:700;color:var(--on-navy)">سورة البقرة</div>
+        <div class="t" data-en="Mishary Alafasy" data-ar="مشاري العفاسي" style="font-size:13px;font-weight:600;color:var(--on-navy-dim)"></div>
+      </div>
+
+      <!-- seek bar -->
+      <div style="padding:0 24px 6px">
+        <div style="height:5px;border-radius:5px;background:var(--gold-faint);position:relative">
+          <i style="display:block;height:100%;width:38%;border-radius:5px;background:var(--gold)"></i>
+          <span style="position:absolute;inset-inline-start:38%;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:var(--shadow-sm)"></span>
+        </div>
+        <div class="between" style="margin-top:8px;font-size:11px;font-weight:700;color:var(--on-navy-dim)">
+          <span>1:02</span>
+          <span>2:48</span>
+        </div>
+      </div>
+
+      <!-- controls -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:22px;padding:8px 24px 30px">
+        <span class="ctl" style="font-size:20px;color:var(--on-navy-dim)">🔀</span>
+        <span class="ctl" style="font-size:24px;color:var(--on-navy)">⏮</span>
+        <span class="play" style="width:64px;height:64px;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 10px 24px -8px var(--gold)">⏸</span>
+        <span class="ctl fwd" style="font-size:24px;color:var(--on-navy)">⏭</span>
+        <span class="ctl" style="font-size:20px;color:var(--on-navy-dim)">🔁</span>
+      </div>
+
+    </div>
+  </div></div>
+</div>
+  </main>
+</div>
+<script>
+/* ---- theme + language engine ---------------------------------------- */
+const root = document.documentElement;
+
+function syncPaper(t){
+  const want = t === 'dark' ? 'night' : 'sepia';
+  document.querySelectorAll('.page.auto-paper').forEach(p => {
+    p.classList.toggle('night', want === 'night');
+    p.classList.toggle('sepia', want === 'sepia');
+    p.classList.remove('day');
+  });
+  document.querySelectorAll('[data-paper-chip]').forEach(c =>
+    c.classList.toggle('solid', c.getAttribute('data-paper-chip') === want));
+}
+function setTheme(t){
+  root.setAttribute('data-theme', t);
+  document.querySelectorAll('[data-theme-btn]').forEach(b =>
+    b.classList.toggle('on', b.getAttribute('data-theme-btn') === t));
+  syncPaper(t);
+}
+function setLang(l){
+  root.setAttribute('data-lang', l);
+  root.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+  root.setAttribute('lang', l);
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const v = l === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+    if (v !== null) el.textContent = v;
+  });
+  document.querySelectorAll('[data-lang-btn]').forEach(b =>
+    b.classList.toggle('on', b.getAttribute('data-lang-btn') === l));
+}
+
+document.querySelectorAll('[data-theme-btn]').forEach(b =>
+  b.addEventListener('click', () => setTheme(b.getAttribute('data-theme-btn'))));
+document.querySelectorAll('[data-lang-btn]').forEach(b =>
+  b.addEventListener('click', () => setLang(b.getAttribute('data-lang-btn'))));
+
+/* initialise (EN / light) */
+setTheme('light');
+setLang('en');
+</script>
+</body>
+</html>
