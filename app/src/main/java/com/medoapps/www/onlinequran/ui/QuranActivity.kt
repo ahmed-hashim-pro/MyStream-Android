@@ -11,6 +11,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
@@ -90,6 +91,8 @@ class QuranActivity : AppCompatActivity(),
   @Inject
   lateinit var recentPageModel: RecentPageModel
   @Inject
+  lateinit var quranDisplayData: com.medoapps.www.onlinequran.data.QuranDisplayData
+  @Inject
   lateinit var translationManagerPresenter: TranslationManagerPresenter
   @Inject
   lateinit var quranIndexEventLogger: QuranIndexEventLogger
@@ -140,6 +143,14 @@ class QuranActivity : AppCompatActivity(),
     }
 
     latestPageObservable = recentPageModel.getLatestPageObservable()
+
+    // header search field -> open the toolbar search (fall back to system search)
+    findViewById<View>(R.id.index_search).setOnClickListener {
+      if (searchItem?.expandActionView() != true) {
+        onSearchRequested()
+      }
+    }
+
     val intent = intent
     if (intent != null) {
       val extras = intent.extras
@@ -160,6 +171,7 @@ class QuranActivity : AppCompatActivity(),
 
   public override fun onResume() {
     compositeDisposable.add(latestPageObservable.subscribe())
+    bindContinueReadingCard()
     super.onResume()
     val isRtl = isRtl()
     if (isRtl != this.isRtl) {
@@ -274,6 +286,27 @@ class QuranActivity : AppCompatActivity(),
         showedTranslationUpgradeDialog
     )
     super.onSaveInstanceState(outState)
+  }
+
+  /** Show/hide the "Continue reading" card from the latest read page. */
+  private fun bindContinueReadingCard() {
+    val card = findViewById<View>(R.id.continue_card) ?: return
+    val subtitle = findViewById<android.widget.TextView>(R.id.continue_subtitle)
+    compositeDisposable.add(
+        latestPageObservable
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { recentPage: Int ->
+              if (recentPage == Constants.NO_PAGE || recentPage <= 0) {
+                card.visibility = View.GONE
+              } else {
+                val name = quranDisplayData.getSuraNameFromPage(this, recentPage, true)
+                val sub = quranDisplayData.getPageSubtitle(this, recentPage)
+                subtitle.text = if (name.isNotEmpty()) "$name · $sub" else sub
+                card.visibility = View.VISIBLE
+                card.setOnClickListener { jumpTo(recentPage) }
+              }
+            }
+    )
   }
 
   private fun jumpToLastPage() {

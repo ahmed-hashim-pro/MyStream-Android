@@ -896,6 +896,8 @@
     <string name="reading_mode_day">نهار</string>
     <string name="reading_mode_sepia">ورقي</string>
     <string name="reading_mode_night">ليل</string>
+    <string name="continue_reading">متابعة القراءة</string>
+    <string name="continue_read_action">قراءة</string>
     <string name="nav_label_more">أخرى</string>
     <string name="home_reciters_header">القرّاء</string>
     <string name="radio_stations_header">الإذاعات</string>

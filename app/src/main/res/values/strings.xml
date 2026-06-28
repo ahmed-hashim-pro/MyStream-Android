@@ -1265,6 +1265,8 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="reading_mode_day">Day</string>
     <string name="reading_mode_sepia">Sepia</string>
     <string name="reading_mode_night">Night</string>
+    <string name="continue_reading">Continue reading</string>
+    <string name="continue_read_action">Read</string>
     <string name="nav_label_more">More</string>
     <string name="home_reciters_header">Reciters</string>
     <string name="radio_stations_header">Radio stations</string>
