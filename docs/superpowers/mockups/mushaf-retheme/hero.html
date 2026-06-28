@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mushaf index — collapsing hero · all states · My Stream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#B8860B; --gold-2:#d9b24a; --gold-light:#E9C778;
+  --gold-faint:rgba(184,134,11,.15); --gold-semi:rgba(184,134,11,.40);
+  --navy-900:#172033; --navy-700:#1F2A44; --navy-500:#2C3A5E;
+  --on-navy:#FFFFFF; --on-navy-dim:rgba(255,255,255,.62);
+  --bg:#FFF8F0; --surface:#FFFFFF; --card:#FFFFFF;
+  --text:#1C1B1F; --text2:#49454E; --muted:#cdbfa9;
+  --line:#EFE6D2; --line-soft:rgba(28,27,31,.07);
+  --badge-bg:#F3E7C9; --badge-tx:#7A5A12;
+  --juz-band:#EFE3CB;
+  --shadow:0 16px 38px -18px rgba(23,32,51,.40);
+}
+[data-theme="dark"]{
+  --gold:#D4A44C; --gold-2:#caa24f;
+  --gold-faint:rgba(212,164,76,.15); --gold-semi:rgba(212,164,76,.40);
+  --bg:#121212; --surface:#1E1E1E; --card:#282828;
+  --text:#FFFFFF; --text2:#B3B3B3; --muted:#4a443a;
+  --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+  --badge-bg:#3a3320; --badge-tx:#E9C778; --juz-band:#241f15;
+  --shadow:0 18px 44px -18px rgba(0,0,0,.75);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans','Cairo',system-ui,sans-serif;color:#e8eaf0;min-height:100vh;
+  padding:24px 22px 70px;
+  background:radial-gradient(1100px 520px at 12% -8%,#20304f 0,transparent 60%),
+             radial-gradient(900px 480px at 100% 0,#11182a 0,transparent 55%),#0c111d;}
+[dir="rtl"] body{font-family:'Cairo','Plus Jakarta Sans',system-ui,sans-serif}
+.wrap{max-width:1200px;margin:0 auto}
+h1.title{font-size:23px;font-weight:800;letter-spacing:-.02em;margin:0 0 3px;display:flex;align-items:center;gap:10px;color:#fff}
+h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 12px var(--gold-light)}
+.sub{color:#9fb0d0;font-size:13.5px;margin:0 0 16px;max-width:920px;line-height:1.55}
+.controls{position:sticky;top:0;z-index:200;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 -22px 22px;
+  padding:13px 22px;background:rgba(9,13,22,.82);backdrop-filter:blur(10px);border-bottom:1px solid #1c2335}
+.seg{display:inline-flex;background:#161d2e;border:1px solid #273350;border-radius:12px;padding:4px;gap:3px}
+.seg .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#5f6f8e;padding:0 6px;align-self:center;font-weight:800}
+.seg button{font:inherit;font-size:12.5px;font-weight:700;color:#9fb0d0;background:transparent;border:0;padding:7px 15px;border-radius:9px;cursor:pointer;transition:.15s}
+.seg button.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305;box-shadow:0 4px 14px -6px var(--gold)}
+.hint{color:#7e8db0;font-size:12px;margin-inline-start:auto}.hint b{color:#cdd6ea}
+
+.sec-h{font-size:15px;font-weight:800;margin:26px 0 4px;color:#dce6f7}
+.sec-d{color:#7e8db0;font-size:12.5px;margin:0 0 16px}
+.row{display:flex;gap:34px;align-items:flex-start;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;align-items:center;gap:11px}
+.cap{text-align:center}.cap .n{font-size:12.5px;font-weight:800;color:#e7ecf7}.cap .d{font-size:11px;color:#7e8db0;margin-top:2px}
+
+/* phone */
+.phone{width:320px;height:680px;border-radius:40px;background:#05070c;padding:9px;flex:none;position:relative;
+  box-shadow:0 34px 80px -30px rgba(0,0,0,.85),0 0 0 2px #1c2335,inset 0 0 0 2px #000}
+.screen{width:100%;height:100%;border-radius:32px;overflow:hidden;position:relative;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+.notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:100px;height:22px;background:#05070c;border-radius:0 0 14px 14px;z-index:120}
+.sb{height:30px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:11.5px;font-weight:700;background:var(--navy-700);color:var(--on-navy);z-index:30}
+.sb .r{display:flex;gap:5px;align-items:center}.sb-dots:after{content:"●●●";letter-spacing:1px;font-size:7px}
+
+/* ===== HERO ===== */
+.hero{flex:none;position:relative;overflow:hidden;
+  background:radial-gradient(220px 150px at 86% -10%,rgba(212,164,76,.30),transparent 70%),
+             linear-gradient(160deg,var(--navy-500),var(--navy-700) 42%,var(--navy-900));
+  border-radius:0 0 22px 22px;box-shadow:0 6px 18px -12px rgba(0,0,0,.6);z-index:20}
+/* title + icons share the top row */
+.hero .bar{min-height:56px;display:flex;align-items:center;gap:4px;padding:6px 8px 6px 16px;position:relative;z-index:5}
+.hero .htitle{min-width:0;flex:0 1 auto}
+.hero .htitle .big{font-size:19px;font-weight:800;color:var(--on-navy);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero .htitle .small{font-size:11px;color:var(--on-navy-dim);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero .bar .grow{flex:1}
+.hero .ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--gold);flex:none}
+/* collapsing area = search field only */
+.hero .expanded{padding:0 16px 14px;transition:opacity .2s, max-height .25s, padding .25s;overflow:hidden;max-height:120px;opacity:1}
+.hero.collapsed .expanded{opacity:0;max-height:0;padding-top:0;padding-bottom:0;pointer-events:none}
+.hero .search{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  border-radius:13px;padding:11px 13px}
+.hero .search .lens{font-size:15px;color:var(--gold)}
+.hero .search .ph{font-size:13px;color:var(--on-navy-dim)}
+.hero .search.active{background:var(--surface);border-color:var(--gold)}
+.hero .search.active .ph{color:var(--text)}
+.hero .search .cursor{width:1.5px;height:16px;background:var(--gold);margin-inline-start:auto;animation:bl 1s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+
+/* tabs (pinned under hero) */
+.tabs{display:flex;background:var(--navy-700);flex:none;z-index:15;box-shadow:0 4px 10px -8px rgba(0,0,0,.5)}
+.tabs .t{flex:1;text-align:center;font-size:12px;font-weight:800;letter-spacing:.02em;padding:12px 4px;color:var(--on-navy-dim);position:relative}
+.tabs .t.on{color:var(--on-navy)}
+.tabs .t.on:after{content:"";position:absolute;inset-inline:24%;bottom:0;height:3px;border-radius:3px;background:var(--gold)}
+
+/* list area */
+.list{flex:1;overflow:auto;background:var(--bg)}
+.list::-webkit-scrollbar{width:0}
+.ccard{margin:12px;background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:12px;padding:12px}
+.ccard .ic{width:40px;height:40px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.ccard .tx{flex:1;min-width:0}
+.ccard .tx .t{font-size:13px;font-weight:800;color:var(--text)}
+.ccard .tx .s{font-size:11.5px;color:var(--text2);margin-top:2px}
+.ccard .btn{font-size:13px;font-weight:800;color:var(--navy-900);background:var(--gold);border-radius:16px;padding:8px 16px}
+.juz{display:flex;justify-content:space-between;padding:13px 16px;background:var(--juz-band);color:var(--gold);font-size:13px;font-weight:700}
+.srow{display:flex;align-items:center;gap:13px;padding:14px 14px;position:relative}
+.srow+.srow:before,.juz+.srow:before{content:"";position:absolute;top:0;inset-inline:14px;height:1px;background:var(--line-soft)}
+.srow .num{width:34px;height:34px;border-radius:10px;background:var(--badge-bg);color:var(--badge-tx);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex:none;font-family:'Plus Jakarta Sans',sans-serif}
+.srow .tx{flex:1;min-width:0}.srow .tx .t{font-size:15px;font-weight:700;color:var(--text)}
+.srow .tx .s{font-size:12px;color:var(--text2);margin-top:3px}
+.srow .pg{font-size:12px;color:var(--text2);font-weight:700}
+
+.scrollhint{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;background:rgba(20,26,40,.78);color:#fff;
+  font-size:11px;font-weight:700;padding:7px 14px;border-radius:20px;z-index:40;pointer-events:none;transition:opacity .3s}
+
+.legend{flex:1;min-width:280px;max-width:420px;background:#10182a;border:1px solid #243353;border-radius:16px;padding:16px 18px}
+.legend h3{margin:0 0 10px;font-size:13px;color:#dce6f7;font-weight:800;letter-spacing:.02em}
+.legend .it{display:flex;gap:11px;padding:9px 0;border-top:1px solid #1d2842}
+.legend .it:first-of-type{border-top:0}
+.legend .k{width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.legend .tx .t{font-size:12.5px;font-weight:700;color:#e7ecf7}
+.legend .tx .d{font-size:11.5px;color:#8fa0c0;margin-top:1px;line-height:1.45}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="title"><span class="dot"></span> Mushaf index — collapsing hero</h1>
+  <p class="sub">Header layers: <b>① title + icons (one row)</b> · <b>② search bar</b> · <b>③ tabs</b>.
+     <b>Interactive:</b> scroll the first phone's list to collapse — the search bar slides away; title + icons + tabs stay pinned.
+     Toggle theme & language (RTL). Matches <code>quran_index.xml</code> (CollapsingToolbarLayout + HeroController).</p>
+  <div class="controls">
+    <div class="seg"><span class="lbl">Theme</span>
+      <button data-theme-btn="light" class="on">☀︎ Light</button>
+      <button data-theme-btn="dark">☾ Dark</button>
+    </div>
+    <div class="seg"><span class="lbl">Language</span>
+      <button data-lang-btn="en" class="on">EN</button>
+      <button data-lang-btn="ar">العربية</button>
+    </div>
+    <span class="hint">scroll phone ① to collapse · ② static states</span>
+  </div>
+
+  <div class="sec-h" data-en="① Interactive — scroll to collapse / expand" data-ar="① تفاعلي — مرّر للطي / التوسيع"></div>
+  <div class="sec-d" data-en="Title + icons + tabs stay pinned; only the search bar collapses away on scroll." data-ar="العنوان والأيقونات والتبويبات تبقى مثبّتة؛ يختفي شريط البحث فقط عند التمرير."></div>
+  <div class="row">
+    <div class="col">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="hero" id="liveHero">
+          <div class="bar">
+            <div class="htitle">
+              <div class="big" data-en="Mushaf" data-ar="المصحف"></div>
+              <div class="small" data-en="The Holy Quran" data-ar="القرآن الكريم"></div>
+            </div>
+            <span class="grow"></span>
+            <span class="ico">📖</span><span class="ico">🔍</span><span class="ico">⋮</span>
+          </div>
+          <div class="expanded">
+            <div class="search"><span class="lens">🔍</span><span class="ph" data-en="Search the Quran" data-ar="بحث في القرآن"></span></div>
+          </div>
+        </div>
+        <div class="tabs">
+          <div class="t on" data-en="Surahs" data-ar="السور"></div>
+          <div class="t" data-en="Juz'" data-ar="الأجزاء"></div>
+          <div class="t" data-en="Bookmarks" data-ar="العلامات"></div>
+        </div>
+        <div class="list" id="liveList">
+          <div class="ccard">
+            <span class="ic">📖</span>
+            <div class="tx"><div class="t" data-en="Continue reading" data-ar="متابعة القراءة"></div>
+              <div class="s" data-en="Al-Baqarah · Page 49" data-ar="البقرة · صفحة ٤٩"></div></div>
+            <span class="btn" data-en="Read" data-ar="قراءة"></span>
+          </div>
+          <div class="juz"><span data-en="Juz' 1" data-ar="الجزء ١"></span><span>1</span></div>
+          <div class="srow"><span class="num">1</span><div class="tx"><div class="t"><span class="ar">الفاتحة</span></div><div class="s" data-en="Al-Fatihah · Meccan · 7" data-ar="الفاتحة · مكية · ٧"></div></div><span class="pg" data-en="Page 1" data-ar="صفحة ١"></span></div>
+          <div class="srow"><span class="num">2</span><div class="tx"><div class="t"><span class="ar">البقرة</span></div><div class="s" data-en="Al-Baqarah · Medinan · 286" data-ar="البقرة · مدنية · ٢٨٦"></div></div><span class="pg" data-en="Page 2" data-ar="صفحة ٢"></span></div>
+          <div class="juz"><span data-en="Juz' 2" data-ar="الجزء ٢"></span><span>22</span></div>
+          <div class="srow"><span class="num">3</span><div class="tx"><div class="t"><span class="ar">آل عمران</span></div><div class="s" data-en="Aal-'Imran · Medinan · 200" data-ar="آل عمران · مدنية · ٢٠٠"></div></div><span class="pg" data-en="Page 50" data-ar="صفحة ٥٠"></span></div>
+          <div class="srow"><span class="num">4</span><div class="tx"><div class="t"><span class="ar">النساء</span></div><div class="s" data-en="An-Nisa' · Medinan · 176" data-ar="النساء · مدنية · ١٧٦"></div></div><span class="pg" data-en="Page 77" data-ar="صفحة ٧٧"></span></div>
+          <div class="srow"><span class="num">5</span><div class="tx"><div class="t"><span class="ar">المائدة</span></div><div class="s" data-en="Al-Ma'idah · Medinan · 120" data-ar="المائدة · مدنية · ١٢٠"></div></div><span class="pg" data-en="Page 106" data-ar="صفحة ١٠٦"></span></div>
+        </div>
+        <div class="scrollhint" id="scrollHint" data-en="↑ scroll to collapse" data-ar="↑ مرّر للطي"></div>
+      </div></div>
+      <div class="cap"><div class="n" data-en="Live collapse / expand" data-ar="طي / توسيع حيّ"></div></div>
+    </div>
+
+    <div class="legend">
+      <h3 data-en="Header layers & options" data-ar="طبقات الهيدر وخياراته"></h3>
+      <div class="it"><span class="k">1</span><div class="tx"><div class="t" data-en="Title + subtitle — with the icons (one row)" data-ar="العنوان + الفرعي — مع الأيقونات (صف واحد)"></div><div class="d" data-en="“Mushaf” / “The Holy Quran” on the start; pinned (always visible)." data-ar="«المصحف» / «القرآن الكريم» على البداية؛ مثبّت (ظاهر دائمًا)."></div></div></div>
+      <div class="it"><span class="k">2</span><div class="tx"><div class="t" data-en="Action icons — Go-to-page · Search · Overflow" data-ar="أيقونات الإجراءات — الانتقال · البحث · المزيد"></div><div class="d" data-en="Gold, on the end of the same row (overflow = jump, settings, help, about)." data-ar="ذهبية، في نهاية الصف نفسه (المزيد = انتقال، إعدادات، مساعدة، حول)."></div></div></div>
+      <div class="it"><span class="k">3</span><div class="tx"><div class="t" data-en="Search bar" data-ar="شريط البحث"></div><div class="d" data-en="Gold lens; opens the Quran search. This is the part that collapses on scroll." data-ar="عدسة ذهبية؛ يفتح بحث القرآن. هذا الجزء الذي يُطوى عند التمرير."></div></div></div>
+      <div class="it"><span class="k">4</span><div class="tx"><div class="t" data-en="Tabs — Surahs / Juz' / Bookmarks" data-ar="التبويبات — السور / الأجزاء / العلامات"></div><div class="d" data-en="Gold underline on active; pinned under the title row when collapsed." data-ar="خط ذهبي أسفل النشط؛ تبقى مثبّتة أسفل صف العنوان عند الطي."></div></div></div>
+      <div class="it"><span class="k">5</span><div class="tx"><div class="t" data-en="Continue reading card" data-ar="بطاقة متابعة القراءة"></div><div class="d" data-en="Last-read surah + page; tap to jump. Shown when a recent page exists." data-ar="آخر سورة وصفحة مقروءة؛ انقر للانتقال. تظهر عند وجود صفحة سابقة."></div></div></div>
+    </div>
+  </div>
+
+  <div class="sec-h" data-en="② States" data-ar="② الحالات"></div>
+  <div class="sec-d" data-en="The same header in its key states." data-ar="نفس الهيدر في حالاته الرئيسية."></div>
+  <div class="row" id="staticRow"></div>
+</div>
+
+<template id="stateTpl">
+  <div class="col">
+    <div class="phone"><div class="notch"></div><div class="screen">
+      <div class="sb"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+      <div class="hero STATECLASS">
+        <div class="bar">
+          <div class="htitle">
+            <div class="big" data-en="Mushaf" data-ar="المصحف"></div>
+            <div class="small" data-en="The Holy Quran" data-ar="القرآن الكريم"></div>
+          </div>
+          <span class="grow"></span>
+          <span class="ico">📖</span><span class="ico">🔍</span><span class="ico">⋮</span>
+        </div>
+        <div class="expanded">
+          <div class="search SEARCHCLASS"><span class="lens">🔍</span><span class="ph" data-en="Search the Quran" data-ar="بحث في القرآن"></span><span class="CURSORCLASS"></span></div>
+        </div>
+      </div>
+      <div class="tabs">
+        <div class="t on" data-en="Surahs" data-ar="السور"></div>
+        <div class="t" data-en="Juz'" data-ar="الأجزاء"></div>
+        <div class="t" data-en="Bookmarks" data-ar="العلامات"></div>
+      </div>
+      <div class="list">
+        <div class="ccard"><span class="ic">📖</span><div class="tx"><div class="t" data-en="Continue reading" data-ar="متابعة القراءة"></div><div class="s" data-en="Al-Baqarah · Page 49" data-ar="البقرة · صفحة ٤٩"></div></div><span class="btn" data-en="Read" data-ar="قراءة"></span></div>
+        <div class="juz"><span data-en="Juz' 1" data-ar="الجزء ١"></span><span>1</span></div>
+        <div class="srow"><span class="num">1</span><div class="tx"><div class="t"><span class="ar">الفاتحة</span></div><div class="s" data-en="Al-Fatihah · Meccan · 7" data-ar="الفاتحة · مكية · ٧"></div></div><span class="pg" data-en="Page 1" data-ar="صفحة ١"></span></div>
+        <div class="srow"><span class="num">2</span><div class="tx"><div class="t"><span class="ar">البقرة</span></div><div class="s" data-en="Al-Baqarah · Medinan · 286" data-ar="البقرة · مدنية · ٢٨٦"></div></div><span class="pg" data-en="Page 2" data-ar="صفحة ٢"></span></div>
+        <div class="srow"><span class="num">3</span><div class="tx"><div class="t"><span class="ar">آل عمران</span></div><div class="s" data-en="Aal-'Imran · Medinan · 200" data-ar="آل عمران · مدنية · ٢٠٠"></div></div><span class="pg" data-en="Page 50" data-ar="صفحة ٥٠"></span></div>
+      </div>
+    </div></div>
+    <div class="cap"><div class="n"></div><div class="d"></div></div>
+  </div>
+</template>
+
+<script>
+const root=document.documentElement;
+function setTheme(t){root.setAttribute('data-theme',t);document.querySelectorAll('[data-theme-btn]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-theme-btn')===t));}
+function applyLang(){const l=root.getAttribute('data-lang');
+  document.querySelectorAll('[data-en]').forEach(el=>{const v=l==='ar'?el.getAttribute('data-ar'):el.getAttribute('data-en');if(v!==null)el.textContent=v;});}
+function setLang(l){root.setAttribute('data-lang',l);root.setAttribute('dir',l==='ar'?'rtl':'ltr');root.setAttribute('lang',l);
+  document.querySelectorAll('[data-lang-btn]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-lang-btn')===l));applyLang();}
+document.querySelectorAll('[data-theme-btn]').forEach(b=>b.addEventListener('click',()=>setTheme(b.getAttribute('data-theme-btn'))));
+document.querySelectorAll('[data-lang-btn]').forEach(b=>b.addEventListener('click',()=>setLang(b.getAttribute('data-lang-btn'))));
+
+const STATES=[
+  {cls:'',          search:'',      cursor:'', n_en:'Expanded (default)', n_ar:'موسّع (افتراضي)', d_en:'Title+icons · search · tabs', d_ar:'العنوان+الأيقونات · بحث · تبويبات'},
+  {cls:'collapsed', search:'',      cursor:'', n_en:'Collapsed', n_ar:'مطوي', d_en:'Search hidden — title+icons+tabs stay', d_ar:'يختفي البحث — يبقى العنوان+الأيقونات+التبويبات'},
+  {cls:'',          search:'active',cursor:'cursor', n_en:'Search active', n_ar:'البحث نشط', d_en:'Field focused — opens the Quran search', d_ar:'الحقل نشط — يفتح بحث القرآن'},
+];
+const tpl=document.getElementById('stateTpl').innerHTML;
+document.getElementById('staticRow').innerHTML=STATES.map(s=>tpl
+  .replace('STATECLASS',s.cls).replace('SEARCHCLASS',s.search).replace('CURSORCLASS',s.cursor)).join('');
+document.querySelectorAll('#staticRow .col').forEach((col,i)=>{
+  const s=STATES[i],n=col.querySelector('.cap .n'),d=col.querySelector('.cap .d');
+  n.setAttribute('data-en',s.n_en);n.setAttribute('data-ar',s.n_ar);
+  d.setAttribute('data-en',s.d_en);d.setAttribute('data-ar',s.d_ar);
+});
+
+const liveHero=document.getElementById('liveHero'),liveList=document.getElementById('liveList'),hintEl=document.getElementById('scrollHint');
+liveList.addEventListener('scroll',()=>{
+  liveHero.classList.toggle('collapsed',liveList.scrollTop>40);
+  hintEl.style.opacity = liveList.scrollTop>10 ? '0' : '1';
+});
+
+setTheme('light');setLang('en');
+</script>
+</body>
+</html>
