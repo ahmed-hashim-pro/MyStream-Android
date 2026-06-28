@@ -105,6 +105,7 @@ class QuranActivity : AppCompatActivity(),
   private var searchMode = false
   private var currentQuery = ""
   private var continueCardWasVisible = false
+  private var heroCornerRadiusPx = 0f
 
   @Inject
   lateinit var settings: QuranSettings
@@ -236,13 +237,32 @@ class QuranActivity : AppCompatActivity(),
    */
   private fun clipHeroBottomCorners() {
     val hero = findViewById<View>(R.id.heroCollapsing)
-    val radius = resources.getDimension(R.dimen.mushaf_hero_corner_radius)
+    heroCornerRadiusPx = resources.getDimension(R.dimen.mushaf_hero_corner_radius)
     hero.outlineProvider = object : ViewOutlineProvider() {
       override fun getOutline(view: View, outline: Outline) {
-        outline.setRoundRect(0, -radius.toInt(), view.width, view.height, radius)
+        outline.setRoundRect(0, -heroCornerRadiusPx.toInt(), view.width, view.height, heroCornerRadiusPx)
       }
     }
     hero.clipToOutline = true
+  }
+
+  /**
+   * The hero's rounded bottom corners belong to the LAST navy section attached to it.
+   * With nothing attached the hero rounds at its own bottom; when the navy results-count
+   * band is attached, the hero goes square and the rounding moves to the band (see
+   * hero-corner-rule.html). [rounded]=true means "the hero is the last section".
+   */
+  private fun setHeroBottomRounded(rounded: Boolean) {
+    val hero = findViewById<com.google.android.material.appbar.CollapsingToolbarLayout>(R.id.heroCollapsing)
+    val bg = if (rounded) R.drawable.bg_header_navy_rounded else R.drawable.bg_header_navy
+    hero.setBackgroundResource(bg)
+    hero.setContentScrim(ContextCompat.getDrawable(this, bg))
+    heroCornerRadiusPx =
+        if (rounded) resources.getDimension(R.dimen.mushaf_hero_corner_radius) else 0f
+    hero.invalidateOutline()
+    // The count band carries the rounded bottom only while it is the attached last section.
+    findViewById<TextView>(R.id.index_search_count).setBackgroundResource(
+        if (rounded) R.color.navy_700 else R.drawable.bg_count_band_navy_rounded)
   }
 
   /** The always-visible hero search field — the real, inline (as-you-type) search. */
@@ -319,6 +339,7 @@ class QuranActivity : AppCompatActivity(),
     if (!searchMode) return
     searchMode = false
     currentQuery = ""
+    setHeroBottomRounded(true) // detached → hero rounds at its own bottom again
     findViewById<View>(R.id.index_search_results).visibility = View.GONE
     findViewById<View>(R.id.index_pager).visibility = View.VISIBLE
     findViewById<View>(R.id.indicator)?.visibility = View.VISIBLE
@@ -358,6 +379,8 @@ class QuranActivity : AppCompatActivity(),
     val empty = findViewById<View>(R.id.index_search_empty)
     val count = cursor?.count ?: 0
     if (count == 0) {
+      // No navy band attached → the hero rounds at its own bottom.
+      setHeroBottomRounded(true)
       countBand.visibility = View.GONE
       list.visibility = View.GONE
       empty.visibility = View.VISIBLE
@@ -365,6 +388,8 @@ class QuranActivity : AppCompatActivity(),
           if (currentQuery.length < 3) R.string.search_keep_typing else R.string.search_no_results_hint)
       inlineSearchAdapter?.swapCursor(null)
     } else {
+      // The count band is attached below the hero → corner flows to the band.
+      setHeroBottomRounded(false)
       empty.visibility = View.GONE
       countBand.visibility = View.VISIBLE
       list.visibility = View.VISIBLE

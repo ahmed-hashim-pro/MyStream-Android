@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Search results-count band when it's the last navy section attached under the hero:
+     navy with rounded bottom corners, so hero (square bottom) + band read as one block. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/navy_700" />
+    <corners
+        android:bottomLeftRadius="@dimen/mushaf_hero_corner_radius"
+        android:bottomRightRadius="@dimen/mushaf_hero_corner_radius" />
+</shape>
