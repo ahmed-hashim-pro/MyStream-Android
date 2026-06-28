@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mushaf search — results viewer · My Stream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#B8860B; --gold-2:#d9b24a; --gold-light:#E9C778;
+  --gold-faint:rgba(184,134,11,.15); --gold-semi:rgba(184,134,11,.40);
+  --navy-900:#172033; --navy-700:#1F2A44; --navy-500:#2C3A5E;
+  --on-navy:#FFFFFF; --on-navy-dim:rgba(255,255,255,.62);
+  --bg:#FFF8F0; --surface:#FFFFFF; --card:#FFFFFF;
+  --text:#1C1B1F; --text2:#49454E; --muted:#cdbfa9;
+  --line:#EFE6D2; --line-soft:rgba(28,27,31,.07);
+  --badge-bg:#F3E7C9; --badge-tx:#7A5A12;
+  --juz-band:#EFE3CB;
+  --shadow:0 16px 38px -18px rgba(23,32,51,.40);
+}
+[data-theme="dark"]{
+  --gold:#D4A44C; --gold-2:#caa24f;
+  --gold-faint:rgba(212,164,76,.16); --gold-semi:rgba(212,164,76,.40);
+  --bg:#121212; --surface:#1E1E1E; --card:#282828;
+  --text:#FFFFFF; --text2:#B3B3B3; --muted:#4a443a;
+  --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+  --badge-bg:#3a3320; --badge-tx:#E9C778; --juz-band:#241f15;
+  --shadow:0 18px 44px -18px rgba(0,0,0,.75);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans','Cairo',system-ui,sans-serif;color:#e8eaf0;min-height:100vh;
+  padding:24px 22px 70px;
+  background:radial-gradient(1100px 520px at 12% -8%,#20304f 0,transparent 60%),
+             radial-gradient(900px 480px at 100% 0,#11182a 0,transparent 55%),#0c111d;}
+[dir="rtl"] body{font-family:'Cairo','Plus Jakarta Sans',system-ui,sans-serif}
+.wrap{max-width:1200px;margin:0 auto}
+h1.title{font-size:23px;font-weight:800;letter-spacing:-.02em;margin:0 0 3px;display:flex;align-items:center;gap:10px;color:#fff}
+h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 12px var(--gold-light)}
+.sub{color:#9fb0d0;font-size:13.5px;margin:0 0 16px;max-width:940px;line-height:1.55}
+.sub code{background:#161d2e;border:1px solid #273350;border-radius:5px;padding:1px 5px;font-size:12px;color:#cdd6ea}
+.controls{position:sticky;top:0;z-index:200;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 -22px 22px;
+  padding:13px 22px;background:rgba(9,13,22,.82);backdrop-filter:blur(10px);border-bottom:1px solid #1c2335}
+.seg{display:inline-flex;background:#161d2e;border:1px solid #273350;border-radius:12px;padding:4px;gap:3px}
+.seg .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#5f6f8e;padding:0 6px;align-self:center;font-weight:800}
+.seg button{font:inherit;font-size:12.5px;font-weight:700;color:#9fb0d0;background:transparent;border:0;padding:7px 15px;border-radius:9px;cursor:pointer;transition:.15s}
+.seg button.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305;box-shadow:0 4px 14px -6px var(--gold)}
+.hint{color:#7e8db0;font-size:12px;margin-inline-start:auto}.hint b{color:#cdd6ea}
+
+.sec-h{font-size:15px;font-weight:800;margin:26px 0 4px;color:#dce6f7}
+.sec-d{color:#7e8db0;font-size:12.5px;margin:0 0 16px}
+.row{display:flex;gap:34px;align-items:flex-start;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;align-items:center;gap:11px}
+.cap{text-align:center;max-width:320px}.cap .n{font-size:12.5px;font-weight:800;color:#e7ecf7}.cap .d{font-size:11px;color:#7e8db0;margin-top:2px;line-height:1.45}
+
+/* phone */
+.phone{width:320px;height:680px;border-radius:40px;background:#05070c;padding:9px;flex:none;position:relative;
+  box-shadow:0 34px 80px -30px rgba(0,0,0,.85),0 0 0 2px #1c2335,inset 0 0 0 2px #000}
+.screen{width:100%;height:100%;border-radius:32px;overflow:hidden;position:relative;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+.notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:100px;height:22px;background:#05070c;border-radius:0 0 14px 14px;z-index:120}
+.sb{height:30px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:11.5px;font-weight:700;background:var(--navy-700);color:var(--on-navy);z-index:30}
+.sb .r{display:flex;gap:5px;align-items:center}.sb-dots:after{content:"●●●";letter-spacing:1px;font-size:7px}
+
+/* ===== HERO (search-focused) ===== */
+.hero{flex:none;position:relative;overflow:hidden;
+  background:radial-gradient(220px 150px at 86% -10%,rgba(212,164,76,.30),transparent 70%),
+             linear-gradient(160deg,var(--navy-500),var(--navy-700) 42%,var(--navy-900));
+  border-radius:0 0 22px 22px;box-shadow:0 6px 18px -12px rgba(0,0,0,.6);z-index:20}
+.hero .bar{min-height:54px;display:flex;align-items:center;gap:8px;padding:6px 10px 6px 14px;position:relative;z-index:5}
+.hero .back{width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--on-navy);flex:none}
+.hero .htitle .big{font-size:17px;font-weight:800;color:var(--on-navy)}
+.hero .htitle .small{font-size:11px;color:var(--on-navy-dim);margin-top:1px}
+.hero .expanded{padding:0 14px 14px}
+.hero .search{display:flex;align-items:center;gap:9px;background:var(--surface);border:1.5px solid var(--gold);
+  border-radius:13px;padding:10px 12px}
+.hero .search .lens{font-size:15px}
+.hero .search .q{font-size:14px;color:var(--text);font-weight:600;flex:1}
+.hero .search .clr{width:20px;height:20px;border-radius:50%;background:var(--gold-faint);color:var(--gold);
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+
+/* count band */
+.countband{display:flex;align-items:center;gap:8px;padding:11px 16px;background:var(--navy-700);color:var(--on-navy);
+  font-size:12.5px;font-weight:700}
+.countband b{color:var(--gold-light)}
+
+/* results list */
+.list{flex:1;overflow:auto;background:var(--bg)}
+.list::-webkit-scrollbar{width:0}
+.rcard{margin:11px 12px 0;background:var(--card);border:1px solid var(--line-soft);border-radius:14px;
+  box-shadow:var(--shadow);padding:13px 14px;cursor:pointer;position:relative}
+.rcard:active{transform:scale(.99)}
+.rcard .rtop{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.rcard .rsura{font-size:13.5px;font-weight:800;color:var(--text)}
+.rcard .rref{font-size:11px;font-weight:800;color:var(--gold);background:var(--gold-faint);
+  border-radius:7px;padding:2px 8px;font-family:'Plus Jakarta Sans',sans-serif}
+[dir="rtl"] .rcard .rref{font-family:'Cairo',sans-serif}
+.rcard .grow{flex:1}
+.rcard .rpage{font-size:11px;font-weight:700;color:var(--text2);display:flex;align-items:center;gap:4px}
+.rcard .rsnip{font-size:13.5px;line-height:1.7;color:var(--text2)}
+[dir="rtl"] .rcard .rsnip{font-family:'Amiri',serif;font-size:18px;line-height:2;color:var(--text)}
+.rcard .rsnip mark{background:var(--gold-faint);color:var(--gold);font-weight:800;
+  border-radius:5px;padding:0 3px;box-decoration-break:clone}
+.rcard .chev{position:absolute;inset-inline-end:12px;bottom:11px;color:var(--muted);font-size:14px}
+
+/* empty / no-results state */
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:30px;text-align:center;background:var(--bg)}
+.empty .bub{width:84px;height:84px;border-radius:50%;background:var(--gold-faint);display:flex;align-items:center;justify-content:center;font-size:38px}
+.empty .et{font-size:16px;font-weight:800;color:var(--text)}
+.empty .ed{font-size:12.5px;color:var(--text2);line-height:1.6;max-width:230px}
+.empty .ebtn{margin-top:6px;font-size:13px;font-weight:800;color:var(--navy-900);
+  background:var(--gold);border-radius:18px;padding:10px 20px}
+
+/* alt: floating dropdown */
+.dim{flex:1;background:var(--bg);position:relative;overflow:hidden}
+.dim .ghost{padding:14px 16px;opacity:.32}
+.dim .ghost .gline{height:13px;border-radius:6px;background:var(--text2);margin-bottom:10px}
+.drop{position:absolute;inset-inline:10px;top:8px;background:var(--card);border:1px solid var(--line-soft);
+  border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.drop .dhead{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);padding:10px 14px 6px}
+.drow{display:flex;align-items:center;gap:11px;padding:11px 14px;position:relative}
+.drow+.drow:before{content:"";position:absolute;top:0;inset-inline:14px;height:1px;background:var(--line-soft)}
+.drow .di{width:30px;height:30px;border-radius:9px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:14px;flex:none}
+.drow .dtx{flex:1;min-width:0}
+.drow .dtx .dt{font-size:13px;color:var(--text);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drow .dtx .dt mark{background:transparent;color:var(--gold);font-weight:800}
+.drow .dtx .ds{font-size:11px;color:var(--text2);margin-top:2px}
+
+.legend{flex:1;min-width:300px;max-width:460px;background:#10182a;border:1px solid #243353;border-radius:16px;padding:16px 18px}
+.legend h3{margin:0 0 10px;font-size:13px;color:#dce6f7;font-weight:800;letter-spacing:.02em}
+.legend .it{display:flex;gap:11px;padding:9px 0;border-top:1px solid #1d2842}
+.legend .it:first-of-type{border-top:0}
+.legend .k{width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.legend .tx .t{font-size:12.5px;font-weight:700;color:#e7ecf7}
+.legend .tx .d{font-size:11.5px;color:#8fa0c0;margin-top:1px;line-height:1.45}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="title"><span class="dot"></span> Mushaf search — results viewer</h1>
+  <p class="sub" data-en="Today the search field opens the system suggestion dropdown, and submitting jumps to a plain, off-theme results screen (gold action bar + lavender toolbar). This redesign replaces both with an in-place, navy+gold results panel: type → results fill the area under the hero as styled verse cards (matched word in gold, Surah · ref · page). No floating system dropdown, no separate “other-app” screen."
+     data-ar="حاليًا يفتح حقل البحث قائمة اقتراحات النظام، وعند الإرسال ينتقل إلى شاشة نتائج بسيطة بطابع مختلف (شريط ذهبي + شريط بنفسجي). هذا التصميم يستبدلهما بلوحة نتائج كحلية+ذهبية في نفس المكان: اكتب ← تظهر النتائج تحت الهيدر كبطاقات آيات منسّقة (الكلمة المطابقة بالذهبي، السورة · المرجع · الصفحة). بلا قائمة منسدلة من النظام، وبلا شاشة منفصلة بطابع غريب."></p>
+
+  <div class="controls">
+    <div class="seg"><span class="lbl">Theme</span>
+      <button data-theme-btn="light" class="on">☀︎ Light</button>
+      <button data-theme-btn="dark">☾ Dark</button></div>
+    <div class="seg"><span class="lbl">Lang</span>
+      <button data-lang-btn="en" class="on">EN</button>
+      <button data-lang-btn="ar">العربية</button></div>
+    <span class="hint" data-en="Toggle theme &amp; language (RTL). The recommended viewer is the first phone." data-ar="بدّل السمة واللغة (RTL). العارض الموصى به هو الهاتف الأول."></span>
+  </div>
+
+  <div class="sec-h" data-en="Search results — key states" data-ar="نتائج البحث — الحالات الأساسية"></div>
+  <div class="sec-d" data-en="Same screen, three states: live results · no results · the alternative re-skinned dropdown." data-ar="نفس الشاشة، ثلاث حالات: نتائج حيّة · لا نتائج · البديل (قائمة منسدلة مُعاد تصميمها)."></div>
+
+  <div class="row">
+    <!-- 1. RECOMMENDED: inline results -->
+    <div class="col">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+        <div class="hero">
+          <div class="bar">
+            <div class="back">‹</div>
+            <div class="htitle"><div class="big" data-en="Search" data-ar="بحث"></div>
+              <div class="small" data-en="The Holy Quran" data-ar="القرآن الكريم"></div></div>
+          </div>
+          <div class="expanded">
+            <div class="search"><span class="lens">🔍</span>
+              <span class="q" data-en="mercy" data-ar="رحمة"></span><span class="clr">✕</span></div>
+          </div>
+        </div>
+        <div class="countband" data-en-html='<b>12</b>&nbsp;results for “mercy”' data-ar-html='<b>١٢</b>&nbsp;نتيجة لِ «رحمة»'></div>
+        <div class="list" id="liveResults"></div>
+      </div></div>
+      <div class="cap"><div class="n" data-en="① Live results (recommended)" data-ar="① نتائج حيّة (موصى به)"></div>
+        <div class="d" data-en="Verse cards in-place — matched word in gold, Surah · ayah · page." data-ar="بطاقات آيات في المكان — الكلمة بالذهبي، السورة · الآية · الصفحة."></div></div>
+    </div>
+
+    <!-- 2. No results -->
+    <div class="col">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+        <div class="hero">
+          <div class="bar">
+            <div class="back">‹</div>
+            <div class="htitle"><div class="big" data-en="Search" data-ar="بحث"></div>
+              <div class="small" data-en="The Holy Quran" data-ar="القرآن الكريم"></div></div>
+          </div>
+          <div class="expanded">
+            <div class="search"><span class="lens">🔍</span>
+              <span class="q" data-en="xyztr" data-ar="كككث"></span><span class="clr">✕</span></div>
+          </div>
+        </div>
+        <div class="empty">
+          <div class="bub">🔍</div>
+          <div class="et" data-en="No results" data-ar="لا توجد نتائج"></div>
+          <div class="ed" data-en="Nothing matched “xyztr”. Try a different word, or download a translation to search its text." data-ar="لا تطابق لِ «كككث». جرّب كلمة أخرى، أو نزّل ترجمة للبحث في نصّها."></div>
+          <div class="ebtn" data-en="Get translations" data-ar="تنزيل الترجمات"></div>
+        </div>
+      </div></div>
+      <div class="cap"><div class="n" data-en="② No results" data-ar="② لا نتائج"></div>
+        <div class="d" data-en="Themed empty state — replaces the bare navy banner + gold button." data-ar="حالة فارغة منسّقة — تستبدل الشريط الكحلي العاري + الزر الذهبي."></div></div>
+    </div>
+
+    <!-- 3. Alt: re-skinned dropdown -->
+    <div class="col">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+        <div class="hero">
+          <div class="bar">
+            <div class="back">‹</div>
+            <div class="htitle"><div class="big" data-en="Search" data-ar="بحث"></div>
+              <div class="small" data-en="The Holy Quran" data-ar="القرآن الكريم"></div></div>
+          </div>
+          <div class="expanded">
+            <div class="search"><span class="lens">🔍</span>
+              <span class="q" data-en="mer" data-ar="رح"></span><span class="clr">✕</span></div>
+          </div>
+        </div>
+        <div class="dim">
+          <div class="ghost">
+            <div class="gline" style="width:60%"></div><div class="gline" style="width:90%"></div>
+            <div class="gline" style="width:40%"></div><div class="gline" style="width:80%"></div>
+            <div class="gline" style="width:55%"></div>
+          </div>
+          <div class="drop" id="dropResults"></div>
+        </div>
+      </div></div>
+      <div class="cap"><div class="n" data-en="③ Re-skinned dropdown (alternative)" data-ar="③ قائمة منسدلة مُعاد تصميمها (بديل)"></div>
+        <div class="d" data-en="If we keep a floating list: navy card, gold matches, location subtitle." data-ar="إن أبقينا على قائمة عائمة: بطاقة كحلية، مطابقات ذهبية، عنوان فرعي للموقع."></div></div>
+    </div>
+
+    <div class="legend">
+      <h3 data-en="Why change it" data-ar="لماذا التغيير"></h3>
+      <div class="it"><span class="k">1</span><div class="tx">
+        <div class="t" data-en="In-place, no context switch" data-ar="في المكان، بلا تبديل سياق"></div>
+        <div class="d" data-en="Results appear under the same navy hero — no jump to a separate, differently-themed Activity." data-ar="تظهر النتائج تحت نفس الهيدر الكحلي — بلا انتقال إلى شاشة منفصلة بطابع مختلف."></div></div></div>
+      <div class="it"><span class="k">2</span><div class="tx">
+        <div class="t" data-en="Readable verse cards" data-ar="بطاقات آيات مقروءة"></div>
+        <div class="d" data-en="Each result shows the verse snippet with the matched word highlighted gold, plus Surah · ayah · page chips." data-ar="كل نتيجة تعرض مقتطف الآية مع إبراز الكلمة بالذهبي، إضافةً إلى السورة · الآية · الصفحة."></div></div></div>
+      <div class="it"><span class="k">3</span><div class="tx">
+        <div class="t" data-en="One language at a time, RTL-correct" data-ar="لغة واحدة، صحيحة الاتجاه"></div>
+        <div class="d" data-en="Arabic snippets use the Amiri mushaf font and mirror fully; EN uses the translation." data-ar="المقتطفات العربية بخط أميري وتنعكس بالكامل؛ والإنجليزية تستخدم الترجمة."></div></div></div>
+      <div class="it"><span class="k">4</span><div class="tx">
+        <div class="t" data-en="Themed empty & loading" data-ar="حالات فارغة وتحميل منسّقة"></div>
+        <div class="d" data-en="No-results and the “get translations” prompt match the gold/navy language." data-ar="حالة عدم وجود نتائج وزر «تنزيل الترجمات» يطابقان لغة الذهبي/الكحلي."></div></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const root=document.documentElement;
+const RESULTS=[
+  {sura_en:"Al-A'râf", sura_ar:"الأعراف", ref_en:"7:156", ref_ar:"٧:١٥٦", pg_en:"Page 170", pg_ar:"صفحة ١٧٠",
+   snip_en:'“…My <mark>mercy</mark> encompasses all things, so I will decree it for those who fear Me…”',
+   snip_ar:'«وَ<mark>رَحْمَتِي</mark> وَسِعَتْ كُلَّ شَيْءٍ ۚ فَسَأَكْتُبُهَا لِلَّذِينَ يَتَّقُونَ»'},
+  {sura_en:"Az-Zumar", sura_ar:"الزمر", ref_en:"39:53", ref_ar:"٣٩:٥٣", pg_en:"Page 464", pg_ar:"صفحة ٤٦٤",
+   snip_en:'“…do not despair of the <mark>mercy</mark> of Allah. Indeed, Allah forgives all sins…”',
+   snip_ar:'«لَا تَقْنَطُوا مِن <mark>رَّحْمَةِ</mark> اللَّهِ ۚ إِنَّ اللَّهَ يَغْفِرُ الذُّنُوبَ جَمِيعًا»'},
+  {sura_en:"An-Nisâ'", sura_ar:"النساء", ref_en:"4:175", ref_ar:"٤:١٧٥", pg_en:"Page 104", pg_ar:"صفحة ١٠٤",
+   snip_en:'“…He will admit them to <mark>mercy</mark> from Him and bounty and guide them to Himself…”',
+   snip_ar:'«فَيُدْخِلُهُمْ فِي <mark>رَحْمَةٍ</mark> مِّنْهُ وَفَضْلٍ وَيَهْدِيهِمْ إِلَيْهِ صِرَاطًا مُّسْتَقِيمًا»'},
+  {sura_en:"Al-Baqarah", sura_ar:"البقرة", ref_en:"2:218", ref_ar:"٢:٢١٨", pg_en:"Page 34", pg_ar:"صفحة ٣٤",
+   snip_en:'“…those hope for the <mark>mercy</mark> of Allah. And Allah is Forgiving and Merciful.”',
+   snip_ar:'«أُولَٰئِكَ يَرْجُونَ <mark>رَحْمَتَ</mark> اللَّهِ ۚ وَاللَّهُ غَفُورٌ رَّحِيمٌ»'},
+];
+
+function renderResults(){
+  const ar = root.getAttribute('data-lang')==='ar';
+  const list=document.getElementById('liveResults');
+  if(list){
+    list.innerHTML = RESULTS.map(r=>`
+      <div class="rcard">
+        <div class="rtop">
+          <span class="rsura">${ar?r.sura_ar:r.sura_en}</span>
+          <span class="rref">${ar?r.ref_ar:r.ref_en}</span>
+          <span class="grow"></span>
+          <span class="rpage">📄 ${ar?r.pg_ar:r.pg_en}</span>
+        </div>
+        <div class="rsnip">${ar?r.snip_ar:r.snip_en}</div>
+        <span class="chev">${ar?'‹':'›'}</span>
+      </div>`).join('') + '<div style="height:12px"></div>';
+  }
+  const drop=document.getElementById('dropResults');
+  if(drop){
+    drop.innerHTML = `<div class="dhead">${ar?'اقتراحات':'Suggestions'}</div>` +
+      RESULTS.slice(0,3).map(r=>{
+        const t = ar ? r.snip_ar.replace(/^«|».*$/g,'').slice(0,28)+'…'
+                     : r.snip_en.replace(/[“”]/g,'').slice(2,34)+'…';
+        return `<div class="drow"><span class="di">📖</span>
+          <div class="dtx"><div class="dt">${t.replace('mercy','<mark>mercy</mark>').replace('رحمة','<mark>رحمة</mark>')}</div>
+          <div class="ds">${ar?r.sura_ar+' · '+r.ref_ar:r.sura_en+' · '+r.ref_en}</div></div></div>`;
+      }).join('');
+  }
+}
+function setTheme(t){root.setAttribute('data-theme',t);document.querySelectorAll('[data-theme-btn]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-theme-btn')===t));}
+function applyLang(){const l=root.getAttribute('data-lang');
+  document.querySelectorAll('[data-en]').forEach(el=>{const v=l==='ar'?el.getAttribute('data-ar'):el.getAttribute('data-en');if(v!==null)el.textContent=v;});
+  document.querySelectorAll('[data-en-html]').forEach(el=>{const v=l==='ar'?el.getAttribute('data-ar-html'):el.getAttribute('data-en-html');if(v!==null)el.innerHTML=v;});
+  renderResults();}
+function setLang(l){root.setAttribute('data-lang',l);root.setAttribute('dir',l==='ar'?'rtl':'ltr');root.setAttribute('lang',l);
+  document.querySelectorAll('[data-lang-btn]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-lang-btn')===l));applyLang();}
+document.querySelectorAll('[data-theme-btn]').forEach(b=>b.addEventListener('click',()=>setTheme(b.getAttribute('data-theme-btn'))));
+document.querySelectorAll('[data-lang-btn]').forEach(b=>b.addEventListener('click',()=>setLang(b.getAttribute('data-lang-btn'))));
+setTheme('light');setLang('en');
+</script>
+</body>
+</html>
