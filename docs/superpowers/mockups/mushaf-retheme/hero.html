@@ -125,9 +125,10 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
 <body>
 <div class="wrap">
   <h1 class="title"><span class="dot"></span> Mushaf index — collapsing hero</h1>
-  <p class="sub">Header layers: <b>① title + icons (one row)</b> · <b>② search bar</b> · <b>③ tabs</b>.
-     <b>Interactive:</b> scroll the first phone's list to collapse — the search bar slides away; title + icons + tabs stay pinned.
-     Toggle theme & language (RTL). Matches <code>quran_index.xml</code> (CollapsingToolbarLayout + HeroController).</p>
+  <p class="sub">Header layers: <b>① title + icons (one row)</b> · <b>② real search bar</b> · <b>③ tabs</b>.
+     The search bar IS the functional search (no separate toolbar icon). <b>Interactive:</b> scroll down to collapse the search away;
+     scroll <b>up from any position</b> and it comes right back (quick-return). Toggle theme & language (RTL).
+     Matches <code>quran_index.xml</code> (CollapsingToolbarLayout, <code>scroll|enterAlways|exitUntilCollapsed|snap</code>).</p>
   <div class="controls">
     <div class="seg"><span class="lbl">Theme</span>
       <button data-theme-btn="light" class="on">☀︎ Light</button>
@@ -141,7 +142,7 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
   </div>
 
   <div class="sec-h" data-en="① Interactive — scroll to collapse / expand" data-ar="① تفاعلي — مرّر للطي / التوسيع"></div>
-  <div class="sec-d" data-en="Title + icons + tabs stay pinned; only the search bar collapses away on scroll." data-ar="العنوان والأيقونات والتبويبات تبقى مثبّتة؛ يختفي شريط البحث فقط عند التمرير."></div>
+  <div class="sec-d" data-en="Scroll down → search collapses. Scroll up from anywhere → it returns (quick-return). Title + icons + tabs stay pinned." data-ar="مرّر لأسفل ← يُطوى البحث. مرّر لأعلى من أي مكان ← يعود (عودة سريعة). العنوان والأيقونات والتبويبات تبقى مثبّتة."></div>
   <div class="row">
     <div class="col">
       <div class="phone"><div class="notch"></div><div class="screen">
@@ -153,7 +154,7 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
               <div class="small" data-en="The Holy Quran" data-ar="القرآن الكريم"></div>
             </div>
             <span class="grow"></span>
-            <span class="ico">📖</span><span class="ico">🔍</span><span class="ico">⋮</span>
+            <span class="ico">📖</span><span class="ico">⋮</span>
           </div>
           <div class="expanded">
             <div class="search"><span class="lens">🔍</span><span class="ph" data-en="Search the Quran" data-ar="بحث في القرآن"></span></div>
@@ -178,8 +179,15 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
           <div class="srow"><span class="num">3</span><div class="tx"><div class="t"><span class="ar">آل عمران</span></div><div class="s" data-en="Aal-'Imran · Medinan · 200" data-ar="آل عمران · مدنية · ٢٠٠"></div></div><span class="pg" data-en="Page 50" data-ar="صفحة ٥٠"></span></div>
           <div class="srow"><span class="num">4</span><div class="tx"><div class="t"><span class="ar">النساء</span></div><div class="s" data-en="An-Nisa' · Medinan · 176" data-ar="النساء · مدنية · ١٧٦"></div></div><span class="pg" data-en="Page 77" data-ar="صفحة ٧٧"></span></div>
           <div class="srow"><span class="num">5</span><div class="tx"><div class="t"><span class="ar">المائدة</span></div><div class="s" data-en="Al-Ma'idah · Medinan · 120" data-ar="المائدة · مدنية · ١٢٠"></div></div><span class="pg" data-en="Page 106" data-ar="صفحة ١٠٦"></span></div>
+          <div class="srow"><span class="num">6</span><div class="tx"><div class="t"><span class="ar">الأنعام</span></div><div class="s" data-en="Al-An'am · Meccan · 165" data-ar="الأنعام · مكية · ١٦٥"></div></div><span class="pg" data-en="Page 128" data-ar="صفحة ١٢٨"></span></div>
+          <div class="srow"><span class="num">7</span><div class="tx"><div class="t"><span class="ar">الأعراف</span></div><div class="s" data-en="Al-A'raf · Meccan · 206" data-ar="الأعراف · مكية · ٢٠٦"></div></div><span class="pg" data-en="Page 151" data-ar="صفحة ١٥١"></span></div>
+          <div class="juz"><span data-en="Juz' 9" data-ar="الجزء ٩"></span><span>162</span></div>
+          <div class="srow"><span class="num">8</span><div class="tx"><div class="t"><span class="ar">الأنفال</span></div><div class="s" data-en="Al-Anfal · Medinan · 75" data-ar="الأنفال · مدنية · ٧٥"></div></div><span class="pg" data-en="Page 177" data-ar="صفحة ١٧٧"></span></div>
+          <div class="srow"><span class="num">9</span><div class="tx"><div class="t"><span class="ar">التوبة</span></div><div class="s" data-en="At-Tawbah · Medinan · 129" data-ar="التوبة · مدنية · ١٢٩"></div></div><span class="pg" data-en="Page 187" data-ar="صفحة ١٨٧"></span></div>
+          <div class="srow"><span class="num">10</span><div class="tx"><div class="t"><span class="ar">يونس</span></div><div class="s" data-en="Yunus · Meccan · 109" data-ar="يونس · مكية · ١٠٩"></div></div><span class="pg" data-en="Page 208" data-ar="صفحة ٢٠٨"></span></div>
+          <div class="srow"><span class="num">11</span><div class="tx"><div class="t"><span class="ar">هود</span></div><div class="s" data-en="Hud · Meccan · 123" data-ar="هود · مكية · ١٢٣"></div></div><span class="pg" data-en="Page 221" data-ar="صفحة ٢٢١"></span></div>
         </div>
-        <div class="scrollhint" id="scrollHint" data-en="↑ scroll to collapse" data-ar="↑ مرّر للطي"></div>
+        <div class="scrollhint" id="scrollHint" data-en="↓ scroll down to collapse · up to return" data-ar="↓ مرّر لأسفل للطي · لأعلى للعودة"></div>
       </div></div>
       <div class="cap"><div class="n" data-en="Live collapse / expand" data-ar="طي / توسيع حيّ"></div></div>
     </div>
@@ -187,8 +195,8 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
     <div class="legend">
       <h3 data-en="Header layers & options" data-ar="طبقات الهيدر وخياراته"></h3>
       <div class="it"><span class="k">1</span><div class="tx"><div class="t" data-en="Title + subtitle — with the icons (one row)" data-ar="العنوان + الفرعي — مع الأيقونات (صف واحد)"></div><div class="d" data-en="“Mushaf” / “The Holy Quran” on the start; pinned (always visible)." data-ar="«المصحف» / «القرآن الكريم» على البداية؛ مثبّت (ظاهر دائمًا)."></div></div></div>
-      <div class="it"><span class="k">2</span><div class="tx"><div class="t" data-en="Action icons — Go-to-page · Search · Overflow" data-ar="أيقونات الإجراءات — الانتقال · البحث · المزيد"></div><div class="d" data-en="Gold, on the end of the same row (overflow = jump, settings, help, about)." data-ar="ذهبية، في نهاية الصف نفسه (المزيد = انتقال، إعدادات، مساعدة، حول)."></div></div></div>
-      <div class="it"><span class="k">3</span><div class="tx"><div class="t" data-en="Search bar" data-ar="شريط البحث"></div><div class="d" data-en="Gold lens; opens the Quran search. This is the part that collapses on scroll." data-ar="عدسة ذهبية؛ يفتح بحث القرآن. هذا الجزء الذي يُطوى عند التمرير."></div></div></div>
+      <div class="it"><span class="k">2</span><div class="tx"><div class="t" data-en="Action icons — Go-to-page · Overflow" data-ar="أيقونات الإجراءات — الانتقال · المزيد"></div><div class="d" data-en="Gold, on the end of the same row (overflow = jump, settings, help, about). No search icon — the bar handles it." data-ar="ذهبية، في نهاية الصف نفسه (المزيد = انتقال، إعدادات، مساعدة، حول). لا أيقونة بحث — الشريط يتكفّل بها."></div></div></div>
+      <div class="it"><span class="k">3</span><div class="tx"><div class="t" data-en="Search bar — the real search" data-ar="شريط البحث — البحث الحقيقي"></div><div class="d" data-en="A live search field (type → results), not a placeholder. Collapses on scroll-down, returns on scroll-up." data-ar="حقل بحث فعّال (اكتب ← نتائج)، وليس عنصرًا نائبًا. يُطوى عند التمرير لأسفل، ويعود عند التمرير لأعلى."></div></div></div>
       <div class="it"><span class="k">4</span><div class="tx"><div class="t" data-en="Tabs — Surahs / Juz' / Bookmarks" data-ar="التبويبات — السور / الأجزاء / العلامات"></div><div class="d" data-en="Gold underline on active; pinned under the title row when collapsed." data-ar="خط ذهبي أسفل النشط؛ تبقى مثبّتة أسفل صف العنوان عند الطي."></div></div></div>
       <div class="it"><span class="k">5</span><div class="tx"><div class="t" data-en="Continue reading card" data-ar="بطاقة متابعة القراءة"></div><div class="d" data-en="Last-read surah + page; tap to jump. Shown when a recent page exists." data-ar="آخر سورة وصفحة مقروءة؛ انقر للانتقال. تظهر عند وجود صفحة سابقة."></div></div></div>
     </div>
@@ -210,7 +218,7 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
             <div class="small" data-en="The Holy Quran" data-ar="القرآن الكريم"></div>
           </div>
           <span class="grow"></span>
-          <span class="ico">📖</span><span class="ico">🔍</span><span class="ico">⋮</span>
+          <span class="ico">📖</span><span class="ico">⋮</span>
         </div>
         <div class="expanded">
           <div class="search SEARCHCLASS"><span class="lens">🔍</span><span class="ph" data-en="Search the Quran" data-ar="بحث في القرآن"></span><span class="CURSORCLASS"></span></div>
@@ -258,9 +266,14 @@ document.querySelectorAll('#staticRow .col').forEach((col,i)=>{
 });
 
 const liveHero=document.getElementById('liveHero'),liveList=document.getElementById('liveList'),hintEl=document.getElementById('scrollHint');
+let lastTop=0;
 liveList.addEventListener('scroll',()=>{
-  liveHero.classList.toggle('collapsed',liveList.scrollTop>40);
-  hintEl.style.opacity = liveList.scrollTop>10 ? '0' : '1';
+  const t=liveList.scrollTop;
+  if(t<=4) liveHero.classList.remove('collapsed');          // at top → expanded
+  else if(t>lastTop+2) liveHero.classList.add('collapsed');  // scrolling down → collapse
+  else if(t<lastTop-2) liveHero.classList.remove('collapsed'); // scrolling up → quick-return
+  lastTop=t;
+  hintEl.style.opacity = t>10 ? '0' : '1';
 });
 
 setTheme('light');setLang('en');
