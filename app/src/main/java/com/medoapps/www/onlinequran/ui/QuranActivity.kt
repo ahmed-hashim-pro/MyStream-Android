@@ -8,13 +8,24 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.content.res.Configuration
+import android.database.Cursor
 import android.graphics.Outline
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.Html
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewOutlineProvider
+import android.widget.CursorAdapter
+import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.CursorLoader
+import androidx.loader.content.Loader
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -32,6 +43,7 @@ import com.medoapps.www.onlinequran.QuranPreferenceActivity
 import com.medoapps.www.onlinequran.SearchActivity
 import com.medoapps.www.onlinequran.ShortcutsActivity
 import com.medoapps.www.onlinequran.data.Constants
+import com.medoapps.www.onlinequran.data.QuranDataProvider
 import com.medoapps.www.onlinequran.model.bookmark.RecentPageModel
 import com.medoapps.www.onlinequran.presenter.data.QuranIndexEventLogger
 import com.medoapps.www.onlinequran.presenter.translation.TranslationManagerPresenter
@@ -76,7 +88,8 @@ import kotlin.math.abs
  */
 class QuranActivity : AppCompatActivity(),
     OnBookmarkTagsUpdateListener,
-    JumpDestination {
+    JumpDestination,
+    LoaderManager.LoaderCallbacks<Cursor> {
   private var upgradeDialog: Dialog? = null
   private var showedTranslationUpgradeDialog = false
   private var isRtl = false
@@ -84,6 +97,14 @@ class QuranActivity : AppCompatActivity(),
   private var supportActionMode: ActionMode? = null
   private val compositeDisposable = CompositeDisposable()
   lateinit var latestPageObservable: Observable<Int>
+
+  // Inline (as-you-type) search in the hero — replaces the system suggestion dropdown
+  // and the separate results screen with results shown in-place over the tab pager.
+  private val searchDebounce = Handler(Looper.getMainLooper())
+  private var inlineSearchAdapter: CursorAdapter? = null
+  private var searchMode = false
+  private var currentQuery = ""
+  private var continueCardWasVisible = false
 
   @Inject
   lateinit var settings: QuranSettings
@@ -93,6 +114,8 @@ class QuranActivity : AppCompatActivity(),
   lateinit var recentPageModel: RecentPageModel
   @Inject
   lateinit var quranDisplayData: com.medoapps.www.onlinequran.data.QuranDisplayData
+  @Inject
+  lateinit var quranInfo: com.quran.data.core.QuranInfo
   @Inject
   lateinit var translationManagerPresenter: TranslationManagerPresenter
   @Inject
@@ -196,6 +219,7 @@ class QuranActivity : AppCompatActivity(),
 
   override fun onPause() {
     compositeDisposable.clear()
+    searchDebounce.removeCallbacksAndMessages(null)
     isPaused = true
     super.onPause()
   }
@@ -221,14 +245,28 @@ class QuranActivity : AppCompatActivity(),
     hero.clipToOutline = true
   }
 
-  /** The always-visible hero search field is the real search (styled for navy). */
+  /** The always-visible hero search field — the real, inline (as-you-type) search. */
   private fun setupHeaderSearch() {
     val searchView = findViewById<android.widget.SearchView>(R.id.index_search)
     searchView.isIconifiedByDefault = false
     searchView.queryHint = getString(R.string.search_hint)
-    val sm = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-    searchView.setSearchableInfo(
-        sm.getSearchableInfo(ComponentName(this, SearchActivity::class.java)))
+    // No SearchableInfo: we drive results inline (below) instead of the system dropdown.
+    searchView.setOnQueryTextListener(object : android.widget.SearchView.OnQueryTextListener {
+      override fun onQueryTextSubmit(query: String?): Boolean {
+        searchView.clearFocus() // results are already inline; just drop the keyboard
+        return true
+      }
+      override fun onQueryTextChange(newText: String?): Boolean {
+        onSearchTextChanged(newText ?: "")
+        return true
+      }
+    })
+
+    findViewById<ListView>(R.id.index_search_list).setOnItemClickListener { parent, _, position, _ ->
+      (parent.getItemAtPosition(position) as? Cursor)?.let { c ->
+        openSearchResult(c.getInt(1), c.getInt(2))
+      }
+    }
 
     val white = androidx.core.content.ContextCompat.getColor(this, R.color.text_on_navy)
     val hintC = androidx.core.content.ContextCompat.getColor(this, R.color.hint_on_navy)
@@ -248,6 +286,123 @@ class QuranActivity : AppCompatActivity(),
     (byId("search_mag_icon") as? android.widget.ImageView)?.apply {
       setImageResource(R.drawable.ic_search_lens)
       clearColorFilter()
+    }
+  }
+
+  // ---- Inline (as-you-type) search ---------------------------------------------------------
+
+  private fun onSearchTextChanged(text: String) {
+    val q = text.trim()
+    searchDebounce.removeCallbacksAndMessages(null)
+    if (q.length < 2) {
+      exitSearchMode()
+      return
+    }
+    enterSearchMode()
+    searchDebounce.postDelayed({ runInlineSearch(q) }, 250)
+  }
+
+  /** Show the inline results panel over the tab pager; hide the tabs + continue card. */
+  private fun enterSearchMode() {
+    if (searchMode) return
+    searchMode = true
+    findViewById<com.google.android.material.appbar.AppBarLayout>(R.id.appbar)?.setExpanded(true, false)
+    findViewById<View>(R.id.index_search_results).visibility = View.VISIBLE
+    findViewById<View>(R.id.index_pager).visibility = View.GONE
+    findViewById<View>(R.id.indicator)?.visibility = View.GONE
+    // continueCardWasVisible is kept current by bindContinueReadingCard; just hide it now.
+    findViewById<View>(R.id.continue_card)?.visibility = View.GONE
+  }
+
+  private fun exitSearchMode() {
+    searchDebounce.removeCallbacksAndMessages(null)
+    if (!searchMode) return
+    searchMode = false
+    currentQuery = ""
+    findViewById<View>(R.id.index_search_results).visibility = View.GONE
+    findViewById<View>(R.id.index_pager).visibility = View.VISIBLE
+    findViewById<View>(R.id.indicator)?.visibility = View.VISIBLE
+    findViewById<View>(R.id.continue_card)?.visibility =
+        if (continueCardWasVisible) View.VISIBLE else View.GONE
+    inlineSearchAdapter?.swapCursor(null)
+    LoaderManager.getInstance(this).destroyLoader(SEARCH_LOADER_ID)
+  }
+
+  private fun runInlineSearch(query: String) {
+    currentQuery = query
+    val args = Bundle().apply { putString(ARG_SEARCH_QUERY, query) }
+    LoaderManager.getInstance(this).restartLoader(SEARCH_LOADER_ID, args, this)
+  }
+
+  private fun openSearchResult(sura: Int, ayah: Int) {
+    val page = quranInfo.getPageFromSuraAyah(sura, ayah)
+    val i = Intent(this, PagerActivity::class.java)
+    i.putExtra("page", page)
+    i.putExtra(PagerActivity.EXTRA_HIGHLIGHT_SURA, sura)
+    i.putExtra(PagerActivity.EXTRA_HIGHLIGHT_AYAH, ayah)
+    if (!QuranUtils.doesStringContainArabic(currentQuery)) {
+      i.putExtra(PagerActivity.EXTRA_JUMP_TO_TRANSLATION, true)
+    }
+    startActivity(i)
+  }
+
+  override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
+    val query = args?.getString(ARG_SEARCH_QUERY) ?: ""
+    return CursorLoader(this, QuranDataProvider.SEARCH_URI, null, null, arrayOf(query), null)
+  }
+
+  override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
+    if (!searchMode) return
+    val list = findViewById<ListView>(R.id.index_search_list)
+    val countBand = findViewById<TextView>(R.id.index_search_count)
+    val empty = findViewById<View>(R.id.index_search_empty)
+    val count = cursor?.count ?: 0
+    if (count == 0) {
+      countBand.visibility = View.GONE
+      list.visibility = View.GONE
+      empty.visibility = View.VISIBLE
+      findViewById<TextView>(R.id.index_search_empty_desc).setText(
+          if (currentQuery.length < 3) R.string.search_keep_typing else R.string.search_no_results_hint)
+      inlineSearchAdapter?.swapCursor(null)
+    } else {
+      empty.visibility = View.GONE
+      countBand.visibility = View.VISIBLE
+      list.visibility = View.VISIBLE
+      countBand.text =
+          resources.getQuantityString(R.plurals.search_results, count, currentQuery, count)
+      val adapter = inlineSearchAdapter
+      if (adapter == null) {
+        inlineSearchAdapter = InlineResultAdapter(cursor).also { list.adapter = it }
+      } else {
+        adapter.swapCursor(cursor)
+      }
+    }
+  }
+
+  override fun onLoaderReset(loader: Loader<Cursor>) {
+    inlineSearchAdapter?.swapCursor(null)
+  }
+
+  /** Renders one search hit using the shared search_result card (gold match comes from the DB markup). */
+  private inner class InlineResultAdapter(c: Cursor?) :
+      CursorAdapter(this@QuranActivity, c, 0) {
+    override fun newView(context: Context, cursor: Cursor, parent: ViewGroup): View {
+      val v = layoutInflater.inflate(R.layout.search_result, parent, false)
+      v.tag = arrayOf(v.findViewById<TextView>(R.id.verseText), v.findViewById<TextView>(R.id.verseLocation))
+      return v
+    }
+
+    override fun bindView(view: View, context: Context, cursor: Cursor) {
+      val views = view.tag as Array<*>
+      val text = views[0] as TextView
+      val loc = views[1] as TextView
+      val sura = cursor.getInt(1)
+      val ayah = cursor.getInt(2)
+      val page = quranInfo.getPageFromSuraAyah(sura, ayah)
+      loc.text = getString(
+          R.string.found_in_sura, quranDisplayData.getSuraName(this@QuranActivity, sura, false), ayah, page)
+      @Suppress("DEPRECATION")
+      text.text = Html.fromHtml(cursor.getString(3))
     }
   }
 
@@ -339,13 +494,16 @@ class QuranActivity : AppCompatActivity(),
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { recentPage: Int ->
               if (recentPage == Constants.NO_PAGE || recentPage <= 0) {
+                continueCardWasVisible = false
                 card.visibility = View.GONE
               } else {
                 val name = quranDisplayData.getSuraNameFromPage(this, recentPage, true)
                 val sub = quranDisplayData.getPageSubtitle(this, recentPage)
                 subtitle.text = if (name.isNotEmpty()) "$name · $sub" else sub
-                card.visibility = View.VISIBLE
                 card.setOnClickListener { jumpTo(recentPage) }
+                // Keep it hidden while inline search results are showing.
+                continueCardWasVisible = true
+                card.visibility = if (searchMode) View.GONE else View.VISIBLE
               }
             }
     )
@@ -522,6 +680,8 @@ class QuranActivity : AppCompatActivity(),
     private const val SURA_LIST = 0
     private const val JUZ2_LIST = 1
     private const val BOOKMARKS_LIST = 2
+    private const val SEARCH_LOADER_ID = 991
+    private const val ARG_SEARCH_QUERY = "inline_search_query"
     private var updatedTranslations = false
   }
 }

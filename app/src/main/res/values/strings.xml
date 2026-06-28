@@ -639,6 +639,7 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="search_screen_title">Search</string>
     <string name="search_no_results_title">No results</string>
     <string name="search_no_results_hint">Try a different word, or download a translation to search its text.</string>
+    <string name="search_keep_typing">Keep typing to search the Quran…</string>
     <string name="no_arabic_search_available">You have not downloaded the Arabic search pack. Please download it and try your search again.</string>
     <string name="get_arabic_search_db">Get Arabic Search Database</string>
 

@@ -364,6 +364,7 @@
     <string name="search_screen_title">بحث</string>
     <string name="search_no_results_title">لا توجد نتائج</string>
     <string name="search_no_results_hint">جرّب كلمة أخرى، أو نزّل ترجمة للبحث في نصّها.</string>
+    <string name="search_keep_typing">تابع الكتابة للبحث في القرآن…</string>
     <string name="no_arabic_search_available">لتفعيل البحث بالعربية يجب تحميل قاعدة البيانات.. هل ترغب في ذلك ؟</string>
     <string name="get_arabic_search_db">حمل قاعدة البيانات</string>
 

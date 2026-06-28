@@ -182,10 +182,87 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <com.medoapps.www.onlinequran.view.QuranViewPager
-            android:id="@+id/index_pager"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1">
+
+            <com.medoapps.www.onlinequran.view.QuranViewPager
+                android:id="@+id/index_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <!-- Inline live search results — cover the pager/tabs while a query is active -->
+            <LinearLayout
+                android:id="@+id/index_search_results"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_main"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/index_search_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/navy_700"
+                    android:padding="13dp"
+                    android:textColor="@color/text_on_navy"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <ListView
+                    android:id="@+id/index_search_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:clipToPadding="false"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="10dp"
+                    android:scrollbars="none" />
+
+                <LinearLayout
+                    android:id="@+id/index_search_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="30dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
+                        android:background="@drawable/bg_icon_frame_gold"
+                        android:contentDescription="@null"
+                        android:padding="22dp"
+                        android:src="@drawable/ic_search_lens" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:text="@string/search_no_results_title"
+                        android:textColor="?android:textColorPrimary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/index_search_empty_desc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:gravity="center"
+                        android:maxWidth="260dp"
+                        android:text="@string/search_no_results_hint"
+                        android:textColor="@color/sura_details_color"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
