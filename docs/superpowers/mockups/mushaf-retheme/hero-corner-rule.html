@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero corner rule — attached sections · My Stream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#B8860B; --gold-2:#d9b24a; --gold-light:#E9C778;
+  --gold-faint:rgba(184,134,11,.15);
+  --navy-900:#172033; --navy-700:#1F2A44; --navy-500:#2C3A5E;
+  --on-navy:#FFFFFF; --on-navy-dim:rgba(255,255,255,.62);
+  --bg:#FFF8F0; --surface:#FFFFFF; --card:#FFFFFF;
+  --text:#1C1B1F; --text2:#49454E; --muted:#cdbfa9;
+  --line-soft:rgba(28,27,31,.07); --badge-bg:#F3E7C9; --badge-tx:#7A5A12;
+  --shadow:0 16px 38px -18px rgba(23,32,51,.40);
+}
+[data-theme="dark"]{
+  --gold:#D4A44C; --gold-2:#caa24f; --gold-faint:rgba(212,164,76,.16);
+  --bg:#121212; --surface:#1E1E1E; --card:#282828;
+  --text:#FFFFFF; --text2:#B3B3B3; --muted:#4a443a;
+  --line-soft:rgba(255,255,255,.06); --badge-bg:#3a3320; --badge-tx:#E9C778;
+  --shadow:0 18px 44px -18px rgba(0,0,0,.75);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans','Cairo',system-ui,sans-serif;color:#e8eaf0;min-height:100vh;
+  padding:24px 22px 70px;
+  background:radial-gradient(1100px 520px at 12% -8%,#20304f 0,transparent 60%),
+             radial-gradient(900px 480px at 100% 0,#11182a 0,transparent 55%),#0c111d;}
+[dir="rtl"] body{font-family:'Cairo','Plus Jakarta Sans',system-ui,sans-serif}
+.wrap{max-width:1180px;margin:0 auto}
+h1.title{font-size:23px;font-weight:800;margin:0 0 3px;display:flex;align-items:center;gap:10px;color:#fff}
+h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 12px var(--gold-light)}
+.sub{color:#9fb0d0;font-size:13.5px;margin:0 0 16px;max-width:940px;line-height:1.55}
+.controls{position:sticky;top:0;z-index:200;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 -22px 22px;
+  padding:13px 22px;background:rgba(9,13,22,.82);backdrop-filter:blur(10px);border-bottom:1px solid #1c2335}
+.seg{display:inline-flex;background:#161d2e;border:1px solid #273350;border-radius:12px;padding:4px;gap:3px}
+.seg .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#5f6f8e;padding:0 6px;align-self:center;font-weight:800}
+.seg button{font:inherit;font-size:12.5px;font-weight:700;color:#9fb0d0;background:transparent;border:0;padding:7px 15px;border-radius:9px;cursor:pointer}
+.seg button.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305}
+.hint{color:#7e8db0;font-size:12px;margin-inline-start:auto}
+.row{display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;align-items:center;gap:11px}
+.cap{text-align:center;max-width:300px}.cap .n{font-size:12.5px;font-weight:800;color:#e7ecf7}
+.cap .d{font-size:11px;color:#7e8db0;margin-top:2px;line-height:1.45}
+.cap .tag{display:inline-block;margin-bottom:6px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:3px 8px}
+.tag.bad{background:rgba(197,48,58,.18);color:#ff8e96}
+.tag.good{background:rgba(60,160,90,.18);color:#7bdc9e}
+.tag.base{background:#21304d;color:#9fb0d0}
+
+.phone{width:300px;height:560px;border-radius:38px;background:#05070c;padding:9px;flex:none;position:relative;
+  box-shadow:0 30px 70px -30px rgba(0,0,0,.85),0 0 0 2px #1c2335}
+.screen{width:100%;height:100%;border-radius:30px;overflow:hidden;position:relative;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+.notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:92px;height:20px;background:#05070c;border-radius:0 0 13px 13px;z-index:120}
+.sb{height:28px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-size:11px;font-weight:700;background:var(--navy-700);color:var(--on-navy)}
+.sb-dots:after{content:"●●●";letter-spacing:1px;font-size:6px}
+
+/* The navy hero (gradient) */
+.hero{flex:none;position:relative;
+  background:radial-gradient(200px 140px at 86% -10%,rgba(212,164,76,.30),transparent 70%),
+             linear-gradient(160deg,var(--navy-500),var(--navy-700) 42%,var(--navy-900));
+  box-shadow:0 6px 18px -12px rgba(0,0,0,.6);z-index:20}
+.hero .bar{display:flex;align-items:center;gap:6px;padding:9px 12px 6px}
+.hero .htitle .big{font-size:16px;font-weight:800;color:var(--on-navy)}
+.hero .htitle .small{font-size:10px;color:var(--on-navy-dim)}
+.hero .grow{flex:1}.hero .ico{color:var(--gold);font-size:16px}
+.hero .search{display:flex;align-items:center;gap:8px;margin:2px 12px 12px;background:var(--surface);border:1.5px solid var(--gold);border-radius:12px;padding:9px 11px}
+.hero .search .ph{font-size:12.5px;color:var(--text);font-weight:600;flex:1}
+.tabs{display:flex;padding-bottom:2px}
+.tabs .t{flex:1;text-align:center;font-size:11px;font-weight:800;padding:9px 4px;color:var(--on-navy-dim);position:relative}
+.tabs .t.on{color:var(--on-navy)}
+.tabs .t.on:after{content:"";position:absolute;inset-inline:26%;bottom:0;height:3px;border-radius:3px;background:var(--gold)}
+
+/* count band — an "attached" navy section */
+.countband{flex:none;background:var(--navy-700);color:var(--on-navy);font-size:12px;font-weight:700;padding:11px 14px}
+.countband b{color:var(--gold-light)}
+
+/* corner variants — THE RULE */
+.r-bottom{border-radius:0 0 22px 22px}
+.r-none{border-radius:0}
+
+.list{flex:1;overflow:hidden;background:var(--bg)}
+.rcard{margin:10px 11px 0;background:var(--card);border:1px solid var(--line-soft);border-radius:13px;box-shadow:var(--shadow);padding:11px 12px}
+.rcard .top{display:flex;gap:7px;align-items:center;margin-bottom:6px}
+.rcard .sura{font-size:12.5px;font-weight:800;color:var(--gold)}
+.rcard .snip{font-size:12px;line-height:1.6;color:var(--text2)}
+.rcard .snip mark{background:var(--gold-faint);color:var(--gold);font-weight:800;border-radius:4px;padding:0 2px}
+.srow{display:flex;align-items:center;gap:11px;padding:11px 13px;position:relative}
+.srow+.srow:before{content:"";position:absolute;top:0;inset-inline:13px;height:1px;background:var(--line-soft)}
+.srow .num{width:30px;height:30px;border-radius:9px;background:var(--badge-bg);color:var(--badge-tx);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex:none}
+.srow .tx .t{font-size:13px;font-weight:700;color:var(--text)}
+.srow .tx .s{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* corner callout marker */
+.mark-wrap{position:relative}
+.cmark{position:absolute;inset-inline-end:-8px;width:16px;height:16px;border:2px solid var(--gold);border-top:0;border-inline-start:0;
+  border-bottom-right-radius:10px;z-index:60;pointer-events:none}
+.legend{margin-top:28px;background:#10182a;border:1px solid #243353;border-radius:16px;padding:16px 18px;max-width:760px}
+.legend h3{margin:0 0 8px;font-size:13px;color:#dce6f7;font-weight:800}
+.legend p{margin:6px 0;color:#8fa0c0;font-size:12.5px;line-height:1.6}
+.legend b{color:#dce6f7}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="title"><span class="dot"></span> Hero corner rule — attached sections</h1>
+  <p class="sub" data-en="Rule: the navy hero's rounded bottom corners belong to the LAST navy section attached to it. A standalone hero rounds at its own bottom. But when a section (e.g. the search results-count band) is attached directly beneath it, the hero goes square and the rounding flows down to that section's bottom — so the hero + attached band read as one continuous navy block that rounds only where it meets the content."
+     data-ar="القاعدة: الزوايا الدائرية السفلية للهيدر الكحلي تنتمي إلى آخر قسم كحلي ملتصق به. الهيدر المنفرد يُدوّر من أسفله. لكن عند التصاق قسم مباشرةً تحته (مثل شريط عدد نتائج البحث)، يصبح أسفل الهيدر مستقيمًا وتنتقل الزوايا الدائرية إلى أسفل ذلك القسم — فيُقرأ الهيدر والقسم الملتصق ككتلة كحلية واحدة متّصلة تُدوّر فقط حيث تلتقي بالمحتوى."></p>
+
+  <div class="controls">
+    <div class="seg"><span class="lbl">Theme</span>
+      <button data-theme-btn="light" class="on">☀︎ Light</button>
+      <button data-theme-btn="dark">☾ Dark</button></div>
+    <div class="seg"><span class="lbl">Lang</span>
+      <button data-lang-btn="en" class="on">EN</button>
+      <button data-lang-btn="ar">العربية</button></div>
+    <span class="hint" data-en="Gold ⌐ marks where the rounded corner sits." data-ar="العلامة الذهبية ⌐ تشير إلى موضع الزاوية الدائرية."></span>
+  </div>
+
+  <div class="row">
+    <!-- A: default -->
+    <div class="col">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+        <div class="mark-wrap">
+          <div class="hero r-bottom">
+            <div class="bar"><div class="htitle"><div class="big" data-en="Mushaf" data-ar="المصحف"></div>
+              <div class="small" data-en="The Holy Quran" data-ar="القرآن الكريم"></div></div>
+              <div class="grow"></div><div class="ico">📖</div><div class="ico">⋮</div></div>
+            <div class="search"><span style="color:var(--gold)">🔍</span><span class="ph" data-en="Search the Quran" data-ar="بحث في القرآن"></span></div>
+            <div class="tabs"><div class="t on" data-en="Surahs" data-ar="سور"></div><div class="t" data-en="Juz'" data-ar="أجزاء"></div><div class="t" data-en="Bookmarks" data-ar="علامات"></div></div>
+          </div>
+          <div class="cmark" style="bottom:-8px"></div>
+        </div>
+        <div class="list">
+          <div class="srow"><span class="num">1</span><div class="tx"><div class="t" data-en="Al-Fâtihah" data-ar="الفاتحة"></div><div class="s" data-en="Makki · 7" data-ar="مكية · ٧"></div></div></div>
+          <div class="srow"><span class="num">2</span><div class="tx"><div class="t" data-en="Al-Baqarah" data-ar="البقرة"></div><div class="s" data-en="Madani · 286" data-ar="مدنية · ٢٨٦"></div></div></div>
+        </div>
+      </div></div>
+      <div class="cap"><span class="tag base" data-en="Baseline" data-ar="الأساس"></span>
+        <div class="n" data-en="① Default — no attached section" data-ar="① افتراضي — بلا قسم ملتصق"></div>
+        <div class="d" data-en="Corner sits at the hero's own bottom (below the tabs)." data-ar="الزاوية في أسفل الهيدر نفسه (تحت التبويبات)."></div></div>
+    </div>
+
+    <!-- B: wrong (today) -->
+    <div class="col">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+        <div class="mark-wrap">
+          <div class="hero r-bottom">
+            <div class="bar"><div class="htitle"><div class="big" data-en="Mushaf" data-ar="المصحف"></div>
+              <div class="small" data-en="The Holy Quran" data-ar="القرآن الكريم"></div></div>
+              <div class="grow"></div><div class="ico">📖</div><div class="ico">⋮</div></div>
+            <div class="search"><span style="color:var(--gold)">🔍</span><span class="ph" data-en="mercy" data-ar="رحمة" style="color:var(--text)"></span><span style="margin-inline-start:auto;color:var(--gold)">✕</span></div>
+          </div>
+          <div class="cmark" style="bottom:-8px"></div>
+        </div>
+        <div class="countband r-none" data-en-html='<b>154</b> results for “mercy”' data-ar-html='<b>١٥٤</b> نتيجة لِ «رحمة»'></div>
+        <div class="list">
+          <div class="rcard"><div class="top"><span class="sura" data-en="Al-A'râf · 7:156" data-ar="الأعراف · ٧:١٥٦"></span></div><div class="snip" data-en-html='…My <mark>mercy</mark> encompasses all things…' data-ar-html='…وَ<mark>رَحْمَتِي</mark> وَسِعَتْ كُلَّ شَيْءٍ…'></div></div>
+        </div>
+      </div></div>
+      <div class="cap"><span class="tag bad" data-en="Today (wrong)" data-ar="حاليًا (خطأ)"></span>
+        <div class="n" data-en="② Rounded gap between two navy sections" data-ar="② فجوة دائرية بين قسمين كحليين"></div>
+        <div class="d" data-en="Hero rounds, then a square navy band starts below — they look broken apart." data-ar="الهيدر يُدوّر ثم يبدأ شريط كحلي مستقيم تحته — يبدوان منفصلين."></div></div>
+    </div>
+
+    <!-- C: right (rule) -->
+    <div class="col">
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+        <div class="hero r-none">
+          <div class="bar"><div class="htitle"><div class="big" data-en="Mushaf" data-ar="المصحف"></div>
+            <div class="small" data-en="The Holy Quran" data-ar="القرآن الكريم"></div></div>
+            <div class="grow"></div><div class="ico">📖</div><div class="ico">⋮</div></div>
+          <div class="search"><span style="color:var(--gold)">🔍</span><span class="ph" data-en="mercy" data-ar="رحمة" style="color:var(--text)"></span><span style="margin-inline-start:auto;color:var(--gold)">✕</span></div>
+        </div>
+        <div class="mark-wrap">
+          <div class="countband r-bottom" data-en-html='<b>154</b> results for “mercy”' data-ar-html='<b>١٥٤</b> نتيجة لِ «رحمة»'></div>
+          <div class="cmark" style="bottom:-8px"></div>
+        </div>
+        <div class="list">
+          <div class="rcard"><div class="top"><span class="sura" data-en="Al-A'râf · 7:156" data-ar="الأعراف · ٧:١٥٦"></span></div><div class="snip" data-en-html='…My <mark>mercy</mark> encompasses all things…' data-ar-html='…وَ<mark>رَحْمَتِي</mark> وَسِعَتْ كُلَّ شَيْءٍ…'></div></div>
+        </div>
+      </div></div>
+      <div class="cap"><span class="tag good" data-en="Rule (right)" data-ar="القاعدة (صحيح)"></span>
+        <div class="n" data-en="③ Corner flows to the last attached section" data-ar="③ الزاوية تنتقل إلى آخر قسم ملتصق"></div>
+        <div class="d" data-en="Hero bottom is square; the count band rounds — one cohesive navy block." data-ar="أسفل الهيدر مستقيم؛ شريط العدد يُدوّر — كتلة كحلية واحدة متماسكة."></div></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <h3 data-en="The rule, precisely" data-ar="القاعدة بدقة"></h3>
+    <p data-en="• If nothing is attached under the hero → the hero keeps its 22dp rounded bottom corners." data-ar="• إذا لم يلتصق شيء تحت الهيدر ← يحتفظ الهيدر بزواياه السفلية الدائرية ٢٢dp."></p>
+    <p data-en="• If a navy section is attached (results-count band, and any future attached band) → the hero bottom becomes square (0dp) and the bottom rounded corners move to the last attached section, so the stack rounds once, at the very bottom, against the content." data-ar="• إذا التصق قسم كحلي (شريط عدد النتائج، وأي شريط ملتصق مستقبلًا) ← يصبح أسفل الهيدر مستقيمًا (0dp) وتنتقل الزوايا الدائرية السفلية إلى آخر قسم ملتصق، فتُدوّر الكتلة مرة واحدة عند الأسفل تمامًا مقابل المحتوى."></p>
+    <p data-en="• On clearing the search, the count band detaches and the hero returns to its own rounded bottom." data-ar="• عند مسح البحث، ينفصل شريط العدد ويعود الهيدر إلى زاويته السفلية الدائرية."></p>
+  </div>
+</div>
+<script>
+const root=document.documentElement;
+function setTheme(t){root.setAttribute('data-theme',t);document.querySelectorAll('[data-theme-btn]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-theme-btn')===t));}
+function applyLang(){const l=root.getAttribute('data-lang');
+  document.querySelectorAll('[data-en]').forEach(el=>{const v=l==='ar'?el.getAttribute('data-ar'):el.getAttribute('data-en');if(v!==null)el.textContent=v;});
+  document.querySelectorAll('[data-en-html]').forEach(el=>{const v=l==='ar'?el.getAttribute('data-ar-html'):el.getAttribute('data-en-html');if(v!==null)el.innerHTML=v;});}
+function setLang(l){root.setAttribute('data-lang',l);root.setAttribute('dir',l==='ar'?'rtl':'ltr');root.setAttribute('lang',l);
+  document.querySelectorAll('[data-lang-btn]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-lang-btn')===l));applyLang();}
+document.querySelectorAll('[data-theme-btn]').forEach(b=>b.addEventListener('click',()=>setTheme(b.getAttribute('data-theme-btn'))));
+document.querySelectorAll('[data-lang-btn]').forEach(b=>b.addEventListener('click',()=>setLang(b.getAttribute('data-lang-btn'))));
+setTheme('light');setLang('en');
+</script>
+</body>
+</html>
