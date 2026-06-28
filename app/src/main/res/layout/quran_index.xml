@@ -31,7 +31,9 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleEnabled="false">
 
-            <!-- Expanded hero (parallax): big title + subtitle + search field -->
+            <!-- Collapsing area (parallax): just the search field. The title now
+                 lives in the pinned toolbar (next to the action icons), so only
+                 the search bar scrolls away on collapse. -->
             <LinearLayout
                 android:id="@+id/heroExpanded"
                 android:layout_width="match_parent"
@@ -44,33 +46,11 @@
                 android:layoutDirection="locale"
                 app:layout_collapseMode="parallax">
 
-                <TextView
-                    android:id="@+id/heroTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textColor="@color/text_on_navy"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    tools:text="Mushaf" />
-
-                <TextView
-                    android:id="@+id/heroSubtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textColor="@color/hint_on_navy"
-                    android:textSize="12sp"
-                    android:visibility="gone"
-                    tools:text="The Holy Quran" />
-
                 <!-- Search field (launches the Quran search) -->
                 <LinearLayout
                     android:id="@+id/index_search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
                     android:background="@drawable/bg_index_search"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
@@ -96,27 +76,45 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Pinned toolbar: hosts the options menu; collapsed title fades in -->
+            <!-- Pinned toolbar: title + subtitle on the start, options menu on the end -->
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layoutDirection="locale"
+                app:contentInsetStart="0dp"
                 app:contentInsetStartWithNavigation="0dp"
                 app:layout_collapseMode="pin">
 
-                <TextView
-                    android:id="@+id/heroCollapsedTitle"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:alpha="0"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textColor="@color/gold_accent"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    tools:text="Mushaf" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/heroTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textColor="@color/text_on_navy"
+                        android:textSize="19sp"
+                        android:textStyle="bold"
+                        tools:text="Mushaf" />
+
+                    <TextView
+                        android:id="@+id/heroSubtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textColor="@color/hint_on_navy"
+                        android:textSize="11sp"
+                        android:visibility="gone"
+                        tools:text="The Holy Quran" />
+                </LinearLayout>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
