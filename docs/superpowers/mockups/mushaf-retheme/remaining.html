@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mushaf re-theme — remaining screens · My Stream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#B8860B; --gold-2:#d9b24a; --gold-light:#E9C778;
+  --gold-faint:rgba(184,134,11,.15); --gold-semi:rgba(184,134,11,.40);
+  --navy-900:#172033; --navy-700:#1F2A44; --navy-500:#2C3A5E;
+  --on-navy:#FFFFFF; --on-navy-dim:rgba(255,255,255,.62);
+  --bg:#FFF8F0; --surface:#FFFFFF; --card:#FFFFFF;
+  --text:#1C1B1F; --text2:#49454E; --muted:#cdbfa9;
+  --line:#EFE6D2; --line-soft:rgba(28,27,31,.07);
+  --badge-bg:#F3E7C9; --badge-tx:#7A5A12; --juz-band:#EFE3CB;
+  --shadow:0 16px 38px -18px rgba(23,32,51,.40);
+}
+[data-theme="dark"]{
+  --gold:#D4A44C; --gold-2:#caa24f;
+  --gold-faint:rgba(212,164,76,.16); --gold-semi:rgba(212,164,76,.40);
+  --bg:#121212; --surface:#1E1E1E; --card:#282828;
+  --text:#FFFFFF; --text2:#B3B3B3; --muted:#4a443a;
+  --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.06);
+  --badge-bg:#3a3320; --badge-tx:#E9C778; --juz-band:#241f15;
+  --shadow:0 18px 44px -18px rgba(0,0,0,.75);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans','Cairo',system-ui,sans-serif;color:#e8eaf0;min-height:100vh;
+  padding:24px 22px 70px;
+  background:radial-gradient(1100px 520px at 12% -8%,#20304f 0,transparent 60%),
+             radial-gradient(900px 480px at 100% 0,#11182a 0,transparent 55%),#0c111d;}
+[dir="rtl"] body{font-family:'Cairo','Plus Jakarta Sans',system-ui,sans-serif}
+.wrap{max-width:1280px;margin:0 auto}
+h1.title{font-size:23px;font-weight:800;letter-spacing:-.02em;margin:0 0 3px;display:flex;align-items:center;gap:10px;color:#fff}
+h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 12px var(--gold-light)}
+.sub{color:#9fb0d0;font-size:13.5px;margin:0 0 16px;max-width:960px;line-height:1.55}
+.controls{position:sticky;top:0;z-index:200;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 -22px 22px;
+  padding:13px 22px;background:rgba(9,13,22,.82);backdrop-filter:blur(10px);border-bottom:1px solid #1c2335}
+.seg{display:inline-flex;background:#161d2e;border:1px solid #273350;border-radius:12px;padding:4px;gap:3px}
+.seg .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#5f6f8e;padding:0 6px;align-self:center;font-weight:800}
+.seg button{font:inherit;font-size:12.5px;font-weight:700;color:#9fb0d0;background:transparent;border:0;padding:7px 15px;border-radius:9px;cursor:pointer;transition:.15s}
+.seg button.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305;box-shadow:0 4px 14px -6px var(--gold)}
+.hint{color:#7e8db0;font-size:12px;margin-inline-start:auto}.hint b{color:#cdd6ea}
+
+.sec-h{font-size:16px;font-weight:800;margin:30px 0 4px;color:#dce6f7}
+.sec-d{color:#7e8db0;font-size:12.5px;margin:0 0 16px}
+.row{display:flex;gap:34px;align-items:flex-start;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;align-items:center;gap:11px}
+.cap{text-align:center;max-width:320px}.cap .n{font-size:12.5px;font-weight:800;color:#e7ecf7}.cap .d{font-size:11px;color:#7e8db0;margin-top:2px;line-height:1.45}
+
+/* phone */
+.phone{width:320px;height:680px;border-radius:40px;background:#05070c;padding:9px;flex:none;position:relative;
+  box-shadow:0 34px 80px -30px rgba(0,0,0,.85),0 0 0 2px #1c2335,inset 0 0 0 2px #000}
+.screen{width:100%;height:100%;border-radius:32px;overflow:hidden;position:relative;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+.notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:100px;height:22px;background:#05070c;border-radius:0 0 14px 14px;z-index:120}
+.sb{height:30px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:11.5px;font-weight:700;background:var(--navy-700);color:var(--on-navy);z-index:30}
+.sb .r{display:flex;gap:5px;align-items:center}.sb-dots:after{content:"●●●";letter-spacing:1px;font-size:7px}
+
+/* navy hero */
+.hero{flex:none;position:relative;overflow:hidden;
+  background:radial-gradient(220px 150px at 86% -10%,rgba(212,164,76,.30),transparent 70%),
+             linear-gradient(160deg,var(--navy-500),var(--navy-700) 42%,var(--navy-900));
+  border-radius:0 0 22px 22px;box-shadow:0 6px 18px -12px rgba(0,0,0,.6);z-index:20}
+.hero .bar{min-height:56px;display:flex;align-items:center;gap:6px;padding:8px 10px 12px 12px;position:relative;z-index:5}
+.hero .back{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--gold);flex:none}
+.hero .htitle{min-width:0;flex:0 1 auto}
+.hero .htitle .big{font-size:18px;font-weight:800;color:var(--on-navy);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero .htitle .small{font-size:11px;color:var(--on-navy-dim);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero .grow{flex:1}
+.hero .ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--gold);flex:none}
+
+/* list + rows */
+.list{flex:1;overflow:auto;background:var(--bg)}
+.list::-webkit-scrollbar{width:0}
+.srow{display:flex;align-items:center;gap:13px;padding:14px 14px;position:relative}
+.srow+.srow:before{content:"";position:absolute;top:0;inset-inline:14px;height:1px;background:var(--line-soft)}
+.srow .num{width:34px;height:34px;border-radius:10px;background:var(--badge-bg);color:var(--badge-tx);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex:none;font-family:'Plus Jakarta Sans',sans-serif}
+[dir="rtl"] .srow .num{font-family:'Cairo',sans-serif}
+.srow .tx{flex:1;min-width:0}.srow .tx .t{font-size:15px;font-weight:700;color:var(--text)}
+.srow .tx .s{font-size:12px;color:var(--text2);margin-top:3px}
+.legend{margin-top:26px;background:#10182a;border:1px solid #243353;border-radius:16px;padding:14px 18px;color:#8fa0c0;font-size:12.5px;line-height:1.6}
+.legend b{color:#dce6f7}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="title"><span class="dot"></span> Mushaf re-theme — remaining screens</h1>
+  <p class="sub" data-en="The last off-theme screens of the embedded Quran reader, re-skinned to the My Stream navy+gold language. Toggle theme &amp; language (RTL) — every screen is shown in its key states."
+     data-ar="آخر الشاشات غير المتوافقة في قارئ المصحف المدمج، مُعاد تصميمها بلغة ماي ستريم الكحلية+الذهبية. بدّل السمة واللغة (RTL) — كل شاشة معروضة بحالاتها الأساسية."></p>
+
+  <div class="controls">
+    <div class="seg"><span class="lbl">Theme</span>
+      <button data-theme-btn="light" class="on">☀︎ Light</button>
+      <button data-theme-btn="dark">☾ Dark</button></div>
+    <div class="seg"><span class="lbl">Lang</span>
+      <button data-lang-btn="en" class="on">EN</button>
+      <button data-lang-btn="ar">العربية</button></div>
+    <span class="hint" data-en="Reciter manager · Downloads player · Data-download gate · About" data-ar="مدير القرّاء · مشغّل التنزيلات · بوابة تنزيل البيانات · حول"></span>
+  </div>
+
+    <div class="sec-h" data-en="Reciter Audio — download manager" data-ar="صوتيات القرّاء — مدير التنزيل"></div>
+  <div class="sec-d" data-en="Re-skinned reciter & per-surah download manager: navy hero with gold ‹ back, gold download/progress, a gold-check "saved" chip (no more green), error-red reserved only for destructive actions (no brick red), gold-faint multi-select with readable text (no teal overlay), and a themed remove bottom sheet plus a navy+gold success snackbar." data-ar="إعادة تصميم مدير تنزيل القرّاء والسور: هيدر كحلي بزر رجوع ذهبي ‹، تنزيل وتقدّم باللون الذهبي، شارة "مُحمّلة" بعلامة ذهبية (بدل الأخضر)، أحمر الخطأ للإجراءات المتلِفة فقط (بدل الأحمر الطوبي)، تحديد متعدد بخلفية ذهبية خفيفة ونص واضح (بدل التراكب الفيروزي)، وورقة سفلية للحذف وإشعار نجاح كحلي+ذهبي."></div>
+  <div class="row">
+<div class="col">
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+    <div class="hero">
+      <div class="bar">
+        <div class="back">‹</div>
+        <div class="htitle"><div class="big" data-en="Audio Manager" data-ar="مدير الصوت"></div>
+          <div class="small" data-en="Reciters · tap to manage surahs" data-ar="القرّاء · اضغط لإدارة السور"></div></div>
+        <div class="grow"></div>
+        <div class="ico">🔍</div>
+      </div>
+    </div>
+    <div class="list">
+      <!-- fully downloaded reciter -> GOLD check chip (was green) -->
+      <div style="background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);padding:13px 14px;margin:11px 12px 0">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="width:46px;height:46px;border-radius:50%;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:21px;flex:none">🎙️</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" data-en="مشاري بن راشد العفاسي" data-ar="مشاري بن راشد العفاسي"></div>
+            <div style="font-size:12px;color:var(--text2);margin-top:3px" data-en="114 / 114 surahs" data-ar="١١٤ / ١١٤ سورة"></div>
+          </div>
+          <span style="display:inline-flex;align-items:center;gap:5px;background:var(--gold-faint);color:var(--gold);border-radius:18px;padding:6px 11px;font-size:11.5px;font-weight:800;flex:none"><span>✓</span><span data-en="Saved" data-ar="مُحمّلة"></span></span>
+        </div>
+      </div>
+      <!-- partial -> GOLD download circle (was teal) -->
+      <div style="background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);padding:13px 14px;margin:11px 12px 0">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="width:46px;height:46px;border-radius:50%;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:21px;flex:none">🎙️</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" data-en="عبد الباسط عبد الصمد" data-ar="عبد الباسط عبد الصمد"></div>
+            <div style="font-size:12px;color:var(--text2);margin-top:3px" data-en="5 / 114 downloaded" data-ar="٥ / ١١٤ مُحمّلة"></div>
+          </div>
+          <span style="width:40px;height:40px;border-radius:50%;background:var(--gold-faint);color:var(--gold);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">⬇</span>
+        </div>
+      </div>
+      <!-- downloading -> GOLD progress + error-red cancel -->
+      <div style="background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);padding:13px 14px;margin:11px 12px 0">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="width:46px;height:46px;border-radius:50%;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:21px;flex:none">🎙️</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" data-en="عبد الرحمن السديس" data-ar="عبد الرحمن السديس"></div>
+            <div style="font-size:12px;color:var(--text2);margin-top:3px" data-en="Downloading 82 / 114…" data-ar="جاري التنزيل ٨٢ / ١١٤…"></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:11px">
+          <div style="flex:1;height:6px;border-radius:6px;background:var(--line);overflow:hidden"><i style="display:block;height:100%;width:72%;background:var(--gold);border-radius:6px"></i></div>
+          <span style="font-size:11.5px;font-weight:800;color:var(--gold);flex:none" data-en="72%" data-ar="٧٢٪"></span>
+          <span style="width:32px;height:32px;border-radius:50%;background:rgba(197,48,58,.12);color:#C5303A;display:flex;align-items:center;justify-content:center;font-size:13px;flex:none">✕</span>
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);padding:13px 14px;margin:11px 12px 0">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="width:46px;height:46px;border-radius:50%;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:21px;flex:none">🎙️</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" data-en="ماهر المعيقلي" data-ar="ماهر المعيقلي"></div>
+            <div style="font-size:12px;color:var(--text2);margin-top:3px" data-en="114 / 114 surahs" data-ar="١١٤ / ١١٤ سورة"></div>
+          </div>
+          <span style="display:inline-flex;align-items:center;gap:5px;background:var(--gold-faint);color:var(--gold);border-radius:18px;padding:6px 11px;font-size:11.5px;font-weight:800;flex:none"><span>✓</span><span data-en="Saved" data-ar="مُحمّلة"></span></span>
+        </div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);padding:13px 14px;margin:11px 12px 14px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="width:46px;height:46px;border-radius:50%;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:21px;flex:none">🎙️</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" data-en="سعد الغامدي" data-ar="سعد الغامدي"></div>
+            <div style="font-size:12px;color:var(--text2);margin-top:3px" data-en="Not downloaded" data-ar="غير مُحمّلة"></div>
+          </div>
+          <span style="width:40px;height:40px;border-radius:50%;background:var(--gold-faint);color:var(--gold);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">⬇</span>
+        </div>
+      </div>
+    </div>
+  </div></div>
+  <div class="cap"><div class="n" data-en="① Reciters list" data-ar="① قائمة القرّاء"></div>
+    <div class="d" data-en="Mic avatars, download counts, gold download/progress, error-red cancel — one reciter mid-download." data-ar="صور القرّاء، عدّاد التنزيل، تنزيل/تقدّم ذهبي، إلغاء بأحمر الخطأ — قارئ قيد التنزيل."></div></div>
+</div>
+
+<div class="col">
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+    <div class="hero">
+      <div class="bar">
+        <div class="back">‹</div>
+        <div class="htitle"><div class="big" data-en="عبد الباسط عبد الصمد" data-ar="عبد الباسط عبد الصمد"></div>
+          <div class="small" data-en="23 / 114 surahs" data-ar="٢٣ / ١١٤ سورة"></div></div>
+        <div class="grow"></div>
+        <div class="ico">⬇</div>
+        <div class="ico">☑</div>
+      </div>
+    </div>
+    <div class="list">
+      <!-- downloaded surah: GOLD check in subtitle + error-red trash action -->
+      <div class="srow">
+        <div class="num"><span data-en="1" data-ar="١"></span></div>
+        <div class="tx"><div class="t" data-en="الفاتحة" data-ar="الفاتحة"></div>
+          <div class="s" style="display:flex;align-items:center;gap:6px"><span style="color:var(--gold);font-weight:900">✓</span><span data-en="Downloaded · 1.1 MB" data-ar="مُحمّلة · ١٫١ م.ب"></span></div></div>
+        <span style="width:38px;height:38px;border-radius:50%;background:rgba(197,48,58,.10);color:#C5303A;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none">🗑</span>
+      </div>
+      <div class="srow">
+        <div class="num"><span data-en="2" data-ar="٢"></span></div>
+        <div class="tx"><div class="t" data-en="البقرة" data-ar="البقرة"></div>
+          <div class="s" style="display:flex;align-items:center;gap:6px"><span style="color:var(--gold);font-weight:900">✓</span><span data-en="Downloaded · 3.4 MB" data-ar="مُحمّلة · ٣٫٤ م.ب"></span></div></div>
+        <span style="width:38px;height:38px;border-radius:50%;background:rgba(197,48,58,.10);color:#C5303A;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none">🗑</span>
+      </div>
+      <!-- downloading surah: GOLD progress + percent + error-red cancel -->
+      <div class="srow">
+        <div class="num"><span data-en="3" data-ar="٣"></span></div>
+        <div class="tx"><div class="t" data-en="آل عمران" data-ar="آل عمران"></div>
+          <div class="s" data-en="Downloading…" data-ar="جاري التنزيل…"></div>
+          <div style="margin-top:8px;height:6px;border-radius:6px;background:var(--line);overflow:hidden"><i style="display:block;height:100%;width:45%;background:var(--gold);border-radius:6px"></i></div></div>
+        <span style="font-size:11.5px;font-weight:800;color:var(--gold);flex:none" data-en="45%" data-ar="٤٥٪"></span>
+        <span style="width:34px;height:34px;border-radius:50%;background:rgba(197,48,58,.12);color:#C5303A;display:flex;align-items:center;justify-content:center;font-size:13px;flex:none">✕</span>
+      </div>
+      <!-- not downloaded: GOLD download circle (was teal) -->
+      <div class="srow">
+        <div class="num"><span data-en="4" data-ar="٤"></span></div>
+        <div class="tx"><div class="t" data-en="النساء" data-ar="النساء"></div>
+          <div class="s" data-en="Download · 3.1 MB" data-ar="تنزيل · ٣٫١ م.ب"></div></div>
+        <span style="width:38px;height:38px;border-radius:50%;background:var(--gold-faint);color:var(--gold);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none">⬇</span>
+      </div>
+      <div class="srow">
+        <div class="num"><span data-en="5" data-ar="٥"></span></div>
+        <div class="tx"><div class="t" data-en="المائدة" data-ar="المائدة"></div>
+          <div class="s" data-en="Download · 2.6 MB" data-ar="تنزيل · ٢٫٦ م.ب"></div></div>
+        <span style="width:38px;height:38px;border-radius:50%;background:var(--gold-faint);color:var(--gold);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none">⬇</span>
+      </div>
+      <div class="srow">
+        <div class="num"><span data-en="6" data-ar="٦"></span></div>
+        <div class="tx"><div class="t" data-en="الأنعام" data-ar="الأنعام"></div>
+          <div class="s" data-en="Download · 2.4 MB" data-ar="تنزيل · ٢٫٤ م.ب"></div></div>
+        <span style="width:38px;height:38px;border-radius:50%;background:var(--gold-faint);color:var(--gold);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none">⬇</span>
+      </div>
+      <div style="height:74px"></div>
+    </div>
+    <!-- themed success snackbar (replaces off-theme toast) -->
+    <div style="position:absolute;left:12px;right:12px;bottom:14px;background:var(--navy-700);color:var(--on-navy);border-radius:13px;padding:12px 14px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow);z-index:30">
+      <span style="color:var(--gold-light);font-size:16px">✓</span>
+      <span style="flex:1;font-size:12.5px;font-weight:700" data-en="1 surah removed" data-ar="تمت إزالة سورة واحدة"></span>
+      <span style="color:var(--gold-light);font-weight:800;font-size:12.5px" data-en="Undo" data-ar="تراجع"></span>
+    </div>
+  </div></div>
+  <div class="cap"><div class="n" data-en="② Per-reciter surahs" data-ar="② سور القارئ"></div>
+    <div class="d" data-en="Download / downloaded / downloading per surah; long reciter name truncates; navy+gold success snackbar." data-ar="تنزيل / مُحمّلة / قيد التنزيل لكل سورة؛ اسم القارئ الطويل يُقصّ؛ إشعار نجاح كحلي+ذهبي."></div></div>
+</div>
+
+<div class="col">
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+    <!-- contextual action bar reuses the navy hero -->
+    <div class="hero">
+      <div class="bar">
+        <div class="back">✕</div>
+        <div class="htitle"><div class="big" data-en="3 selected" data-ar="٣ محدّدة"></div>
+          <div class="small" data-en="Tap rows to select" data-ar="اضغط الصفوف للتحديد"></div></div>
+        <div class="grow"></div>
+        <div class="ico">☑</div>
+      </div>
+    </div>
+    <div class="list">
+      <!-- selected -> GOLD-faint background + gold check (was teal overlay) -->
+      <div class="srow" style="background:var(--gold-faint)">
+        <span style="width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--navy-900);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex:none">✓</span>
+        <div class="num"><span data-en="1" data-ar="١"></span></div>
+        <div class="tx"><div class="t" data-en="الفاتحة" data-ar="الفاتحة"></div>
+          <div class="s" data-en="Downloaded · 1.1 MB" data-ar="مُحمّلة · ١٫١ م.ب"></div></div>
+      </div>
+      <div class="srow" style="background:var(--gold-faint)">
+        <span style="width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--navy-900);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex:none">✓</span>
+        <div class="num"><span data-en="2" data-ar="٢"></span></div>
+        <div class="tx"><div class="t" data-en="البقرة" data-ar="البقرة"></div>
+          <div class="s" data-en="Downloaded · 3.4 MB" data-ar="مُحمّلة · ٣٫٤ م.ب"></div></div>
+      </div>
+      <div class="srow">
+        <span style="width:24px;height:24px;border-radius:50%;border:2px solid var(--muted);flex:none"></span>
+        <div class="num"><span data-en="3" data-ar="٣"></span></div>
+        <div class="tx"><div class="t" data-en="آل عمران" data-ar="آل عمران"></div>
+          <div class="s" data-en="Download · 3.0 MB" data-ar="تنزيل · ٣٫٠ م.ب"></div></div>
+      </div>
+      <div class="srow" style="background:var(--gold-faint)">
+        <span style="width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--navy-900);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex:none">✓</span>
+        <div class="num"><span data-en="4" data-ar="٤"></span></div>
+        <div class="tx"><div class="t" data-en="النساء" data-ar="النساء"></div>
+          <div class="s" data-en="Download · 3.1 MB" data-ar="تنزيل · ٣٫١ م.ب"></div></div>
+      </div>
+      <div class="srow">
+        <span style="width:24px;height:24px;border-radius:50%;border:2px solid var(--muted);flex:none"></span>
+        <div class="num"><span data-en="5" data-ar="٥"></span></div>
+        <div class="tx"><div class="t" data-en="المائدة" data-ar="المائدة"></div>
+          <div class="s" data-en="Download · 2.6 MB" data-ar="تنزيل · ٢٫٦ م.ب"></div></div>
+      </div>
+      <div class="srow">
+        <span style="width:24px;height:24px;border-radius:50%;border:2px solid var(--muted);flex:none"></span>
+        <div class="num"><span data-en="6" data-ar="٦"></span></div>
+        <div class="tx"><div class="t" data-en="الأنعام" data-ar="الأنعام"></div>
+          <div class="s" data-en="Download · 2.4 MB" data-ar="تنزيل · ٢٫٤ م.ب"></div></div>
+      </div>
+    </div>
+    <!-- bottom contextual actions: gold primary + error-red destructive -->
+    <div style="flex:none;display:flex;gap:10px;padding:12px 14px;background:var(--surface);border-top:1px solid var(--line)">
+      <span style="flex:1;text-align:center;background:var(--gold);color:var(--navy-900);border-radius:18px;padding:11px 16px;font-weight:800;font-size:13px;display:inline-block" data-en="⬇ Download (3)" data-ar="⬇ تنزيل (٣)"></span>
+      <span style="text-align:center;border:1px solid #C5303A;color:#C5303A;border-radius:18px;padding:11px 18px;font-weight:800;font-size:13px;display:inline-block" data-en="Delete" data-ar="حذف"></span>
+    </div>
+  </div></div>
+  <div class="cap"><div class="n" data-en="③ Multi-select (CAB)" data-ar="③ تحديد متعدد"></div>
+    <div class="d" data-en="Long-press to select: gold-faint rows + gold checks (no teal), gold Download / error-red Delete actions." data-ar="اضغط مطوّلًا للتحديد: صفوف ذهبية خفيفة وعلامات ذهبية (بلا فيروزي)، تنزيل ذهبي / حذف بأحمر الخطأ."></div></div>
+</div>
+
+<div class="col">
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+    <div class="hero">
+      <div class="bar">
+        <div class="back">‹</div>
+        <div class="htitle"><div class="big" data-en="عبد الباسط عبد الصمد" data-ar="عبد الباسط عبد الصمد"></div>
+          <div class="small" data-en="23 / 114 surahs" data-ar="٢٣ / ١١٤ سورة"></div></div>
+        <div class="grow"></div>
+        <div class="ico">⬇</div>
+        <div class="ico">☑</div>
+      </div>
+    </div>
+    <div class="list">
+      <div class="srow">
+        <div class="num"><span data-en="1" data-ar="١"></span></div>
+        <div class="tx"><div class="t" data-en="الفاتحة" data-ar="الفاتحة"></div>
+          <div class="s" data-en="Downloaded · 1.1 MB" data-ar="مُحمّلة · ١٫١ م.ب"></div></div>
+        <span style="width:38px;height:38px;border-radius:50%;background:rgba(197,48,58,.10);color:#C5303A;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none">🗑</span>
+      </div>
+      <div class="srow">
+        <div class="num"><span data-en="2" data-ar="٢"></span></div>
+        <div class="tx"><div class="t" data-en="البقرة" data-ar="البقرة"></div>
+          <div class="s" data-en="Downloaded · 3.4 MB" data-ar="مُحمّلة · ٣٫٤ م.ب"></div></div>
+        <span style="width:38px;height:38px;border-radius:50%;background:rgba(197,48,58,.10);color:#C5303A;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none">🗑</span>
+      </div>
+      <div class="srow">
+        <div class="num"><span data-en="3" data-ar="٣"></span></div>
+        <div class="tx"><div class="t" data-en="آل عمران" data-ar="آل عمران"></div>
+          <div class="s" data-en="Download · 3.0 MB" data-ar="تنزيل · ٣٫٠ م.ب"></div></div>
+        <span style="width:38px;height:38px;border-radius:50%;background:var(--gold-faint);color:var(--gold);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none">⬇</span>
+      </div>
+    </div>
+    <!-- scrim + themed remove bottom sheet (replaces off-theme dialog) -->
+    <div style="position:absolute;inset:0;background:rgba(9,13,22,.55);z-index:35"></div>
+    <div style="position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:22px 22px 0 0;padding:8px 20px 22px;box-shadow:var(--shadow);z-index:40">
+      <div style="width:40px;height:4px;border-radius:4px;background:var(--line);margin:6px auto 16px"></div>
+      <div style="width:58px;height:58px;border-radius:50%;background:rgba(197,48,58,.12);color:#C5303A;font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">🗑</div>
+      <div style="text-align:center;font-size:17px;font-weight:800;color:var(--text)" data-en="Remove surah?" data-ar="إزالة السورة؟"></div>
+      <div style="text-align:center;font-size:12.5px;line-height:1.6;color:var(--text2);margin:8px auto 18px;max-width:240px" data-en="This removes البقرة and frees 3.4 MB. You can download it again anytime." data-ar="سيؤدي هذا إلى إزالة البقرة وتحرير ٣٫٤ م.ب. يمكنك تنزيلها مجددًا في أي وقت."></div>
+      <div style="display:flex;gap:10px">
+        <span style="flex:1;text-align:center;border:1px solid var(--line);color:var(--text);border-radius:18px;padding:12px;font-weight:800;font-size:13px;display:inline-block" data-en="Cancel" data-ar="إلغاء"></span>
+        <span style="flex:1;text-align:center;background:#BA1A1A;color:#FFFFFF;border-radius:18px;padding:12px;font-weight:800;font-size:13px;display:inline-block" data-en="Remove" data-ar="إزالة"></span>
+      </div>
+    </div>
+  </div></div>
+  <div class="cap"><div class="n" data-en="④ Remove confirmation" data-ar="④ تأكيد الإزالة"></div>
+    <div class="d" data-en="Themed bottom sheet over a dimmed list — destructive Remove in M3 error-red, neutral Cancel." data-ar="ورقة سفلية منسّقة فوق قائمة معتمة — زر الإزالة بأحمر الخطأ، وإلغاء محايد."></div></div>
+</div>
+  </div>
+
+  <div class="sec-h" data-en="Downloads Player — audio downloads + playback" data-ar="مشغّل التنزيلات — الصوت والتشغيل"></div>
+  <div class="sec-d" data-en="Re-skinned offline recitation player: navy hero with gold equalizer action, gold visualizer + EQ band sliders, gold seek progress and navy/gold transport controls — playing, paused, and idle states." data-ar="مشغّل التلاوات دون اتصال بهوية كحلي وذهبي: ترويسة كحلية مع زرّ معادل الصوت الذهبي، ومُصوِّر موجة ذهبي ومنزلقات معادل الصوت، وشريط تقدّم ذهبي وأزرار تحكم كحلية/ذهبية — حالات التشغيل والإيقاف والخمول."></div>
+  <div class="row">
+<![CDATA[<div class="col">
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+    <div class="hero">
+      <div class="bar">
+        <div class="back">‹</div>
+        <div class="htitle">
+          <div class="big" data-en="سورة الفاتحة" data-ar="سورة الفاتحة" style="font-family:'Amiri',serif"></div>
+          <div class="small" data-en="عبد الباسط عبد الصمد" data-ar="عبد الباسط عبد الصمد"></div>
+        </div>
+        <div class="grow"></div>
+        <div class="ico" title="Equalizer preset">🎚</div>
+      </div>
+    </div>
+
+    <div class="list" style="padding:0 0 14px">
+
+      <!-- now playing label -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 14px 4px">
+        <div data-en="Now playing" data-ar="يُشغّل الآن" style="font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)"></div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--text2)">
+          <span data-en="Equalizer" data-ar="معادل الصوت"></span>
+          <span style="background:var(--gold-faint);color:var(--gold);border-radius:14px;padding:3px 10px;font-weight:800"><span data-en="Classical" data-ar="كلاسيكي"></span> ⌄</span>
+        </div>
+      </div>
+
+      <!-- VISUALIZER (gold waveform, animating) -->
+      <div style="background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);padding:14px 14px 12px;margin:8px 12px 0">
+        <div style="height:60px;display:flex;align-items:center;justify-content:space-between;gap:3px">
+          <i style="flex:1;border-radius:3px;height:12px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:28px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:42px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:20px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:52px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:34px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:48px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:18px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:38px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:54px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:26px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:44px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:30px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:56px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:22px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:46px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:32px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:50px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:24px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+          <i style="flex:1;border-radius:3px;height:16px;background:linear-gradient(180deg,var(--gold-light),var(--gold))"></i>
+        </div>
+      </div>
+
+      <!-- seek bar + timers -->
+      <div style="padding:16px 16px 4px">
+        <div style="height:5px;border-radius:5px;background:var(--gold-faint);position:relative">
+          <i style="display:block;height:100%;width:70%;border-radius:5px;background:linear-gradient(90deg,var(--gold),var(--gold-2))"></i>
+          <span style="position:absolute;inset-inline-start:70%;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:var(--shadow-sm)"></span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-size:11.5px;font-weight:700;color:var(--text2)">
+          <span data-en="3:45" data-ar="٣:٤٥"></span>
+          <span data-en="5:22" data-ar="٥:٢٢"></span>
+        </div>
+      </div>
+
+      <!-- +5 toast -->
+      <div style="display:flex;justify-content:center;padding:6px 0 2px">
+        <span style="background:var(--navy-900);color:var(--gold-light);border-radius:14px;padding:6px 16px;font-size:12px;font-weight:800;box-shadow:var(--shadow)" data-en="+5 sec" data-ar="+٥ ثوانٍ"></span>
+      </div>
+
+      <!-- transport controls -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:14px;padding:8px 16px 4px">
+        <span style="width:44px;height:44px;border-radius:50%;background:var(--navy-700);color:var(--on-navy);display:flex;align-items:center;justify-content:center;font-size:17px">⏮</span>
+        <span style="width:44px;height:44px;border-radius:50%;background:var(--navy-700);color:var(--on-navy);display:flex;align-items:center;justify-content:center;font-size:16px">⏪</span>
+        <span style="width:64px;height:64px;border-radius:50%;background:var(--gold);color:var(--navy-900);display:flex;align-items:center;justify-content:center;font-size:25px;box-shadow:0 10px 24px -8px var(--gold)">⏸</span>
+        <span style="width:44px;height:44px;border-radius:50%;background:var(--navy-700);color:var(--on-navy);display:flex;align-items:center;justify-content:center;font-size:16px">⏩</span>
+        <span style="width:44px;height:44px;border-radius:50%;background:var(--navy-700);color:var(--on-navy);display:flex;align-items:center;justify-content:center;font-size:17px">⏭</span>
+      </div>
+
+    </div>
+  </div></div>
+  <div class="cap">
+    <div class="n" data-en="Playing" data-ar="قيد التشغيل"></div>
+    <div class="d" data-en="Gold waveform active · pause shown · +5s toast" data-ar="مُصوِّر الموجة الذهبي نشط · زر الإيقاف · إشعار +٥ ثوانٍ"></div>
+  </div>
+</div>
+
+<div class="col">
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+    <div class="hero">
+      <div class="bar">
+        <div class="back">‹</div>
+        <div class="htitle">
+          <div class="big" data-en="سورة البقرة" data-ar="سورة البقرة" style="font-family:'Amiri',serif"></div>
+          <div class="small" data-en="محمد المنشاوي" data-ar="محمد المنشاوي"></div>
+        </div>
+        <div class="grow"></div>
+        <div class="ico" title="Equalizer preset">🎚</div>
+      </div>
+    </div>
+
+    <div class="list" style="padding:0 0 14px">
+
+      <!-- paused state label -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 14px 4px">
+        <div data-en="Paused" data-ar="متوقّف مؤقتًا" style="font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text2)"></div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--text2)">
+          <span data-en="125 Hz" data-ar="١٢٥ هرتز"></span>
+        </div>
+      </div>
+
+      <!-- static visualizer (dim, not animating) -->
+      <div style="background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);padding:14px;margin:8px 12px 0">
+        <div style="height:36px;display:flex;align-items:center;justify-content:space-between;gap:3px">
+          <i style="flex:1;border-radius:3px;height:6px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:9px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:5px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:8px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:6px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:10px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:5px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:7px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:6px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:9px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:5px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:8px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:6px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:10px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:5px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:7px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:6px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:9px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:5px;background:var(--line)"></i>
+          <i style="flex:1;border-radius:3px;height:6px;background:var(--line)"></i>
+        </div>
+      </div>
+
+      <!-- equalizer band sliders (Classical preset) -->
+      <div style="background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);padding:14px 16px 12px;margin:11px 12px 0">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div data-en="Equalizer" data-ar="معادل الصوت" style="font-size:12px;font-weight:800;color:var(--text)"></div>
+          <span style="background:var(--gold);color:var(--navy-900);border-radius:14px;padding:4px 12px;font-size:11px;font-weight:800"><span data-en="Classical" data-ar="كلاسيكي"></span> ⌄</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:8px">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px">
+            <div style="position:relative;width:14px;height:62px;display:flex;align-items:flex-end;justify-content:center">
+              <div style="position:absolute;top:0;bottom:0;width:4px;border-radius:4px;background:var(--gold-faint)"></div>
+              <div style="position:absolute;bottom:0;width:4px;border-radius:4px;background:var(--gold);height:55%"></div>
+              <div style="position:absolute;bottom:calc(55% - 6px);width:13px;height:13px;border-radius:50%;background:var(--gold);border:2px solid var(--card);box-shadow:var(--shadow-sm)"></div>
+            </div>
+            <div data-en="60" data-ar="٦٠" style="font-size:9px;font-weight:700;color:var(--text2)"></div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px">
+            <div style="position:relative;width:14px;height:62px;display:flex;align-items:flex-end;justify-content:center">
+              <div style="position:absolute;top:0;bottom:0;width:4px;border-radius:4px;background:var(--gold-faint)"></div>
+              <div style="position:absolute;bottom:0;width:4px;border-radius:4px;background:var(--gold);height:72%"></div>
+              <div style="position:absolute;bottom:calc(72% - 6px);width:13px;height:13px;border-radius:50%;background:var(--gold);border:2px solid var(--card);box-shadow:var(--shadow-sm)"></div>
+            </div>
+            <div data-en="230" data-ar="٢٣٠" style="font-size:9px;font-weight:700;color:var(--text2)"></div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px">
+            <div style="position:relative;width:14px;height:62px;display:flex;align-items:flex-end;justify-content:center">
+              <div style="position:absolute;top:0;bottom:0;width:4px;border-radius:4px;background:var(--gold-faint)"></div>
+              <div style="position:absolute;bottom:0;width:4px;border-radius:4px;background:var(--gold);height:40%"></div>
+              <div style="position:absolute;bottom:calc(40% - 6px);width:13px;height:13px;border-radius:50%;background:var(--gold);border:2px solid var(--card);box-shadow:var(--shadow-sm)"></div>
+            </div>
+            <div data-en="910" data-ar="٩١٠" style="font-size:9px;font-weight:700;color:var(--text2)"></div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px">
+            <div style="position:relative;width:14px;height:62px;display:flex;align-items:flex-end;justify-content:center">
+              <div style="position:absolute;top:0;bottom:0;width:4px;border-radius:4px;background:var(--gold-faint)"></div>
+              <div style="position:absolute;bottom:0;width:4px;border-radius:4px;background:var(--gold);height:60%"></div>
+              <div style="position:absolute;bottom:calc(60% - 6px);width:13px;height:13px;border-radius:50%;background:var(--gold);border:2px solid var(--card);box-shadow:var(--shadow-sm)"></div>
+            </div>
+            <div data-en="3.6k" data-ar="٣٫٦ك" style="font-size:9px;font-weight:700;color:var(--text2)"></div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px">
+            <div style="position:relative;width:14px;height:62px;display:flex;align-items:flex-end;justify-content:center">
+              <div style="position:absolute;top:0;bottom:0;width:4px;border-radius:4px;background:var(--gold-faint)"></div>
+              <div style="position:absolute;bottom:0;width:4px;border-radius:4px;background:var(--gold);height:82%"></div>
+              <div style="position:absolute;bottom:calc(82% - 6px);width:13px;height:13px;border-radius:50%;background:var(--gold);border:2px solid var(--card);box-shadow:var(--shadow-sm)"></div>
+            </div>
+            <div data-en="14k" data-ar="١٤ك" style="font-size:9px;font-weight:700;color:var(--text2)"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- seek bar paused -->
+      <div style="padding:14px 16px 4px">
+        <div style="height:5px;border-radius:5px;background:var(--gold-faint);position:relative">
+          <i style="display:block;height:100%;width:30%;border-radius:5px;background:linear-gradient(90deg,var(--gold),var(--gold-2))"></i>
+          <span style="position:absolute;inset-inline-start:30%;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:var(--shadow-sm)"></span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-size:11.5px;font-weight:700;color:var(--text2)">
+          <span data-en="4:18" data-ar="٤:١٨"></span>
+          <span data-en="14:32" data-ar="١٤:٣٢"></span>
+        </div>
+      </div>
+
+      <!-- transport controls (play icon) -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:14px;padding:8px 16px 0">
+        <span style="width:42px;height:42px;border-radius:50%;background:var(--navy-700);color:var(--on-navy);display:flex;align-items:center;justify-content:center;font-size:16px">⏮</span>
+        <span style="width:42px;height:42px;border-radius:50%;background:var(--navy-700);color:var(--on-navy);display:flex;align-items:center;justify-content:center;font-size:15px">⏪</span>
+        <span style="width:62px;height:62px;border-radius:50%;background:var(--gold);color:var(--navy-900);display:flex;align-items:center;justify-content:center;font-size:23px;box-shadow:0 10px 24px -8px var(--gold)">▶</span>
+        <span style="width:42px;height:42px;border-radius:50%;background:var(--navy-700);color:var(--on-navy);display:flex;align-items:center;justify-content:center;font-size:15px">⏩</span>
+        <span style="width:42px;height:42px;border-radius:50%;background:var(--navy-700);color:var(--on-navy);display:flex;align-items:center;justify-content:center;font-size:16px">⏭</span>
+      </div>
+
+    </div>
+  </div></div>
+  <div class="cap">
+    <div class="n" data-en="Paused · Equalizer" data-ar="متوقّف · معادل الصوت"></div>
+    <div class="d" data-en="Play icon · static waveform · Classical preset bands" data-ar="زر التشغيل · موجة ساكنة · منزلقات الإعداد الكلاسيكي"></div>
+  </div>
+</div>
+
+<div class="col">
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+    <div class="hero">
+      <div class="bar">
+        <div class="back">‹</div>
+        <div class="htitle">
+          <div class="big" data-en="Player" data-ar="المشغّل"></div>
+          <div class="small" data-en="No track loaded" data-ar="لا توجد تلاوة محمّلة"></div>
+        </div>
+        <div class="grow"></div>
+        <div class="ico" style="opacity:.4" title="Equalizer preset">🎚</div>
+      </div>
+    </div>
+
+    <div class="list" style="padding:0 0 14px">
+
+      <!-- empty / idle centered prompt -->
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:34px 30px 10px;gap:14px">
+        <div style="width:84px;height:84px;border-radius:50%;background:var(--gold-faint);display:flex;align-items:center;justify-content:center;font-size:38px;color:var(--gold)">🎧</div>
+        <div data-en="Nothing playing yet" data-ar="لا شيء قيد التشغيل بعد" style="font-size:15px;font-weight:800;color:var(--text)"></div>
+        <div data-en="Pick a downloaded surah to start listening offline." data-ar="اختر سورة محمّلة لبدء الاستماع دون اتصال." style="font-size:12px;color:var(--text2);line-height:1.5;max-width:230px"></div>
+        <span style="background:var(--gold);color:var(--navy-900);border-radius:18px;padding:10px 20px;font-weight:800;font-size:13px;display:inline-block" data-en="Browse downloads" data-ar="تصفّح التنزيلات"></span>
+      </div>
+
+      <!-- empty seek bar -->
+      <div style="padding:18px 16px 4px">
+        <div style="height:5px;border-radius:5px;background:var(--gold-faint);position:relative">
+          <i style="display:block;height:100%;width:0%;border-radius:5px;background:var(--gold)"></i>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;font-size:11.5px;font-weight:700;color:var(--muted)">
+          <span data-en="0:00" data-ar="٠:٠٠"></span>
+          <span data-en="0:00" data-ar="٠:٠٠"></span>
+        </div>
+      </div>
+
+      <!-- disabled transport controls -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:14px;padding:8px 16px 0;opacity:.55">
+        <span style="width:42px;height:42px;border-radius:50%;background:var(--line);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:16px">⏮</span>
+        <span style="width:42px;height:42px;border-radius:50%;background:var(--line);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:15px">⏪</span>
+        <span style="width:62px;height:62px;border-radius:50%;background:var(--line);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:23px">▶</span>
+        <span style="width:42px;height:42px;border-radius:50%;background:var(--line);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:15px">⏩</span>
+        <span style="width:42px;height:42px;border-radius:50%;background:var(--line);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:16px">⏭</span>
+      </div>
+
+    </div>
+  </div></div>
+  <div class="cap">
+    <div class="n" data-en="Idle · Empty" data-ar="خامل · فارغ"></div>
+    <div class="d" data-en="No song loaded · controls disabled · themed prompt" data-ar="لا توجد تلاوة · أزرار معطّلة · رسالة بالهوية"></div>
+  </div>
+</div>]]>
+  </div>
+
+  <div class="sec-h" data-en="Quran data-download gate — re-themed" data-ar="بوابة تحميل بيانات المصحف — بطابع جديد"></div>
+  <div class="sec-d" data-en="The plain system download/progress dialogs become navy+gold bottom sheets over the dimmed Mushaf index: gold prompt, a gold progress bar (replacing the default blue/cyan system bar) with %, size and resume note, and a themed error/retry sheet." data-ar="تتحول حوارات التحميل والتقدّم النظامية العادية إلى أوراق سفلية كحلية+ذهبية فوق فهرس المصحف المعتم: مطالبة ذهبية، شريط تقدّم ذهبي (يستبدل الشريط النظامي الأزرق/السماوي) مع النسبة والحجم وملاحظة الاستئناف، وورقة خطأ/إعادة محاولة منسّقة."></div>
+  <div class="row">
+<!-- PHONE 1 — Download prompt (gate) -->
+<div class="col">
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+    <div class="hero">
+      <div class="bar">
+        <div class="back">‹</div>
+        <div class="htitle"><div class="big" data-en="Mushaf" data-ar="المصحف"></div>
+          <div class="small" data-en="The Holy Quran" data-ar="القرآن الكريم"></div></div>
+        <div class="grow"></div>
+        <div class="ico">⬇</div>
+      </div>
+    </div>
+    <div class="list" style="position:relative;overflow:hidden">
+      <div style="opacity:.4;filter:saturate(.55);pointer-events:none">
+        <div class="juz"><span data-en="Juz' 1" data-ar="الجزء ١"></span><span>1</span></div>
+        <div class="srow"><span class="num">1</span><div class="tx"><div class="t" data-en="الفاتحة" data-ar="الفاتحة"></div><div class="s" data-en="Al-Fatihah · Meccan · 7" data-ar="مكية · ٧ آيات"></div></div><span class="pg" data-en="Page 1" data-ar="صفحة ١"></span></div>
+        <div class="srow"><span class="num">2</span><div class="tx"><div class="t" data-en="البقرة" data-ar="البقرة"></div><div class="s" data-en="Al-Baqarah · Medinan · 286" data-ar="مدنية · ٢٨٦ آية"></div></div><span class="pg" data-en="Page 2" data-ar="صفحة ٢"></span></div>
+        <div class="srow"><span class="num">3</span><div class="tx"><div class="t" data-en="آل عمران" data-ar="آل عمران"></div><div class="s" data-en="Aal-'Imran · Medinan · 200" data-ar="مدنية · ٢٠٠ آية"></div></div><span class="pg" data-en="Page 50" data-ar="صفحة ٥٠"></span></div>
+        <div class="srow"><span class="num">4</span><div class="tx"><div class="t" data-en="النساء" data-ar="النساء"></div><div class="s" data-en="An-Nisa' · Medinan · 176" data-ar="مدنية · ١٧٦ آية"></div></div><span class="pg" data-en="Page 77" data-ar="صفحة ٧٧"></span></div>
+      </div>
+      <div style="position:absolute;inset:0;background:rgba(23,32,51,.6)"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line-soft);border-radius:24px 24px 0 0;box-shadow:0 -18px 40px -16px rgba(0,0,0,.5);padding:0 0 20px">
+        <div style="width:40px;height:4px;border-radius:4px;background:var(--muted);opacity:.8;margin:12px auto 16px"></div>
+        <div style="width:64px;height:64px;border-radius:50%;background:var(--gold-faint);display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--gold);margin:0 auto 14px">⬇</div>
+        <div style="padding:0 22px">
+          <div style="font-size:17px;font-weight:800;color:var(--gold);margin-bottom:8px" data-en="Download required files?" data-ar="تحميل الملفات المطلوبة؟"></div>
+          <div style="font-size:13px;line-height:1.65;color:var(--text2)" data-en="For the Mushaf to work properly we need to download some files now. If you skip this, reading may be unreliable and will need an Internet connection." data-ar="لكي يعمل المصحف بشكل صحيح نحتاج لتحميل بعض الملفات الآن. إن تخطّيت ذلك فقد لا تعمل القراءة بشكل موثوق وستحتاج للاتصال بالإنترنت."></div>
+          <div style="display:flex;align-items:center;gap:7px;margin-top:14px;font-size:11.5px;color:var(--text2)"><span style="color:var(--gold)">↻</span><span data-en="About 19 MB · resume supported" data-ar="حوالي ١٩ م.ب · يدعم الاستئناف"></span></div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;padding:18px 22px 0">
+          <div style="border:1.5px solid var(--line);color:var(--text2);border-radius:18px;padding:10px 22px;font-weight:800;font-size:13px" data-en="Not now" data-ar="ليس الآن"></div>
+          <div style="background:var(--gold);color:var(--navy-900);border-radius:18px;padding:10px 22px;font-weight:800;font-size:13px" data-en="Download" data-ar="تحميل"></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+  <div class="cap"><div class="n" data-en="① Download prompt" data-ar="① مطالبة التحميل"></div>
+    <div class="d" data-en="Navy+gold bottom sheet replaces the plain system dialog — gold title, Not now / Download." data-ar="ورقة سفلية كحلية+ذهبية تستبدل الحوار النظامي العادي — عنوان ذهبي، ليس الآن / تحميل."></div></div>
+</div>
+
+<!-- PHONE 2 — Downloading with progress -->
+<div class="col">
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+    <div class="hero">
+      <div class="bar">
+        <div class="back">‹</div>
+        <div class="htitle"><div class="big" data-en="Mushaf" data-ar="المصحف"></div>
+          <div class="small" data-en="The Holy Quran" data-ar="القرآن الكريم"></div></div>
+        <div class="grow"></div>
+        <div class="ico">⬇</div>
+      </div>
+    </div>
+    <div class="list" style="position:relative;overflow:hidden">
+      <div style="opacity:.4;filter:saturate(.55);pointer-events:none">
+        <div class="juz"><span data-en="Juz' 1" data-ar="الجزء ١"></span><span>1</span></div>
+        <div class="srow"><span class="num">1</span><div class="tx"><div class="t" data-en="الفاتحة" data-ar="الفاتحة"></div><div class="s" data-en="Al-Fatihah · Meccan · 7" data-ar="مكية · ٧ آيات"></div></div><span class="pg" data-en="Page 1" data-ar="صفحة ١"></span></div>
+        <div class="srow"><span class="num">2</span><div class="tx"><div class="t" data-en="البقرة" data-ar="البقرة"></div><div class="s" data-en="Al-Baqarah · Medinan · 286" data-ar="مدنية · ٢٨٦ آية"></div></div><span class="pg" data-en="Page 2" data-ar="صفحة ٢"></span></div>
+        <div class="srow"><span class="num">3</span><div class="tx"><div class="t" data-en="آل عمران" data-ar="آل عمران"></div><div class="s" data-en="Aal-'Imran · Medinan · 200" data-ar="مدنية · ٢٠٠ آية"></div></div><span class="pg" data-en="Page 50" data-ar="صفحة ٥٠"></span></div>
+        <div class="srow"><span class="num">4</span><div class="tx"><div class="t" data-en="النساء" data-ar="النساء"></div><div class="s" data-en="An-Nisa' · Medinan · 176" data-ar="مدنية · ١٧٦ آية"></div></div><span class="pg" data-en="Page 77" data-ar="صفحة ٧٧"></span></div>
+      </div>
+      <div style="position:absolute;inset:0;background:rgba(23,32,51,.6)"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line-soft);border-radius:24px 24px 0 0;box-shadow:0 -18px 40px -16px rgba(0,0,0,.5);padding:0 0 20px">
+        <div style="width:40px;height:4px;border-radius:4px;background:var(--muted);opacity:.8;margin:12px auto 16px"></div>
+        <div style="padding:0 22px">
+          <div style="display:flex;align-items:center;gap:11px;margin-bottom:16px">
+            <div style="width:46px;height:46px;border-radius:13px;background:var(--gold-faint);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--gold);flex:none">⬇</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:16px;font-weight:800;color:var(--gold)" data-en="Downloading…" data-ar="جاري التحميل…"></div>
+              <div style="font-size:12px;color:var(--text2);margin-top:2px" data-en="Quran page images" data-ar="صور صفحات المصحف"></div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px">
+            <span style="font-size:15px;font-weight:800;color:var(--gold)" data-en="65%" data-ar="٦٥٪"></span>
+            <span style="font-size:11.5px;color:var(--text2)" data-en="12.4 / 19 MB" data-ar="١٢٫٤ / ١٩ م.ب"></span>
+          </div>
+          <div style="height:9px;border-radius:6px;background:var(--gold-faint);overflow:hidden">
+            <div style="height:100%;width:65%;border-radius:6px;background:linear-gradient(90deg,var(--gold-2),var(--gold))"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;margin-top:12px;font-size:11.5px;color:var(--text2)"><span style="color:var(--gold)">↻</span><span data-en="Resume supported — you can leave and come back safely." data-ar="يدعم الاستئناف — يمكنك الخروج والعودة بأمان."></span></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;padding:16px 22px 0">
+          <div style="border:1.5px solid var(--line);color:var(--text2);border-radius:18px;padding:10px 22px;font-weight:800;font-size:13px" data-en="Cancel" data-ar="إلغاء"></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+  <div class="cap"><div class="n" data-en="② Downloading" data-ar="② جاري التحميل"></div>
+    <div class="d" data-en="Gold progress bar (no blue/cyan system bar) with %, size and a resume note." data-ar="شريط تقدّم ذهبي (بلا شريط نظامي أزرق/سماوي) مع النسبة والحجم وملاحظة الاستئناف."></div></div>
+</div>
+
+<!-- PHONE 3 — Error: not enough space -->
+<div class="col">
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+    <div class="hero">
+      <div class="bar">
+        <div class="back">‹</div>
+        <div class="htitle"><div class="big" data-en="Mushaf" data-ar="المصحف"></div>
+          <div class="small" data-en="The Holy Quran" data-ar="القرآن الكريم"></div></div>
+        <div class="grow"></div>
+        <div class="ico">⬇</div>
+      </div>
+    </div>
+    <div class="list" style="position:relative;overflow:hidden">
+      <div style="opacity:.4;filter:saturate(.55);pointer-events:none">
+        <div class="juz"><span data-en="Juz' 1" data-ar="الجزء ١"></span><span>1</span></div>
+        <div class="srow"><span class="num">1</span><div class="tx"><div class="t" data-en="الفاتحة" data-ar="الفاتحة"></div><div class="s" data-en="Al-Fatihah · Meccan · 7" data-ar="مكية · ٧ آيات"></div></div><span class="pg" data-en="Page 1" data-ar="صفحة ١"></span></div>
+        <div class="srow"><span class="num">2</span><div class="tx"><div class="t" data-en="البقرة" data-ar="البقرة"></div><div class="s" data-en="Al-Baqarah · Medinan · 286" data-ar="مدنية · ٢٨٦ آية"></div></div><span class="pg" data-en="Page 2" data-ar="صفحة ٢"></span></div>
+        <div class="srow"><span class="num">3</span><div class="tx"><div class="t" data-en="آل عمران" data-ar="آل عمران"></div><div class="s" data-en="Aal-'Imran · Medinan · 200" data-ar="مدنية · ٢٠٠ آية"></div></div><span class="pg" data-en="Page 50" data-ar="صفحة ٥٠"></span></div>
+        <div class="srow"><span class="num">4</span><div class="tx"><div class="t" data-en="النساء" data-ar="النساء"></div><div class="s" data-en="An-Nisa' · Medinan · 176" data-ar="مدنية · ١٧٦ آية"></div></div><span class="pg" data-en="Page 77" data-ar="صفحة ٧٧"></span></div>
+      </div>
+      <div style="position:absolute;inset:0;background:rgba(23,32,51,.6)"></div>
+      <div style="position:absolute;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line-soft);border-radius:24px 24px 0 0;box-shadow:0 -18px 40px -16px rgba(0,0,0,.5);padding:0 0 20px">
+        <div style="width:40px;height:4px;border-radius:4px;background:var(--muted);opacity:.8;margin:12px auto 16px"></div>
+        <div style="width:64px;height:64px;border-radius:50%;background:var(--gold-faint);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 14px">⚠️</div>
+        <div style="padding:0 22px;text-align:center">
+          <div style="font-size:17px;font-weight:800;color:var(--gold);margin-bottom:8px" data-en="Not enough space" data-ar="لا توجد مساحة كافية"></div>
+          <div style="font-size:13px;line-height:1.65;color:var(--text2)" data-en="There isn't enough storage to download the Quran files. Free up some space, then try again." data-ar="لا توجد مساحة تخزين كافية لتحميل ملفات المصحف. أفرغ بعض المساحة ثم أعد المحاولة."></div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center;padding:18px 22px 0">
+          <div style="border:1.5px solid var(--line);color:var(--text2);border-radius:18px;padding:10px 22px;font-weight:800;font-size:13px" data-en="Cancel" data-ar="إلغاء"></div>
+          <div style="background:var(--gold);color:var(--navy-900);border-radius:18px;padding:10px 22px;font-weight:800;font-size:13px" data-en="Try again" data-ar="أعد المحاولة"></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+  <div class="cap"><div class="n" data-en="③ Error · retry" data-ar="③ خطأ · إعادة المحاولة"></div>
+    <div class="d" data-en="Failure states (no space / no network) reuse the themed sheet — Cancel / Try again." data-ar="حالات الفشل (لا مساحة / لا شبكة) تستخدم الورقة المنسّقة نفسها — إلغاء / أعد المحاولة."></div></div>
+</div>
+  </div>
+
+  <div class="sec-h" data-en="About app" data-ar="حول التطبيق"></div>
+  <div class="sec-d" data-en="App identity, data-source credits and open-source licenses, re-skinned to the navy + gold hero with gold-accent section headers and tappable link rows." data-ar="هوية التطبيق واعتمادات مصادر البيانات وتراخيص المصادر المفتوحة، بإعادة تصميم على الهيدر الأزرق الداكن والذهبي مع عناوين أقسام ذهبية وصفوف روابط قابلة للنقر."></div>
+  <div class="row">
+<div class="col">
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+    <div class="hero">
+      <div class="bar">
+        <div class="back">‹</div>
+        <div class="htitle"><div class="big" data-en="About Us" data-ar="حول التطبيق"></div>
+          <div class="small" data-en="Credits, sources & licenses" data-ar="الاعتمادات والمصادر والتراخيص"></div></div>
+        <div class="grow"></div>
+      </div>
+    </div>
+    <div class="list">
+      <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px;padding:22px 16px 4px">
+        <div style="width:84px;height:84px;border-radius:50%;background:var(--gold-faint);display:flex;align-items:center;justify-content:center;font-size:40px">🕌</div>
+        <div style="font-size:18px;font-weight:800;color:var(--text)" data-en="My Stream" data-ar="ماي ستريم"></div>
+        <div style="font-size:11.5px;font-weight:700;color:var(--text2)" data-en="Version 1.0.0" data-ar="الإصدار 1.0.0"></div>
+        <div style="font-size:11px;color:var(--text2)" data-en="Built by Ahmed Hashim" data-ar="طوّرها أحمد هاشم"></div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center;padding:8px 16px 2px">
+        <span style="background:var(--gold);color:var(--navy-900);border-radius:18px;padding:10px 20px;font-weight:800;font-size:13px;display:inline-block" data-en="Rate the app" data-ar="قيّم التطبيق"></span>
+        <span style="border:1.5px solid var(--gold);color:var(--gold);background:transparent;border-radius:18px;padding:9px 18px;font-weight:800;font-size:13px;display:inline-block" data-en="Share" data-ar="مشاركة"></span>
+      </div>
+
+      <div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:18px 14px 4px;display:flex;align-items:center;gap:10px">
+        <span data-en="About app" data-ar="حول التطبيق"></span><span style="flex:1;height:1px;background:var(--gold-faint)"></span></div>
+      <div style="background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);padding:13px 14px;margin:8px 12px 0">
+        <div style="font-size:12.5px;line-height:1.6;color:var(--text2)" data-en="A free Qur'an reader: read the Mushaf, follow gapless verse-by-verse audio, and browse tafsir — all credited to their original sources below." data-ar="قارئ قرآن مجاني: اقرأ المصحف وتابع الصوت المتصل آية بآية وتصفّح التفاسير — وكل المصادر موثّقة بالأسفل."></div>
+      </div>
+
+      <div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:18px 14px 4px;display:flex;align-items:center;gap:10px">
+        <span data-en="Qur'an image sources" data-ar="مصادر صور المصحف"></span><span style="flex:1;height:1px;background:var(--gold-faint)"></span></div>
+      <div style="background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin:8px 12px 14px">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px">
+          <span style="width:38px;height:38px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">📄</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Madani images" data-ar="مصحف مدني"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="King Fahd Glorious Qur'an Printing Complex" data-ar="مجمع الملك فهد لطباعة المصحف الشريف"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line-soft)">
+          <span style="width:38px;height:38px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">📄</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Naskh images" data-ar="مصحف نسخ"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="King Fahd Glorious Qur'an Printing Complex" data-ar="مجمع الملك فهد لطباعة المصحف الشريف"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line-soft)">
+          <span style="width:38px;height:38px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">📄</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Qaloon images" data-ar="مصحف قالون"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="King Fahd Glorious Qur'an Printing Complex" data-ar="مجمع الملك فهد لطباعة المصحف الشريف"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+      </div>
+    </div>
+  </div></div>
+  <div class="cap"><div class="n" data-en="Default" data-ar="الوضع الافتراضي"></div>
+    <div class="d" data-en="App identity, links & Qur'an image sources" data-ar="هوية التطبيق والروابط ومصادر صور المصحف"></div></div>
+</div>
+
+<div class="col">
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+    <div class="hero">
+      <div class="bar">
+        <div class="back">‹</div>
+        <div class="htitle"><div class="big" data-en="About Us" data-ar="حول التطبيق"></div>
+          <div class="small" data-en="Credits, sources & licenses" data-ar="الاعتمادات والمصادر والتراخيص"></div></div>
+        <div class="grow"></div>
+      </div>
+    </div>
+    <div class="list">
+      <div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:16px 14px 4px;display:flex;align-items:center;gap:10px">
+        <span data-en="Audio & tafsir sources" data-ar="مصادر الصوت والتفسير"></span><span style="flex:1;height:1px;background:var(--gold-faint)"></span></div>
+      <div style="background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin:8px 12px 0">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px">
+          <span style="width:38px;height:38px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">🎧</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="QuranicAudio" data-ar="QuranicAudio"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="Gapless mp3 recitations" data-ar="التلاوات الصوتية المتصلة"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line-soft)">
+          <span style="width:38px;height:38px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">📚</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Electronic Moshaf Project" data-ar="مشروع المصحف الإلكتروني"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="King Saud University — tafsir & translations" data-ar="جامعة الملك سعود — التفاسير والترجمات"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line-soft)">
+          <span style="width:38px;height:38px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">🔎</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Al-Bāḥith al-Qur'ānī" data-ar="الباحث القرآني"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="Tafsir search corpus" data-ar="منصّة البحث في التفاسير"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line-soft)">
+          <span style="width:38px;height:38px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">🕮</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Noble Qur'an Encyclopedia" data-ar="موسوعة القرآن الكريم"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="Reference content" data-ar="محتوى مرجعي"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line-soft)">
+          <span style="width:38px;height:38px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">🌐</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Tanzil" data-ar="تنزيل"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="Verified Qur'an text & translations" data-ar="نص القرآن والترجمات الموثّقة"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line-soft)">
+          <span style="width:38px;height:38px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">📖</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Noorhidayat" data-ar="Noorhidayat"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="Recitation data" data-ar="بيانات التلاوات"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+      </div>
+
+      <div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:18px 14px 4px;display:flex;align-items:center;gap:10px">
+        <span data-en="Open-source projects" data-ar="مشاريع مفتوحة المصدر"></span><span style="flex:1;height:1px;background:var(--gold-faint)"></span></div>
+      <div style="background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin:8px 12px 14px">
+        <div style="display:flex;align-items:center;gap:12px;padding:11px 14px">
+          <span style="width:34px;height:34px;border-radius:10px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex:none">{ }</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:var(--text)" data-en="AndroidX · Kotlin" data-ar="AndroidX · Kotlin"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="Jetpack core & language" data-ar="مكتبات Jetpack الأساسية واللغة"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-top:1px solid var(--line-soft)">
+          <span style="width:34px;height:34px;border-radius:10px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex:none">{ }</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:var(--text)" data-en="Dagger 2 · OkHttp" data-ar="Dagger 2 · OkHttp"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="Dependency injection & networking" data-ar="حقن التبعيات والشبكات"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-top:1px solid var(--line-soft)">
+          <span style="width:34px;height:34px;border-radius:10px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex:none">{ }</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700;color:var(--text)" data-en="RxJava · RxAndroid · Moshi" data-ar="RxJava · RxAndroid · Moshi"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="Reactive streams & JSON" data-ar="التدفقات التفاعلية وJSON"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 14px;border-top:1px solid var(--line-soft);font-size:12px;font-weight:800;color:var(--gold)" data-en="View all 12 libraries ›" data-ar="‹ عرض كل المكتبات (12)"></div>
+      </div>
+    </div>
+  </div></div>
+  <div class="cap"><div class="n" data-en="Credits, scrolled" data-ar="الاعتمادات (تمرير)"></div>
+    <div class="d" data-en="Audio & tafsir sources + open-source libraries" data-ar="المصادر الصوتية والتفسير والمكتبات مفتوحة المصدر"></div></div>
+</div>
+
+<div class="col">
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+    <div class="hero">
+      <div class="bar">
+        <div class="back">‹</div>
+        <div class="htitle"><div class="big" data-en="About Us" data-ar="حول التطبيق"></div>
+          <div class="small" data-en="Credits, sources & licenses" data-ar="الاعتمادات والمصادر والتراخيص"></div></div>
+        <div class="grow"></div>
+      </div>
+    </div>
+    <div class="list">
+      <div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:16px 14px 4px;display:flex;align-items:center;gap:10px">
+        <span data-en="Qur'an image sources" data-ar="مصادر صور المصحف"></span><span style="flex:1;height:1px;background:var(--gold-faint)"></span></div>
+      <div style="background:var(--card);border:1px solid var(--line-soft);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin:8px 12px 0">
+        <div style="display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--gold-faint);box-shadow:inset 3px 0 0 var(--gold)">
+          <span style="width:38px;height:38px;border-radius:11px;background:var(--gold);color:var(--navy-900);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">📄</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:800;color:var(--text)" data-en="Madani images" data-ar="مصحف مدني"></div>
+            <div style="font-size:11px;color:var(--gold);margin-top:2px;line-height:1.4;font-weight:700" data-en="Opening external link…" data-ar="جارٍ فتح الرابط الخارجي…"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line-soft)">
+          <span style="width:38px;height:38px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">📄</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Naskh images" data-ar="مصحف نسخ"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="King Fahd Glorious Qur'an Printing Complex" data-ar="مجمع الملك فهد لطباعة المصحف الشريف"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line-soft)">
+          <span style="width:38px;height:38px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none">📄</span>
+          <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Qaloon images" data-ar="مصحف قالون"></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;line-height:1.4" data-en="King Fahd Glorious Qur'an Printing Complex" data-ar="مجمع الملك فهد لطباعة المصحف الشريف"></div></div>
+          <span style="color:var(--gold);font-size:15px;flex:none">↗</span></div>
+      </div>
+      <div style="text-align:center;font-size:11px;color:var(--text2);padding:16px 24px 0;line-height:1.5" data-en="Tapping a credit opens its official website in your browser." data-ar="النقر على أي اعتماد يفتح موقعه الرسمي في المتصفح."></div>
+    </div>
+    <div style="flex:none;margin:0 12px 14px;display:flex;align-items:center;gap:11px;background:var(--navy-900);color:var(--on-navy);border-radius:13px;padding:12px 14px;box-shadow:var(--shadow)">
+      <span style="font-size:16px;color:var(--gold-light);flex:none">↗</span>
+      <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700" data-en="Opening in your browser…" data-ar="جارٍ الفتح في المتصفح…"></div>
+        <div style="font-size:10.5px;color:var(--on-navy-dim);margin-top:1px" data-en="qurancomplex.gov.sa" data-ar="qurancomplex.gov.sa"></div></div>
+      <span style="font-size:11px;font-weight:800;color:var(--gold);flex:none" data-en="CANCEL" data-ar="إلغاء"></span>
+    </div>
+  </div></div>
+  <div class="cap"><div class="n" data-en="Opening a source" data-ar="فتح مصدر"></div>
+    <div class="d" data-en="Tapping a credit opens its site in the browser" data-ar="النقر على اعتماد يفتح موقعه في المتصفح"></div></div>
+</div>
+  </div>
+
+
+</div>
+<script>
+const root=document.documentElement;
+function setTheme(t){root.setAttribute('data-theme',t);document.querySelectorAll('[data-theme-btn]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-theme-btn')===t));}
+function applyLang(){const l=root.getAttribute('data-lang');
+  document.querySelectorAll('[data-en]').forEach(el=>{const v=l==='ar'?el.getAttribute('data-ar'):el.getAttribute('data-en');if(v!==null)el.textContent=v;});
+  document.querySelectorAll('[data-en-html]').forEach(el=>{const v=l==='ar'?el.getAttribute('data-ar-html'):el.getAttribute('data-en-html');if(v!==null)el.innerHTML=v;});}
+function setLang(l){root.setAttribute('data-lang',l);root.setAttribute('dir',l==='ar'?'rtl':'ltr');root.setAttribute('lang',l);
+  document.querySelectorAll('[data-lang-btn]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-lang-btn')===l));applyLang();}
+document.querySelectorAll('[data-theme-btn]').forEach(b=>b.addEventListener('click',()=>setTheme(b.getAttribute('data-theme-btn'))));
+document.querySelectorAll('[data-lang-btn]').forEach(b=>b.addEventListener('click',()=>setLang(b.getAttribute('data-lang-btn'))));
+setTheme('light');setLang('en');
+</script>
+</body>
+</html>
