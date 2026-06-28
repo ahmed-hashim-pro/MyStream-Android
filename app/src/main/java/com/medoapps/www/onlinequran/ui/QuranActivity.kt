@@ -79,7 +79,6 @@ class QuranActivity : AppCompatActivity(),
   private var showedTranslationUpgradeDialog = false
   private var isRtl = false
   private var isPaused = false
-  private var searchItem: MenuItem? = null
   private var supportActionMode: ActionMode? = null
   private val compositeDisposable = CompositeDisposable()
   lateinit var latestPageObservable: Observable<Int>
@@ -147,12 +146,8 @@ class QuranActivity : AppCompatActivity(),
 
     latestPageObservable = recentPageModel.getLatestPageObservable()
 
-    // header search field -> open the toolbar search (fall back to system search)
-    findViewById<View>(R.id.index_search).setOnClickListener {
-      if (searchItem?.expandActionView() != true) {
-        onSearchRequested()
-      }
-    }
+    // The hero search field is the real, functional search (no toolbar icon).
+    setupHeaderSearch()
 
     val intent = intent
     if (intent != null) {
@@ -205,19 +200,35 @@ class QuranActivity : AppCompatActivity(),
     return settings.isArabicNames || QuranUtils.isRtl()
   }
 
+  /** The always-visible hero search field is the real search (styled for navy). */
+  private fun setupHeaderSearch() {
+    val searchView = findViewById<android.widget.SearchView>(R.id.index_search)
+    searchView.isIconifiedByDefault = false
+    searchView.queryHint = getString(R.string.search_hint)
+    val sm = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+    searchView.setSearchableInfo(
+        sm.getSearchableInfo(ComponentName(this, SearchActivity::class.java)))
+
+    val white = androidx.core.content.ContextCompat.getColor(this, R.color.text_on_navy)
+    val hintC = androidx.core.content.ContextCompat.getColor(this, R.color.hint_on_navy)
+    val gold = androidx.core.content.ContextCompat.getColor(this, R.color.gold_accent)
+    fun byId(name: String): View? =
+        searchView.findViewById(resources.getIdentifier("android:id/$name", null, null))
+    (byId("search_src_text") as? android.widget.TextView)?.apply {
+      setTextColor(white); setHintTextColor(hintC)
+    }
+    byId("search_plate")?.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+    byId("submit_area")?.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+    for (n in listOf("search_mag_icon", "search_close_btn", "search_button", "search_go_btn")) {
+      (byId(n) as? android.widget.ImageView)?.setColorFilter(gold)
+    }
+  }
+
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     super.onCreateOptionsMenu(menu)
     val inflater = menuInflater
     inflater.inflate(R.menu.home_menu, menu)
-    searchItem = menu.findItem(R.id.search)
-    val searchView = searchItem?.actionView as SearchView
-    val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-    searchView.queryHint = getString(R.string.search_hint)
-    searchView.setSearchableInfo(
-        searchManager.getSearchableInfo(
-            ComponentName(this, SearchActivity::class.java)
-        )
-    )
+    // search now lives in the hero field (setupHeaderSearch), not in the toolbar
 
     // Add additional injected screens (if any)
     extraScreens
@@ -271,13 +282,14 @@ class QuranActivity : AppCompatActivity(),
   }
 
   override fun onBackPressed() {
-    val searchItem = searchItem
     val supportActionMode = supportActionMode
+    val searchView = findViewById<android.widget.SearchView?>(R.id.index_search)
 
     if (supportActionMode != null) {
       supportActionMode.finish()
-    } else if (searchItem != null && searchItem.isActionViewExpanded) {
-      searchItem.collapseActionView()
+    } else if (searchView != null && (searchView.query?.isNotEmpty() == true || searchView.hasFocus())) {
+      searchView.setQuery("", false)
+      searchView.clearFocus()
     } else {
       super.onBackPressed()
     }

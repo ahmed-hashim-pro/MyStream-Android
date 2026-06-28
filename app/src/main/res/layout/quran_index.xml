@@ -28,7 +28,7 @@
             android:background="@drawable/bg_header_navy"
             android:elevation="4dp"
             app:contentScrim="@drawable/bg_header_navy"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed|snap"
             app:titleEnabled="false">
 
             <!-- Collapsing area (parallax): just the search field. The title now
@@ -46,34 +46,17 @@
                 android:layoutDirection="locale"
                 app:layout_collapseMode="parallax">
 
-                <!-- Search field (launches the Quran search) -->
-                <LinearLayout
+                <!-- Real, functional search field (no separate toolbar icon) -->
+                <SearchView
                     android:id="@+id/index_search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_index_search"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="13dp"
-                    android:paddingVertical="11dp"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_marginEnd="9dp"
-                        android:src="@drawable/ic_ab_search"
-                        android:contentDescription="@string/search_hint"
-                        app:tint="@color/gold_accent" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/search_hint"
-                        android:textColor="@color/hint_on_navy"
-                        android:textSize="13sp" />
-                </LinearLayout>
+                    android:iconifiedByDefault="false"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:queryBackground="@android:color/transparent"
+                    android:submitBackground="@android:color/transparent" />
             </LinearLayout>
 
             <!-- Pinned toolbar: title + subtitle on the start, options menu on the end -->
