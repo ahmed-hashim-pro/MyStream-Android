@@ -20,9 +20,15 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -55,6 +61,9 @@ public class SearchActivity extends AppCompatActivity
   private TextView messageView;
   private TextView warningView;
   private Button buttonGetTranslations;
+  private View emptyView;
+  private TextView emptyDesc;
+  private android.widget.SearchView heroSearch;
   private boolean downloadArabicSearchDb;
   private boolean isArabicSearch;
   private String query;
@@ -71,8 +80,11 @@ public class SearchActivity extends AppCompatActivity
     ((QuranApplication) getApplication())
         .getApplicationComponent().inject(this);
     setContentView(R.layout.search);
+    applyNavyStatusBar();
     messageView = findViewById(R.id.search_area);
     warningView = findViewById(R.id.search_warning);
+    emptyView = findViewById(R.id.search_empty);
+    emptyDesc = findViewById(R.id.empty_desc);
     buttonGetTranslations = findViewById(R.id.btnGetTranslations);
     buttonGetTranslations.setOnClickListener(v -> {
       Intent intent;
@@ -85,28 +97,51 @@ public class SearchActivity extends AppCompatActivity
       startActivity(intent);
       finish();
     });
+
+    ImageButton back = findViewById(R.id.search_back);
+    if (back != null) back.setOnClickListener(v -> finish());
+    setupHeroSearch();
+
     handleIntent(getIntent());
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    super.onCreateOptionsMenu(menu);
-    getMenuInflater().inflate(R.menu.search_menu, menu);
-    MenuItem searchItem = menu.findItem(R.id.search);
-    SearchView searchView = (SearchView) searchItem.getActionView();
-    SearchManager searchManager = ((SearchManager) getSystemService(Context.SEARCH_SERVICE));
-    searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
-    Intent intent = getIntent();
-    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-      // Make sure the keyboard is hidden if doing a search from within this activity
-      searchView.clearFocus();
-    } else if (intent.getAction() == null){
-      // If no action is specified, just open the keyboard so the user can quickly start searching
-      searchItem.expandActionView();
-    }
-    return true;
+  /** Navy status bar with light icons, matching the rest of the Mushaf re-theme. */
+  private void applyNavyStatusBar() {
+    getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.navy_700));
+    WindowInsetsControllerCompat wic =
+        WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+    if (wic != null) wic.setAppearanceLightStatusBars(false);
   }
+
+  /** The hero search field is the real search (SearchableInfo), styled for navy. */
+  private void setupHeroSearch() {
+    heroSearch = findViewById(R.id.hero_search);
+    if (heroSearch == null) return;
+    heroSearch.setIconifiedByDefault(false);
+    heroSearch.setQueryHint(getString(R.string.search_hint));
+    SearchManager sm = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+    heroSearch.setSearchableInfo(sm.getSearchableInfo(getComponentName()));
+
+    int white = ContextCompat.getColor(this, R.color.text_on_navy);
+    int hint = ContextCompat.getColor(this, R.color.hint_on_navy);
+    int gold = ContextCompat.getColor(this, R.color.gold_accent);
+    EditText q = heroSearch.findViewById(
+        getResources().getIdentifier("android:id/search_src_text", null, null));
+    if (q != null) { q.setTextColor(white); q.setHintTextColor(hint); }
+    View plate = heroSearch.findViewById(
+        getResources().getIdentifier("android:id/search_plate", null, null));
+    if (plate != null) plate.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+    for (String n : new String[]{"search_close_btn", "search_go_btn", "search_button"}) {
+      ImageView ic = heroSearch.findViewById(getResources().getIdentifier("android:id/" + n, null, null));
+      if (ic != null) ic.setColorFilter(gold);
+    }
+    // Lens = the mockup's emoji magnifier (multi-color); use its own colors.
+    ImageView mag = heroSearch.findViewById(
+        getResources().getIdentifier("android:id/search_mag_icon", null, null));
+    if (mag != null) { mag.setImageResource(R.drawable.ic_search_lens); mag.clearColorFilter(); }
+  }
+
+  // Search lives in the navy hero (setupHeroSearch), not in an action-bar menu.
 
   @Override
   public void onPause() {
@@ -187,12 +222,13 @@ public class SearchActivity extends AppCompatActivity
       downloadArabicSearchDb = false;
     }
 
-    if (cursor == null) {
-      messageView.setText(getString(R.string.no_results, query));
+    if (cursor == null || cursor.getCount() == 0) {
+      // No results: show the themed empty state, hide the count band + list.
+      showEmptyState(true);
       // cursor is null either when the query length is less than 3 characters or when
       // there are no valid databases to search at all. in this case, if it's not an
       // Arabic search, show the "get translations" button.
-      if (!containsArabic && query.length() > 2) {
+      if (!containsArabic && query != null && query.length() > 2) {
         buttonGetTranslations.setText(R.string.get_translations);
         buttonGetTranslations.setVisibility(View.VISIBLE);
       }
@@ -200,6 +236,7 @@ public class SearchActivity extends AppCompatActivity
         adapter.swapCursor(null);
       }
     } else {
+      showEmptyState(false);
       // Display the number of results
       int count = cursor.getCount();
       String countString = getResources().getQuantityString(
@@ -221,6 +258,14 @@ public class SearchActivity extends AppCompatActivity
     }
   }
 
+  /** Toggle between the themed empty state and the results list + count band. */
+  private void showEmptyState(boolean empty) {
+    if (emptyView != null) emptyView.setVisibility(empty ? View.VISIBLE : View.GONE);
+    findViewById(R.id.results_list).setVisibility(empty ? View.GONE : View.VISIBLE);
+    messageView.setVisibility(empty ? View.GONE : View.VISIBLE);
+    if (empty && emptyDesc != null) emptyDesc.setText(getString(R.string.search_no_results_hint));
+  }
+
   @Override
   public void onLoaderReset(@NonNull Loader<Cursor> loader) {
     if (adapter != null) {
@@ -234,7 +279,14 @@ public class SearchActivity extends AppCompatActivity
     }
     if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
       String query = intent.getStringExtra(SearchManager.QUERY);
+      if (heroSearch != null && query != null) {
+        heroSearch.setQuery(query, false);
+        heroSearch.clearFocus();
+      }
       showResults(query);
+    } else if (intent.getAction() == null) {
+      // Opened blank — focus the field so the keyboard appears for a fresh search.
+      if (heroSearch != null) heroSearch.requestFocus();
     } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
       Uri intentData = intent.getData();
       String query = intent.getStringExtra(SearchManager.USER_QUERY);
@@ -350,6 +402,7 @@ public class SearchActivity extends AppCompatActivity
       int ayah = cursor.getInt(2);
       int page = quranInfo.getPageFromSuraAyah(sura, ayah);
 
+      // The DB already wraps each match in <font color=translation_highlight> (now gold).
       String text = cursor.getString(3);
       String suraName = quranDisplayData.getSuraName(this.context, sura, false);
       holder.text.setText(Html.fromHtml(text));

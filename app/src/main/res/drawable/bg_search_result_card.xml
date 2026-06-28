@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Search result row as a navy-theme card (light & dark via background_card). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/background_card" />
+    <corners android:radius="14dp" />
+</shape>

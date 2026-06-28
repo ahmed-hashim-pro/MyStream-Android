@@ -1,31 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Quran search results — re-themed to the navy+gold language (matches
+  docs/.../mushaf-retheme/search.html): navy hero with a back button, title and
+  the real search field; a navy count band; themed empty state; result cards.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="locale"
+    android:orientation="vertical"
+    android:background="@color/background_main">
+
+    <!-- Navy hero: back + title/subtitle, then the search field -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <TextView android:id="@+id/search_warning"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@color/gold_accent_faint"
-              android:padding="12dp"
-              android:textSize="15sp"
-              android:visibility="gone"
-              android:textColor="?android:textColorPrimary" />
-    <Button android:id="@+id/btnGetTranslations" android:text="@string/menu_get_translations"
-    	android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"/>
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_header_navy"
+        android:elevation="4dp"
+        android:orientation="vertical"
+        android:paddingBottom="14dp">
 
-  <TextView
-      android:id="@+id/search_area"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:background="@color/navy_700"
-      android:padding="12dp"
-      android:text="@string/search_key"
-      android:textColor="@color/text_on_navy"
-      android:textSize="15sp" />
-
-    <ListView
-            android:id="@+id/results_list"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="?attr/actionBarSize"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="6dp"
+            android:paddingEnd="12dp">
+
+            <ImageButton
+                android:id="@+id/search_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/cd_back"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:src="@drawable/outline_arrow_back_ios_24"
+                app:tint="@color/gold_accent"
+                xmlns:app="http://schemas.android.com/apk/res-auto" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@string/search_screen_title"
+                    android:textColor="@color/text_on_navy"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@string/home_quran_section"
+                    android:textColor="@color/hint_on_navy"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <SearchView
+            android:id="@+id/hero_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bg_index_search"
+            android:iconifiedByDefault="false"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="2dp"
+            android:queryBackground="@android:color/transparent"
+            android:submitBackground="@android:color/transparent" />
+    </LinearLayout>
+
+    <!-- Arabic-search warning (shown only when the Arabic DB is missing) -->
+    <TextView
+        android:id="@+id/search_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gold_accent_faint"
+        android:padding="12dp"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <!-- Result count band -->
+    <TextView
+        android:id="@+id/search_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/navy_700"
+        android:padding="13dp"
+        android:textColor="@color/text_on_navy"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <!-- Results -->
+    <ListView
+        android:id="@+id/results_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="10dp"
+        android:scrollbars="none" />
+
+    <!-- Themed empty / no-results state (toggled from code) -->
+    <LinearLayout
+        android:id="@+id/search_empty"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="30dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:background="@drawable/bg_icon_frame_gold"
+            android:contentDescription="@null"
+            android:padding="22dp"
+            android:src="@drawable/ic_search_lens" />
+
+        <TextView
+            android:id="@+id/empty_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="@string/search_no_results_title"
+            android:textColor="?android:textColorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/empty_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:maxWidth="260dp"
+            android:text="@string/search_no_results_hint"
+            android:textColor="@color/sura_details_color"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/btnGetTranslations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_download_all_button"
+            android:paddingStart="22dp"
+            android:paddingEnd="22dp"
+            android:text="@string/get_translations"
+            android:textColor="@color/text_on_gold"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </LinearLayout>
 </LinearLayout>
