@@ -8,10 +8,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.content.res.Configuration
+import android.graphics.Outline
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewOutlineProvider
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
@@ -138,6 +140,8 @@ class QuranActivity : AppCompatActivity(),
       pager.currentItem = TITLES.size - 1
     }
 
+    clipHeroBottomCorners()
+
     if (savedInstanceState != null) {
       showedTranslationUpgradeDialog = savedInstanceState.getBoolean(
           SI_SHOWED_UPGRADE_DIALOG, false
@@ -198,6 +202,23 @@ class QuranActivity : AppCompatActivity(),
 
   private fun isRtl(): Boolean {
     return settings.isArabicNames || QuranUtils.isRtl()
+  }
+
+  /**
+   * Clip the collapsing hero to its rounded bottom corners so child views — notably
+   * the tab strip's gold selected-indicator, which is drawn flush to the strip's
+   * bottom edge — can't poke past the rounded card. The outline starts above the
+   * view (negative top) so only the bottom corners round; the top stays square.
+   */
+  private fun clipHeroBottomCorners() {
+    val hero = findViewById<View>(R.id.heroCollapsing)
+    val radius = resources.getDimension(R.dimen.mushaf_hero_corner_radius)
+    hero.outlineProvider = object : ViewOutlineProvider() {
+      override fun getOutline(view: View, outline: Outline) {
+        outline.setRoundRect(0, -radius.toInt(), view.width, view.height, radius)
+      }
+    }
+    hero.clipToOutline = true
   }
 
   /** The always-visible hero search field is the real search (styled for navy). */

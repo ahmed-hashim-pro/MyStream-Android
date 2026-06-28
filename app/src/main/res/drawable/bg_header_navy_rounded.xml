@@ -12,6 +12,6 @@
         android:centerColor="@color/navy_700"
         android:endColor="@color/navy_900" />
     <corners
-        android:bottomLeftRadius="22dp"
-        android:bottomRightRadius="22dp" />
+        android:bottomLeftRadius="@dimen/mushaf_hero_corner_radius"
+        android:bottomRightRadius="@dimen/mushaf_hero_corner_radius" />
 </shape>

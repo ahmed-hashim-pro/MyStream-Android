@@ -99,4 +99,7 @@
     <dimen name="player_seekbar_height">4dp</dimen>
     <dimen name="card_corner_radius">8dp</dimen>
     <dimen name="playlist_item_height">48dp</dimen>
+    <!-- Bottom-corner radius of the Mushaf index hero card (bg_header_navy_rounded);
+         also used to clip the hero's children so the tab indicator can't poke past it. -->
+    <dimen name="mushaf_hero_corner_radius">22dp</dimen>
 </resources>
