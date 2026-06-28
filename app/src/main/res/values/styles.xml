@@ -56,6 +56,25 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <!-- Audio download manager: NoActionBar + a navy multi-select contextual bar
+         (gold close/menu icons via a dark action-bar overlay). -->
+    <style name="AppTheme.AudioManager" parent="AppTheme.NoActionBar">
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/navy_700</item>
+        <item name="actionModeStyle">@style/Widget.MyStream.AudioActionMode</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.MyStream.AudioActionBar</item>
+    </style>
+
+    <!-- Navy contextual (multi-select) bar background -->
+    <style name="Widget.MyStream.AudioActionMode" parent="Widget.AppCompat.ActionMode">
+        <item name="background">@color/navy_700</item>
+    </style>
+
+    <style name="ThemeOverlay.MyStream.AudioActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!-- Close (✕) and contextual menu icons drawn in gold on the navy bar -->
+        <item name="colorControlNormal">@color/gold_accent</item>
+    </style>
+
     <!-- Admin variant (no action bar + dark control highlight) -->
     <style name="AppTheme.AdminNoActionBarTheme" parent="AppTheme.NoActionBar">
         <item name="colorControlHighlight">@color/black</item>

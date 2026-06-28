@@ -2,6 +2,7 @@ package com.medoapps.www.onlinequran.ui
 
 import android.content.Context
 import android.content.IntentFilter
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
@@ -19,6 +20,9 @@ import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.view.ActionMode.Callback
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -92,11 +96,16 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
     }
     qari = sheikh
 
-    val ab = supportActionBar
-    if (ab != null) {
-      ab.title = qari.name
-      ab.setDisplayHomeAsUpEnabled(true)
-    }
+    val toolbar = findViewById<Toolbar>(R.id.toolbar)
+    setSupportActionBar(toolbar)
+    toolbar.navigationIcon =
+        ContextCompat.getDrawable(this, R.drawable.outline_arrow_back_ios_24)?.also {
+          it.setTint(ContextCompat.getColor(this, R.color.gold_accent))
+        }
+    toolbar.setNavigationContentDescription(R.string.cd_back)
+    toolbar.setNavigationOnClickListener { finish() }
+    supportActionBar?.title = qari.name
+    applyNavyStatusBar()
 
     surahAdapter = SurahAdapter(this)
 
@@ -145,7 +154,24 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.surah_audio_manager_menu, menu)
+    menu.findItem(R.id.download_all)?.icon?.let {
+      it.mutate()
+      it.setTint(ContextCompat.getColor(this, R.color.gold_accent))
+    }
     return super.onCreateOptionsMenu(menu)
+  }
+
+  /** Navy status bar with light icons, matching the rest of the Mushaf re-theme. */
+  private fun applyNavyStatusBar() {
+    window.statusBarColor = ContextCompat.getColor(this, R.color.navy_700)
+    WindowCompat.getInsetsController(window, window.decorView)
+        .isAppearanceLightStatusBars = false
+  }
+
+  /** Reflect the downloaded-surah count in the toolbar subtitle (X / 114). */
+  private fun updateSubtitle() {
+    val downloaded = surahAdapter.qariDownloadInfo?.downloadedSuras?.size() ?: 0
+    supportActionBar?.subtitle = getString(R.string.audio_sheikh_progress, downloaded, 114)
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -175,6 +201,7 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
                 progressBar.visibility = View.GONE
                 surahAdapter.setDownloadInfo(downloadInfo)
                 surahAdapter.notifyDataSetChanged()
+                updateSubtitle()
               }
       )
     }
@@ -183,6 +210,13 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
     object : Callback {
       override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
         mode.menuInflater.inflate(R.menu.surah_audio_manager_contextual_menu, menu)
+        val gold = ContextCompat.getColor(this@SheikhAudioManagerActivity, R.color.gold_accent)
+        for (i in 0 until menu.size()) {
+          menu.getItem(i).icon?.let {
+            it.mutate()
+            it.setTint(gold)
+          }
+        }
         return true
       }
 
@@ -382,18 +416,25 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
       val surahStatus: Int
       val surahStatusImage: Int
       val surahStatusBackground: Int
+      val surahStatusTint: Int
       if (isItemFullyDownloaded(position)) {
         surahStatus = R.string.audio_manager_surah_delete
-        surahStatusImage = R.drawable.ic_cancel
+        surahStatusImage = R.drawable.ic_delete
         surahStatusBackground = R.drawable.cancel_button_circle
+        surahStatusTint = R.color.audio_remove
       } else {
         surahStatus = R.string.audio_manager_surah_download
         surahStatusImage = R.drawable.ic_download
         surahStatusBackground = R.drawable.download_button_circle
+        surahStatusTint = R.color.gold_accent
       }
       holder.status.text = getString(surahStatus)
       holder.image.setImageResource(surahStatusImage)
       holder.image.setBackgroundResource(surahStatusBackground)
+      holder.image.setColorFilter(
+          ContextCompat.getColor(this@SheikhAudioManagerActivity, surahStatusTint),
+          PorterDuff.Mode.SRC_IN
+      )
       holder.setChecked(isItemChecked(position))
     }
 

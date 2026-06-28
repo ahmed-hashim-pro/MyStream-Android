@@ -1,16 +1,19 @@
 package com.medoapps.www.onlinequran.ui
 
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -57,12 +60,9 @@ class AudioManagerActivity : AppCompatActivity() {
 
     super.onCreate(savedInstanceState)
 
-    val ab = supportActionBar
-    if (ab != null) {
-      ab.setTitle(R.string.audio_manager)
-      ab.setDisplayHomeAsUpEnabled(true)
-    }
     setContentView(R.layout.audio_manager)
+    applyNavyStatusBar()
+    findViewById<ImageButton>(R.id.am_back)?.setOnClickListener { finish() }
 
     qariItems = audioUtils.getQariList(this)
     shuyookhAdapter = ShuyookhAdapter(qariItems)
@@ -112,12 +112,11 @@ class AudioManagerActivity : AppCompatActivity() {
       }
     }
 
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (item.itemId == android.R.id.home) {
-      finish()
-      return true
-    }
-    return super.onOptionsItemSelected(item)
+  /** Navy status bar with light icons, matching the rest of the Mushaf re-theme. */
+  private fun applyNavyStatusBar() {
+    window.statusBarColor = ContextCompat.getColor(this, R.color.navy_700)
+    WindowCompat.getInsetsController(window, window.decorView)
+        .isAppearanceLightStatusBars = false
   }
 
   private inner class ShuyookhAdapter(val qariItems: List<QariItem>) :
@@ -149,10 +148,17 @@ class AudioManagerActivity : AppCompatActivity() {
           R.plurals.files_downloaded,
           fullyDownloaded, fullyDownloaded
       )
-      if (fullyDownloaded > 0)
+      if (fullyDownloaded > 0) {
         holder.image.setBackgroundResource(R.drawable.downloaded_button_circle)
-      else
+        holder.image.setImageResource(R.drawable.round_check_24)
+      } else {
         holder.image.setBackgroundResource(R.drawable.download_button_circle)
+        holder.image.setImageResource(R.drawable.ic_download)
+      }
+      holder.image.setColorFilter(
+          ContextCompat.getColor(this@AudioManagerActivity, R.color.gold_accent),
+          PorterDuff.Mode.SRC_IN
+      )
     }
 
     fun getSheikhInfoForPosition(position: Int): QariDownloadInfo? {

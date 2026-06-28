@@ -232,6 +232,10 @@
     <color name="download_button_background">#FF556F79</color>
     <color name="downloaded_button_background">#FF5E9800</color>
     <color name="cancel_button_background">#FFA50800</color>
+    <!-- Audio-manager destructive (remove/cancel) accent — M3 error red, reserved for
+         destructive actions only (gold is used for download/saved). -->
+    <color name="audio_remove">@color/md_theme_light_error</color>
+    <color name="audio_remove_faint">#1FBA1A1A</color>
     <color name="snackbar_background_color">@color/download_button_background</color>
     <color name="overlay_panel">#DD000000</color>
     <color name="navbar_night_color">#FF000000</color>

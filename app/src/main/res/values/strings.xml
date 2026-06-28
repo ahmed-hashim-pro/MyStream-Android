@@ -875,6 +875,8 @@ Press the button below to set the time for this , then you can start the app </s
 
     <!-- audio manager -->
     <string name="audio_manager">Audio Manager</string>
+    <string name="audio_manager_subtitle">Reciters · tap to manage surahs</string>
+    <string name="audio_sheikh_progress">%1$d / %2$d surahs</string>
     <string name="audio_manager_remove_audio_title">Remove Surah?</string>
     <string name="audio_manager_remove_audio_msg">Are you sure you would like to remove %1$s?</string>
     <plurals name="audio_manager_delete_surah_success">

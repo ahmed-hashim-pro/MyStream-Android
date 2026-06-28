@@ -545,6 +545,8 @@
 
     <!-- audio manager -->
     <string name="audio_manager">إدارة الصوتيات</string>
+    <string name="audio_manager_subtitle">القرّاء · اضغط لإدارة السور</string>
+    <string name="audio_sheikh_progress">%1$d / %2$d سورة</string>
     <string name="prefs_use_arabic_summary_on">سيتم تحويل التطبيق إلى اللغة العربية</string>
     <string name="prefs_use_arabic_title">الوضع العربي</string>
 <!--    <string name="play">تشغيل</string>-->
