@@ -122,9 +122,12 @@ class QuranActivity : AppCompatActivity(),
 
     val tb = findViewById<Toolbar>(R.id.toolbar)
     setSupportActionBar(tb)
-    val ab = supportActionBar
-    ab?.setTitle(R.string.nav_label_mushaf)
-    ab?.subtitle = getString(R.string.home_quran_section)
+    // The collapsing hero shows the title/subtitle; the toolbar only hosts the menu.
+    supportActionBar?.setDisplayShowTitleEnabled(false)
+    com.medoapps.www.onlinequran.HeroController.attach(this)
+        .title(R.string.nav_label_mushaf)
+        .subtitle(getString(R.string.home_quran_section))
+        .apply()
 
     val pager = findViewById<ViewPager>(R.id.index_pager)
     pager.offscreenPageLimit = 3
