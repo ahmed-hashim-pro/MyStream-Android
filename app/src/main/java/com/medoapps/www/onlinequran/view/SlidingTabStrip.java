@@ -30,6 +30,9 @@ class SlidingTabStrip extends LeftToRightLinearLayout {
   private static final byte DEFAULT_BOTTOM_BORDER_COLOR_ALPHA = 0x26;
   private static final int SELECTED_INDICATOR_THICKNESS_DIPS = 3;
   private static final int DEFAULT_SELECTED_INDICATOR_COLOR = 0xFF33B5E5;
+  // The selection underline is a short, centered pill (matches the mushaf hero
+  // mockup: inset ~24% on each side, fully rounded ends) rather than a full-width bar.
+  private static final float INDICATOR_INSET_FRACTION = 0.24f;
 
   private final int mBottomBorderThickness;
   private final Paint mBottomBorderPaint;
@@ -69,6 +72,7 @@ class SlidingTabStrip extends LeftToRightLinearLayout {
 
     mSelectedIndicatorThickness = (int) (SELECTED_INDICATOR_THICKNESS_DIPS * density);
     mSelectedIndicatorPaint = new Paint();
+    mSelectedIndicatorPaint.setAntiAlias(true);
   }
 
   void setCustomTabColorizer(SlidingTabLayout.TabColorizer customTabColorizer) {
@@ -120,8 +124,13 @@ class SlidingTabStrip extends LeftToRightLinearLayout {
 
       mSelectedIndicatorPaint.setColor(color);
 
-      canvas.drawRect(left, height - mSelectedIndicatorThickness, right,
-          height, mSelectedIndicatorPaint);
+      // Short, centered, pill-shaped underline (not a full-width square bar).
+      final float inset = (right - left) * INDICATOR_INSET_FRACTION;
+      final float indicatorLeft = left + inset;
+      final float indicatorRight = right - inset;
+      final float radius = mSelectedIndicatorThickness / 2f;
+      canvas.drawRoundRect(indicatorLeft, height - mSelectedIndicatorThickness,
+          indicatorRight, height, radius, radius, mSelectedIndicatorPaint);
     }
 
     // Thin underline along the entire bottom edge

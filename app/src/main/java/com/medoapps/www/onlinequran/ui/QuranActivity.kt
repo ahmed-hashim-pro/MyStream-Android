@@ -243,6 +243,8 @@ class QuranActivity : AppCompatActivity(),
     for (n in listOf("search_mag_icon", "search_close_btn", "search_button", "search_go_btn")) {
       (byId(n) as? android.widget.ImageView)?.setColorFilter(gold)
     }
+    // Use the bolder magnifier from the mockup instead of the thin AppCompat default.
+    (byId("search_mag_icon") as? android.widget.ImageView)?.setImageResource(R.drawable.ic_search_lens)
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
