@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -201,6 +202,11 @@ public class PagerActivity extends AppCompatActivity implements
   private AudioRequest lastAudioRequest;
   private boolean isDualPages = false;
   private View toolBarArea;
+  private View readingModeBar;
+  private View sepiaOverlay;
+  private TextView readingModeDay;
+  private TextView readingModeSepia;
+  private TextView readingModeNight;
   private boolean promptedForExtraDownload;
   private QuranSpinner translationsSpinner;
   private ProgressDialog progressDialog;
@@ -357,6 +363,17 @@ public class PagerActivity extends AppCompatActivity implements
 
     toolBarArea = findViewById(R.id.toolbar_area);
     translationsSpinner = findViewById(R.id.spinner);
+
+    // Day / Sepia / Night reading-mode switcher
+    readingModeBar = findViewById(R.id.reading_mode_bar);
+    sepiaOverlay = findViewById(R.id.reading_sepia_overlay);
+    readingModeDay = findViewById(R.id.reading_mode_day);
+    readingModeSepia = findViewById(R.id.reading_mode_sepia);
+    readingModeNight = findViewById(R.id.reading_mode_night);
+    readingModeDay.setOnClickListener(v -> setReadingMode(false, false));
+    readingModeSepia.setOnClickListener(v -> setReadingMode(false, true));
+    readingModeNight.setOnClickListener(v -> setReadingMode(true, false));
+    applyReadingMode();
 
     // this is the colored view behind the status bar on kitkat and above
     final View statusBarBackground = findViewById(R.id.status_bg);
@@ -740,6 +757,16 @@ public class PagerActivity extends AppCompatActivity implements
         .translationY(visible ? 0 : audioStatusBar.getHeight() + bottomMargin)
         .setDuration(250)
         .start();
+
+    // and the reading-mode switcher (slides off below with the chrome)
+    if (readingModeBar != null) {
+      readingModeBar.animate()
+          .translationY(visible ? 0 :
+              readingModeBar.getHeight() + audioStatusBar.getHeight() + bottomMargin)
+          .alpha(visible ? 1f : 0f)
+          .setDuration(250)
+          .start();
+    }
   }
 
   @Override
@@ -814,6 +841,33 @@ public class PagerActivity extends AppCompatActivity implements
         isNightMode ? ContextCompat.getColor(this, R.color.navbar_night_color) :
             defaultNavigationBarColor;
     getWindow().setNavigationBarColor(color);
+  }
+
+  /** Persist the chosen reading mode (Day/Sepia/Night) and re-render. */
+  private void setReadingMode(boolean night, boolean sepia) {
+    quranSettings.setReadingMode(night, sepia);
+    refreshQuranPages();
+    applyReadingMode();
+  }
+
+  /** Reflect the current reading mode: sepia overlay, chip selection, nav bar. */
+  private void applyReadingMode() {
+    if (readingModeBar == null) {
+      return;
+    }
+    final boolean night = quranSettings.isNightMode();
+    final boolean sepia = !night && quranSettings.isSepiaMode();
+    sepiaOverlay.setVisibility(sepia ? View.VISIBLE : View.GONE);
+    styleReadingChip(readingModeNight, night);
+    styleReadingChip(readingModeSepia, sepia);
+    styleReadingChip(readingModeDay, !night && !sepia);
+    updateNavigationBar(night);
+  }
+
+  private void styleReadingChip(TextView chip, boolean selected) {
+    chip.setBackgroundResource(selected ? R.drawable.bg_reading_chip_on : 0);
+    chip.setTextColor(ContextCompat.getColor(
+        this, selected ? R.color.navy_900 : R.color.text_secondary));
   }
 
   @NonNull
@@ -1120,15 +1174,12 @@ public class PagerActivity extends AppCompatActivity implements
       }
       return true;
     } else if (itemId == R.id.night_mode) {
-      SharedPreferences prefs = PreferenceManager
-          .getDefaultSharedPreferences(this);
-      SharedPreferences.Editor prefsEditor = prefs.edit();
       final boolean isNightMode = !item.isChecked();
-      prefsEditor.putBoolean(Constants.PREF_NIGHT_MODE, isNightMode).apply();
       item.setIcon(isNightMode ? R.drawable.ic_night_mode : R.drawable.ic_day_mode);
       item.setChecked(isNightMode);
-      refreshQuranPages();
-      updateNavigationBar(isNightMode);
+      // route through the shared reading-mode logic (persists, refreshes pages,
+      // clears sepia, and syncs the Day/Sepia/Night chips + nav bar)
+      setReadingMode(isNightMode, false);
       return true;
     } else if (itemId == R.id.settings) {
       Intent i = new Intent(this, QuranPreferenceActivity.class);

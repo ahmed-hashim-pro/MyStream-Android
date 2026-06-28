@@ -193,6 +193,7 @@
     <color name="color_control_activated">@color/accent_color</color>
     <color name="color_control_normal">#89B2DFDB</color>
     <color name="page_background">#FFF4CB</color>
+    <color name="page_sepia_overlay">#38D9B36B</color>
     <color name="header_background">#EDE0CF</color>
     <color name="ripple_dark">#33FFFFFF</color>
     <color name="header_text_color">@color/sura_number_color</color>

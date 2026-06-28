@@ -893,6 +893,9 @@
     <string name="nav_label_quran">القرآن</string>
     <string name="nav_label_radio">راديو</string>
     <string name="nav_label_mushaf">المصحف</string>
+    <string name="reading_mode_day">نهار</string>
+    <string name="reading_mode_sepia">ورقي</string>
+    <string name="reading_mode_night">ليل</string>
     <string name="nav_label_more">أخرى</string>
     <string name="home_reciters_header">القرّاء</string>
     <string name="radio_stations_header">الإذاعات</string>

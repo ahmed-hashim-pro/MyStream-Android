@@ -82,6 +82,17 @@ public class QuranSettings {
         == android.content.res.Configuration.UI_MODE_NIGHT_YES;
   }
 
+  public boolean isSepiaMode() {
+    return prefs.getBoolean(Constants.PREF_SEPIA_MODE, false);
+  }
+
+  public void setReadingMode(boolean night, boolean sepia) {
+    prefs.edit()
+        .putBoolean(Constants.PREF_NIGHT_MODE, night)
+        .putBoolean(Constants.PREF_SEPIA_MODE, sepia)
+        .apply();
+  }
+
   public boolean useNewBackground() {
     return prefs.getBoolean(Constants.PREF_USE_NEW_BACKGROUND, true);
   }

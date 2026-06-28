@@ -57,6 +57,7 @@ object Constants {
   const val PREF_ACTIVE_TRANSLATION = "activeTranslation"
   const val PREF_ACTIVE_TRANSLATIONS = "activeTranslations"
   const val PREF_NIGHT_MODE = "nightMode"
+  const val PREF_SEPIA_MODE = "sepiaMode"
   const val PREF_NIGHT_MODE_TEXT_BRIGHTNESS = "nightModeTextBrightness"
   const val PREF_NIGHT_MODE_BACKGROUND_BRIGHTNESS = "nightModeBackgroundBrightness"
   const val PREF_DEFAULT_QARI = "defaultQari"
