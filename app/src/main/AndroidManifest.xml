@@ -549,7 +549,8 @@
         <activity
             android:name=".ui.TranslationManagerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".QuranPreferenceActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

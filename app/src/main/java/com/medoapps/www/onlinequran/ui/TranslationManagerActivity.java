@@ -98,11 +98,14 @@ public class TranslationManagerActivity extends AppCompatActivity
 
     databaseDirectory = quranFileUtils.getQuranDatabaseDirectory(this);
 
-    final ActionBar actionBar = getSupportActionBar();
-    if (actionBar != null) {
-      actionBar.setDisplayHomeAsUpEnabled(true);
-      actionBar.setTitle(R.string.prefs_translations);
-    }
+    // Navy hero (title + back live in the layout); navy status bar with light icons.
+    getWindow().setStatusBarColor(
+        androidx.core.content.ContextCompat.getColor(this, R.color.navy_700));
+    androidx.core.view.WindowInsetsControllerCompat wic =
+        androidx.core.view.WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+    if (wic != null) wic.setAppearanceLightStatusBars(false);
+    android.widget.ImageButton tmBack = findViewById(R.id.tm_back);
+    if (tmBack != null) tmBack.setOnClickListener(v -> finish());
 
     quranSettings = QuranSettings.getInstance(this);
     onClickDownloadDisposable = adapter.getOnClickDownloadSubject().subscribe(this::downloadItem);

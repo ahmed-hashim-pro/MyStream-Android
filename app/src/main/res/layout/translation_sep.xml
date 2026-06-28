@@ -10,7 +10,8 @@
       android:id="@+id/separator_txt"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:textColor="@color/accent_color"
+      android:textColor="@color/gold_accent"
+      android:textStyle="bold"
       android:paddingBottom="4dp"
       android:gravity="bottom"
       android:textSize="14sp"
@@ -19,6 +20,6 @@
       android:id="@+id/line"
       android:layout_width="match_parent"
       android:layout_height="1dp"
-      android:background="@color/accent_color"
+      android:background="@color/gold_accent_faint"
       />
 </LinearLayout>
