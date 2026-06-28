@@ -86,8 +86,10 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
 .hero .search .cursor{width:1.5px;height:16px;background:var(--gold);margin-inline-start:auto;animation:bl 1s steps(1) infinite}
 @keyframes bl{50%{opacity:0}}
 
-/* tabs (pinned under hero) */
-.tabs{display:flex;background:var(--navy-700);flex:none;z-index:15;box-shadow:0 4px 10px -8px rgba(0,0,0,.5)}
+/* tabs — now inside the rounded hero card; collapse/expand with it */
+.tabs{display:flex;background:var(--navy-700);flex:none;z-index:15;overflow:hidden;
+  transition:max-height .25s ease, opacity .2s;max-height:54px;opacity:1}
+.hero.collapsed .tabs{max-height:0;opacity:0}
 .tabs .t{flex:1;text-align:center;font-size:12px;font-weight:800;letter-spacing:.02em;padding:12px 4px;color:var(--on-navy-dim);position:relative}
 .tabs .t.on{color:var(--on-navy)}
 .tabs .t.on:after{content:"";position:absolute;inset-inline:24%;bottom:0;height:3px;border-radius:3px;background:var(--gold)}
@@ -142,7 +144,7 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
   </div>
 
   <div class="sec-h" data-en="① Interactive — scroll to collapse / expand" data-ar="① تفاعلي — مرّر للطي / التوسيع"></div>
-  <div class="sec-d" data-en="Scroll down → search collapses. Scroll up from anywhere → it returns (quick-return). Title + icons + tabs stay pinned." data-ar="مرّر لأسفل ← يُطوى البحث. مرّر لأعلى من أي مكان ← يعود (عودة سريعة). العنوان والأيقونات والتبويبات تبقى مثبّتة."></div>
+  <div class="sec-d" data-en="The navy header is one rounded card. Scroll down → search + tabs collapse into it (only title+icons remain). Scroll up from anywhere → all return (quick-return)." data-ar="الهيدر الكحلي بطاقة واحدة بزوايا دائرية. مرّر لأسفل ← يُطوى البحث والتبويبات (يبقى العنوان+الأيقونات فقط). مرّر لأعلى من أي مكان ← يعود الكل (عودة سريعة)."></div>
   <div class="row">
     <div class="col">
       <div class="phone"><div class="notch"></div><div class="screen">
@@ -159,11 +161,11 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
           <div class="expanded">
             <div class="search"><span class="lens">🔍</span><span class="ph" data-en="Search the Quran" data-ar="بحث في القرآن"></span></div>
           </div>
-        </div>
-        <div class="tabs">
-          <div class="t on" data-en="Surahs" data-ar="السور"></div>
-          <div class="t" data-en="Juz'" data-ar="الأجزاء"></div>
-          <div class="t" data-en="Bookmarks" data-ar="العلامات"></div>
+          <div class="tabs">
+            <div class="t on" data-en="Surahs" data-ar="السور"></div>
+            <div class="t" data-en="Juz'" data-ar="الأجزاء"></div>
+            <div class="t" data-en="Bookmarks" data-ar="العلامات"></div>
+          </div>
         </div>
         <div class="list" id="liveList">
           <div class="ccard">
@@ -197,7 +199,7 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
       <div class="it"><span class="k">1</span><div class="tx"><div class="t" data-en="Title + subtitle — with the icons (one row)" data-ar="العنوان + الفرعي — مع الأيقونات (صف واحد)"></div><div class="d" data-en="“Mushaf” / “The Holy Quran” on the start; pinned (always visible)." data-ar="«المصحف» / «القرآن الكريم» على البداية؛ مثبّت (ظاهر دائمًا)."></div></div></div>
       <div class="it"><span class="k">2</span><div class="tx"><div class="t" data-en="Action icons — Go-to-page · Overflow" data-ar="أيقونات الإجراءات — الانتقال · المزيد"></div><div class="d" data-en="Gold, on the end of the same row (overflow = jump, settings, help, about). No search icon — the bar handles it." data-ar="ذهبية، في نهاية الصف نفسه (المزيد = انتقال، إعدادات، مساعدة، حول). لا أيقونة بحث — الشريط يتكفّل بها."></div></div></div>
       <div class="it"><span class="k">3</span><div class="tx"><div class="t" data-en="Search bar — the real search" data-ar="شريط البحث — البحث الحقيقي"></div><div class="d" data-en="A live search field (type → results), not a placeholder. Collapses on scroll-down, returns on scroll-up." data-ar="حقل بحث فعّال (اكتب ← نتائج)، وليس عنصرًا نائبًا. يُطوى عند التمرير لأسفل، ويعود عند التمرير لأعلى."></div></div></div>
-      <div class="it"><span class="k">4</span><div class="tx"><div class="t" data-en="Tabs — Surahs / Juz' / Bookmarks" data-ar="التبويبات — السور / الأجزاء / العلامات"></div><div class="d" data-en="Gold underline on active; pinned under the title row when collapsed." data-ar="خط ذهبي أسفل النشط؛ تبقى مثبّتة أسفل صف العنوان عند الطي."></div></div></div>
+      <div class="it"><span class="k">4</span><div class="tx"><div class="t" data-en="Tabs — Surahs / Juz' / Bookmarks" data-ar="التبويبات — السور / الأجزاء / العلامات"></div><div class="d" data-en="Inside the rounded hero card — they collapse & expand together with it (not pinned)." data-ar="داخل بطاقة الهيرو الدائرية — تُطوى وتتوسّع معها (غير مثبّتة)."></div></div></div>
       <div class="it"><span class="k">5</span><div class="tx"><div class="t" data-en="Continue reading card" data-ar="بطاقة متابعة القراءة"></div><div class="d" data-en="Last-read surah + page; tap to jump. Shown when a recent page exists." data-ar="آخر سورة وصفحة مقروءة؛ انقر للانتقال. تظهر عند وجود صفحة سابقة."></div></div></div>
     </div>
   </div>
@@ -223,11 +225,11 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
         <div class="expanded">
           <div class="search SEARCHCLASS"><span class="lens">🔍</span><span class="ph" data-en="Search the Quran" data-ar="بحث في القرآن"></span><span class="CURSORCLASS"></span></div>
         </div>
-      </div>
-      <div class="tabs">
-        <div class="t on" data-en="Surahs" data-ar="السور"></div>
-        <div class="t" data-en="Juz'" data-ar="الأجزاء"></div>
-        <div class="t" data-en="Bookmarks" data-ar="العلامات"></div>
+        <div class="tabs">
+          <div class="t on" data-en="Surahs" data-ar="السور"></div>
+          <div class="t" data-en="Juz'" data-ar="الأجزاء"></div>
+          <div class="t" data-en="Bookmarks" data-ar="العلامات"></div>
+        </div>
       </div>
       <div class="list">
         <div class="ccard"><span class="ic">📖</span><div class="tx"><div class="t" data-en="Continue reading" data-ar="متابعة القراءة"></div><div class="s" data-en="Al-Baqarah · Page 49" data-ar="البقرة · صفحة ٤٩"></div></div><span class="btn" data-en="Read" data-ar="قراءة"></span></div>
@@ -253,7 +255,7 @@ document.querySelectorAll('[data-lang-btn]').forEach(b=>b.addEventListener('clic
 
 const STATES=[
   {cls:'',          search:'',      cursor:'', n_en:'Expanded (default)', n_ar:'موسّع (افتراضي)', d_en:'Title+icons · search · tabs', d_ar:'العنوان+الأيقونات · بحث · تبويبات'},
-  {cls:'collapsed', search:'',      cursor:'', n_en:'Collapsed', n_ar:'مطوي', d_en:'Search hidden — title+icons+tabs stay', d_ar:'يختفي البحث — يبقى العنوان+الأيقونات+التبويبات'},
+  {cls:'collapsed', search:'',      cursor:'', n_en:'Collapsed', n_ar:'مطوي', d_en:'Search + tabs hidden — only title+icons (rounded)', d_ar:'يختفي البحث والتبويبات — يبقى العنوان+الأيقونات (بزوايا دائرية)'},
   {cls:'',          search:'active',cursor:'cursor', n_en:'Search active', n_ar:'البحث نشط', d_en:'Field focused — opens the Quran search', d_ar:'الحقل نشط — يفتح بحث القرآن'},
 ];
 const tpl=document.getElementById('stateTpl').innerHTML;
