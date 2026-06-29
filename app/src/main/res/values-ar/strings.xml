@@ -297,6 +297,8 @@
     <string name="menu_about">عنا</string>
     <string name="menu_other_apps">تطبيقات أخرى‎</string>
     <string name="menu_settings">الإعدادات</string>
+    <string name="prefs_settings_subtitle">العرض · القراءة · صفحتان · التفسير · التحميل</string>
+    <string name="advanced_subtitle">استيراد وتصدير · تخزين</string>
     <string name="menu_jump_last_page">الصفحة الأخيرة</string>
     <string name="menu_bookmarks">المرجعيات</string>
     <string name="menu_bookmarks_page">مرجعيات الصفحات</string>

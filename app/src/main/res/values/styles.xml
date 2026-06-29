@@ -195,6 +195,9 @@
         <item name="android:windowEnterTransition">@transition/activity_slide</item>
         <item name="android:windowExitTransition">@transition/activity_fade</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.MyStream</item>
+        <!-- Gold-accent the ListPreference / storage picker dialogs -->
+        <item name="alertDialogTheme">@style/ThemeOverlay.MyStream.Dialog</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.MyStream.MaterialDialog</item>
     </style>
 
     <!-- ============================================================ -->

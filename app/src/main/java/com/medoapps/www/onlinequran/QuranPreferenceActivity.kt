@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.google.android.material.appbar.MaterialToolbar
 import com.medoapps.www.onlinequran.ui.fragment.QuranSettingsFragment
 import com.medoapps.www.onlinequran.util.AudioManagerUtils
 
@@ -15,14 +14,13 @@ class QuranPreferenceActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.preferences)
 
-    window.statusBarColor = ContextCompat.getColor(this, R.color.background_main)
+    // Navy hero (sets the navy status bar itself); keep the cream nav bar below.
     window.navigationBarColor = ContextCompat.getColor(this, R.color.background_main)
-
-    val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-    toolbar.setTitle(R.string.menu_settings)
-    setSupportActionBar(toolbar)
-    val ab = supportActionBar
-    ab?.setDisplayHomeAsUpEnabled(true)
+    HeroController.attach(this)
+      .back()
+      .title(R.string.menu_settings)
+      .subtitle(getString(R.string.prefs_settings_subtitle))
+      .apply()
 
     AudioManagerUtils.clearCache()
 
