@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mushaf re-theme — Proposed UX vs As-Built (design fidelity)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{ --gold:#D4A44C; --navy:#1F2A44; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Plus Jakarta Sans',system-ui,Arial,sans-serif;color:#e8eaf0;
+    background:radial-gradient(1100px 520px at 12% -8%,#20304f 0,transparent 60%),
+               radial-gradient(900px 480px at 100% 0,#11182a 0,transparent 55%),#0c111d;
+    padding:30px 22px 90px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1240px;margin:0 auto}
+  h1{font-size:25px;font-weight:800;letter-spacing:-.02em;margin:0 0 6px;display:flex;align-items:center;gap:11px}
+  h1 .dot{width:11px;height:11px;border-radius:50%;background:var(--gold);box-shadow:0 0 14px var(--gold)}
+  .sub{color:#9fb0d0;font-size:14px;line-height:1.65;margin:0 0 6px;max-width:1000px}
+  .sub b{color:#e7ecf7} .sub code{background:#161d2e;border:1px solid #273350;border-radius:5px;padding:1px 6px;font-size:12.5px;color:#cdd6ea}
+  .board{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0 4px}
+  .stat{background:#121a2b;border:1px solid #243150;border-radius:14px;padding:11px 18px;min-width:108px}
+  .stat .k{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#7e8db0}
+  .stat .v{font-size:25px;font-weight:800;margin-top:3px}
+  .stat.hi .v{color:#94e6ab}.stat.med .v{color:#ffd479}.stat.low .v{color:#ff9d9d}.stat.tot .v{color:#cdd6ea}
+  .legend{display:flex;gap:10px;margin:18px 0 4px;flex-wrap:wrap;align-items:center}
+  .legend span{font-size:11.5px;font-weight:800;letter-spacing:.03em;padding:6px 13px;border-radius:20px}
+  .l-ux{background:#2a2350;color:#c9b8ff;border:1px solid #45397a}
+  .l-ab{background:#16331f;color:#94e6ab;border:1px solid #2c5a37}
+  .grp{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);
+    margin:44px 0 0;padding-bottom:9px;border-bottom:1px solid #243150}
+  section{border-top:1px solid #161d2e;padding-top:22px;margin-top:24px}
+  .shead{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-bottom:2px}
+  .shead h2{font-size:19px;font-weight:800;margin:0;display:flex;align-items:baseline;gap:9px}
+  .shead h2 .n{color:var(--gold);font-size:15px;font-variant-numeric:tabular-nums}
+  .fid{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:4px 11px;border-radius:20px}
+  .fid.high{background:#16331f;color:#94e6ab;border:1px solid #2c5a37}
+  .fid.medium{background:#3a3415;color:#ffd479;border:1px solid #5c5320}
+  .fid.low{background:#3a2326;color:#ff9d9d;border:1px solid #5c3030}
+  .fid.none{background:#222a3a;color:#9fb0d0;border:1px solid #344259}
+  .vsum{color:#c4cfe6;font-size:14px;line-height:1.5;margin:8px 0 16px;max-width:1060px}
+  .pair{display:flex;gap:30px;flex-wrap:wrap;align-items:flex-start}
+  figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:10px;width:284px}
+  figcaption{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:5px 14px;border-radius:20px}
+  figcaption.ux{background:#2a2350;color:#c9b8ff;border:1px solid #45397a}
+  figcaption.ab{background:#16331f;color:#94e6ab;border:1px solid #2c5a37}
+  .shot{width:284px;border-radius:24px;overflow:hidden;border:6px solid #05070c;
+    box-shadow:0 28px 64px -26px rgba(0,0,0,.85),0 0 0 1.5px #1c2335;background:#000}
+  .shot img{display:block;width:100%;height:auto}
+  .shot.empty{height:560px;display:flex;align-items:center;justify-content:center;text-align:center;
+    background:#0e1422;color:#7e8db0;font-size:12.5px;line-height:1.5;padding:26px;border:2px dashed #2a3550}
+  .shot.empty code{background:#161d2e;border:1px solid #273350;border-radius:4px;padding:1px 5px;color:#9fb0d0;font-size:11.5px}
+  .arrow{align-self:center;color:var(--gold);font-size:28px;opacity:.7;padding-top:240px}
+  .notes{flex:1;min-width:250px;display:flex;flex-direction:column;gap:13px;padding-top:4px}
+  .nb{background:#101627;border:1px solid #213050;border-radius:13px;padding:12px 15px}
+  .nb h4{margin:0 0 8px;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
+  .nb.match h4{color:#94e6ab}.nb.diff h4{color:#ffb1b1}
+  .nb ul{margin:0;padding-inline-start:18px}
+  .nb li{font-size:13px;line-height:1.5;color:#cdd6ea;margin-bottom:6px}
+  .nb.diff li{color:#f1d8d8}
+  .nb .none{color:#7e8db0;font-size:12.5px}
+  .nb.none{color:#9fb0d0;font-size:13px;line-height:1.55}
+  .nb.none code{background:#161d2e;border:1px solid #273350;border-radius:4px;padding:1px 5px;color:#9fb0d0;font-size:11.5px}
+  footer{margin-top:56px;color:#6f7e9e;font-size:12.5px;border-top:1px solid #1c2335;padding-top:18px;line-height:1.75}
+  footer code{color:#9fb0d0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1><span class="dot"></span> Mushaf re-theme — Proposed UX vs As-Built</h1>
+  <p class="sub"><b>Left</b> = the UX I proposed (the navy + gold design mockups, rendered in Arabic / light to match).
+     <b>Right</b> = the real running app, screenshotted on the emulator after implementation (Arabic / light).
+     A <b>design-fidelity QA</b>: for each screen, how faithfully did the build realise the proposed design — and where did it deviate?</p>
+  <p class="sub">Headline finding: the re-theme applied the navy + gold <b>chrome and accents</b> (heroes, gold tab indicators, gold CTAs, cream surfaces, RTL) almost everywhere, but it <b>re-skinned the embedded Quran-for-Android screens in place</b> rather than rebuilding their internal layouts to the richer mockups. So palette/chrome fidelity is high, while several deeper redesigns (carded lists, custom ayah panels) and a few <b>un-themed controls</b> (the quick-jump <code>AlertDialog</code>, the settings switches, the playback <b>Apply</b> button) did not land.</p>
+  <div class="board">
+    <div class="stat tot"><div class="k">Screens compared</div><div class="v">15</div></div>
+    <div class="stat hi"><div class="k">High fidelity</div><div class="v">0</div></div>
+    <div class="stat med"><div class="k">Medium</div><div class="v">7</div></div>
+    <div class="stat low"><div class="k">Low</div><div class="v">8</div></div>
+  </div>
+  <div class="legend"><span class="l-ux">◀ Proposed UX (mockup)</span><span class="l-ab">As-built app (real device) ▶</span></div>
+<div class="grp">Index &amp; navigation</div>
+  <section>
+    <div class="shead"><h2><span class="n">01</span> Quran Index — Surahs</h2><span class="fid medium">Medium fidelity</span></div>
+    <p class="vsum">Navy+gold chrome (hero, gold pill, tab underline, search icon, cream badges) is faithful, but the list adds off-theme lavender Juz bands, runs much looser, and drops chevrons/star.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-00-index-surah.png" alt="proposed index-surah"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/prop-01-index.png" alt="as-built index-surah"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Navy hero app-bar reproduced: right-aligned bold title &#x27;المصحف&#x27; with &#x27;القرآن الكريم&#x27; subtitle and a 3-dot overflow menu top-left, on a deep navy ground</li><li>Gold &#x27;قراءة&#x27; pill button on the white &#x27;متابعة القراءة&#x27; continue-reading card matches the mockup&#x27;s gold CTA</li><li>Gold underline indicator sits under the active right-most tab (&#x27;سورة&#x27;), exactly as the mockup&#x27;s active &#x27;السور&#x27; tab</li><li>Cream/beige rounded-square surah number badges with amber/gold numerals are carried over per row</li><li>Gold magnifier icon inside the rounded search field, on the cream/light list background, matches the proposed treatment</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>Off-theme color: the Juz separator rows (&#x27;الجزء ١/٢/٣&#x27;) render as full-width pale lavender/periwinkle-grey bands — a default-looking tint outside the navy+gold palette; the mockup&#x27;s Surahs tab had no Juz bands at all</li><li>List row spacing is far looser/taller in the build, with large vertical gaps between each surah name and its &#x27;مكية - ٧ آيات&#x27; metadata, versus the mockup&#x27;s compact, tightly grouped rows</li><li>Build drops per-row affordances shown in the mockup: no leading chevrons and no gold star bookmark on البقرة</li><li>Copy/label mismatches: tabs read &#x27;سورة / الجزء / المرجعيات&#x27; vs mockup &#x27;السور / الأجزاء / العلامات&#x27;, and the search placeholder is &#x27;بحث في القرآن&#x27; vs &#x27;ابحث عن سورة أو جزء أو صفحة&#x27;</li><li>Icon differences: top-left secondary icon is a book/mushaf glyph (mockup used a magnifier), and the continue-card trailing control is a gold-outlined mihrab button rather than the mockup&#x27;s plain book glyph</li></ul></div></div>
+    </div>
+  </section>
+  <section>
+    <div class="shead"><h2><span class="n">02</span> Index — Juz&#x27; list</h2><span class="fid medium">Medium fidelity</span></div>
+    <p class="vsum">Navy+gold chrome (hero, gold tab underline, search pill, cream list, no off-theme controls) is faithfully applied, but the list body is a re-tinted embedded-Quran view with pie progress circles plus an added resume card, not the mockup&#x27;s gold square-badge juz index.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-01-index-juz.png" alt="proposed index-juz"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/prop-02-juz.png" alt="as-built index-juz"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Navy hero app-bar reproduced: same deep-navy color with right-aligned RTL title &#x27;المصحف&#x27; and subtitle &#x27;القرآن الكريم&#x27;, overflow (three-dot) menu top-left</li><li>Three-tab segmented row inside the navy hero with the active center tab (&#x27;الجزء&#x27;) marked by a gold/amber underline indicator, exactly as the mockup&#x27;s gold tab underline</li><li>Rounded navy search pill with an inset magnifier icon sits below the tabs, matching the mockup&#x27;s search field treatment</li><li>Gold/amber accent is the consistent theme color throughout (pie circles, &#x27;قراءة&#x27; button, badge fill) with no off-theme Material defaults — no purple/teal/grey switches or controls anywhere</li><li>Warm cream/off-white list background under the navy chrome, matching the mockup&#x27;s light list surface</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>List body is a different component: mockup shows a Juz INDEX (gold rounded-square number badges + juz names like &#x27;الجزء الأول&#x27; + &#x27;starts at&#x27; subtitle + page number with chevron). Build shows ayah-text rows with gold PIE-CHART progress circles and ayah references — the signature gold square number badges and juz-name rows are not reproduced</li><li>Build adds a &#x27;متابعة القراءة&#x27; (continue reading) resume card with a solid-gold &#x27;قراءة&#x27; pill button and a gold-outlined icon button — this card is absent from the mockup</li><li>Section header differs: mockup uses a cream/transparent band reading &#x27;الأجزاء ١-١٠&#x27; (a range); build uses a light blue/lavender-tinted band reading &#x27;الجزء ١&#x27;</li><li>Tab labels differ from the mockup: build reads &#x27;المرجعيات / الجزء / سورة&#x27; vs mockup &#x27;العلامات / الأجزاء / السور&#x27;; search placeholder is &#x27;بحث في القرآن&#x27; vs mockup &#x27;ابحث عن سورة أو جزء أو صفحة&#x27;</li><li>Top-left hero icon is an open-book glyph in the build, but a magnifier/search icon in the mockup</li></ul></div></div>
+    </div>
+  </section>
+  <section>
+    <div class="shead"><h2><span class="n">03</span> Index — Bookmarks tab</h2><span class="fid medium">Medium fidelity</span></div>
+    <p class="vsum">Navy hero, gold tab underline, gold button and cream bg are faithful, but distinctive gold-star bookmark cards, gold section headers and badge pill are missing, with an off-theme blue section band.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-02-index-bookmarks.png" alt="proposed bookmarks"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/asbuilt/ab-bookmarks.png" alt="as-built bookmarks"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Navy hero/app-bar with the same deep-navy color, &#x27;المصحف&#x27; title and &#x27;القرآن الكريم&#x27; subtitle</li><li>Gold underline beneath the active tab matches the mockup&#x27;s gold tab indicator</li><li>Warm cream/off-white page background carried over from the mockup</li><li>Gold accents present elsewhere: solid gold &#x27;قراءة&#x27; pill button and a gold-outlined icon box in the continue-reading card</li><li>Correct RTL layout (right-aligned Arabic text, tabs ordered right-to-left)</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>Header magnifier and toolbar icons are white/grey in the build; the mockup&#x27;s search magnifier is gold</li><li>Active tab label text is white in the build vs gold in the mockup (only the underline is gold)</li><li>List items are plain rows with a faint white bookmark icon; the mockup uses cards each with a gold star inside a light-gold rounded square box</li><li>Section header &#x27;آخر المتصفحات&#x27; sits on an off-theme cool light-blue band with dark text, whereas mockup section headers (&#x27;الحفظ&#x27;/&#x27;المفضلة&#x27;) are plain gold text with no colored strip</li><li>Missing the gold pill badge (&#x27;آية الكرسي&#x27;) and the grouped saved/favorite bookmark cards; build instead shows a continue-reading card plus a recently-browsed list</li></ul></div></div>
+    </div>
+  </section><div class="grp">Reader &amp; ayah panels</div>
+  <section>
+    <div class="shead"><h2><span class="n">04</span> Reader — chrome, paper-mode chips &amp; audio bar</h2><span class="fid medium">Medium fidelity</span></div>
+    <p class="vsum">Navy chrome, cream paper area and the gold paper-mode pill match well, but the headline navy+gold audio bar is missing (shows a loading strip), and top icons, surah banner and ayah circles stayed non-gold/embedded defaults.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-03-reader.png" alt="proposed reader"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/asbuilt/ab-reader-chrome.png" alt="as-built reader"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Navy top app-bar/chrome reproduced with the gold/cream surah title and a lighter &#x27;صفحة / جزء&#x27; page-and-juz subtitle, matching the mockup&#x27;s navy hero</li><li>Paper-mode segmented pill (ليل / ورقي / نهار) faithfully reproduced: white rounded pill with the &#x27;ورقي&#x27; segment selected in gold/amber</li><li>Cream/sepia paper reading surface with dark Arabic Quran text and circular ayah-number markers, matching the paper-mode reading intent</li><li>RTL handling correct: back chevron sits on the right, title is right-aligned, Arabic text flows right-to-left</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>The mockup&#x27;s signature navy+gold audio player bar (gold circular play button, reciter name &#x27;مشاري العفاسي&#x27;, 2:48/1:02 time, skip buttons, book icon) is absent in the build — the bottom instead shows a &#x27;جاري التحميل…&#x27; loading strip with a thin olive-gold progress line and a white circular X close button</li><li>Top app-bar action icons are plain white/cream (globe, bookmark, kebab) instead of the mockup&#x27;s gold-accented icons (gold crescent moon and gold star) — the gold accent on top-bar icons is missing</li><li>Surah header is the embedded reader&#x27;s ornate dark-brown decorative banner frame, not the mockup&#x27;s minimal rounded card with a thin gold border and gold &#x27;سُورَة&#x27; title</li><li>Ayah-number markers render as small brown/dark thin-outline circles (embedded default), not the gold-filled/gold medallions shown in the mockup</li></ul></div></div>
+    </div>
+  </section>
+  <section>
+    <div class="shead"><h2><span class="n">05</span> Ayah panel — translation</h2><span class="fid low">Low fidelity</span></div>
+    <p class="vsum">Navy color and one gold tab underline carried over, but the proposed ayah-panel layout, gold Next/Previous buttons, source dropdown, and centered ayah were not built.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-04-ayah-translation.png" alt="proposed ayah-translation"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/asbuilt/ab-translation-page.png" alt="as-built ayah-translation"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Deep navy panel background matches the mockup&#x27;s navy hero/panel color</li><li>Gold accent used as the active-tab underline beneath the globe (translation) icon</li><li>Sepia/cream reader page retained above the panel with a gold-bordered ornate surah-header banner</li><li>RTL handling preserved: Arabic labels and verse reference (&#x27;١:٢&#x27;, &#x27;التفسير والترجمة&#x27;) are right-aligned</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>Primary nav controls are off-theme: mockup has a gold filled &#x27;التالي&#x27; (Next) + gold-outlined &#x27;السابق&#x27; (Previous) button pair; as-built replaces them with two pale light-grey/cream chevron square buttons in the bottom corners (default, un-gold)</li><li>The cream rounded translation-source dropdown card (&#x27;صحيح إنترناشونال ▾&#x27;) is missing entirely; as-built shows only a low-contrast muted-grey &#x27;التفسير والترجمة&#x27; header with a tiny chevron</li><li>No Arabic ayah text inside the panel: mockup centers the verse prominently, as-built shows only left-aligned English translation</li><li>Gold pagination pill (gold segment among grey dots) is absent; as-built instead has a white icon toolbar (play/globe/tag/collapse) the mockup never proposed</li><li>Panel form differs: mockup is a rounded-corner bottom sheet with a grey drag handle over the reader; as-built is a flat-top panel filling the lower ~60% with a large empty navy void and no handle</li></ul></div></div>
+    </div>
+  </section>
+  <section>
+    <div class="shead"><h2><span class="n">06</span> Ayah panel — playback config</h2><span class="fid low">Low fidelity</span></div>
+    <p class="vsum">Navy surface and gold labels carry over, but the primary Apply button is off-theme purple, the checkbox is default grey, and the repeat steppers/inputs were replaced — low fidelity.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-05-ayah-playback.png" alt="proposed ayah-playback"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/asbuilt/ab-playback.png" alt="as-built ayah-playback"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Gold accent used for the &#x27;من&#x27; / &#x27;إلى&#x27; section labels</li><li>Gold underline indicator marks the active tab and the selected repeat value (1)</li><li>RTL layout is correct: labels and values right-aligned, Arabic numerals</li><li>Surface uses the navy palette (panel background is deep navy)</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>Primary action button is PURPLE (&#x27;تطبيق وتشغيل&#x27;) — a default Material color; the mockup&#x27;s Apply button is solid GOLD (&#x27;تطبيق&#x27;)</li><li>The &#x27;limit reading to range&#x27; checkbox is a plain grey/unfilled outline square; the mockup uses a GOLD filled (checked) checkbox</li><li>Repeat controls differ entirely: mockup has gold circular +/− stepper buttons with teal repeat-icon badges (×2 / ×1); build uses plain text selectors (∞ 1 2) with a gold underline</li><li>Panel surface is dark navy whereas the mockup proposed a light/white bottom sheet with cream rounded input fields</li><li>Header differs: mockup has an X-close + &#x27;نطاق التشغيل&#x27; title + gold page-dots; build shows a row of icon tabs (play/globe/tag/chevron) and no sheet title</li><li>From/To use plain dropdown spinners on navy rather than the mockup&#x27;s cream filled rounded input fields</li></ul></div></div>
+    </div>
+  </section>
+  <section>
+    <div class="shead"><h2><span class="n">07</span> Ayah action toolbar</h2><span class="fid medium">Medium fidelity</span></div>
+    <p class="vsum">Navy toolbar and gold ayah highlight are on-theme, but the build shows the icon popup not the mockup&#x27;s gold tags sheet, and toolbar icons read white not gold.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-06-ayah-tags.png" alt="proposed ayah-tags"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/asbuilt/ab-ayah-panel.png" alt="as-built ayah-tags"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Action toolbar uses the deep navy surface that matches the mockup&#x27;s navy chrome/app-bar color</li><li>Selected ayah is highlighted in a warm tan/gold, echoing the gold accent and the mockup&#x27;s gold ayah highlight</li><li>Reading page keeps the sepia/cream paper background beneath the navy chrome, consistent with the re-theme intent</li><li>Toolbar exposes the expected action set (bookmark, tag/label, share, globe/translation, play) for the tags/share flow, and RTL anchoring of the caret reads correctly</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>The build captures the action-toolbar popup, NOT the &#x27;إضافة إلى الوسوم&#x27; tags bottom sheet that is the centerpiece of the mockup, so the gold-filled checkbox, colored category dots (green/amber/orange/red), gold &#x27;حفظ&#x27; button, outlined &#x27;إلغاء&#x27;, &#x27;وسم جديد +&#x27; link, and the gold pager dots are all absent/unverifiable</li><li>Toolbar icons (bookmark, tag, share, globe, play) render as plain white/cream on navy rather than the gold accent the mockup uses for its app-bar icons (moon/star)</li><li>No navy hero/app-bar with a gold surah title is visible atop the as-built page; the header is plain sepia text (&#x27;الجزء ١ / سورة الفاتحة&#x27;), whereas the mockup shows a navy header with gold title and gold moon/star icons (may be an auto-hide/scroll state)</li></ul></div></div>
+    </div>
+  </section>
+  <section>
+    <div class="shead"><h2><span class="n">08</span> Translation reading view</h2><span class="fid low">Low fidelity</span></div>
+    <p class="vsum">Only the navy surface and white text carried over; the proposed navy hero, gold source-badge, gold verse numbers and sepia verse-card list are all missing, with near-zero gold accent.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-07-translation-page.png" alt="proposed translation-page"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/asbuilt/ab-translation-page.png" alt="as-built translation-page"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Deep navy surface is used for the translation panel, matching the mockup&#x27;s navy color</li><li>Translation body text is white set on the navy panel, as proposed</li><li>A gold accent appears as the active-tab underline beneath the globe icon (same amber-gold family as the mockup)</li><li>RTL handling is present: Arabic header (الجزء ١ / سورة الفاتحة), Arabic-numeral verse reference ١:٢ right-aligned, Arabic toolbar label</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>No navy hero app-bar at the top: the mockup&#x27;s navy header with white surah title + gold &#x27;صحيح إنترناشونال&#x27; subtitle is absent. The top is instead the sepia Mushaf page with a dark-on-sepia &#x27;الجزء ١ / سورة الفاتحة&#x27; header</li><li>The prominent gold-outlined translation-source pill/badge from the mockup is completely missing</li><li>The multi-verse sepia card list with per-verse gold circular numbers is not implemented; only a single verse translation shows in a large, mostly-empty navy panel</li><li>Gold accent usage is minimal: the toolbar icons (play, globe, tag, chevron) are plain white rather than gold, and only one thin gold tab underline exists</li><li>The two bottom navigation chevron buttons are light grey/beige default-styled controls, off-theme (neither navy nor gold)</li></ul></div></div>
+    </div>
+  </section>
+  <section>
+    <div class="shead"><h2><span class="n">09</span> Audio bar during playback</h2><span class="fid low">Low fidelity</span></div>
+    <p class="vsum">The proposed full-screen navy+gold now-playing player was not built; the as-built shows only a thin gold loading bar atop the sepia reader, missing the album art, slider, and transport controls.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-17-audio-player.png" alt="proposed audio-player"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/asbuilt/ab-reader-chrome.png" alt="as-built audio-player"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Navy chrome is present: the top app bar uses the dark navy tone from the mockup&#x27;s palette</li><li>Gold accent carries into the audio UI: the bottom playback/loading bar uses a gold/amber progress line, echoing the mockup&#x27;s gold slider</li><li>Gold accent on selected control: the &#x27;ورقي&#x27; theme-toggle pill is gold-filled, consistent with the gold-accent language</li><li>RTL handling is correct: Arabic text is right-aligned and the back arrow is flipped to point right</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>The entire proposed full-screen now-playing player is absent - there is no large gold-ringed circular album art with the ornamental gold medallion</li><li>No centered track-title / reciter-name block (&#x27;سورة البقرة&#x27; / &#x27;مشاري العفاسي&#x27;) exists in the build</li><li>No full gold progress slider with thumb and time labels (2:48 / 1:02); the as-built has only a thin gold loading line with &#x27;جاري التحميل...&#x27; text</li><li>The rounded transport-control deck is entirely missing - no gold play/pause card, no skip-forward/back, no teal repeat/shuffle buttons</li><li>The as-built audio element is a minimal bottom strip in a loading state with an X close button, not the rich navy+gold playback surface proposed</li></ul></div></div>
+    </div>
+  </section><div class="grp">Search &amp; jump</div>
+  <section>
+    <div class="shead"><h2><span class="n">10</span> Search results</h2><span class="fid none">As-built not captured</span></div>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-08-search.png" alt="proposed search"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot empty">Not captured on device: the search box needs a typed Arabic query, and Arabic can't be injected through <code>adb input text</code> (no IME bridge on this emulator). The results screen re-uses the navy verse-card layout.</div></figure>
+      <div class="notes"><div class="nb none">Not captured on device: the search box needs a typed Arabic query, and Arabic can't be injected through <code>adb input text</code> (no IME bridge on this emulator). The results screen re-uses the navy verse-card layout.</div></div>
+    </div>
+  </section>
+  <section>
+    <div class="shead"><h2><span class="n">11</span> Quick-jump dialog</h2><span class="fid low">Low fidelity</span></div>
+    <p class="vsum">The quick-jump dialog ships as an un-themed default Material AlertDialog (plain underlined inputs, default spinner, single text button) — only the gold confirm-text color survives; the navy+gold themed card, cream fields, gold dropdown and dual buttons are all missing.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-09-jump.png" alt="proposed jump"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/asbuilt/ab-jump.png" alt="as-built jump"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Dialog is a centered white modal over a dimmed scrim, same general placement as the mockup</li><li>RTL layout preserved: title, labels and fields are right-aligned for Arabic</li><li>Underlying navy app-bar/hero with gold icons is visible behind the dimmed scrim</li><li>The single confirm action (&#x27;موافق&#x27;) uses the gold/amber accent text color</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>Dialog is a bare DEFAULT Material AlertDialog, not the themed navy+gold card: sharp corners, no styling, vs the rounded themed card in the mockup</li><li>Input fields are plain Material underlined fields with grey/dark underlines, instead of the cream-filled rounded input boxes (with 604-1 / 286-1 range hints) shown in the mockup</li><li>Surah selector is a default Material spinner with an underline, not the gold-bordered rounded dropdown with a gold triangle indicator from the mockup</li><li>Gold section headers are missing: &#x27;رقم الصفحة&#x27; / &#x27;السورة&#x27; / &#x27;الآية&#x27; labels render as plain dark text (and the aya field is absent), whereas the mockup uses gold section labels for all three</li><li>Bottom actions differ: only one gold TEXT button (&#x27;موافق&#x27;) exists, instead of the gold FILLED primary &#x27;انتقال&#x27; button paired with an outlined &#x27;إلغاء&#x27; cancel button</li></ul></div></div>
+    </div>
+  </section><div class="grp">Settings &amp; managers</div>
+  <section>
+    <div class="shead"><h2><span class="n">12</span> Settings — display section</h2><span class="fid low">Low fidelity</span></div>
+    <p class="vsum">Build largely ignored the re-theme: no navy hero, default grey/lavender switches, flat list instead of white cards, and grey (not gold) section headers; only the gold icon tint carried over.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-11-settings.png" alt="proposed settings"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/asbuilt/ab-settings.png" alt="as-built settings"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Cream/sepia page background is consistent between mockup and build</li><li>RTL layout is correct: Arabic titles right-aligned, toggles/sliders on the left edge, icons on the right</li><li>Right-hand row icons (translate, image, lock, tag, moon, info) carry a gold/amber tint, partially honoring the gold accent intent</li><li>Overall content order preserved: a display (العرض) section followed by a reading (القراءة) section</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>Navy hero/app-bar is entirely missing: the mockup has a dark navy bar with a white title and gold tab subtitle, but the build shows only a faint near-invisible light-grey title on the cream background with a plain back arrow</li><li>Toggle switches kept the DEFAULT Material color: lavender/light-purple tracks with greyish-brown thumbs, instead of the mockup&#x27;s gold-filled toggles</li><li>No white rounded cards: the build is a flat list with thin hairline dividers, whereas the mockup groups rows into white Material-3 cards</li><li>Section headers are grey (إعدادات العرض / إعدادات القراءة) instead of the mockup&#x27;s gold headers (العرض / القراءة)</li><li>Gold inline value chips from the mockup (ورقي &#x27;paper&#x27;, مدني &#x27;Madani&#x27;) are absent; those settings render as plain toggles/rows, and the colorful icon tiles became flat outline icons with no tile background</li></ul></div></div>
+    </div>
+  </section>
+  <section>
+    <div class="shead"><h2><span class="n">13</span> Settings — advanced / reading</h2><span class="fid low">Low fidelity</span></div>
+    <p class="vsum">As-built is the un-rethemed sepia Quran settings screen: navy hero absent, toggles left default grey, flat rows instead of white cards - only icon/slider gold survives.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-12-settings-advanced.png" alt="proposed settings-advanced"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/asbuilt/ab-settings-adv.png" alt="as-built settings-advanced"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Gold/amber leading icons on the right of each row (tablet, tafsir, slider, headphones, download, gear) echo the mockup&#x27;s gold iconography</li><li>Font-size slider uses a gold/amber thumb consistent with the gold accent language</li><li>RTL Arabic layout is correct: titles right-aligned, leading icons pinned to the right edge</li><li>Warm light/cream background tone is in the same family as the mockup&#x27;s light surface</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>Navy hero/app-bar is entirely missing: mockup has a navy collapsing header with a gold subtitle pill, but the build has a plain cream header strip with a black &#x27;الإعدادات&#x27; title and a thin black back arrow</li><li>Toggle switches kept the DEFAULT off-theme color - grey track with a grey/brown thumb - instead of gold; these are the most prominent controls and read as un-themed</li><li>No elevated white cards: the build uses flat full-width list rows divided by hairline separators, whereas the mockup groups items into rounded white cards</li><li>Section headers are plain grey text, not the gold/amber section headers shown in the mockup</li><li>No gold value badges: mockup shows gold pills like &#x27;داخلي&#x27; and &#x27;248 م.ب&#x27;; the build shows the values (&#x27;داخلي&#x27;, &#x27;248 م.ب&#x27;) in plain gold text with no badge styling/card container</li></ul></div></div>
+    </div>
+  </section>
+  <section>
+    <div class="shead"><h2><span class="n">14</span> Bookmark/tag multi-select</h2><span class="fid none">As-built not captured</span></div>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-10-tags-manage.png" alt="proposed tags-manage"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot empty">Not captured on device: this contextual-action-bar state needs several saved tagged bookmarks to populate. The proposed design shows a navy CAB (trash / edit / tag) over gold-star cards with gold tag chips.</div></figure>
+      <div class="notes"><div class="nb none">Not captured on device: this contextual-action-bar state needs several saved tagged bookmarks to populate. The proposed design shows a navy CAB (trash / edit / tag) over gold-star cards with gold tag chips.</div></div>
+    </div>
+  </section>
+  <section>
+    <div class="shead"><h2><span class="n">15</span> Tafsir &amp; Translation manager</h2><span class="fid medium">Medium fidelity</span></div>
+    <p class="vsum">Navy bar and gold accents (headers, chevron, download arrows) carried over, but flat list rows replace the card layout and the hero subtitle, search, progress bar, reorder controls, and grey globe icons all diverge.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-14-translations-manager.png" alt="proposed translations-manager"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/asbuilt/ab-translations-mgr.png" alt="as-built translations-manager"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Navy app-bar/header is present with the correct dark navy color, matching the mockup&#x27;s navy hero</li><li>Gold back chevron in the header matches the mockup&#x27;s gold accent</li><li>Section headers (&#x27;الملفات المحملة&#x27;, &#x27;الملفات المتاحة للتحميل&#x27;) are gold and right-aligned RTL, as in the mockup (&#x27;المُثبّتة&#x27; / &#x27;المتاحة&#x27;)</li><li>Available-item download arrows are gold, matching the mockup&#x27;s gold download icons</li><li>Cream/off-white page background matches the mockup</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>List items are flat full-width rows divided by thin lines; the mockup used elevated white rounded cards with spacing between them</li><li>The trailing globe icons are rendered in default grey, an off-theme color (mockup had no globe; it used gold/grey trash + reorder controls instead) — and the installed row has a stray grey vertical accent bar on its left edge</li><li>The navy header is a plain app-bar: it omits the mockup&#x27;s subtitle line (&#x27;3 مُثبّتة · اضغط مطولاً لإعادة الترتيب&#x27;) and the search lens icon</li><li>No downloading state is shown — the mockup&#x27;s in-progress card with the gold 64% progress bar is absent</li><li>Installed item lacks the mockup&#x27;s management affordances (trash icon, up/down reorder arrows, drag-handle dots)</li></ul></div></div>
+    </div>
+  </section>
+  <section>
+    <div class="shead"><h2><span class="n">16</span> Reciters audio manager (list)</h2><span class="fid medium">Medium fidelity</span></div>
+    <p class="vsum">Navy+gold+cream palette and RTL are applied faithfully, but the mockup&#x27;s white elevated cards, mic avatars, gold &#x27;installed&#x27; badges, progress bar, and search icon were not built.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-15-reciters-manager.png" alt="proposed reciters-manager"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/prop-04-reciter.png" alt="as-built reciters-manager"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Navy app-bar header with gold title text and a gold chevron affordance on the right (RTL-correct), matching the mockup&#x27;s navy+gold header band</li><li>Cream/off-white screen background carried through, consistent with the mockup&#x27;s paper-tone canvas</li><li>Gold-themed circular download control: a beige circle holding a gold down-arrow icon, echoing the mockup&#x27;s gold download iconography</li><li>Full RTL layout honored — Arabic title right-aligned, list content right-aligned, chevron pointing right</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>List items are flat rows directly on the cream background with no surface or shadow; the mockup renders each reciter as an elevated white rounded card with a drop shadow</li><li>No reciter avatar: the mockup places a circular beige microphone avatar on the right of every row, but the build&#x27;s rows are text-only on that side</li><li>No status badge: the mockup shows a gold &#x27;مثبت&#x27; (installed) pill on downloaded reciters, while every build row just reads &#x27;لم يتم تحميل سور بعد&#x27; with no badge</li><li>No download-progress indicator: the mockup has a gold progress bar with a &#x27;٧٢٪&#x27; label for an in-progress item; the build shows none</li><li>Header differs structurally — the mockup is a taller navy hero with a search magnifier icon at top-left; the build is a shorter flat navy bar with no search icon, and the title/subtitle text is swapped</li></ul></div></div>
+    </div>
+  </section><div class="grp">About</div>
+  <section>
+    <div class="shead"><h2><span class="n">17</span> About screen</h2><span class="fid low">Low fidelity</span></div>
+    <p class="vsum">Only the navy bar and gold section headers carried over; the mockup&#x27;s gold-carded book-icon hero, version chip, sepia background, and carded icon source rows are absent.</p>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-13-about.png" alt="proposed about"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/prop-06-about.png" alt="as-built about"></div></figure>
+      <div class="notes"><div class="nb match"><h4>✓ Carried over</h4><ul><li>Navy app-bar is present at the top with the correct dark-navy color matching the mockup&#x27;s hero</li><li>Section headers use the gold/amber accent color (مصادر المعلومات, مشاريع مفتوحة المصدر) as the mockup intends</li><li>RTL layout is correct: Arabic text right-aligned and the back control sits on the right of the app-bar</li></ul></div><div class="nb diff"><h4>✕ Deviates from mockup</h4><ul><li>Hero content is wrong: build shows the rainbow circular &#x27;My Stream&#x27; logo + Latin &#x27;My Stream&#x27; text + a prayer subtitle, instead of the mockup&#x27;s book icon inside a gold rounded card with Arabic title &#x27;ماي ستريم — المصحف&#x27;</li><li>No gold version chip (&#x27;v4.2.1&#x27;) is shown under the app name as in the mockup</li><li>Background is a cool light-lavender/near-white, not the mockup&#x27;s warm cream/sepia paper</li><li>Source list is rendered as flat plain-text rows (title + grey description) with no white rounded cards and no gold document icons; the mockup uses elevated white cards each with a gold doc icon</li><li>App-bar back arrow and title are plain white; the mockup&#x27;s back chevron is gold and the header uses a gold-accented treatment</li></ul></div></div>
+    </div>
+  </section><div class="grp">First-run data gate</div>
+  <section>
+    <div class="shead"><h2><span class="n">18</span> Page-data download &amp; permissions</h2><span class="fid none">As-built not captured</span></div>
+    <div class="pair">
+      <figure><figcaption class="ux">Proposed UX</figcaption><div class="shot"><img loading="lazy" src="compare-shots/ux/ux-16-data-download.png" alt="proposed data-download"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot empty">Not captured on device: this first-run gate only appears before the Quran page images are downloaded, and can't be re-triggered without wiping app data. Proposed as a navy hero + gold progress + permission rows.</div></figure>
+      <div class="notes"><div class="nb none">Not captured on device: this first-run gate only appears before the Quran page images are downloaded, and can't be re-triggered without wiping app data. Proposed as a navy hero + gold progress + permission rows.</div></div>
+    </div>
+  </section><div class="grp">Built — screens with no dedicated mockup</div>
+  <section>
+    <div class="shead"><h2><span class="n">★</span> Per-reciter surah download list</h2><span class="fid none">App only · no mockup</span></div>
+    <div class="pair">
+      <figure><figcaption class="ux" style="opacity:.5">No mockup</figcaption><div class="shot empty">No 1:1 mockup — the mockup set has the reciter <i>list</i> (#16) but not the per-reciter surah list. Shown for completeness: navy toolbar, gold download discs, error-red trash on downloaded surahs.</div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/prop-05-sheikh.png" alt="as-built per-reciter"></div></figure>
+      <div class="notes"><div class="nb none">No 1:1 mockup — the mockup set has the reciter <i>list</i> (#16) but not the per-reciter surah list. Shown for completeness: navy toolbar, gold download discs, error-red trash on downloaded surahs.</div></div>
+    </div>
+  </section>
+  <section>
+    <div class="shead"><h2><span class="n">★</span> Help screen</h2><span class="fid none">App only · no mockup</span></div>
+    <div class="pair">
+      <figure><figcaption class="ux" style="opacity:.5">No mockup</figcaption><div class="shot empty">No dedicated mockup — the mockup combined About + Help into one screen (#14). The built Help is its own screen: navy hero, gold back, readable body (the pre-re-theme build had white-on-light invisible text).</div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="ab">As-built</figcaption><div class="shot"><img loading="lazy" src="compare-shots/prop-07-help.png" alt="as-built help"></div></figure>
+      <div class="notes"><div class="nb none">No dedicated mockup — the mockup combined About + Help into one screen (#14). The built Help is its own screen: navy hero, gold back, readable body (the pre-re-theme build had white-on-light invisible text).</div></div>
+    </div>
+  </section>
+  <footer>
+    Proposed UX = <code>docs/superpowers/mockups/mushaf-retheme/parts/*.html</code> rendered Arabic / light.
+    As-built = real emulator screenshots of <code>feature/mushaf-retheme</code> (Arabic / light), captured live.
+    Fidelity verdicts produced by a 15-agent side-by-side comparison pass. <code>compare-real.html</code> shows the before→after (pre-re-theme vs now); this gallery shows proposed→built.
+  </footer>
+</div>
+</body>
+</html>
