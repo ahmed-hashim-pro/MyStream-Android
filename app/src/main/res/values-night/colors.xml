@@ -159,6 +159,10 @@
     <color name="gold_accent">#D4A44C</color>
     <color name="gold_accent_semi">#66D4A44C</color>
     <color name="gold_accent_faint">#26D4A44C</color>
+    <!-- Search match highlight: mirror the day def to the night gold so the
+         highlighted word matches the gold location label in dark mode
+         (light def lives in values/colors.xml). -->
+    <color name="translation_highlight">@color/gold_accent</color>
     <!-- Audio-manager destructive (remove/cancel) accent — M3 dark error red. -->
     <color name="audio_remove">#FFB4AB</color>
     <color name="audio_remove_faint">#33FFB4AB</color>

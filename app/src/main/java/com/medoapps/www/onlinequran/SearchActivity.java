@@ -215,6 +215,9 @@ public class SearchActivity extends AppCompatActivity
 
       warningView.setText(getString(R.string.no_arabic_search_available));
       warningView.setVisibility(View.VISIBLE);
+      // The notice itself triggers the download, so the action stays reachable
+      // even when translation results are shown (which hides the empty-state button).
+      warningView.setOnClickListener(v -> downloadArabicSearchDb());
       buttonGetTranslations.setText(getString(R.string.get_arabic_search_db));
       buttonGetTranslations.setVisibility(View.VISIBLE);
       downloadArabicSearchDb = true;
