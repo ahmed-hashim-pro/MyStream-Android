@@ -540,7 +540,9 @@
             android:name=".AboutUsActivity"
             android:exported="false"
             android:theme="@style/QuranToolBar.About" />
-        <activity android:name=".HelpActivity" />
+        <activity
+            android:name=".HelpActivity"
+            android:theme="@style/QuranToolBar" />
         <activity
             android:name=".ui.PagerActivity"
             android:exported="false"

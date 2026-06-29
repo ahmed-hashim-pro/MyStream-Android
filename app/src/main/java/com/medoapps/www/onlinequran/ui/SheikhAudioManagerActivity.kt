@@ -343,7 +343,14 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
           R.plurals.audio_manager_delete_surah_success, successCount, successCount
       )
     }
-    ToastCompat.makeText(this, resultString, Toast.LENGTH_SHORT).show()
+    // Navy+gold success snackbar (per the reciter-manager mockup) instead of a plain toast.
+    com.google.android.material.snackbar.Snackbar
+        .make(recyclerView, resultString, com.google.android.material.snackbar.Snackbar.LENGTH_SHORT)
+        .apply {
+          view.setBackgroundColor(ContextCompat.getColor(this@SheikhAudioManagerActivity, R.color.navy_700))
+          setTextColor(ContextCompat.getColor(this@SheikhAudioManagerActivity, R.color.text_on_navy))
+        }
+        .show()
     if (successCount > 0) {
       // refresh, if at least 1 file was deleted
       AudioManagerUtils.clearCacheKeyForSheikh(qari)

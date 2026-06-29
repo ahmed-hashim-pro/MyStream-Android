@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+        app:popupTheme="@style/ThemeOverlay.MyStream.PopupMenu"
         >
       <com.medoapps.www.onlinequran.view.QuranSpinner
           android:id="@+id/spinner"

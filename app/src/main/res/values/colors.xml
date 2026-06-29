@@ -213,23 +213,24 @@
     <color name="translation_verse_text_color">#FF858383</color>
     <color name="translation_verse_background_color">#FFF2F2F2</color>
     <color name="translation_verse_background_night_color">#FF333333</color>
-    <color name="translation_translator_color">#FF22A5AD</color>
+    <color name="translation_translator_color">@color/gold_accent</color>
     <color name="translation_text_color">#FF777777</color>
     <color name="translation_divider_color">#FFE8E8E8</color>
     <color name="translation_background_color_night">#FF1D1F21</color>
-    <color name="translation_ayah_selected_color">#FFE0F2F1</color>
+    <color name="translation_ayah_selected_color">@color/gold_accent_faint</color>
     <color name="translation_ayah_selected_color_night">#FF2D2D2D</color>
     <color name="overlay_text_color">#FF505050</color>
     <color name="inactive">#9E9E9E</color>
-    <color name="selection_highlight">#404694A6</color>
-    <color name="audio_highlight">#4046A646</color>
+    <!-- Reader page-image ayah highlights: gold-family (was teal/green). -->
+    <color name="selection_highlight">#40B8860B</color>
+    <color name="audio_highlight">#55B8860B</color>
     <color name="note_highlight">#40EBEB21</color>
     <color name="bookmark_highlight">#40A4A4A4</color>
     <!-- Search-match + in-reader translation highlight: gold (follows day/night via gold_accent). -->
     <color name="translation_highlight">@color/gold_accent</color>
     <color name="toolbar_item_pressed">#55B8860B</color>
     <color name="indicator_color">@color/gold_accent</color>
-    <color name="panel_label">@color/accent_color</color>
+    <color name="panel_label">@color/gold_accent</color>
     <color name="notification_color">#FF112E44</color>
     <color name="audio_notification_color">@color/download_button_background</color>
     <color name="audio_notification_background_color">#FFD8D8D8</color>

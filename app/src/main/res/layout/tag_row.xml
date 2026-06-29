@@ -12,6 +12,7 @@
       android:layout_width="48dp"
       android:layout_height="48dp"
       android:focusable="false"
+      android:buttonTint="@color/gold_accent"
       />
   <ImageView
       android:id="@+id/tag_add_image"
@@ -27,7 +28,7 @@
       android:layout_width="0dp"
       android:layout_height="48dp"
       android:layout_weight="1"
-      android:textColor="#F3F4E6"
+      android:textColor="@color/text_primary"
       android:gravity="center_vertical"
       />
 </LinearLayout>

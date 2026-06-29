@@ -75,6 +75,30 @@
         <item name="colorControlNormal">@color/gold_accent</item>
     </style>
 
+    <!-- Gold-accented dialog surfaces for the Mushaf (jump / tag / download dialogs).
+         Wired via alertDialogTheme + materialAlertDialogTheme on QuranToolBar so bare
+         AlertDialog.Builder dialogs pick up gold buttons/inputs/cursors. -->
+    <style name="ThemeOverlay.MyStream.Dialog" parent="ThemeOverlay.Material3.Dialog">
+        <item name="colorPrimary">@color/gold_accent</item>
+        <item name="colorAccent">@color/gold_accent</item>
+        <item name="colorControlActivated">@color/gold_accent</item>
+    </style>
+
+    <style name="ThemeOverlay.MyStream.MaterialDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">@color/gold_accent</item>
+        <item name="colorAccent">@color/gold_accent</item>
+        <item name="colorControlActivated">@color/gold_accent</item>
+    </style>
+
+    <!-- Navy popup/overflow menu for the reader toolbar (replaces the dark AppCompat popup). -->
+    <style name="ThemeOverlay.MyStream.PopupMenu" parent="ThemeOverlay.Material3.Dark">
+        <item name="colorSurface">@color/navy_700</item>
+        <item name="colorOnSurface">@color/text_on_navy</item>
+        <item name="android:colorBackground">@color/navy_700</item>
+        <item name="colorControlNormal">@color/gold_accent</item>
+        <item name="colorControlActivated">@color/gold_accent</item>
+    </style>
+
     <!-- Admin variant (no action bar + dark control highlight) -->
     <style name="AppTheme.AdminNoActionBarTheme" parent="AppTheme.NoActionBar">
         <item name="colorControlHighlight">@color/black</item>
