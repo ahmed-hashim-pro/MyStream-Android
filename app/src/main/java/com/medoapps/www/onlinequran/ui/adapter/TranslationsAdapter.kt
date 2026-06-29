@@ -1,5 +1,6 @@
 package com.medoapps.www.onlinequran.ui.adapter
 
+import android.graphics.Typeface
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.medoapps.www.onlinequran.R
 
@@ -53,6 +55,10 @@ class TranslationsAdapter(private val downloadedMenuActionListener: DownloadedMe
           } else {
             holder.translationInfo?.text = item.translation.translatorNameLocalized
           }
+          // default subtitle styling (reset for recycled rows; upgrade rows re-style below)
+          translationInfo?.setTextColor(
+            ContextCompat.getColor(itemView.context, R.color.sura_details_color))
+          translationInfo?.setTypeface(null, Typeface.NORMAL)
 
           val leftImage = this.leftImage
           val rightImage = this.rightImage
@@ -64,6 +70,10 @@ class TranslationsAdapter(private val downloadedMenuActionListener: DownloadedMe
               leftImage?.setImageResource(R.drawable.ic_download)
               leftImage?.visibility = View.VISIBLE
               translationInfo?.setText(R.string.update_available)
+              // gold + bold to flag the available update
+              translationInfo?.setTextColor(
+                ContextCompat.getColor(itemView.context, R.color.gold_accent))
+              translationInfo?.setTypeface(null, Typeface.BOLD)
             } else {
               leftImage?.visibility = View.GONE
             }

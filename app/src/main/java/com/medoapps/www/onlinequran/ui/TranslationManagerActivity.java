@@ -5,6 +5,7 @@ import com.google.android.material.snackbar.Snackbar;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import androidx.core.content.ContextCompat;
 import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -235,6 +236,8 @@ public class TranslationManagerActivity extends AppCompatActivity
     translationSwipeRefresh.setRefreshing(false);
     Snackbar
         .make(translationRecycler, R.string.error_getting_translation_list, Snackbar.LENGTH_SHORT)
+        .setBackgroundTint(ContextCompat.getColor(this, R.color.navy_700))
+        .setTextColor(ContextCompat.getColor(this, R.color.text_on_navy))
         .show();
   }
 
