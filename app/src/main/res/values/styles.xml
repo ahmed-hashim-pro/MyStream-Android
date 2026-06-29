@@ -90,13 +90,24 @@
         <item name="colorControlActivated">@color/gold_accent</item>
     </style>
 
-    <!-- Navy popup/overflow menu for the reader toolbar (replaces the dark AppCompat popup). -->
+    <!-- Navy popup/overflow menu for the Mushaf toolbars (index, reader, audio manager). -->
     <style name="ThemeOverlay.MyStream.PopupMenu" parent="ThemeOverlay.Material3.Dark">
         <item name="colorSurface">@color/navy_700</item>
         <item name="colorOnSurface">@color/text_on_navy</item>
         <item name="android:colorBackground">@color/navy_700</item>
         <item name="colorControlNormal">@color/gold_accent</item>
         <item name="colorControlActivated">@color/gold_accent</item>
+        <item name="popupMenuStyle">@style/Widget.MyStream.PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/Widget.MyStream.PopupMenu.Overflow</item>
+    </style>
+
+    <style name="Widget.MyStream.PopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_popup_navy</item>
+    </style>
+
+    <style name="Widget.MyStream.PopupMenu.Overflow" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@drawable/bg_popup_navy</item>
+        <item name="android:overlapAnchor">false</item>
     </style>
 
     <!-- Admin variant (no action bar + dark control highlight) -->

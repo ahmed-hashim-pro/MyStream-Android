@@ -17,6 +17,7 @@
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         app:contentInsetStartWithNavigation="0dp"
+        app:popupTheme="@style/ThemeOverlay.MyStream.PopupMenu"
         app:subtitleTextColor="@color/hint_on_navy"
         app:titleTextColor="@color/text_on_navy" />
 
