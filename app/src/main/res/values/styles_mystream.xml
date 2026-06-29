@@ -34,7 +34,11 @@
         <item name="android:background">@drawable/bg_listrow_badge</item>
     </style>
 
-    <style name="Widget.MyStream.ListRow.Title">
+    <!-- parent="" breaks dot-notation inheritance from Widget.MyStream.ListRow
+         (which carries minHeight=64dp + 16dp padding + match_parent width). Without
+         it the title/metadata each became a 64dp-tall row-sized box, inflating every
+         surah row to ~150dp. These are plain wrap_content text lines. -->
+    <style name="Widget.MyStream.ListRow.Title" parent="">
         <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
@@ -42,7 +46,7 @@
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="Widget.MyStream.ListRow.Meta">
+    <style name="Widget.MyStream.ListRow.Meta" parent="">
         <item name="android:textColor">@color/sura_details_color</item>
         <item name="android:textSize">13sp</item>
         <item name="android:maxLines">1</item>
