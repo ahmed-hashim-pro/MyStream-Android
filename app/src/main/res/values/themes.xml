@@ -26,6 +26,11 @@
         <item name="windowActionBarOverlay">true</item>
     </style>
 
+    <!-- About screen: gold preference-category headers (was teal colorAccent). -->
+    <style name="QuranToolBar.About">
+        <item name="colorAccent">@color/gold_accent</item>
+    </style>
+
     <style name="QuranDialog" parent="ThemeOverlay.Material3.Dialog" />
 
     <!-- Full-screen athan alarm screen (shows over lock screen / other apps). -->

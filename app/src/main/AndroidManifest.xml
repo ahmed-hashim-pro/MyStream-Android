@@ -539,7 +539,7 @@
         <activity
             android:name=".AboutUsActivity"
             android:exported="false"
-            android:theme="@style/QuranToolBar" />
+            android:theme="@style/QuranToolBar.About" />
         <activity android:name=".HelpActivity" />
         <activity
             android:name=".ui.PagerActivity"

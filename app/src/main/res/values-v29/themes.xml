@@ -15,6 +15,16 @@
     <item name="spinnerDropDownItemStyle">@style/SherlockDropDownItem</item>
     <item name="spinnerItemStyle">@style/SherlockSpinnerItem</item>
     <item name="android:forceDarkAllowed">false</item>
+    <!-- Navy chrome (the base QuranToolBar sets these; the v29 variant must too,
+         otherwise the status bar falls back to the M3 default purple). -->
+    <item name="android:statusBarColor">@color/navy_900</item>
+    <item name="android:navigationBarColor">@color/navy_900</item>
+    <item name="android:windowLightStatusBar">false</item>
+  </style>
+
+  <!-- About screen: gold preference-category headers (was teal colorAccent). -->
+  <style name="QuranToolBar.About">
+    <item name="colorAccent">@color/gold_accent</item>
   </style>
 
   <style name="QuranDialog" parent="ThemeOverlay.Material3.Dialog">
