@@ -97,6 +97,10 @@
         <item name="android:colorBackground">@color/navy_700</item>
         <item name="colorControlNormal">@color/gold_accent</item>
         <item name="colorControlActivated">@color/gold_accent</item>
+        <!-- checkable submenu items (sort radios/checkboxes) tint off colorPrimary in
+             Material3 — keep them gold, not the baseline purple. -->
+        <item name="colorPrimary">@color/gold_accent</item>
+        <item name="colorAccent">@color/gold_accent</item>
         <item name="popupMenuStyle">@style/Widget.MyStream.PopupMenu</item>
         <item name="actionOverflowMenuStyle">@style/Widget.MyStream.PopupMenu.Overflow</item>
     </style>
