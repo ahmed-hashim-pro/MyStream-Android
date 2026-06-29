@@ -20,6 +20,7 @@
       android:layout_height="48dp"
       android:src="@drawable/ic_new"
       android:scaleType="center"
+      android:tint="@color/gold_accent"
       android:visibility="gone"
       android:contentDescription="@null"
       />

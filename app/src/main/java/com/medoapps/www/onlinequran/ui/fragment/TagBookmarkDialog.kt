@@ -16,9 +16,11 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AlertDialog.Builder
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.quran.data.model.bookmark.Tag
 import com.medoapps.www.onlinequran.QuranApplication
+import com.medoapps.www.onlinequran.R.color
 import com.medoapps.www.onlinequran.R.id
 import com.medoapps.www.onlinequran.R.layout
 import com.medoapps.www.onlinequran.R.string
@@ -164,6 +166,8 @@ open class TagBookmarkDialog : DialogFragment() {
           addImage.visibility = View.VISIBLE
           checkBox.visibility = View.GONE
           tagName.text = newTagString
+          // gold-accent the "New Tag" affordance (matches the mockup)
+          tagName.setTextColor(ContextCompat.getColor(parent.context, color.gold_accent))
         }
       } else {
         holder.apply {
@@ -171,6 +175,8 @@ open class TagBookmarkDialog : DialogFragment() {
           checkBox.visibility = View.VISIBLE
           checkBox.isChecked = checkedTags.contains(id)
           tagName.text = name
+          // reset (views are recycled) so normal tags keep the default ink
+          tagName.setTextColor(ContextCompat.getColor(parent.context, color.text_primary))
           checkBox.setOnClickListener { tagBookmarkPresenter.toggleTag(id) }
         }
       }

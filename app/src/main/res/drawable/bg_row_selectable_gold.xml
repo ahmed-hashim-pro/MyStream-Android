@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Selectable list row: keeps the Material ripple on press AND shows a faint
+     gold wash when the row is activated (e.g. multi-select / contextual action
+     bar). Concrete colors so it works in light & dark. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight">
+    <item>
+        <selector>
+            <item android:state_activated="true" android:drawable="@color/gold_accent_faint" />
+            <item android:drawable="@android:color/transparent" />
+        </selector>
+    </item>
+</ripple>
