@@ -36,6 +36,8 @@
     <!-- About screen: gold preference-category headers (was teal colorAccent). -->
     <style name="QuranToolBar.About">
         <item name="colorAccent">@color/gold_accent</item>
+        <!-- Style the About preference list like Settings (gold category headers). -->
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.MyStream</item>
     </style>
 
     <!-- Host theme for the quick-jump widget shortcut (ShowJumpFragmentActivity).

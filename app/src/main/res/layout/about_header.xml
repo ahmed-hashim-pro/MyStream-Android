@@ -11,11 +11,11 @@
 
   <ImageView
       android:id="@+id/logo"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:src="@drawable/icon"
-      android:layout_marginTop="8dp"
-      android:layout_marginBottom="8dp"
+      android:layout_width="64dp"
+      android:layout_height="64dp"
+      android:src="@mipmap/ic_launcher_new_transparent9"
+      android:layout_marginTop="20dp"
+      android:layout_marginBottom="10dp"
       android:layout_gravity="center_horizontal"
       android:contentDescription="@null"
       />
@@ -25,7 +25,8 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center_horizontal"
-      android:textSize="12sp"
+      android:textColor="@color/text_primary"
+      android:textSize="18sp"
       android:textStyle="bold"
       />
 
@@ -33,9 +34,11 @@
       android:id="@android:id/summary"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="8dp"
+      android:layout_marginTop="2dp"
+      android:layout_marginBottom="16dp"
       android:gravity="center_horizontal"
-      android:textSize="12sp"
+      android:textColor="@color/text_secondary"
+      android:textSize="13sp"
       />
 
   <!-- Preference should place its actual preference widget here. -->
