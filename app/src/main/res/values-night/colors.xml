@@ -110,6 +110,8 @@
     <color name="header_background">#2A2A2A</color>
     <!-- Juz' section-header band (dark) — subtle navy-tinted band, on-theme. -->
     <color name="juz_header_band">#20283C</color>
+    <!-- Juz' header text stays gold on the dark band in night (navy would vanish). -->
+    <color name="header_text_color">@color/gold_accent</color>
 
     <!-- Mushaf header (dark) -->
     <color name="mushaf_header_background">#1E1E1E</color>

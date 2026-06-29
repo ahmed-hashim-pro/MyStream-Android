@@ -12,11 +12,12 @@
       android:layout_height="wrap_content"
       android:padding="16dp"
       android:layout_gravity="center_vertical"
-      />
+      android:indeterminateTint="@color/gold_accent" />
 
   <TextView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"
+      android:textColor="@color/text_primary"
       android:text="@string/please_wait" />
 </LinearLayout>

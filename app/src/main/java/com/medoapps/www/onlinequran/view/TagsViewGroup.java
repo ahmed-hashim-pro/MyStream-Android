@@ -54,7 +54,7 @@ public class TagsViewGroup extends LinearLayout {
     mTagWidth = resources.getDimensionPixelSize(R.dimen.tag_width);
     mTagsMargin = resources.getDimensionPixelSize(R.dimen.tag_margin);
     mTagsTextSize = resources.getDimensionPixelSize(R.dimen.tag_text_size);
-    mDefaultTagBackgroundColor = ContextCompat.getColor(context, R.color.accent_color_dark);
+    mDefaultTagBackgroundColor = ContextCompat.getColor(context, R.color.gold_accent_faint);
     mTagsToShow = MAX_TAGS;
   }
 
@@ -73,6 +73,7 @@ public class TagsViewGroup extends LinearLayout {
       tv.setText(tag.getName());
       tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTagsTextSize);
       tv.setBackgroundColor(mDefaultTagBackgroundColor);
+      tv.setTextColor(ContextCompat.getColor(mContext, R.color.text_primary));
       tv.setGravity(Gravity.CENTER);
       tv.setLines(1);
       tv.setEllipsize(TextUtils.TruncateAt.END);

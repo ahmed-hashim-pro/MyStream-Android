@@ -141,7 +141,11 @@ class QuranActivity : AppCompatActivity(),
     window.statusBarColor = headerColor
     window.navigationBarColor = headerColor
     val isNightMode = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
-    WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = !isNightMode
+    val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+    insetsController.isAppearanceLightStatusBars = !isNightMode
+    // The nav bar is the cream/dark list surface, so its icons must invert too —
+    // otherwise the (default white) buttons/gesture pill are invisible on cream in day mode.
+    insetsController.isAppearanceLightNavigationBars = !isNightMode
 
     isRtl = isRtl()
 
