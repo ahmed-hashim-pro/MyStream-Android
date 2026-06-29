@@ -108,6 +108,8 @@
     <color name="sura_number_color">#D4A44C</color>
     <color name="sura_details_color">#998F80</color>
     <color name="header_background">#2A2A2A</color>
+    <!-- Juz' section-header band (dark) — subtle navy-tinted band, on-theme. -->
+    <color name="juz_header_band">#20283C</color>
 
     <!-- Mushaf header (dark) -->
     <color name="mushaf_header_background">#1E1E1E</color>
