@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mushaf re-theme — REAL Current vs Proposed (device screenshots)</title>
+<style>
+  :root{ --gold:#D4A44C; --navy:#1F2A44; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Plus Jakarta Sans',system-ui,Arial,sans-serif;color:#e8eaf0;
+    background:radial-gradient(1100px 520px at 12% -8%,#20304f 0,transparent 60%),
+               radial-gradient(900px 480px at 100% 0,#11182a 0,transparent 55%),#0c111d;
+    padding:30px 22px 80px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto}
+  h1{font-size:24px;font-weight:800;letter-spacing:-.02em;margin:0 0 4px;display:flex;align-items:center;gap:10px}
+  h1 .dot{width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+  .sub{color:#9fb0d0;font-size:14px;line-height:1.6;margin:0 0 10px;max-width:920px}
+  .legend{display:flex;gap:14px;margin:14px 0 26px;flex-wrap:wrap}
+  .legend span{font-size:12px;font-weight:800;letter-spacing:.04em;padding:6px 14px;border-radius:20px}
+  .legend .c{background:#3a2326;color:#ff9d9d;border:1px solid #5c3030}
+  .legend .p{background:#16331f;color:#94e6ab;border:1px solid #2c5a37}
+  section{border-top:1px solid #1c2335;padding-top:20px;margin-top:26px}
+  h2{font-size:19px;font-weight:800;margin:0 0 4px;display:flex;align-items:baseline;gap:9px}
+  h2 .n{color:var(--gold);font-size:15px}
+  .desc{color:#9fb0d0;font-size:13.5px;line-height:1.55;margin:0 0 18px;max-width:1000px}
+  .desc b{color:#e7ecf7}
+  .pair{display:flex;gap:38px;flex-wrap:wrap;align-items:flex-start}
+  figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:10px;width:300px}
+  figcaption{font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:5px 15px;border-radius:20px}
+  figcaption.c{background:#3a2326;color:#ff9d9d;border:1px solid #5c3030}
+  figcaption.p{background:#16331f;color:#94e6ab;border:1px solid #2c5a37}
+  .shot{width:300px;border-radius:26px;overflow:hidden;border:7px solid #05070c;
+    box-shadow:0 30px 70px -28px rgba(0,0,0,.85),0 0 0 1.5px #1c2335;background:#000}
+  .shot img{display:block;width:100%;height:auto}
+  .arrow{align-self:center;color:var(--gold);font-size:30px;opacity:.8;padding-top:120px}
+  footer{margin-top:40px;color:#6f7e9e;font-size:12px;border-top:1px solid #1c2335;padding-top:16px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1><span class="dot"></span> Mushaf re-theme — Current vs Proposed (real screenshots)</h1>
+  <p class="sub">Actual device screenshots, captured on the emulator (Arabic, light theme). <b>LEFT = current</b> — the app built from commit <code>97fab84</code>, the state right <i>before</i> the Mushaf re-theme. <b>RIGHT = proposed</b> — the re-themed build that is now on <code>feature/mushaf-retheme</code>. No mockups; these are the real running screens.</p>
+  <div class="legend"><span class="c">◀ Current (before)</span><span class="p">Proposed (now in app) ▶</span></div>
+
+  <section>
+    <h2><span class="n">01</span> Quran Index — Surah list</h2>
+    <p class="desc">Sepia/cream bar titled <b>“My Stream”</b> with warm-tan Juz' separator bands and plain gold sura numbers → <b>navy collapsing hero</b> (“Mushaf / The Holy Quran”), an always-on search field, Surahs/Juz/Bookmarks tabs with a gold indicator, a Continue-reading card, and rounded gold badges.</p>
+    <div class="pair">
+      <figure><figcaption class="c">Current</figcaption><div class="shot"><img src="compare-shots/cur-01-index.png" alt="current index"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="p">Proposed</figcaption><div class="shot"><img src="compare-shots/prop-01-index.png" alt="proposed index"></div></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">02</span> Index — Juz' list &amp; progress markers</h2>
+    <p class="desc">Warm-tan section bands and <b>teal</b> rub'-el-hizb pie markers → a cool navy-tint band with navy/gold text and <b>gold</b> pie markers.</p>
+    <div class="pair">
+      <figure><figcaption class="c">Current</figcaption><div class="shot"><img src="compare-shots/cur-02-juz.png" alt="current juz"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="p">Proposed</figcaption><div class="shot"><img src="compare-shots/prop-02-juz.png" alt="proposed juz"></div></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">03</span> Reader page — chrome &amp; paper modes</h2>
+    <p class="desc">A flat <b>grey</b> top bar and grey audio bar around the page image, with no paper-mode control → a <b>navy</b> top bar (back / translation / bookmark), gold <b>Day/Sepia/Night</b> chips and a navy audio bar with a gold play button.</p>
+    <div class="pair">
+      <figure><figcaption class="c">Current</figcaption><div class="shot"><img src="compare-shots/cur-03-reader.png" alt="current reader"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="p">Proposed</figcaption><div class="shot"><img src="compare-shots/prop-03-reader.png" alt="proposed reader"></div></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">04</span> Reciter audio download manager</h2>
+    <p class="desc">A <b>purple</b> status bar + lavender action bar with <b>slate-teal</b> download circles on plain rows → a navy hero (“Audio Manager · Reciters”) with gold-faint download discs and gold arrows.</p>
+    <div class="pair">
+      <figure><figcaption class="c">Current</figcaption><div class="shot"><img src="compare-shots/cur-04-reciter.png" alt="current reciter manager"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="p">Proposed</figcaption><div class="shot"><img src="compare-shots/prop-04-reciter.png" alt="proposed reciter manager"></div></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">05</span> Per-reciter surahs</h2>
+    <p class="desc">Gold/lavender action bar with slate &amp; brick-red download circles → a navy toolbar (reciter name + “X / 114 surahs”), gold download discs and an error-red trash for downloaded surahs.</p>
+    <div class="pair">
+      <figure><figcaption class="c">Current</figcaption><div class="shot"><img src="compare-shots/cur-05-sheikh.png" alt="current per-reciter"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="p">Proposed</figcaption><div class="shot"><img src="compare-shots/prop-05-sheikh.png" alt="proposed per-reciter"></div></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">06</span> About screen</h2>
+    <p class="desc">A <b>purple</b> status bar above the toolbar and <b>teal</b> category headers → a navy status bar and <b>gold</b> category headers on a clean surface.</p>
+    <div class="pair">
+      <figure><figcaption class="c">Current</figcaption><div class="shot"><img src="compare-shots/cur-06-about.png" alt="current about"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="p">Proposed</figcaption><div class="shot"><img src="compare-shots/prop-06-about.png" alt="proposed about"></div></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="n">07</span> Help screen</h2>
+    <p class="desc">A default light/grey action bar with body text that was <b>hardcoded white — invisible on the light background</b> → a navy hero with a gold back and fully readable text.</p>
+    <div class="pair">
+      <figure><figcaption class="c">Current</figcaption><div class="shot"><img src="compare-shots/cur-07-help.png" alt="current help"></div></figure>
+      <div class="arrow">→</div>
+      <figure><figcaption class="p">Proposed</figcaption><div class="shot"><img src="compare-shots/prop-07-help.png" alt="proposed help"></div></figure>
+    </div>
+  </section>
+
+  <footer>
+    Real device captures · Arabic · light theme. Current = commit <code>97fab84</code> (pre-re-theme). Proposed = <code>feature/mushaf-retheme</code>.
+    Dialogs, menus, the search screen and dark-mode variants are covered in the illustrated gallery (<code>compare.html</code>); these seven are the core screens captured live on the device.
+  </footer>
+</div>
+</body>
+</html>
