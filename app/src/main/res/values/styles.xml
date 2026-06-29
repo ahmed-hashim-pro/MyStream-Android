@@ -63,6 +63,9 @@
         <item name="actionModeBackground">@color/navy_700</item>
         <item name="actionModeStyle">@style/Widget.MyStream.AudioActionMode</item>
         <item name="actionBarTheme">@style/ThemeOverlay.MyStream.AudioActionBar</item>
+        <!-- Gold-accent the bulk-download range picker / confirm dialogs -->
+        <item name="alertDialogTheme">@style/ThemeOverlay.MyStream.Dialog</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.MyStream.MaterialDialog</item>
     </style>
 
     <!-- Navy contextual (multi-select) bar background -->
