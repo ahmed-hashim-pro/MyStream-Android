@@ -10,66 +10,182 @@
           <div class="nav">
             <span class="bk">‹</span>
             <div class="ttl"><div class="t" data-en="Settings" data-ar="الإعدادات"></div>
-              <div class="s" data-en="Display · reading · audio" data-ar="العرض · القراءة · الصوت"></div></div>
+              <div class="s" data-en="Display · reading · dual · translation · download" data-ar="العرض · القراءة · صفحتان · التفسير · التحميل"></div></div>
           </div>
         </div>
         <div class="body"><div class="scroll">
-          <div class="sec"><span data-en="Display" data-ar="العرض"></span><span class="ln"></span></div>
+
+          <!-- ===== Display Settings ===== -->
+          <div class="sec"><span style="color:var(--gold)" data-en="Display Settings" data-ar="إعدادات العرض"></span><span class="ln"></span></div>
           <div class="card">
+            <!-- Arabic mode -->
             <div class="prow"><span class="ic">🔤</span>
-              <div class="tx"><div class="t" data-en="Arabic surah names" data-ar="أسماء السور بالعربية"></div>
-                <div class="s" data-en="Show names in Arabic script" data-ar="عرض الأسماء بالخط العربي"></div></div>
+              <div class="tx"><div class="t" data-en="Arabic mode" data-ar="الوضع العربي"></div>
+                <div class="s" data-en="Use Arabic for application interface" data-ar="سيتم تحويل التطبيق إلى اللغة العربية"></div></div>
               <div class="sw on"><div class="k"></div></div></div>
-            <div class="prow"><span class="ic">🎨</span>
-              <div class="tx"><div class="t" data-en="Reading background" data-ar="خلفية القراءة"></div>
-                <div class="s" data-en="Paper tone for the page" data-ar="لون الورق للصفحة"></div></div>
-              <span class="val" data-en="Sepia" data-ar="ورقي"></span></div>
+            <!-- New background (no summary, no value) -->
+            <div class="prow"><span class="ic">🖼️</span>
+              <div class="tx"><div class="t" data-en="New background" data-ar="الخلفية الجديدة"></div></div>
+              <div class="sw on"><div class="k"></div></div></div>
+            <!-- Lock screen orientation -->
             <div class="prow"><span class="ic">🔒</span>
-              <div class="tx"><div class="t" data-en="Lock orientation" data-ar="قفل الاتجاه"></div>
-                <div class="s" data-en="Keep portrait while reading" data-ar="إبقاء الوضع الرأسي أثناء القراءة"></div></div>
+              <div class="tx"><div class="t" data-en="Lock screen orientation" data-ar="الإبقاء على وضع العرض"></div>
+                <div class="s" data-en="Adaptive to current orientation mode" data-ar="وضع العرض يتغير تلقائيا"></div></div>
+              <div class="sw"><div class="k"></div></div></div>
+            <!-- Landscape orientation — DISABLED (depends on lock) -->
+            <div class="prow" style="opacity:.45">
+              <span class="ic">🖥️</span>
+              <div class="tx"><div class="t" data-en="Landscape orientation" data-ar="الوضع الأفقي"></div>
+                <div class="s" data-en="Portrait orientation will be used" data-ar="سيتم استخدام الوضع الرأسي"></div></div>
+              <div class="sw"><div class="k"></div></div></div>
+            <!-- Surah translated name -->
+            <div class="prow"><span class="ic">🏷️</span>
+              <div class="tx"><div class="t" data-en="Surah translated name" data-ar="ترجمة أسماء السور"></div>
+                <div class="s" data-en="Show the translation of surah name" data-ar="إظهار أسماء السور مترجمة"></div></div>
+              <div class="sw on"><div class="k"></div></div></div>
+            <!-- Night mode -->
+            <div class="prow"><span class="ic">🌙</span>
+              <div class="tx"><div class="t" data-en="Night mode" data-ar="القراءة الليلية"></div>
+                <div class="s" data-en="Use dark background and light fonts" data-ar="الخلفية باللون الأسود والخطوط باللون الأبيض"></div></div>
+              <div class="sw"><div class="k"></div></div></div>
+            <!-- Text brightness slider — DISABLED (depends on night mode) -->
+            <div class="prow" style="opacity:.45;align-items:flex-start">
+              <span class="ic">🔆</span>
+              <div class="tx">
+                <div class="t" data-en="Text brightness" data-ar="إضاءة الخط"></div>
+                <div class="s" data-en="Font backlight when night mode is on" data-ar="إضاءة الخط عند تفعيل القراءة الليلية"></div>
+                <div style="display:flex;align-items:center;gap:11px;margin-top:10px">
+                  <div style="position:relative;height:16px;display:flex;align-items:center;flex:1">
+                    <div style="height:4px;border-radius:4px;background:var(--gold-faint);width:100%"></div>
+                    <div style="position:absolute;inset-inline-start:0;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--gold),var(--gold-2));width:88%"></div>
+                    <span style="position:absolute;inset-inline-start:calc(88% - 7px);width:15px;height:15px;border-radius:50%;background:#fff;border:2px solid var(--gold);box-shadow:0 1px 3px rgba(0,0,0,.3)"></span>
+                  </div>
+                  <span style="font-size:11.5px;font-weight:800;color:var(--text2);min-width:26px;text-align:end"><span data-en="255" data-ar="٢٥٥"></span></span>
+                </div>
+                <div style="text-align:center;margin-top:6px"><span class="gold" style="font-size:11px;font-weight:800" data-en="Preview" data-ar="معاينة"></span></div>
+              </div>
+            </div>
+            <!-- Background brightness slider — DISABLED (depends on night mode) -->
+            <div class="prow" style="opacity:.45;align-items:flex-start">
+              <span class="ic">🔅</span>
+              <div class="tx">
+                <div class="t" data-en="Background brightness" data-ar="إضاءة الخلفية"></div>
+                <div class="s" data-en="Page backlight when night mode is on" data-ar="إضاءة الصفحة عند تفعيل القراءة الليلية"></div>
+                <div style="display:flex;align-items:center;gap:11px;margin-top:10px">
+                  <div style="position:relative;height:16px;display:flex;align-items:center;flex:1">
+                    <div style="height:4px;border-radius:4px;background:var(--gold-faint);width:100%"></div>
+                    <div style="position:absolute;inset-inline-start:0;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--gold),var(--gold-2));width:4%"></div>
+                    <span style="position:absolute;inset-inline-start:calc(4% - 2px);width:15px;height:15px;border-radius:50%;background:#fff;border:2px solid var(--gold);box-shadow:0 1px 3px rgba(0,0,0,.3)"></span>
+                  </div>
+                  <span style="width:24px;height:24px;border-radius:6px;background:#000;border:1px solid var(--line);flex:none"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== Reading Preferences ===== -->
+          <div class="sec"><span style="color:var(--gold)" data-en="Reading Preferences" data-ar="إعدادات القراءة"></span><span class="ln"></span></div>
+          <div class="card">
+            <!-- Page type (experimental) -->
+            <div class="prow"><span class="ic">📄</span>
+              <div class="tx"><div class="t" data-en="Page Type (experimental)" data-ar="نوع طباعة المصحف (تجريبي)"></div>
+                <div class="s" data-en="Select the type of reading pages" data-ar="اختر نوع صفحات القراءة"></div></div>
+              <span class="val" data-en="Madani" data-ar="مدني"></span></div>
+            <!-- Show page info -->
+            <div class="prow"><span class="ic">ℹ️</span>
+              <div class="tx"><div class="t" data-en="Show page info" data-ar="عرض بيانات الصفحة"></div>
+                <div class="s" data-en="Overlay page number, surah name, and juz' while reading" data-ar="عرض رقم الصفحة، اسم السورة، ورقم الجزء أثناء القراءة"></div></div>
+              <div class="sw on"><div class="k"></div></div></div>
+            <!-- Display marker popups -->
+            <div class="prow"><span class="ic">🔔</span>
+              <div class="tx"><div class="t" data-en="Display marker popups" data-ar="التنبيه"></div>
+                <div class="s" data-en="Display popup on reaching juz', hizb, etc." data-ar="عرض تنبيه عند الوصول إلى بداية الربع أو الجزء"></div></div>
+              <div class="sw on"><div class="k"></div></div></div>
+            <!-- Highlight bookmarks -->
+            <div class="prow"><span class="ic">🔖</span>
+              <div class="tx"><div class="t" data-en="Highlight bookmarks" data-ar="تعليم المرجعيات"></div>
+                <div class="s" data-en="Highlight bookmarked ayahs while reading" data-ar="تمييز الآيات المرجعية أثناء القراءة"></div></div>
+              <div class="sw on"><div class="k"></div></div></div>
+            <!-- Volume key navigation -->
+            <div class="prow"><span class="ic">🔊</span>
+              <div class="tx"><div class="t" data-en="Volume key navigation" data-ar="تصفح بمفاتيح الصوت"></div>
+                <div class="s" data-en="Navigate between pages using volume keys" data-ar="التنقل بين الصفحات بمفاتيح الصوت"></div></div>
               <div class="sw"><div class="k"></div></div></div>
           </div>
 
-          <div class="sec"><span data-en="Reading" data-ar="القراءة"></span><span class="ln"></span></div>
+          <!-- ===== Dual Page Preferences ===== -->
+          <div class="sec"><span style="color:var(--gold)" data-en="Dual Page Preferences" data-ar="تفضيلات الصفحتين المتجاورتين"></span><span class="ln"></span></div>
           <div class="card">
-            <div class="prow"><span class="ic">📄</span>
-              <div class="tx"><div class="t" data-en="Page type" data-ar="نوع الصفحة"></div>
-                <div class="s" data-en="Mushaf image set" data-ar="مجموعة صور المصحف"></div></div>
-              <span class="val" data-en="Madani" data-ar="مدني"></span></div>
-            <div class="prow"><span class="ic">ℹ️</span>
-              <div class="tx"><div class="t" data-en="Page info overlay" data-ar="معلومات الصفحة"></div>
-                <div class="s" data-en="Show surah & juz' on page" data-ar="عرض السورة والجزء على الصفحة"></div></div>
-              <div class="sw on"><div class="k"></div></div></div>
-            <div class="prow"><span class="ic">👆</span>
-              <div class="tx"><div class="t" data-en="Ayah marker popups" data-ar="نوافذ علامة الآية"></div>
-                <div class="s" data-en="Tap a marker for actions" data-ar="انقر العلامة للإجراءات"></div></div>
-              <div class="sw on"><div class="k"></div></div></div>
+            <!-- Dual page mode -->
+            <div class="prow"><span class="ic">📖</span>
+              <div class="tx"><div class="t" data-en="Dual Page Mode" data-ar="وضع الصفحتين المتجاورتين"></div>
+                <div class="s" data-en="In landscape, two pages will appear side by side." data-ar="في الوضع الأفقي تظهر صفحتان جنبًا إلى جنب"></div></div>
+              <div class="sw"><div class="k"></div></div></div>
+            <!-- Quran + translation dual — DISABLED (depends on dual page mode) -->
+            <div class="prow" style="opacity:.45"><span class="ic">📑</span>
+              <div class="tx"><div class="t" data-en="Quran and translation in dual mode" data-ar="عرض صفحة من المصحف وأخرى من الترجمة"></div>
+                <div class="s" data-en="One Quran page beside one translation page" data-ar="صفحة من المصحف بجوار صفحة من الترجمة"></div></div>
+              <div class="sw"><div class="k"></div></div></div>
           </div>
 
-          <div class="sec"><span data-en="Translation" data-ar="الترجمة"></span><span class="ln"></span></div>
+          <!-- ===== Translation Preferences ===== -->
+          <div class="sec"><span style="color:var(--gold)" data-en="Translation Preferences" data-ar="إعدادات التفسير والترجمة"></span><span class="ln"></span></div>
           <div class="card">
+            <!-- Translations (nav) -->
             <div class="prow"><span class="ic">🌐</span>
-              <div class="tx"><div class="t" data-en="Manage translations" data-ar="إدارة الترجمات"></div>
-                <div class="s" data-en="3 installed" data-ar="3 مُثبّتة"></div></div>
+              <div class="tx"><div class="t" data-en="Translations" data-ar="التفسير والترجمة"></div>
+                <div class="s" data-en="Download and manage translations" data-ar="حمّل واختر التفاسير والتراجم"></div></div>
               <span class="chev">›</span></div>
-            <div class="prow"><span class="ic">🔠</span>
-              <div class="tx"><div class="t" data-en="Translation text size" data-ar="حجم نص الترجمة"></div></div>
-              <span class="val" data-en="Medium" data-ar="متوسط"></span></div>
+            <!-- Ayah before translation -->
+            <div class="prow"><span class="ic">📜</span>
+              <div class="tx"><div class="t" data-en="Ayah before translation" data-ar="عرض الآية مع التفسير"></div>
+                <div class="s" data-en="Show ayah in Arabic above the translation" data-ar="إظهار الآية بالعربية فوق الترجمة"></div></div>
+              <div class="sw on"><div class="k"></div></div></div>
+            <!-- Translation text size — SLIDER (0–40) -->
+            <div class="prow" style="align-items:flex-start"><span class="ic">🔠</span>
+              <div class="tx">
+                <div class="t" data-en="Translation text size" data-ar="خط التفسير والترجمة"></div>
+                <div style="display:flex;align-items:center;gap:11px;margin-top:10px">
+                  <div style="position:relative;height:16px;display:flex;align-items:center;flex:1">
+                    <div style="height:4px;border-radius:4px;background:var(--gold-faint);width:100%"></div>
+                    <div style="position:absolute;inset-inline-start:0;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--gold),var(--gold-2));width:38%"></div>
+                    <span style="position:absolute;inset-inline-start:calc(38% - 7px);width:15px;height:15px;border-radius:50%;background:#fff;border:2px solid var(--gold);box-shadow:0 1px 3px rgba(0,0,0,.3)"></span>
+                  </div>
+                  <span style="font-size:11.5px;font-weight:800;color:var(--text2);min-width:22px;text-align:end"><span data-en="15" data-ar="١٥"></span></span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="sec"><span data-en="Audio & advanced" data-ar="الصوت والمتقدم"></span><span class="ln"></span></div>
+          <!-- ===== Download Options ===== -->
+          <div class="sec"><span style="color:var(--gold)" data-en="Download Options" data-ar="خيارات التحميل"></span><span class="ln"></span></div>
           <div class="card">
-            <div class="prow"><span class="ic">🎙️</span>
-              <div class="tx"><div class="t" data-en="Default reciter" data-ar="القارئ الافتراضي"></div></div>
-              <span class="val" data-en="Mishary Alafasy" data-ar="مشاري العفاسي"></span></div>
-            <div class="prow"><span class="ic">⚙️</span>
-              <div class="tx"><div class="t" data-en="Advanced settings" data-ar="الإعدادات المتقدمة"></div>
-                <div class="s" data-en="Backup, storage, logs" data-ar="نسخ احتياطي، تخزين، سجلات"></div></div>
-              <span class="chev">›</span></div>
-            <div class="prow"><span class="ic">ℹ️</span>
-              <div class="tx"><div class="t" data-en="About & help" data-ar="حول والمساعدة"></div></div>
+            <!-- Streaming -->
+            <div class="prow"><span class="ic">📡</span>
+              <div class="tx"><div class="t" data-en="Streaming" data-ar="استماع عبر الإنترنت"></div>
+                <div class="s" data-en="Stream audio instead of downloading" data-ar="بث الصوت بدلاً من تنزيله"></div></div>
+              <div class="sw"><div class="k"></div></div></div>
+            <!-- Download amount (dialog list) -->
+            <div class="prow"><span class="ic">⬇️</span>
+              <div class="tx"><div class="t" data-en="Download amount" data-ar="كم التحميل"></div>
+                <div class="s" data-en="Preferred download amount for non-gapless audio" data-ar="كمية التحميل المفضّلة للصوت غير المتصل"></div></div>
+              <span class="val" data-en="Juz'" data-ar="جزء"></span></div>
+            <!-- Audio Manager (nav) -->
+            <div class="prow"><span class="ic">🎧</span>
+              <div class="tx"><div class="t" data-en="Audio Manager" data-ar="إدارة الصوتيات"></div>
+                <div class="s" data-en="Manage and download Quranic audio" data-ar="إدارة وتنزيل التلاوات الصوتية"></div></div>
               <span class="chev">›</span></div>
           </div>
+
+          <!-- ===== Advanced Options ===== -->
+          <div class="sec"><span style="color:var(--gold)" data-en="Advanced Options" data-ar="خيارات متقدمة"></span><span class="ln"></span></div>
+          <div class="card">
+            <div class="prow"><span class="ic">⚙️</span>
+              <div class="tx"><div class="t" data-en="Advanced Options" data-ar="خيارات متقدمة"></div>
+                <div class="s" data-en="Import/export bookmarks, set Quran data directory, etc." data-ar="استيراد/تصدير المرجعيات، تعيين مجلد بيانات المصحف، إلخ"></div></div>
+              <span class="chev">›</span></div>
+          </div>
+
         </div></div>
       </div></div>
     </div>

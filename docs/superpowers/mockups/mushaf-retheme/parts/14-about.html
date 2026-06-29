@@ -1,57 +1,199 @@
-<!-- ====== 14 · ABOUT & HELP ====== -->
+<!-- ============ 14 · ABOUT US (AboutFragment — PreferenceScreen) ============ -->
 <div class="phone-col">
   <div class="phone-cap">
-    <div class="n" data-en="About & Help" data-ar="حول والمساعدة"></div>
-    <div class="d" data-en="App info, sources & contact" data-ar="معلومات التطبيق والمصادر والتواصل"></div>
+    <div class="n" data-en="About Us" data-ar="عنا"></div>
+    <div class="d" data-en="AboutFragment — data sources & open-source credits, each row opens a web link" data-ar="AboutFragment — مصادر المعلومات وشكر المشاريع مفتوحة المصدر، كل صف يفتح رابطًا"></div>
   </div>
   <div class="phone"><div class="notch"></div><div class="screen">
     <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
     <div class="bar round">
       <div class="nav">
         <span class="bk">‹</span>
-        <div class="ttl"><div class="t" data-en="About & Help" data-ar="حول والمساعدة"></div></div>
+        <div class="ttl"><div class="t" data-en="About Us" data-ar="عنا"></div></div>
       </div>
     </div>
     <div class="body"><div class="scroll">
-      <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:18px 12px 8px">
-        <div style="width:64px;height:64px;border-radius:18px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:32px">📖</div>
-        <div style="font-size:16px;font-weight:800;color:var(--text)" data-en="My Stream — Mushaf" data-ar="ماي ستريم — المصحف"></div>
-        <div style="font-size:11.5px;font-weight:700;color:var(--text2)" data-en="v4.2.1" data-ar="v4.2.1"></div>
+
+      <!-- header: real app logo (@drawable/icon) + app_name + about_description tagline -->
+      <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:20px 14px 12px">
+        <div style="width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-2));display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm);position:relative">
+          <div style="position:absolute;inset:4px;border-radius:50%;border:1.5px solid rgba(255,255,255,.35)"></div>
+          <span style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.02em;color:var(--navy-900)">MS</span>
+        </div>
+        <div style="font-size:16px;font-weight:800;color:var(--text)" data-en="My Stream" data-ar="My Stream"></div>
+        <div style="font-size:11.5px;line-height:1.5;color:var(--text2);max-width:236px" data-en="Quran for Android is a free Quran application. Please do not forget the contributors in your prayers." data-ar="هذا التطبيق مجاني. لا تنسونا من صالح دعائكم."></div>
+      </div>
+      <div style="height:1px;background:var(--line);margin:6px 12px 0"></div>
+
+      <!-- ===== Data Sources (about_data_sources) ===== -->
+      <div class="sec" style="color:var(--gold)"><span data-en="Data Sources" data-ar="مصادر المعلومات"></span><span class="ln"></span></div>
+      <div class="card">
+
+        <!-- Images — madani flavor → King Fahd Complex; madani Images IS a link -->
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="Images" data-ar="الصور"></span></div>
+            <div class="s" data-en="The Quran images are based on the fonts from the King Fahd Quran Printing Complex" data-ar="صور صفحات القرآن الموجودة بالتطبيق مصدرها مجمع الملك فهد لطباعة المصحف الشريف بالمدينة المنورة"></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <!-- QuranicAudio -->
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="QuranicAudio" data-ar="QuranicAudio"></span></div>
+            <div class="s" data-en="Gapless mp3 Quran recitations" data-ar="التلاوات الصوتية المتصلة"></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <!-- Electronic Moshaf Project (KSU) -->
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="Electronic Moshaf Project" data-ar="مشروع المصحف الإلكتروني"></span></div>
+            <div class="s" data-en="The King Saud University Electronic Moshaf Project is the app's source of Arabic Tafaseer and translations for various languages. It is also the source for Dr. Ayman Suwaid's recitation." data-ar="مشروع المصحف الإلكتروني بجامعة الملك سعود هو مصدر عدد من التفاسير والترجمات المستخدمة في التطبيق. وهو أيضا مصدر تلاوة الشيخ أيمن سويد."></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <!-- Al-Bāḥith al-Qur'ānī (tafsir.app) -->
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="Al-Bāḥith al-Qur'ānī (tafsir.app)" data-ar="الباحث القرآني (tafsir.app)"></span></div>
+            <div class="s" data-en="Uthmani text and Arabic Tafaseer" data-ar="النص العثماني والتفاسير العربية"></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <!-- Noble Quran Encyclopedia (QuranEnc) -->
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="Noble Quran Encyclopedia (QuranEnc)" data-ar="موسوعة القرآن الكريم"></span></div>
+            <div class="s" data-en="Translations for many languages" data-ar="الترجمات لعدد من اللغات"></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <!-- Tanzil -->
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="Tanzil" data-ar="تنزيل"></span></div>
+            <div class="s" data-en="Translations for a few languages" data-ar="ترجمات لبعض اللغات"></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <!-- Noorhidayat -->
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="Noorhidayat" data-ar="نور وهداية (Noorhidayat)"></span></div>
+            <div class="s" data-en="Noorehira font and Mufti Taqi Translation" data-ar="خط نورحِرا وترجمة مفتي تقي"></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
       </div>
 
-      <div class="sec"><span data-en="About" data-ar="حول"></span><span class="ln"></span></div>
+      <!-- ===== Open Source Projects (about_open_source) — all 12 library credits ===== -->
+      <div class="sec" style="color:var(--gold)"><span data-en="Open Source Projects" data-ar="مشاريع مفتوحة المصدر"></span><span class="ln"></span></div>
       <div class="card">
-        <div style="padding:14px;font-size:12.5px;line-height:1.6;color:var(--text2)" data-en="A calm navy-and-gold Qur'an reader built on the open-source Quran for Android project. Read the Mushaf, follow verse-by-verse audio, and bookmark your place — all in My Stream's design language." data-ar="مصحف هادئ بالأزرق الداكن والذهبي مبني على مشروع Quran for Android مفتوح المصدر. اقرأ المصحف وتابع الصوت آية بآية واحفظ موضعك — كل ذلك بهوية ماي ستريم."></div>
+
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="AndroidX" data-ar="AndroidX"></span></div>
+            <div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span dir="ltr" data-en="https://developer.android.com/jetpack/androidx" data-ar="https://developer.android.com/jetpack/androidx"></span></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="Kotlin" data-ar="Kotlin"></span></div>
+            <div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span dir="ltr" data-en="https://kotlinlang.org" data-ar="https://kotlinlang.org"></span></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="Dagger 2" data-ar="Dagger 2"></span></div>
+            <div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span dir="ltr" data-en="https://google.github.io/dagger" data-ar="https://google.github.io/dagger"></span></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="OkHttp" data-ar="OkHttp"></span></div>
+            <div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span dir="ltr" data-en="https://github.com/square/okhttp" data-ar="https://github.com/square/okhttp"></span></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="RxJava" data-ar="RxJava"></span></div>
+            <div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span dir="ltr" data-en="https://github.com/ReactiveX/RxJava" data-ar="https://github.com/ReactiveX/RxJava"></span></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="RxAndroid" data-ar="RxAndroid"></span></div>
+            <div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span dir="ltr" data-en="https://github.com/ReactiveX/RxAndroid" data-ar="https://github.com/ReactiveX/RxAndroid"></span></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="Moshi" data-ar="Moshi"></span></div>
+            <div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span dir="ltr" data-en="https://github.com/square/moshi" data-ar="https://github.com/square/moshi"></span></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="AndroidSlidingUpPanel" data-ar="AndroidSlidingUpPanel"></span></div>
+            <div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span dir="ltr" data-en="https://github.com/umano/AndroidSlidingUpPanel" data-ar="https://github.com/umano/AndroidSlidingUpPanel"></span></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="Timber" data-ar="Timber"></span></div>
+            <div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span dir="ltr" data-en="https://github.com/JakeWharton/timber" data-ar="https://github.com/JakeWharton/timber"></span></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="Material Components for Android" data-ar="Material Components for Android"></span></div>
+            <div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span dir="ltr" data-en="https://github.com/material-components/material-components-android" data-ar="https://github.com/material-components/material-components-android"></span></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="dnsjava" data-ar="dnsjava"></span></div>
+            <div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span dir="ltr" data-en="http://dnsjava.org" data-ar="http://dnsjava.org"></span></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
+
+        <div class="prow">
+          <div class="tx">
+            <div class="t"><span data-en="Number Picker" data-ar="Number Picker"></span></div>
+            <div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span dir="ltr" data-en="https://github.com/ShawnLin013/NumberPicker" data-ar="https://github.com/ShawnLin013/NumberPicker"></span></div>
+          </div>
+          <span style="color:var(--gold);font-size:14px;flex:none" aria-hidden="true">↗</span>
+        </div>
       </div>
 
-      <div class="sec"><span data-en="Quran text sources" data-ar="مصادر نص المصحف"></span><span class="ln"></span></div>
-      <div class="card">
-        <div class="prow"><span class="ic">📄</span>
-          <div class="tx"><div class="t" data-en="Madani" data-ar="مدني"></div>
-            <div class="s" data-en="King Fahd Complex" data-ar="مجمع الملك فهد"></div></div></div>
-        <div class="prow"><span class="ic">📄</span>
-          <div class="tx"><div class="t" data-en="Naskh" data-ar="نسخ"></div>
-            <div class="s" data-en="King Fahd Complex" data-ar="مجمع الملك فهد"></div></div></div>
-        <div class="prow"><span class="ic">📄</span>
-          <div class="tx"><div class="t" data-en="Qaloon" data-ar="قالون"></div>
-            <div class="s" data-en="King Fahd Complex" data-ar="مجمع الملك فهد"></div></div></div>
-        <div class="prow"><span class="ic">📄</span>
-          <div class="tx"><div class="t" data-en="Warsh" data-ar="ورش"></div>
-            <div class="s" data-en="King Fahd Complex" data-ar="مجمع الملك فهد"></div></div></div>
-      </div>
-
-      <div class="sec"><span data-en="Support" data-ar="الدعم"></span><span class="ln"></span></div>
-      <div class="card">
-        <div class="prow"><span class="ic">❓</span>
-          <div class="tx"><div class="t" data-en="Help & FAQ" data-ar="المساعدة والأسئلة"></div></div>
-          <span class="chev">›</span></div>
-        <div class="prow"><span class="ic">✉️</span>
-          <div class="tx"><div class="t" data-en="Contact us" data-ar="تواصل معنا"></div></div>
-          <span class="chev">›</span></div>
-        <div class="prow"><span class="ic">⭐</span>
-          <div class="tx"><div class="t" data-en="Rate the app" data-ar="قيّم التطبيق"></div></div>
-          <span class="chev">›</span></div>
-      </div>
     </div></div>
   </div></div>
 </div>

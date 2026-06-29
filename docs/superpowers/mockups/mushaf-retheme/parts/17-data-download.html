@@ -1,40 +1,196 @@
 <!-- ====== 17 · DATA DOWNLOAD & PERMISSIONS GATE ====== -->
+<!-- First-run only: a SEQUENCE of navy+gold bottom-sheets / dialogs over the launching window.
+     No toolbar, no full-screen hero. If page images already exist the gate is skipped silently. -->
+
+<!-- ============ A · DOWNLOAD-PROMPT SHEET (non-cancelable Yes/No) ============ -->
 <div class="phone-col">
   <div class="phone-cap">
-    <div class="n" data-en="Data Download & Permissions" data-ar="تنزيل البيانات والأذونات"></div>
-    <div class="d" data-en="First-launch gate before the Mushaf opens" data-ar="بوابة أول تشغيل قبل فتح المصحف"></div>
+    <div class="n" data-en="Download prompt" data-ar="طلب التنزيل"></div>
+    <div class="d" data-en="Non-cancelable Yes/No · shown only on first run (skipped if pages exist)" data-ar="غير قابل للإلغاء — نعم/لا · يظهر في أول تشغيل فقط (يُتخطّى إن وُجدت الصفحات)"></div>
   </div>
   <div class="phone"><div class="notch"></div><div class="screen">
     <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
-    <div class="bar">
-      <div class="nav">
-        <div class="ttl" style="text-align:center">
-          <div class="t" data-en="Mushaf" data-ar="المصحف"></div>
+
+    <div class="grow" style="position:relative;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)">
+      <!-- launching window behind the modal — no content view -->
+      <div class="scrim"></div>
+
+      <div class="sheet">
+        <div class="grab"></div>
+        <div class="sh-head" style="padding-bottom:6px">
+          <div class="t" data-en="Download Required Files?" data-ar="حمل الملفات المطلوبه؟"></div>
+        </div>
+        <div class="pad" style="padding:0 16px 16px">
+          <div style="font-size:12.5px;line-height:1.55;color:var(--text2)" data-en="In order for Quran Android to work properly, we need to download some files. If you do not do this now, the app may not work reliably and will require an Internet connection for reading. Would you like to download the required files now?" data-ar="لكي يعمل التطبيق بنجاح تحتاج لتحميل بعض الملفات الان. إن لم يتم التحميل الان قد لا يعمل التطبيق بشكل صحيح و ستحتاج للاتصال بالنت للقراءة. هل تود التحميل الان؟"></div>
+
+          <!-- the same sheet carries two alternate bodies depending on context -->
+          <div style="margin-top:12px;padding:10px 12px;border:1px dashed var(--gold-semi);border-radius:11px;background:var(--gold-faint)">
+            <div style="font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-bottom:5px" data-en="Alternate prompt copy" data-ar="نصوص بديلة للطلب"></div>
+            <div style="font-size:11px;line-height:1.5;color:var(--text2)"><b data-en="Tablet:" data-ar="لوحي:"></b> <span data-en="We recently added improved images for tablets. Would you like to download these images now?" data-ar="تم تحسين الصور الخاصه بالتابلت. هل تود تحميلها الان؟"></span></div>
+            <div style="font-size:11px;line-height:1.5;color:var(--text2);margin-top:6px"><b data-en="Patch:" data-ar="تحديث:"></b> <span data-en="There is a small yet important update for the Quran images you have on your device. Would you like to download this patch now?" data-ar="هناك تحديث هام صغير على ملفات الصور على هاتفكم. هل تود تحميل الملف حالا؟"></span></div>
+          </div>
+
+          <div style="display:flex;gap:10px;margin-top:14px">
+            <span class="btn ghost grow" data-en="No" data-ar="لا"></span>
+            <span class="btn gold grow" data-en="Yes" data-ar="نعم"></span>
+          </div>
+          <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:9px" data-en="Cannot be dismissed by tapping outside" data-ar="لا يمكن إغلاقه باللمس خارجه"></div>
         </div>
       </div>
     </div>
+  </div></div>
+</div>
 
-    <div class="grow" style="background:linear-gradient(160deg,var(--navy-700),var(--navy-900));display:flex;flex-direction:column;position:relative;overflow:hidden">
-      <div class="empty" style="flex:1;height:auto;color:var(--on-navy)">
-        <div class="glyph">📖</div>
-        <div class="t" style="font-size:17px;font-weight:800;color:var(--on-navy)" data-en="Download Quran pages" data-ar="تنزيل صفحات المصحف"></div>
-        <div style="font-size:12.5px;line-height:1.5;color:var(--on-navy-dim);max-width:220px" data-en="Madani Mushaf · about 45 MB" data-ar="مصحف مدني · نحو 45 ميجابايت"></div>
+<!-- ============ B · STORAGE-PERMISSION RATIONALE SHEET (OK / Cancel) ============ -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Storage permission" data-ar="إذن التخزين"></div>
+    <div class="d" data-en="Rationale → system request → 'restart' toast (older SD-card devices)" data-ar="المبرّر ← طلب النظام ← تنبيه إعادة التشغيل (أجهزة قديمة تخزّن على بطاقة SD)"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+
+    <div class="grow" style="position:relative;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)">
+      <div class="scrim"></div>
+
+      <!-- 'restart the app' toast (after the system dialog returns) -->
+      <div style="position:absolute;left:18px;right:18px;bottom:14px;z-index:62;background:rgba(28,27,31,.92);color:#fff;border-radius:11px;padding:10px 14px;font-size:11.5px;line-height:1.4;text-align:center" data-en="Please restart the app for this to take effect." data-ar="يرجى إعادة تشغيل التطبيق لتفعيل الإذن"></div>
+
+      <div class="sheet" style="bottom:60px">
+        <div class="grab"></div>
+        <div class="pad" style="padding:6px 16px 16px">
+          <div style="font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-bottom:8px" data-en="Older devices that store on the SD card" data-ar="الأجهزة القديمة التي تخزّن على بطاقة SD"></div>
+          <div style="font-size:12.5px;line-height:1.55;color:var(--text2)" data-en="Quran wants your permission to store its data on external storage. Quran will work without this permission, but if you clear data or uninstall the app, all downloaded pages, audio, and data will be removed. Grant Quran permission?" data-ar="تطبيق قرآن يحتاج إلى إذنك بالوصول إلى الذاكرة الخارجية. التطبيق سيعمل دون الإذن، لكن عند مسح البيانات أو حذف التطبيق، ستحذف جميع صفحات المصحف والبيانات والصوت. هل تريد الإذن لتطبيق قرآن؟"></div>
+
+          <div style="display:flex;gap:10px;margin-top:14px">
+            <span class="btn ghost grow" data-en="Cancel" data-ar="إلغاء"></span>
+            <span class="btn gold grow" data-en="OK" data-ar="موافق"></span>
+          </div>
+          <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:9px" data-en="OK → the system permission request" data-ar="موافق ← طلب الإذن من النظام"></div>
+        </div>
       </div>
+    </div>
+  </div></div>
+</div>
 
-      <div style="padding:0 16px 16px">
-        <div class="card" style="margin-bottom:14px">
-          <div style="padding:14px">
-            <div class="between">
-              <div class="t" style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Downloading…" data-ar="جارٍ التنزيل…"></div>
-              <div style="font-size:13px;font-weight:800;color:var(--gold)">62%</div>
-            </div>
-            <div class="prog" style="margin-top:10px"><i style="width:62%"></i></div>
-            <div style="font-size:11.5px;color:var(--text2);margin-top:9px" data-en="page 374 of 604" data-ar="الصفحة 374 من 604"></div>
+<!-- ============ C · DOWNLOADING — determinate navy progress card ============ -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Downloading" data-ar="جارٍ التنزيل"></div>
+    <div class="d" data-en="Determinate bar · MB or surah/ayah status · resume supported · Cancel" data-ar="شريط محدّد · حالة بالميجابايت أو السورة/الآية · يدعم الاستئناف · إلغاء"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+
+    <div class="grow" style="position:relative;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)">
+      <div class="scrim"></div>
+
+      <!-- navy progress dialog -->
+      <div class="dialog" style="background:linear-gradient(150deg,var(--navy-700),var(--navy-900));border:0">
+        <div style="padding:18px 18px 16px">
+          <div class="t" style="font-size:16px;font-weight:800;color:var(--on-navy)" data-en="Downloading…" data-ar="جاري التحميل...."></div>
+          <div style="font-size:11.5px;line-height:1.45;color:var(--on-navy-dim);margin-top:5px" data-en="Please wait for the files to download (resume supported)." data-ar="يرجى الإنتظار حتى نهاية التحميل"></div>
+
+          <div class="prog" style="margin-top:14px;background:rgba(255,255,255,.14)"><i style="width:27%"></i></div>
+
+          <div style="font-size:12.5px;font-weight:700;color:var(--on-navy);margin-top:10px" data-en="Downloaded 12.34 MB / 45.00 MB" data-ar="تم تحميل ١٢٫٣٤ ميجابايت / ٤٥٫٠٠ ميجابايت"></div>
+          <div style="font-size:10px;line-height:1.5;color:var(--on-navy-dim);margin-top:5px" data-en="Audio variants: 'Downloaded 8.0 MB / 45.0 MB of surah 3' · 'Downloading surah 3 ayah 12'" data-ar="نسخ الصوت: «جاري التحميل من سورة ٣ - ٨٫٠ / ٤٥٫٠» · «جاري تحميل السورة ٣ الآية ١٢»"></div>
+
+          <!-- non-fatal auto-retry note (STATE_ERROR_WILL_RETRY) — download keeps going -->
+          <div style="display:flex;align-items:flex-start;gap:7px;margin-top:12px;padding:8px 10px;border-radius:9px;background:rgba(212,164,76,.14)">
+            <span style="color:var(--gold-light);font-size:13px;line-height:1.2">⟳</span>
+            <span style="font-size:10.5px;line-height:1.45;color:var(--gold-light)" data-en="Corrupted file, attempting to re-download" data-ar="هناك ملف تالف، جاري إعادة التحميل"></span>
           </div>
         </div>
+        <div style="display:flex;justify-content:flex-end;padding:0 12px 12px">
+          <span class="btn ghost" data-en="Cancel" data-ar="إلغاء"></span>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div>
 
-        <button class="btn gold block" style="margin-bottom:9px" data-en="Download" data-ar="تنزيل"></button>
-        <button class="btn ghost block" data-en="Use streaming instead" data-ar="استخدام البث بدلاً من ذلك"></button>
+<!-- ============ D · PROCESSING / EXTRACTING — determinate navy card ============ -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Processing" data-ar="تجهيز"></div>
+    <div class="d" data-en="Extracting downloaded files N / M (second half of the flow)" data-ar="استخراج الملفات المحمّلة ن / م (النصف الثاني من العملية)"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+
+    <div class="grow" style="position:relative;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)">
+      <div class="scrim"></div>
+
+      <div class="dialog" style="background:linear-gradient(150deg,var(--navy-700),var(--navy-900));border:0">
+        <div style="padding:18px 18px 16px">
+          <div class="t" style="font-size:16px;font-weight:800;color:var(--on-navy)" data-en="Processing…" data-ar="تجهيز…"></div>
+          <div style="font-size:11.5px;line-height:1.45;color:var(--on-navy-dim);margin-top:5px" data-en="Unpacking the downloaded pages — almost ready." data-ar="جارٍ فك الصفحات المحمّلة — على وشك الانتهاء."></div>
+
+          <div class="prog" style="margin-top:14px;background:rgba(255,255,255,.14)"><i style="width:52%"></i></div>
+
+          <div style="font-size:12.5px;font-weight:700;color:var(--on-navy);margin-top:10px" data-en="Processing file 312 / 604" data-ar="جاري اﻹعداد ٣١٢ / ٦٠٤"></div>
+          <div style="font-size:10px;line-height:1.45;color:var(--on-navy-dim);margin-top:5px" data-en="No Cancel here — extraction must finish before the reader opens." data-ar="لا يوجد إلغاء هنا — يجب اكتمال الاستخراج قبل فتح القارئ."></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ============ E · MIGRATION SPINNER — indeterminate (Android 11+) ============ -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Migration" data-ar="نقل البيانات"></div>
+    <div class="d" data-en="Indeterminate spinner — moving files on Android 11+ (migration_upgrade)" data-ar="مؤشّر غير محدّد — نقل الملفات على أندرويد ١١+"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+
+    <div class="grow" style="position:relative;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)">
+      <div class="scrim"></div>
+
+      <!-- small centered navy dialog -->
+      <div class="dialog" style="inset-inline:auto;left:50%;top:50%;transform:translate(-50%,-50%);width:210px;background:linear-gradient(150deg,var(--navy-700),var(--navy-900));border:0">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:26px 20px">
+          <!-- indeterminate gold spinner (static frame) -->
+          <div style="width:38px;height:38px;border-radius:50%;border:3px solid rgba(212,164,76,.22);border-top-color:var(--gold-light);transform:rotate(45deg)"></div>
+          <div style="font-size:13.5px;font-weight:800;color:var(--on-navy)" data-en="Please wait…" data-ar="الرجاء الانتظار…"></div>
+          <div style="font-size:10px;color:var(--on-navy-dim);text-align:center;line-height:1.4" data-en="Moving files to app storage" data-ar="نقل الملفات إلى تخزين التطبيق"></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ============ F · FATAL ERROR SHEET (Retry / Cancel) ============ -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Download error" data-ar="خطأ في التنزيل"></div>
+    <div class="d" data-en="Fatal sheet — Retry / Cancel (non-fatal errors auto-retry instead)" data-ar="ورقة خطأ — أعد المحاولة / إلغاء (الأخطاء غير القاتلة تُعاد تلقائياً)"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+
+    <div class="grow" style="position:relative;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)">
+      <div class="scrim"></div>
+
+      <div class="sheet">
+        <div class="grab"></div>
+        <div class="pad" style="padding:8px 16px 16px">
+          <div style="display:flex;align-items:flex-start;gap:11px">
+            <span style="width:38px;height:38px;border-radius:11px;background:rgba(200,75,75,.14);color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:19px;flex:none">⚠</span>
+            <div style="flex:1">
+              <div style="font-size:14px;font-weight:800;color:var(--text)" data-en="Download failed" data-ar="لم يتم تحميل الملفات"></div>
+              <div style="font-size:12px;line-height:1.5;color:var(--text2);margin-top:3px" data-en="Could not download due to network error" data-ar="لا يمكن اﻻتصال بالانترنت"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;margin-top:16px">
+            <span class="btn ghost grow" data-en="Cancel" data-ar="إلغاء"></span>
+            <span class="btn gold grow" data-en="Retry" data-ar="أعد المحاولة"></span>
+          </div>
+          <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:9px" data-en="Only fatal errors stop here; transient ones resume on their own" data-ar="تتوقّف هنا الأخطاء القاتلة فقط؛ أمّا العابرة فتُستأنف تلقائياً"></div>
+        </div>
       </div>
     </div>
   </div></div>

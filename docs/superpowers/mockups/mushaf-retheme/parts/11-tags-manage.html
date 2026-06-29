@@ -1,88 +1,279 @@
-<!-- ====== 11 · BOOKMARKS — SELECTION / CONTEXTUAL ACTION MODE ====== -->
+<!-- ====== 11 · BOOKMARKS — SELECTION / CONTEXTUAL ACTION MODE + TAG TOOLS ====== -->
+
+<!-- ---- Frame 1 · CAB STATE A — bookmark ROWS selected (Tag · Delete · New Tag) ---- -->
 <div class="phone-col">
   <div class="phone-cap">
-    <div class="n" data-en="Bookmarks · Selection" data-ar="العلامات · التحديد"></div>
-    <div class="d" data-en="Batch tag, edit or delete bookmarks" data-ar="وسم أو تعديل أو حذف العلامات دفعةً"></div>
+    <div class="n" data-en="Bookmarks · Select rows" data-ar="المرجعيات · تحديد علامات"></div>
+    <div class="d" data-en="CAB for bookmark rows — 🏷️ Tag · 🗑️ Delete Tag · ＋ New Tag (Edit Tag hidden)" data-ar="شريط الإجراءات للعلامات — 🏷️ تصنيف · 🗑️ حذف · ＋ صنف جديد (تعديل الصنف مخفي)"></div>
   </div>
   <div class="phone"><div class="notch"></div><div class="screen">
     <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
     <div class="bar round">
       <div class="nav">
         <span class="bk">✕</span>
-        <div class="ttl">
-          <div class="t" data-en="2 selected" data-ar="2 محدد"></div>
-        </div>
+        <div class="grow"></div>
         <div class="acts">
-          <span class="ico">🏷️</span>
-          <span class="ico">✎</span>
-          <span class="ico">🗑️</span>
+          <span class="ico" title="Tag Bookmark">🏷️</span>
+          <span class="ico" title="Delete Tag">🗑️</span>
+          <span class="ico" title="New Tag" style="font-size:23px;font-weight:600">＋</span>
         </div>
       </div>
     </div>
     <div class="body"><div class="scroll">
       <div class="list">
 
-        <div class="row" style="background:var(--gold-faint)">
-          <div class="cbx on">✓</div>
-          <div class="tx">
-            <div class="t"><span class="ar">البقرة ٢٥٥</span></div>
-            <div class="s">
-              <span data-en="Al-Baqarah · page 42" data-ar="البقرة · صفحة 42"></span>
-              <span class="dot-sep"></span>
-              <span class="chip" data-en="Memorize" data-ar="حفظ"></span>
-            </div>
-          </div>
+        <!-- tag-group header (selectable; here un-selected) -->
+        <div class="juzband">
+          <span class="jt" style="display:flex;align-items:center;gap:7px"><span style="color:var(--gold)">🏷️</span><span data-en="Memorize" data-ar="حفظ"></span></span>
+          <span class="jp" data-en="2 bookmarks" data-ar="مرجعيتان"></span>
         </div>
 
-        <div class="row">
+        <div class="row" style="padding-inline-start:18px;background:var(--gold-faint)">
+          <span class="ic">★</span>
+          <div class="tx">
+            <div class="t"><span class="ar">البقرة ٢٥٥</span></div>
+            <div class="s"><span data-en="Al-Baqarah · Ayah 255" data-ar="البقرة · الآية ٢٥٥"></span></div>
+          </div>
+          <div class="end"><span class="pg" data-en="p. 42" data-ar="ص ٤٢"></span></div>
+        </div>
+
+        <div class="row" style="padding-inline-start:18px;background:var(--gold-faint)">
+          <span class="ic">★</span>
+          <div class="tx">
+            <div class="t"><span class="ar">الكهف ١٠</span></div>
+            <div class="s"><span data-en="Al-Kahf · Ayah 10" data-ar="الكهف · الآية ١٠"></span></div>
+          </div>
+          <div class="end"><span class="pg" data-en="p. 294" data-ar="ص ٢٩٤"></span></div>
+        </div>
+
+        <!-- second tag-group header -->
+        <div class="juzband">
+          <span class="jt" style="display:flex;align-items:center;gap:7px"><span style="color:var(--gold)">🏷️</span><span data-en="Tafsir" data-ar="تفسير"></span></span>
+          <span class="jp" data-en="2 bookmarks" data-ar="مرجعيتان"></span>
+        </div>
+
+        <div class="row" style="padding-inline-start:18px">
           <span class="ic">★</span>
           <div class="tx">
             <div class="t"><span class="ar">آل عمران ١٩</span></div>
-            <div class="s">
-              <span data-en="Aal-'Imran · page 52" data-ar="آل عمران · صفحة 52"></span>
-              <span class="dot-sep"></span>
-              <span class="chip" data-en="Tafsir" data-ar="تفسير"></span>
-            </div>
+            <div class="s"><span data-en="Aal-'Imran · Ayah 19" data-ar="آل عمران · الآية ١٩"></span></div>
           </div>
+          <div class="end"><span class="pg" data-en="p. 52" data-ar="ص ٥٢"></span></div>
         </div>
 
-        <div class="row" style="background:var(--gold-faint)">
-          <div class="cbx on">✓</div>
-          <div class="tx">
-            <div class="t"><span class="ar">الكهف ١٠</span></div>
-            <div class="s">
-              <span data-en="Al-Kahf · page 294" data-ar="الكهف · صفحة 294"></span>
-              <span class="dot-sep"></span>
-              <span class="chip" data-en="Memorize" data-ar="حفظ"></span>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
+        <div class="row" style="padding-inline-start:18px">
           <span class="ic">★</span>
           <div class="tx">
             <div class="t"><span class="ar">يس ٩</span></div>
-            <div class="s">
-              <span data-en="Ya-Sin · page 440" data-ar="يس · صفحة 440"></span>
-              <span class="dot-sep"></span>
-              <span class="chip" data-en="Favorites" data-ar="مفضلة"></span>
-            </div>
+            <div class="s"><span data-en="Ya-Sin · Ayah 9" data-ar="يس · الآية ٩"></span></div>
           </div>
-        </div>
-
-        <div class="row">
-          <span class="ic">★</span>
-          <div class="tx">
-            <div class="t"><span class="ar">الرحمن ١٣</span></div>
-            <div class="s">
-              <span data-en="Ar-Rahman · page 531" data-ar="الرحمن · صفحة 531"></span>
-              <span class="dot-sep"></span>
-              <span class="chip" data-en="Daily" data-ar="يومي"></span>
-            </div>
-          </div>
+          <div class="end"><span class="pg" data-en="p. 440" data-ar="ص ٤٤٠"></span></div>
         </div>
 
       </div>
     </div></div>
+  </div></div>
+</div>
+
+<!-- ---- Frame 2 · CAB STATE B — a whole TAG HEADER selected (Edit · Delete · New Tag) ---- -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Bookmarks · Select a tag" data-ar="المرجعيات · تحديد صنف"></div>
+    <div class="d" data-en="One tag header selected — ✎ Edit Tag · 🗑️ Delete Tag · ＋ New Tag (Tag Bookmark hidden)" data-ar="صنف واحد محدد — ✎ تعديل · 🗑️ حذف · ＋ صنف جديد (تصنيف المرجعية مخفي)"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+    <div class="bar round">
+      <div class="nav">
+        <span class="bk">✕</span>
+        <div class="grow"></div>
+        <div class="acts">
+          <span class="ico" title="Edit Tag">✎</span>
+          <span class="ico" title="Delete Tag">🗑️</span>
+          <span class="ico" title="New Tag" style="font-size:23px;font-weight:600">＋</span>
+        </div>
+      </div>
+    </div>
+    <div class="body"><div class="scroll">
+      <div class="list">
+
+        <!-- the tag-group header itself is selected (rename / delete the tag) -->
+        <div class="juzband" style="background:var(--gold-faint);border:1px solid var(--gold-semi)">
+          <span class="jt" style="display:flex;align-items:center;gap:7px;color:var(--gold)"><span>🏷️</span><span data-en="Memorize" data-ar="حفظ"></span></span>
+          <span class="jp" data-en="2 bookmarks" data-ar="مرجعيتان"></span>
+        </div>
+
+        <div class="row" style="padding-inline-start:18px">
+          <span class="ic">★</span>
+          <div class="tx">
+            <div class="t"><span class="ar">البقرة ٢٥٥</span></div>
+            <div class="s"><span data-en="Al-Baqarah · Ayah 255" data-ar="البقرة · الآية ٢٥٥"></span></div>
+          </div>
+          <div class="end"><span class="pg" data-en="p. 42" data-ar="ص ٤٢"></span></div>
+        </div>
+
+        <div class="row" style="padding-inline-start:18px">
+          <span class="ic">★</span>
+          <div class="tx">
+            <div class="t"><span class="ar">الكهف ١٠</span></div>
+            <div class="s"><span data-en="Al-Kahf · Ayah 10" data-ar="الكهف · الآية ١٠"></span></div>
+          </div>
+          <div class="end"><span class="pg" data-en="p. 294" data-ar="ص ٢٩٤"></span></div>
+        </div>
+
+        <div class="juzband">
+          <span class="jt" style="display:flex;align-items:center;gap:7px"><span style="color:var(--gold)">🏷️</span><span data-en="Tafsir" data-ar="تفسير"></span></span>
+          <span class="jp" data-en="2 bookmarks" data-ar="مرجعيتان"></span>
+        </div>
+
+        <div class="row" style="padding-inline-start:18px">
+          <span class="ic">★</span>
+          <div class="tx">
+            <div class="t"><span class="ar">آل عمران ١٩</span></div>
+            <div class="s"><span data-en="Aal-'Imran · Ayah 19" data-ar="آل عمران · الآية ١٩"></span></div>
+          </div>
+          <div class="end"><span class="pg" data-en="p. 52" data-ar="ص ٥٢"></span></div>
+        </div>
+
+      </div>
+    </div></div>
+  </div></div>
+</div>
+
+<!-- ---- Frame 3 · Tag Bookmark dialog — multi-select checklist + New Tag (+) + OK/Cancel ---- -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Tag Bookmark dialog" data-ar="حوار تصنيف المرجعية"></div>
+    <div class="d" data-en="🏷️ opens a gold checklist of tags — batch-tag the selected bookmarks" data-ar="🏷️ يفتح قائمة أصناف بمربعات ذهبية — لوسم العلامات المحددة دفعةً"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+    <div class="bar round">
+      <div class="nav">
+        <span class="bk">✕</span>
+        <div class="grow"></div>
+        <div class="acts">
+          <span class="ico" title="Tag Bookmark">🏷️</span>
+          <span class="ico" title="Delete Tag">🗑️</span>
+          <span class="ico" title="New Tag" style="font-size:23px;font-weight:600">＋</span>
+        </div>
+      </div>
+    </div>
+    <div class="body"><div class="scroll">
+      <div class="list">
+        <div class="juzband">
+          <span class="jt" style="display:flex;align-items:center;gap:7px"><span style="color:var(--gold)">🏷️</span><span data-en="Memorize" data-ar="حفظ"></span></span>
+          <span class="jp" data-en="2 bookmarks" data-ar="مرجعيتان"></span>
+        </div>
+        <div class="row" style="padding-inline-start:18px;background:var(--gold-faint)">
+          <span class="ic">★</span>
+          <div class="tx"><div class="t"><span class="ar">البقرة ٢٥٥</span></div>
+            <div class="s"><span data-en="Al-Baqarah · Ayah 255" data-ar="البقرة · الآية ٢٥٥"></span></div></div>
+          <div class="end"><span class="pg" data-en="p. 42" data-ar="ص ٤٢"></span></div>
+        </div>
+        <div class="row" style="padding-inline-start:18px;background:var(--gold-faint)">
+          <span class="ic">★</span>
+          <div class="tx"><div class="t"><span class="ar">الكهف ١٠</span></div>
+            <div class="s"><span data-en="Al-Kahf · Ayah 10" data-ar="الكهف · الآية ١٠"></span></div></div>
+          <div class="end"><span class="pg" data-en="p. 294" data-ar="ص ٢٩٤"></span></div>
+        </div>
+      </div>
+    </div></div>
+
+    <!-- title-less alert: multi-select tag checklist (tag_row) -->
+    <div class="scrim"></div>
+    <div class="dialog">
+      <div class="db" style="padding-top:15px">
+        <div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);padding:0 2px 6px" data-en="Tag 2 bookmarks" data-ar="تصنيف مرجعيتين"></div>
+        <div class="list" style="max-height:232px;overflow-y:auto">
+
+          <div class="crow" style="gap:14px;padding:9px 4px">
+            <div class="cbx on">✓</div>
+            <span style="font-size:14px;font-weight:600;color:var(--text)" data-en="Memorize" data-ar="حفظ"></span>
+          </div>
+          <div class="crow" style="gap:14px;padding:9px 4px">
+            <div class="cbx"></div>
+            <span style="font-size:14px;font-weight:600;color:var(--text)" data-en="Tafsir" data-ar="تفسير"></span>
+          </div>
+          <div class="crow" style="gap:14px;padding:9px 4px">
+            <div class="cbx on">✓</div>
+            <span style="font-size:14px;font-weight:600;color:var(--text)" data-en="Favorites" data-ar="مفضلة"></span>
+          </div>
+          <div class="crow" style="gap:14px;padding:9px 4px">
+            <div class="cbx"></div>
+            <span style="font-size:14px;font-weight:600;color:var(--text)" data-en="Daily" data-ar="يومي"></span>
+          </div>
+
+          <!-- bottom 'New Tag' row — tag_row's ic_new ImageView replaces the checkbox -->
+          <div class="crow" style="gap:14px;padding:11px 4px;border-top:1px solid var(--line)">
+            <div class="cbx" style="border-style:dashed;border-color:var(--gold-semi);color:var(--gold);font-size:16px;font-weight:700">＋</div>
+            <span style="font-size:14px;font-weight:800;color:var(--gold)" data-en="New Tag" data-ar="صنف جديد"></span>
+          </div>
+
+        </div>
+      </div>
+      <div class="df">
+        <span class="btn ghost" style="padding:9px 16px" data-en="Cancel" data-ar="إلغاء"></span>
+        <span class="btn gold" style="padding:9px 18px" data-en="OK" data-ar="موافق"></span>
+      </div>
+    </div>
+  </div></div>
+</div>
+
+<!-- ---- Frame 4 · Deferred delete → Snackbar with UNDO ---- -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Delete · Undo" data-ar="حذف · تراجع"></div>
+    <div class="d" data-en="Delete Tag is deferred — a navy+gold Snackbar offers UNDO" data-ar="الحذف مؤجَّل — شريط إشعار كحلي/ذهبي يتيح التراجع"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+    <div class="bar round">
+      <div class="nav">
+        <span class="bk">‹</span>
+        <div class="ttl"><div class="t" data-en="Bookmarks" data-ar="المرجعيات"></div></div>
+        <div class="acts"><span class="ico" title="Sort / more">⋮</span></div>
+      </div>
+    </div>
+    <div class="body"><div class="scroll">
+      <div class="list">
+
+        <!-- the 'Memorize' group's two bookmarks just got deleted; Tafsir remains -->
+        <div class="juzband">
+          <span class="jt" style="display:flex;align-items:center;gap:7px"><span style="color:var(--gold)">🏷️</span><span data-en="Tafsir" data-ar="تفسير"></span></span>
+          <span class="jp" data-en="2 bookmarks" data-ar="مرجعيتان"></span>
+        </div>
+        <div class="row" style="padding-inline-start:18px">
+          <span class="ic">★</span>
+          <div class="tx"><div class="t"><span class="ar">آل عمران ١٩</span></div>
+            <div class="s"><span data-en="Aal-'Imran · Ayah 19" data-ar="آل عمران · الآية ١٩"></span></div></div>
+          <div class="end"><span class="pg" data-en="p. 52" data-ar="ص ٥٢"></span></div>
+        </div>
+        <div class="row" style="padding-inline-start:18px">
+          <span class="ic">★</span>
+          <div class="tx"><div class="t"><span class="ar">يس ٩</span></div>
+            <div class="s"><span data-en="Ya-Sin · Ayah 9" data-ar="يس · الآية ٩"></span></div></div>
+          <div class="end"><span class="pg" data-en="p. 440" data-ar="ص ٤٤٠"></span></div>
+        </div>
+
+        <div class="juzband">
+          <span class="jt" style="display:flex;align-items:center;gap:7px"><span style="color:var(--gold)">🏷️</span><span data-en="Favorites" data-ar="مفضلة"></span></span>
+          <span class="jp" data-en="1 bookmark" data-ar="مرجعية واحدة"></span>
+        </div>
+        <div class="row" style="padding-inline-start:18px">
+          <span class="ic">★</span>
+          <div class="tx"><div class="t"><span class="ar">الرحمن ١٣</span></div>
+            <div class="s"><span data-en="Ar-Rahman · Ayah 13" data-ar="الرحمن · الآية ١٣"></span></div></div>
+          <div class="end"><span class="pg" data-en="p. 531" data-ar="ص ٥٣١"></span></div>
+        </div>
+
+      </div>
+    </div></div>
+
+    <!-- Snackbar: bookmark_tag_deleted (plural) + UNDO, on navy with gold action -->
+    <div style="position:absolute;inset-inline:14px;bottom:16px;z-index:60;display:flex;align-items:center;gap:14px;background:var(--navy-700);color:var(--on-navy);border-radius:13px;padding:13px 16px;box-shadow:var(--shadow)">
+      <span style="flex:1;font-size:13px;font-weight:600" data-en="Deleted 2 items" data-ar="تم حذف عنصران"></span>
+      <span style="font-size:13px;font-weight:800;letter-spacing:.04em;color:var(--gold-light)" data-en="UNDO" data-ar="تراجع"></span>
+    </div>
   </div></div>
 </div>

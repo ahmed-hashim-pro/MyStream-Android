@@ -1,68 +1,102 @@
-<!-- ====== 09 · SEARCH ====== -->
+<!-- ============ 09 · SEARCH — RESULTS ============ -->
 <div class="phone-col">
   <div class="phone-cap">
-    <div class="n" data-en="Search" data-ar="البحث"></div>
-    <div class="d" data-en="Keyword search across the Mushaf" data-ar="بحث بالكلمات في المصحف"></div>
+    <div class="n" data-en="Search · Results" data-ar="البحث · النتائج"></div>
+    <div class="d" data-en="SearchActivity — gold match highlight, navy count band" data-ar="نتائج البحث — تظليل ذهبي وشريط عدّ كحلي"></div>
   </div>
   <div class="phone"><div class="notch"></div><div class="screen">
     <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+
+    <!-- Navy hero: row 1 = back + title/subtitle, row 2 = full-width search field -->
     <div class="bar round">
       <div class="nav">
         <span class="bk">‹</span>
-        <div class="search" style="flex:1;margin-top:0">
-          <span class="lens">🔍</span>
-          <span class="ph" data-en="mercy" data-ar="رحمة"></span>
-          <span class="grow"></span>
-          <span style="font-size:15px;color:var(--on-navy-dim)">✕</span>
+        <div class="ttl">
+          <div class="t" data-en="Search" data-ar="بحث"></div>
+          <div class="s" data-en="The Holy Quran" data-ar="القرآن الكريم"></div>
         </div>
+      </div>
+      <div class="search">
+        <span class="lens">🔍</span>
+        <span class="ph" style="color:var(--on-navy)" data-en="mercy" data-ar="رحمة"></span>
+        <span class="grow"></span>
+        <span style="font-size:15px;color:var(--on-navy-dim)">✕</span>
       </div>
     </div>
+
     <div class="body"><div class="scroll" style="padding:0 0 22px">
+
+      <!-- Arabic-search-pack warning (shown only when the Arabic DB is missing) -->
       <div class="notice">
         <span class="g">⚠</span>
-        <div class="t">
-          <b data-en="Arabic search needs a data file." data-ar="بحث العربية يحتاج ملف بيانات."></b>
-          <span> </span>
-          <span class="txtlink" data-en="Download" data-ar="تنزيل"></span>
+        <div class="t" style="flex:1">
+          <span data-en="You have not downloaded the Arabic search pack. Please download it and try your search again." data-ar="لتفعيل البحث بالعربية يجب تحميل قاعدة البيانات.. هل ترغب في ذلك ؟"></span>
+          <div style="margin-top:10px">
+            <button class="btn gold" style="padding:8px 14px;font-size:12px">⬇ <span data-en="Get Arabic Search Database" data-ar="حمل قاعدة البيانات"></span></button>
+          </div>
         </div>
       </div>
 
-      <div class="sec"><span data-en="12 results" data-ar="١٢ نتيجة"></span><span class="ln"></span></div>
+      <!-- Solid navy_700 count band: query echo + colon -->
+      <div style="background:var(--navy-700);color:var(--on-navy);font-weight:800;font-size:13px;padding:12px 14px" data-en='12 results for "mercy":' data-ar='١٢ نتيجة في البحث عن "رحمة"'></div>
 
-      <div class="list">
-        <div class="row">
-          <div class="ic">📍</div>
-          <div class="tx">
-            <div class="t"><span class="ar">كَتَبَ رَبُّكُمْ عَلَىٰ نَفْسِهِ ٱل<b>رَّحْمَةَ</b></span></div>
-            <div class="s"><span data-en="Al-An'am : 54 · Page 134" data-ar="الأنعام : ٥٤ · صفحة 134"></span></div>
-          </div>
-          <span class="chev">›</span>
-        </div>
-        <div class="row">
-          <div class="ic">📍</div>
-          <div class="tx">
-            <div class="t"><span class="ar">أُو۟لَـٰٓئِكَ يَرْجُونَ <b>رَحْمَتَ</b> ٱللَّهِ</span></div>
-            <div class="s"><span data-en="Al-Baqarah : 218 · Page 34" data-ar="البقرة : ٢١٨ · صفحة 34"></span></div>
-          </div>
-          <span class="chev">›</span>
-        </div>
-        <div class="row">
-          <div class="ic">📍</div>
-          <div class="tx">
-            <div class="t"><span class="ar">وَ<b>رَحْمَتِى</b> وَسِعَتْ كُلَّ شَىْءٍ</span></div>
-            <div class="s"><span data-en="Al-A'raf : 156 · Page 170" data-ar="الأعراف : ١٥٦ · صفحة 170"></span></div>
-          </div>
-          <span class="chev">›</span>
-        </div>
-        <div class="row">
-          <div class="ic">📍</div>
-          <div class="tx">
-            <div class="t"><span class="ar">إِنَّ <b>رَحْمَتَ</b> ٱللَّهِ قَرِيبٌ مِّنَ ٱلْمُحْسِنِينَ</span></div>
-            <div class="s"><span data-en="Al-A'raf : 56 · Page 157" data-ar="الأعراف : ٥٦ · صفحة 157"></span></div>
-          </div>
-          <span class="chev">›</span>
-        </div>
+      <!-- Result cards: GOLD location on top, verse snippet below; match in gold; no icon, no chevron -->
+      <div class="card flat" style="margin:8px 12px 6px;padding:14px">
+        <div style="font-size:12px;font-weight:800;color:var(--gold)" data-en="Found in Surah Al-An'am: 54 (page 134)" data-ar="سورة الأنعام: ٥٤ (صفحة 134)"></div>
+        <div class="quran-inline" dir="rtl" style="font-size:15.5px;line-height:1.4;color:var(--text);margin-top:7px">كَتَبَ رَبُّكُمْ عَلَىٰ نَفْسِهِ ٱل<span style="color:var(--gold)">رَّحْمَةَ</span></div>
       </div>
+
+      <div class="card flat" style="margin:6px 12px;padding:14px">
+        <div style="font-size:12px;font-weight:800;color:var(--gold)" data-en="Found in Surah Al-Baqarah: 218 (page 34)" data-ar="سورة البقرة: ٢١٨ (صفحة 34)"></div>
+        <div class="quran-inline" dir="rtl" style="font-size:15.5px;line-height:1.4;color:var(--text);margin-top:7px">أُو۟لَـٰٓئِكَ يَرْجُونَ <span style="color:var(--gold)">رَحْمَتَ</span> ٱللَّهِ</div>
+      </div>
+
+      <div class="card flat" style="margin:6px 12px;padding:14px">
+        <div style="font-size:12px;font-weight:800;color:var(--gold)" data-en="Found in Surah Al-A'raf: 156 (page 170)" data-ar="سورة الأعراف: ١٥٦ (صفحة 170)"></div>
+        <div class="quran-inline" dir="rtl" style="font-size:15.5px;line-height:1.4;color:var(--text);margin-top:7px">وَ<span style="color:var(--gold)">رَحْمَتِى</span> وَسِعَتْ كُلَّ شَىْءٍ</div>
+      </div>
+
+      <div class="card flat" style="margin:6px 12px;padding:14px">
+        <div style="font-size:12px;font-weight:800;color:var(--gold)" data-en="Found in Surah Al-A'raf: 56 (page 157)" data-ar="سورة الأعراف: ٥٦ (صفحة 157)"></div>
+        <div class="quran-inline" dir="rtl" style="font-size:15.5px;line-height:1.4;color:var(--text);margin-top:7px">إِنَّ <span style="color:var(--gold)">رَحْمَتَ</span> ٱللَّهِ قَرِيبٌ مِّنَ ٱلْمُحْسِنِينَ</div>
+      </div>
+
     </div></div>
+  </div></div>
+</div>
+
+<!-- ============ 09b · SEARCH — NO RESULTS (themed empty state) ============ -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Search · No results" data-ar="البحث · لا نتائج"></div>
+    <div class="d" data-en="Themed empty state + conditional Get Translations" data-ar="حالة فراغ + زر حمّل الترجمة الشرطي"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+
+    <div class="bar round">
+      <div class="nav">
+        <span class="bk">‹</span>
+        <div class="ttl">
+          <div class="t" data-en="Search" data-ar="بحث"></div>
+          <div class="s" data-en="The Holy Quran" data-ar="القرآن الكريم"></div>
+        </div>
+      </div>
+      <div class="search">
+        <span class="lens">🔍</span>
+        <span class="ph" style="color:var(--on-navy)" data-en="mercy" data-ar="رحمة"></span>
+        <span class="grow"></span>
+        <span style="font-size:15px;color:var(--on-navy-dim)">✕</span>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="empty">
+        <div class="glyph" style="border:1px solid var(--gold-semi)">🔍</div>
+        <div class="t" data-en="No results" data-ar="لا توجد نتائج"></div>
+        <div class="s" data-en="Try a different word, or download a translation to search its text." data-ar="جرّب كلمة أخرى، أو نزّل ترجمة للبحث في نصّها."></div>
+        <button class="btn gold" style="margin-top:8px">⬇ <span data-en="Get Translations" data-ar="حمّل التفسير أو الترجمة"></span></button>
+      </div>
+    </div>
   </div></div>
 </div>

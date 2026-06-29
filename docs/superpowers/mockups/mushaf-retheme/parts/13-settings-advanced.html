@@ -1,58 +1,152 @@
-<!-- ====== 13 · ADVANCED SETTINGS ====== -->
+<!-- ============ 13 · SETTINGS — READING / DOWNLOADS / ADVANCED ============ -->
     <div class="phone-col">
       <div class="phone-cap">
-        <div class="n" data-en="Advanced Settings" data-ar="الإعدادات المتقدمة"></div>
-        <div class="d" data-en="Backup, storage & diagnostics" data-ar="النسخ والتخزين والتشخيص"></div>
+        <div class="n" data-en="Settings — lower sections" data-ar="الإعدادات — الأقسام السفلية"></div>
+        <div class="d" data-en="Reached by scrolling the Settings screen" data-ar="يظهر بالتمرير في شاشة الإعدادات"></div>
       </div>
       <div class="phone"><div class="notch"></div><div class="screen">
         <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
         <div class="bar round">
           <div class="nav">
             <span class="bk">‹</span>
-            <div class="ttl"><div class="t" data-en="Advanced" data-ar="متقدم"></div>
-              <div class="s" data-en="Backup · storage · logs" data-ar="نسخ · تخزين · سجلات"></div></div>
+            <div class="ttl"><div class="t" data-en="Settings" data-ar="الإعدادات"></div>
+              <div class="s" data-en="Reading · audio · advanced" data-ar="القراءة · الصوت · المتقدمة"></div></div>
           </div>
         </div>
         <div class="body"><div class="scroll">
-          <div class="sec"><span data-en="Backup & restore" data-ar="النسخ والاستعادة"></span><span class="ln"></span></div>
+
+          <!-- ===== Dual page preferences ===== -->
+          <div class="sec"><span data-en="Dual Page Preferences" data-ar="الصفحتان المتجاورتان"></span><span class="ln"></span></div>
+          <div class="card">
+            <div class="prow"><span class="ic">📖</span>
+              <div class="tx"><div class="t" data-en="Dual page mode" data-ar="وضع الصفحتين المتجاورتين"></div>
+                <div class="s" data-en="Show two facing pages in landscape" data-ar="عرض صفحتين متجاورتين في الوضع الأفقي"></div></div>
+              <div class="sw on"><span class="k"></span></div></div>
+            <div class="prow"><span class="ic">📑</span>
+              <div class="tx"><div class="t" data-en="Quran & translation in dual mode" data-ar="عرض صفحة من المصحف وأخرى من الترجمة"></div>
+                <div class="s" data-en="When dual page is on, show a Mushaf page beside a translation page" data-ar="عند تفعيل الصفحتين المتجاورتين، تعرض صفحة المصحف والترجمة معا"></div>
+                <div style="font-size:10px;font-weight:700;color:var(--gold);margin-top:3px" data-en="Requires Dual page mode" data-ar="يتطلب وضع الصفحتين المتجاورتين"></div></div>
+              <div class="sw on"><span class="k"></span></div></div>
+          </div>
+
+          <!-- ===== Tafsir & translation ===== -->
+          <div class="sec"><span data-en="Tafsir & Translation" data-ar="التفسير والترجمة"></span><span class="ln"></span></div>
+          <div class="card">
+            <div class="prow"><span class="ic">🌐</span>
+              <div class="tx"><div class="t" data-en="Translations" data-ar="التفسير والترجمة"></div>
+                <div class="s" data-en="Download and choose tafsir and translations" data-ar="حمّل واختر التفاسير والتراجم"></div></div>
+              <span class="chev">›</span></div>
+            <div class="prow"><span class="ic">📄</span>
+              <div class="tx"><div class="t" data-en="Show ayah with tafsir" data-ar="عرض الآية مع التفسير"></div>
+                <div class="s" data-en="Choose to show the ayah alongside its tafsir" data-ar="اختر لعرض الآية مع التفسير"></div></div>
+              <div class="sw on"><span class="k"></span></div></div>
+            <!-- translation text-size slider with live preview sample -->
+            <div class="prow" style="display:block">
+              <div style="display:flex;align-items:center;gap:12px">
+                <span class="ic">🅰</span>
+                <div class="tx"><div class="t" data-en="Translation text size" data-ar="خط التفسير والترجمة"></div>
+                  <div class="s" data-en="Tafsir & translation font size" data-ar="حجم خط التفسير والترجمة"></div></div>
+                <span class="val" data-en="15" data-ar="١٥"></span></div>
+              <div style="display:flex;align-items:center;gap:11px;margin-top:9px;padding:0 2px">
+                <span style="font-size:11px;font-weight:800;color:var(--text2)">A−</span>
+                <div class="prog" style="flex:1;position:relative;overflow:visible">
+                  <i style="width:60%"></i>
+                  <span style="position:absolute;inset-inline-start:60%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-2));box-shadow:0 2px 6px rgba(0,0,0,.35)"></span>
+                </div>
+                <span style="font-size:15px;font-weight:800;color:var(--text2)">A+</span>
+              </div>
+              <div style="text-align:center;margin-top:9px;font-size:15px;color:var(--text2)" data-en="Preview" data-ar="معاينة"></div>
+            </div>
+          </div>
+
+          <!-- ===== Download options ===== -->
+          <div class="sec"><span data-en="Download Options" data-ar="خيارات التحميل"></span><span class="ln"></span></div>
+          <div class="card">
+            <div class="prow"><span class="ic">📡</span>
+              <div class="tx"><div class="t" data-en="Streaming" data-ar="استماع عبر الانترنت"></div>
+                <div class="s" data-en="Play audio online (files won't be downloaded to the device)" data-ar="سيتم تشغيل الصوت عبر الانترنت (لن يتم تنزيل الملفات على الجهاز)"></div></div>
+              <div class="sw on"><span class="k"></span></div></div>
+            <div class="prow"><span class="ic">☁️</span>
+              <div class="tx"><div class="t" data-en="Download amount" data-ar="كم التحميل"></div>
+                <div class="s" data-en="How much to download for offline recitations" data-ar="كم التحميل للتلاوات غير المتصلة"></div></div>
+              <span class="val" data-en="Whole surah" data-ar="السورة كاملة"></span><span class="chev">›</span></div>
+            <div class="prow"><span class="ic">🎧</span>
+              <div class="tx"><div class="t" data-en="Audio Manager" data-ar="إدارة الصوتيات"></div>
+                <div class="s" data-en="Download and manage audio files" data-ar="تحميل وإدارة الملفات الصوتية"></div></div>
+              <span class="chev">›</span></div>
+          </div>
+
+          <!-- ===== Advanced (links to the sub-screen) ===== -->
+          <div class="sec"><span data-en="Advanced" data-ar="خيارات متقدمة"></span><span class="ln"></span></div>
+          <div class="card">
+            <div class="prow"><span class="ic">⚙️</span>
+              <div class="tx"><div class="t" data-en="Advanced Options" data-ar="خيارات متقدمة"></div>
+                <div class="s" data-en="Import/export bookmarks and other settings" data-ar="استيراد وتصدير المرجعيات وإعدادات أخرى"></div></div>
+              <span class="chev">›</span></div>
+          </div>
+
+        </div></div>
+      </div></div>
+    </div>
+
+    <!-- ============ 13b · ADVANCED OPTIONS — SUB-SCREEN ============ -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Advanced Options" data-ar="خيارات متقدمة"></div>
+        <div class="d" data-en="Sub-screen — bookmarks & storage" data-ar="الشاشة الفرعية — المرجعيات والتخزين"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar round">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl"><div class="t" data-en="Advanced Options" data-ar="خيارات متقدمة"></div>
+              <div class="s" data-en="Import/export · storage" data-ar="استيراد وتصدير · تخزين"></div></div>
+          </div>
+        </div>
+        <div class="body"><div class="scroll">
+
+          <!-- ===== Bookmarks & tags ===== -->
+          <div class="sec"><span data-en="Bookmarks & Tags" data-ar="المرجعيات والتصنيفات"></span><span class="ln"></span></div>
           <div class="card">
             <div class="prow"><span class="ic">📥</span>
-              <div class="tx"><div class="t" data-en="Import bookmarks" data-ar="استيراد العلامات"></div>
-                <div class="s" data-en="Restore from a backup file" data-ar="استعادة من ملف نسخ احتياطي"></div></div>
+              <div class="tx"><div class="t" data-en="Import" data-ar="استيراد"></div>
+                <div class="s" data-en="Import bookmarks and tags" data-ar="استيراد الإشارات المرجعية والعلامات"></div></div>
               <span class="chev">›</span></div>
             <div class="prow"><span class="ic">📤</span>
-              <div class="tx"><div class="t" data-en="Export bookmarks" data-ar="تصدير العلامات"></div>
-                <div class="s" data-en="Save bookmarks to a file" data-ar="حفظ العلامات في ملف"></div></div>
+              <div class="tx"><div class="t" data-en="Export" data-ar="تصدير"></div>
+                <div class="s" data-en="Export a copy of bookmarks and tags" data-ar="تصدير نسخة من المرجعيات والتصنيفات"></div></div>
               <span class="chev">›</span></div>
             <div class="prow"><span class="ic">📊</span>
-              <div class="tx"><div class="t" data-en="Export reading progress (CSV)" data-ar="تصدير تقدّم القراءة (CSV)"></div>
-                <div class="s" data-en="Khatmah & session history" data-ar="سجل الختمات والجلسات"></div></div>
+              <div class="tx"><div class="t" data-en="Export CSV" data-ar="تصدير CSV"></div>
+                <div class="s" data-en="Export a copy of bookmarks and tags in CSV" data-ar="تصدير نسخة من المرجعيات والتصنيفات بصيغة CSV"></div></div>
               <span class="chev">›</span></div>
           </div>
 
+          <!-- ===== Storage ===== -->
           <div class="sec"><span data-en="Storage" data-ar="التخزين"></span><span class="ln"></span></div>
           <div class="card">
-            <div class="prow"><span class="ic">💾</span>
-              <div class="tx"><div class="t" data-en="App storage location" data-ar="مكان تخزين التطبيق"></div>
-                <div class="s" data-en="Where pages & audio are kept" data-ar="مكان حفظ الصفحات والصوت"></div></div>
-              <span class="val" data-en="Internal" data-ar="داخلي"></span></div>
-            <div class="prow"><span class="ic">📦</span>
-              <div class="tx"><div class="t" data-en="Quran data size" data-ar="حجم بيانات المصحف"></div>
-                <div class="s" data-en="Pages, audio & translations" data-ar="الصفحات والصوت والترجمات"></div></div>
-              <span class="val" data-en="248 MB" data-ar="248 م.ب"></span></div>
+            <div class="prow"><span class="ic">📁</span>
+              <div class="tx"><div class="t" data-en="Quran data directory" data-ar="مكان التطبيق"></div>
+                <div class="s" data-en="Choose where to store Quran files · current data 248 MB" data-ar="اختر الذاكرة التي سيتم تخزين الملفات عليها · الحجم الحالي ٢٤٨ م.ب"></div></div>
+              <span class="val" data-en="Internal storage" data-ar="الذاكرة الداخلية"></span><span class="chev">›</span></div>
+          </div>
+          <div class="notice"><span class="g">ℹ️</span>
+            <div class="t"><span data-en="Opens a list of storage mounts with their free space. " data-ar="يفتح قائمة بذاكرات التخزين مع المساحة الحرة. "></span><b data-en="Hidden on single-storage devices." data-ar="يُخفى على الأجهزة ذات الذاكرة الواحدة."></b></div>
           </div>
 
+          <!-- ===== Diagnostics (debug / beta builds only) ===== -->
           <div class="sec"><span data-en="Diagnostics" data-ar="التشخيص"></span><span class="ln"></span></div>
           <div class="card">
-            <div class="prow"><span class="ic">🛟</span>
-              <div class="tx"><div class="t" data-en="Send logs to developers" data-ar="إرسال السجلات للمطورين"></div>
-                <div class="s" data-en="Help diagnose a problem" data-ar="للمساعدة في تشخيص مشكلة"></div></div>
-              <span class="chev">›</span></div>
-            <div class="prow"><span class="ic" style="background:var(--gold-faint);color:var(--danger)">↺</span>
-              <div class="tx"><div class="t" data-en="Reset all settings" data-ar="إعادة تعيين الإعدادات"></div>
-                <div class="s" style="color:var(--danger)" data-en="Restore defaults — can't be undone" data-ar="استعادة الافتراضيات — لا يمكن التراجع"></div></div>
+            <div class="prow"><span class="ic">🐞</span>
+              <div class="tx"><div class="t" style="display:flex;align-items:center;gap:7px"><span data-en="Send logs" data-ar="إرسال السجلات"></span><span class="chip outline" style="font-size:9px;padding:2px 7px" data-en="Debug · Beta" data-ar="تطوير · تجريبي"></span></div>
+                <div class="s" data-en="Send debug logs to the developer" data-ar="إرسال سجلات التصحيح للمطور"></div></div>
               <span class="chev">›</span></div>
           </div>
+          <div class="notice"><span class="g">ℹ️</span>
+            <div class="t"><span data-en="Send logs appears only in debug & beta builds — it isn't shipped in the release build." data-ar="يظهر «إرسال السجلات» في إصدارات التطوير والتجريبي فقط — ولا يُشحن في الإصدار النهائي."></span></div>
+          </div>
+
         </div></div>
       </div></div>
     </div>

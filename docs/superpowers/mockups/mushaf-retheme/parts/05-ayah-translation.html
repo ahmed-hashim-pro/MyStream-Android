@@ -1,8 +1,10 @@
-<!-- ====== 05 · AYAH PANEL — TRANSLATION ====== -->
+<!-- ====== 05 · AYAH PANEL — TRANSLATION / TAFSIR ====== -->
+<!-- Sliding action panel (InlineTranslationView) over the page. One of THREE swipeable
+     panels: Bookmark/Tag · Translation · Audio. This is the Translation panel. -->
 <div class="phone-col">
   <div class="phone-cap">
     <div class="n" data-en="Ayah Panel · Translation" data-ar="لوحة الآية · الترجمة"></div>
-    <div class="d" data-en="Tap an ayah → sliding panel" data-ar="انقر آية ← لوحة منزلقة"></div>
+    <div class="d" data-en="Tap an ayah → swipe Bookmark · Translation · Audio" data-ar="انقر آية ← مرّر بين المرجعية · الترجمة · الصوت"></div>
   </div>
   <div class="phone"><div class="notch"></div><div class="screen">
     <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
@@ -12,44 +14,123 @@
       <div class="nav">
         <span class="bk">‹</span>
         <div class="ttl">
-          <div class="t"><span class="ar">البقرة</span></div>
-          <div class="s"><span data-en="Page 49 · Juz' 1" data-ar="صفحة 49 · الجزء 1"></span></div>
+          <div class="t"><span class="ar">الفاتحة</span></div>
+          <div class="s"><span data-en="Page 1 · Juz' 1" data-ar="صفحة ١ · الجزء ١"></span></div>
         </div>
-        <div class="acts"><span class="ico">☆</span><span class="ico">🌙</span><span class="ico">⋮</span></div>
+        <div class="acts"><span class="ico" title="Show as text">🌐</span><span class="ico">☆</span><span class="ico">⋮</span></div>
       </div>
     </div>
 
     <div class="grow" style="position:relative;flex:1;overflow:hidden">
-      <div class="page auto-paper sepia">
-        <div class="surah-band">سُورَةُ البَقَرَة</div>
+      <div class="page sepia">
+        <div class="surah-band">سُورَةُ الفَاتِحَةِ</div>
         <div class="quran">
-          الٓمٓ <span class="mk">1</span> ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ <span class="mk">2</span> ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَٰهُمْ يُنفِقُونَ <span class="mk">3</span>
+          بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">1</span>
+          <!-- selected ayah → gold-faint highlight band on the page -->
+          <span style="background:var(--gold-faint);border-radius:5px;box-decoration-break:clone;-webkit-box-decoration-break:clone">ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ <span class="mk">2</span></span>
+          ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">3</span> مَٰلِكِ يَوۡمِ ٱلدِّينِ <span class="mk">4</span> إِيَّاكَ نَعۡبُدُ وَإِيَّاكَ نَسۡتَعِينُ <span class="mk">5</span>
         </div>
       </div>
 
-      <!-- dim + sheet -->
-      <div class="scrim"></div>
-      <div class="sheet">
-        <div class="grab"></div>
-        <div class="sh-head">
-          <div class="t"><span class="ar">البقرة ٢:٢</span></div>
-          <span class="x">✕</span>
+      <!-- TRANSLATION action panel (fixed-navy surface · ScrollView) -->
+      <div class="sheet" style="background:linear-gradient(160deg,var(--navy-700),var(--navy-900));color:var(--on-navy);height:62%;border-radius:22px 22px 0 0">
+        <div class="grab" style="background:rgba(255,255,255,.32)"></div>
+
+        <!-- TOP ACTION BAR = swipeable tab icons (Audio · Translation · Bookmark/Tag) +
+             collapse chevron (ic_action_expand). Icon strip is NOT mirrored (matches as-built). -->
+        <div dir="ltr" style="display:flex;align-items:center;padding:2px 6px 0;border-bottom:1px solid rgba(255,255,255,.10)">
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:9px 0 13px;color:var(--on-navy);font-size:18px" title="Audio">▶</div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:9px 0 13px;color:var(--on-navy);font-size:18px;position:relative" title="Translation">🌐
+            <span style="position:absolute;left:24%;right:24%;bottom:3px;height:3px;border-radius:3px;background:var(--gold)"></span>
+          </div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:9px 0 13px;color:var(--on-navy);font-size:18px" title="Bookmark / Tag">🏷️</div>
+          <div style="display:flex;align-items:center;justify-content:center;padding:9px 10px 13px;color:var(--on-navy);font-size:20px" title="Collapse">⌄</div>
         </div>
-        <div class="dots"><i class="on"></i><i></i><i></i></div>
-        <div class="pad" style="padding:0 16px 18px">
-          <div class="field" style="margin-top:0">
-            <div class="lab" data-en="Translation" data-ar="الترجمة"></div>
-            <div class="inp"><span class="grow" data-en="Saheeh International ▾" data-ar="صحيح إنترناشونال ▾"></span></div>
+
+        <!-- STATIC multi-select spinner — always reads 'Translations', NOT a chosen translator name.
+             Tapping opens the multi-select checklist of translations/tafaseer. -->
+        <div style="display:flex;align-items:center;gap:10px;padding:11px 18px;border-bottom:1px solid rgba(255,255,255,.08)">
+          <span style="font-size:12.5px;font-weight:800;color:var(--gold-light)" data-en="Translations" data-ar="التفسير والترجمة"></span>
+          <span style="margin-inline-start:auto;color:var(--gold-light);font-size:12px">▾</span>
+        </div>
+
+        <!-- scrollable translation/tafsir content -->
+        <div style="flex:1;overflow-y:auto;padding:12px 18px 14px">
+          <!-- numeric sura:ayah label only (no surah name) -->
+          <div style="font-size:14px;font-weight:800;color:var(--on-navy);text-align:start;padding:2px 0 8px" data-en="1:2" data-ar="١:٢"></div>
+
+          <!-- multi-translation STACKING — each under a bold ALL-CAPS gold translator header -->
+          <div style="font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--gold-light);margin:0 0 3px" data-en="Saheeh International" data-ar="صحيح إنترناشونال"></div>
+          <div style="font-size:13.5px;line-height:1.6;color:var(--on-navy);text-align:start;-webkit-user-select:text;user-select:text" data-en="[All] praise is [due] to Allāh, Lord of the worlds -" data-ar="الحمدُ والثناءُ لله ربِّ العالمين، مالكِ الخلقِ أجمعين."></div>
+
+          <div style="font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--gold-light);margin:14px 0 3px" data-en="Pickthall" data-ar="بيكثال"></div>
+          <div style="font-size:13.5px;line-height:1.6;color:var(--on-navy);text-align:start;-webkit-user-select:text;user-select:text" data-en="Praise be to Allah, Lord of the Worlds," data-ar="الثناءُ كلُّه لله، ربِّ العالمين،"></div>
+
+          <div style="font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--gold-light);margin:14px 0 3px" data-en="Tafsir al-Muyassar" data-ar="التفسير الميسّر"></div>
+          <div style="font-size:13.5px;line-height:1.7;color:var(--on-navy);text-align:start;-webkit-user-select:text;user-select:text" dir="rtl" data-en="All praise and thanks belong to Allah alone, Lord of all creation — the heavens, the earth and all therein…" data-ar="الثناءُ على الله بصفاتِه التي كلُّها أوصافُ كمالٍ، وبنِعَمِه الظاهرةِ والباطنةِ، وهو سبحانه ربُّ جميعِ الخلائق…"></div>
+
+          <!-- entry to the Translation Manager (multi-select / download) -->
+          <div style="margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,.10)">
+            <a class="txtlink" style="color:var(--gold-light);display:inline-flex;align-items:center;gap:6px"><span>＋</span><span data-en="More Translations &amp; Tafsir…" data-ar="المزيد من الترجمات والتفاسير…"></span></a>
           </div>
+        </div>
 
-          <div class="quran-inline" style="direction:rtl;text-align:center;font-size:21px;line-height:1.9;color:var(--text);margin:16px 0 4px">ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ</div>
+        <!-- icon-only prev / next AYAH (ic_translation_previous / ic_translation_next).
+             Shown only for a single-ayah selection — hidden for ranges. -->
+        <span style="position:absolute;bottom:12px;inset-inline-start:14px;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:var(--on-navy);font-size:20px" title="Previous ayah">‹</span>
+        <span style="position:absolute;bottom:12px;inset-inline-end:14px;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:var(--on-navy);font-size:20px" title="Next ayah">›</span>
+      </div>
+    </div>
+  </div></div>
+</div>
 
-          <div style="font-size:14px;line-height:1.6;color:var(--text2);padding:8px 2px 4px" data-en="This is the Book about which there is no doubt, a guidance for those conscious of Allah." data-ar="ذٰلك الكتابُ لا ريبَ فيه، هدًى للمتقين."></div>
+<!-- ====== 05b · AYAH PANEL — EMPTY (no translations downloaded) ====== -->
+<div class="phone-col">
+  <div class="phone-cap">
+    <div class="n" data-en="Ayah Panel · Empty" data-ar="لوحة الآية · فارغة"></div>
+    <div class="d" data-en="Nothing downloaded → Get Translations" data-ar="لا يوجد تحميل ← حمّل الترجمة"></div>
+  </div>
+  <div class="phone"><div class="notch"></div><div class="screen">
+    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
 
-          <div style="display:flex;gap:10px;margin-top:16px">
-            <span class="btn ghost grow"><span class="chev">‹</span><span data-en="Prev" data-ar="السابق"></span></span>
-            <span class="btn gold grow"><span data-en="Next" data-ar="التالي"></span><span class="chev">›</span></span>
+    <div class="bar">
+      <div class="nav">
+        <span class="bk">‹</span>
+        <div class="ttl">
+          <div class="t"><span class="ar">الفاتحة</span></div>
+          <div class="s"><span data-en="Page 1 · Juz' 1" data-ar="صفحة ١ · الجزء ١"></span></div>
+        </div>
+        <div class="acts"><span class="ico" title="Show as text">🌐</span><span class="ico">☆</span><span class="ico">⋮</span></div>
+      </div>
+    </div>
+
+    <div class="grow" style="position:relative;flex:1;overflow:hidden">
+      <div class="page sepia">
+        <div class="surah-band">سُورَةُ الفَاتِحَةِ</div>
+        <div class="quran">
+          بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">1</span>
+          <span style="background:var(--gold-faint);border-radius:5px;box-decoration-break:clone;-webkit-box-decoration-break:clone">ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ <span class="mk">2</span></span>
+          ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">3</span> مَٰلِكِ يَوۡمِ ٱلدِّينِ <span class="mk">4</span> إِيَّاكَ نَعۡبُدُ وَإِيَّاكَ نَسۡتَعِينُ <span class="mk">5</span>
+        </div>
+      </div>
+
+      <div class="sheet" style="background:linear-gradient(160deg,var(--navy-700),var(--navy-900));color:var(--on-navy);height:62%;border-radius:22px 22px 0 0">
+        <div class="grab" style="background:rgba(255,255,255,.32)"></div>
+
+        <div dir="ltr" style="display:flex;align-items:center;padding:2px 6px 0;border-bottom:1px solid rgba(255,255,255,.10)">
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:9px 0 13px;color:var(--on-navy);font-size:18px" title="Audio">▶</div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:9px 0 13px;color:var(--on-navy);font-size:18px;position:relative" title="Translation">🌐
+            <span style="position:absolute;left:24%;right:24%;bottom:3px;height:3px;border-radius:3px;background:var(--gold)"></span>
           </div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:9px 0 13px;color:var(--on-navy);font-size:18px" title="Bookmark / Tag">🏷️</div>
+          <div style="display:flex;align-items:center;justify-content:center;padding:9px 10px 13px;color:var(--on-navy);font-size:20px" title="Collapse">⌄</div>
+        </div>
+
+        <!-- @string/need_translation empty state — Prev/Next hidden -->
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:13px;padding:24px 28px">
+          <span style="width:70px;height:70px;border-radius:22px;background:var(--gold-faint);color:var(--gold-light);display:flex;align-items:center;justify-content:center;font-size:32px">🌐</span>
+          <div style="font-size:13.5px;line-height:1.55;color:var(--on-navy-dim);max-width:220px" data-en="You don't have any translations or tafaseer downloaded yet." data-ar="لم يتم تحميل أي تفسير أو ترجمة"></div>
+          <span class="btn gold"><span data-en="Get Translations" data-ar="حمّل التفسير أو الترجمة"></span></span>
         </div>
       </div>
     </div>

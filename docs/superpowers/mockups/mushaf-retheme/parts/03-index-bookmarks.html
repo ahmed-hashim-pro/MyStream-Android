@@ -1,85 +1,330 @@
 <!-- ====== 03 · QURAN INDEX — BOOKMARKS TAB ====== -->
+
+    <!-- ---- Frame 1 · Bookmarks tab (default, ungrouped) ---- -->
     <div class="phone-col">
       <div class="phone-cap">
-        <div class="n" data-en="Quran Index · Bookmarks" data-ar="فهرس المصحف · العلامات"></div>
-        <div class="d" data-en="Saved ayat, grouped by tag" data-ar="الآيات المحفوظة، مجمّعة بالوسوم"></div>
+        <div class="n" data-en="Quran Index · Bookmarks" data-ar="فهرس المصحف · المرجعيات"></div>
+        <div class="d" data-en="Recent pages + page & ayah bookmarks" data-ar="آخر المتصفحات + مرجعيات الصفحات والآيات"></div>
       </div>
       <div class="phone"><div class="notch"></div><div class="screen">
         <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
         <div class="bar round">
           <div class="nav">
-            <span class="bk">‹</span>
             <div class="ttl">
               <div class="t" data-en="Mushaf" data-ar="المصحف"></div>
               <div class="s" data-en="The Noble Qur'an" data-ar="القرآن الكريم"></div>
             </div>
-            <div class="acts"><span class="ico">🔍</span><span class="ico">⋮</span></div>
+            <div class="acts">
+              <span class="ico" title="Sort" style="flex-direction:column;gap:3px">
+                <i style="width:16px;height:2px;background:var(--gold);border-radius:2px"></i>
+                <i style="width:11px;height:2px;background:var(--gold);border-radius:2px"></i>
+                <i style="width:6px;height:2px;background:var(--gold);border-radius:2px"></i>
+              </span>
+              <span class="ico" title="Last page">📖</span>
+              <span class="ico">⋮</span>
+            </div>
           </div>
           <div class="search">
             <span class="lens">🔍</span>
-            <span class="ph" data-en="Search bookmarks or tags" data-ar="ابحث في العلامات أو الوسوم"></span>
+            <span class="ph" data-en="Search the Quran" data-ar="بحث في القرآن"></span>
           </div>
           <div class="tabs in-bar">
-            <div class="tab" data-en="Surahs" data-ar="السور"></div>
-            <div class="tab" data-en="Juz'" data-ar="الأجزاء"></div>
-            <div class="tab on" data-en="Bookmarks" data-ar="العلامات"></div>
+            <div class="tab" data-en="Surahs" data-ar="سورة"></div>
+            <div class="tab" data-en="Juz'" data-ar="الجزء"></div>
+            <div class="tab on" data-en="Bookmarks" data-ar="المرجعيات"></div>
           </div>
         </div>
         <div class="body"><div class="scroll">
 
-          <div class="sec"><span data-en="Memorizing" data-ar="الحفظ"></span><span class="ln"></span></div>
-          <div class="list">
-            <div class="row">
-              <div class="ic">★</div>
-              <div class="tx">
-                <div class="t"><span class="ar">البقرة ٢٥٥</span></div>
-                <div class="s"><span data-en="Al-Baqarah : 255 · Page 42" data-ar="البقرة : ٢٥٥ · صفحة 42"></span><span class="chip" data-en="Ayat al-Kursi" data-ar="آية الكرسي"></span></div>
+          <!-- Continue reading -->
+          <div class="card">
+            <div class="crow">
+              <span class="ic">🕌</span>
+              <div class="tx grow">
+                <div class="t" style="font-size:13px;font-weight:800;color:var(--text)" data-en="Continue reading" data-ar="متابعة القراءة"></div>
+                <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px"><span class="ar">سُورَةُ الفَاتِحَةِ</span> · <span data-en="Page 1, Juz' 1" data-ar="صفحة ١، جزء ١"></span></div>
               </div>
-              <div class="end"><span class="pg" data-en="Page 42" data-ar="صفحة 42"></span></div>
-              <span class="chev">›</span>
-            </div>
-            <div class="row">
-              <div class="ic">★</div>
-              <div class="tx">
-                <div class="t"><span class="ar">آل عمران ١٩</span></div>
-                <div class="s"><span data-en="Aal-'Imran : 19 · Page 52" data-ar="آل عمران : ١٩ · صفحة 52"></span></div>
-              </div>
-              <div class="end"><span class="pg" data-en="Page 52" data-ar="صفحة 52"></span></div>
-              <span class="chev">›</span>
+              <span class="btn gold" style="padding:8px 14px">▸ <span data-en="Read" data-ar="قراءة"></span></span>
             </div>
           </div>
 
-          <div class="sec"><span data-en="Favorites" data-ar="المفضلة"></span><span class="ln"></span></div>
+          <!-- RECENT PAGES -->
+          <div class="juzband" style="margin:8px -12px 2px;border-radius:0"><span class="jt" data-en="Recent pages" data-ar="آخر المتصفحات"></span></div>
           <div class="list">
             <div class="row">
-              <div class="ic">★</div>
+              <div class="ic">📄</div>
               <div class="tx">
-                <div class="t"><span class="ar">الفاتحة ٦</span></div>
-                <div class="s"><span data-en="Al-Fatihah : 6 · Page 1 · 2 days ago" data-ar="الفاتحة : ٦ · صفحة 1 · قبل يومين"></span></div>
+                <div class="t"><span class="ar">سُورَةُ الفَاتِحَةِ</span></div>
+                <div class="s"><span data-en="Page 1, Juz' 1" data-ar="صفحة ١، جزء ١"></span></div>
               </div>
-              <div class="end"><span class="pg" data-en="Page 1" data-ar="صفحة 1"></span></div>
-              <span class="chev">›</span>
+              <div class="end"><span class="pg" data-en="1" data-ar="١"></span></div>
             </div>
             <div class="row">
-              <div class="ic">★</div>
+              <div class="ic">📄</div>
+              <div class="tx">
+                <div class="t"><span class="ar">سُورَةُ البَقَرَةِ</span></div>
+                <div class="s"><span data-en="Page 4, Juz' 1" data-ar="صفحة ٤، جزء ١"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="4" data-ar="٤"></span></div>
+            </div>
+            <div class="row">
+              <div class="ic">📄</div>
+              <div class="tx">
+                <div class="t"><span class="ar">سُورَةُ البَقَرَةِ</span></div>
+                <div class="s"><span data-en="Page 6, Juz' 1" data-ar="صفحة ٦، جزء ١"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="6" data-ar="٦"></span></div>
+            </div>
+          </div>
+
+          <!-- PAGE BOOKMARKS (ic_favorite) -->
+          <div class="juzband" style="margin:10px -12px 2px;border-radius:0"><span class="jt" data-en="Page bookmarks" data-ar="مرجعيات الصفحات"></span></div>
+          <div class="list">
+            <div class="row">
+              <div class="ic">♥</div>
+              <div class="tx">
+                <div class="t"><span class="ar">سُورَةُ البَقَرَةِ</span></div>
+                <div class="s"><span data-en="Page 48, Juz' 2" data-ar="صفحة ٤٨، جزء ٢"></span><span class="chip" data-en="Memorizing" data-ar="حفظ"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="48" data-ar="٤٨"></span></div>
+            </div>
+            <div class="row">
+              <div class="ic">♥</div>
+              <div class="tx">
+                <div class="t"><span class="ar">سُورَةُ الكَهۡفِ</span></div>
+                <div class="s"><span data-en="Page 294, Juz' 15" data-ar="صفحة ٢٩٤، جزء ١٥"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="294" data-ar="٢٩٤"></span></div>
+            </div>
+          </div>
+
+          <!-- AYAH BOOKMARKS (gold) -->
+          <div class="juzband" style="margin:10px -12px 2px;border-radius:0"><span class="jt" data-en="Ayah bookmarks" data-ar="مرجعيات الآيات"></span></div>
+          <div class="list">
+            <div class="row">
+              <div class="ic" style="background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305">★</div>
+              <div class="tx">
+                <div class="t"><span class="ar">البقرة ٢٥٥</span></div>
+                <div class="s"><span data-en="Al-Baqarah : 255 · Page 42" data-ar="البقرة : ٢٥٥ · صفحة ٤٢"></span><span class="chip" data-en="Ayat al-Kursi" data-ar="آية الكرسي"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="42" data-ar="٤٢"></span></div>
+            </div>
+            <div class="row">
+              <div class="ic" style="background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305">★</div>
               <div class="tx">
                 <div class="t"><span class="ar">يس ٩</span></div>
-                <div class="s"><span data-en="Ya-Sin : 9 · Page 440 · last week" data-ar="يس : ٩ · صفحة 440 · الأسبوع الماضي"></span><span class="chip" data-en="Du'a" data-ar="دعاء"></span></div>
+                <div class="s"><span data-en="Ya-Sin : 9 · Page 440" data-ar="يس : ٩ · صفحة ٤٤٠"></span><span class="chip" data-en="Du'a" data-ar="دعاء"></span></div>
               </div>
-              <div class="end"><span class="pg" data-en="Page 440" data-ar="صفحة 440"></span></div>
-              <span class="chev">›</span>
-            </div>
-            <div class="row">
-              <div class="ic">★</div>
-              <div class="tx">
-                <div class="t"><span class="ar">الكهف ١٠</span></div>
-                <div class="s"><span data-en="Al-Kahf : 10 · Page 294 · last Friday" data-ar="الكهف : ١٠ · صفحة 294 · الجمعة الماضية"></span></div>
-              </div>
-              <div class="end"><span class="pg" data-en="Page 294" data-ar="صفحة 294"></span></div>
-              <span class="chev">›</span>
+              <div class="end"><span class="pg" data-en="440" data-ar="٤٤٠"></span></div>
             </div>
           </div>
 
         </div></div>
+      </div></div>
+    </div>
+
+    <!-- ---- Frame 2 · Grouped by tags ---- -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Bookmarks · Grouped by tags" data-ar="المرجعيات · مجمّعة بالوسوم"></div>
+        <div class="d" data-en="Tag groups + an untagged group" data-ar="مجموعات الوسوم + مجموعة غير مصنّفة"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar round">
+          <div class="nav">
+            <div class="ttl">
+              <div class="t" data-en="Mushaf" data-ar="المصحف"></div>
+              <div class="s" data-en="The Noble Qur'an" data-ar="القرآن الكريم"></div>
+            </div>
+            <div class="acts">
+              <span class="ico" title="Sort" style="flex-direction:column;gap:3px">
+                <i style="width:16px;height:2px;background:var(--gold);border-radius:2px"></i>
+                <i style="width:11px;height:2px;background:var(--gold);border-radius:2px"></i>
+                <i style="width:6px;height:2px;background:var(--gold);border-radius:2px"></i>
+              </span>
+              <span class="ico" title="Last page">📖</span>
+              <span class="ico">⋮</span>
+            </div>
+          </div>
+          <div class="search">
+            <span class="lens">🔍</span>
+            <span class="ph" data-en="Search the Quran" data-ar="بحث في القرآن"></span>
+          </div>
+          <div class="tabs in-bar">
+            <div class="tab" data-en="Surahs" data-ar="سورة"></div>
+            <div class="tab" data-en="Juz'" data-ar="الجزء"></div>
+            <div class="tab on" data-en="Bookmarks" data-ar="المرجعيات"></div>
+          </div>
+        </div>
+        <div class="body"><div class="scroll">
+
+          <!-- TAG GROUP: Memorizing -->
+          <div class="juzband" style="margin:8px -12px 2px;border-radius:0"><span class="jt" data-en="Memorizing" data-ar="حفظ"></span><span class="jp" data-en="2" data-ar="٢"></span></div>
+          <div class="list">
+            <div class="row">
+              <div class="ic" style="background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305">★</div>
+              <div class="tx">
+                <div class="t"><span class="ar">البقرة ٢٥٥</span></div>
+                <div class="s"><span data-en="Al-Baqarah : 255 · Page 42" data-ar="البقرة : ٢٥٥ · صفحة ٤٢"></span><span class="chip" data-en="Ayat al-Kursi" data-ar="آية الكرسي"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="42" data-ar="٤٢"></span></div>
+            </div>
+            <div class="row">
+              <div class="ic">♥</div>
+              <div class="tx">
+                <div class="t"><span class="ar">سُورَةُ البَقَرَةِ</span></div>
+                <div class="s"><span data-en="Page 48, Juz' 2" data-ar="صفحة ٤٨، جزء ٢"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="48" data-ar="٤٨"></span></div>
+            </div>
+          </div>
+
+          <!-- TAG GROUP: Review -->
+          <div class="juzband" style="margin:10px -12px 2px;border-radius:0"><span class="jt" data-en="Review" data-ar="مراجعة"></span><span class="jp" data-en="2" data-ar="٢"></span></div>
+          <div class="list">
+            <div class="row">
+              <div class="ic" style="background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305">★</div>
+              <div class="tx">
+                <div class="t"><span class="ar">يس ٩</span></div>
+                <div class="s"><span data-en="Ya-Sin : 9 · Page 440" data-ar="يس : ٩ · صفحة ٤٤٠"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="440" data-ar="٤٤٠"></span></div>
+            </div>
+            <div class="row">
+              <div class="ic" style="background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305">★</div>
+              <div class="tx">
+                <div class="t"><span class="ar">الكهف ١٠</span></div>
+                <div class="s"><span data-en="Al-Kahf : 10 · Page 294" data-ar="الكهف : ١٠ · صفحة ٢٩٤"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="294" data-ar="٢٩٤"></span></div>
+            </div>
+          </div>
+
+          <!-- NOT TAGGED -->
+          <div class="juzband" style="margin:10px -12px 2px;border-radius:0"><span class="jt" data-en="Not tagged" data-ar="غير مصنّف"></span><span class="jp" data-en="2" data-ar="٢"></span></div>
+          <div class="list">
+            <div class="row">
+              <div class="ic">♥</div>
+              <div class="tx">
+                <div class="t"><span class="ar">سُورَةُ الفَاتِحَةِ</span></div>
+                <div class="s"><span data-en="Page 1, Juz' 1" data-ar="صفحة ١، جزء ١"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="1" data-ar="١"></span></div>
+            </div>
+            <div class="row">
+              <div class="ic" style="background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305">★</div>
+              <div class="tx">
+                <div class="t"><span class="ar">آل عمران ١٩</span></div>
+                <div class="s"><span data-en="Aal-'Imran : 19 · Page 52" data-ar="آل عمران : ١٩ · صفحة ٥٢"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="52" data-ar="٥٢"></span></div>
+            </div>
+          </div>
+
+        </div></div>
+      </div></div>
+    </div>
+
+    <!-- ---- Frame 3 · Sort & display overflow menu ---- -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Bookmarks · Sort & display" data-ar="المرجعيات · الترتيب والعرض"></div>
+        <div class="d" data-en="Overflow — sort order, grouping & display toggles" data-ar="قائمة الخيارات — الترتيب والتجميع وخيارات العرض"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar round">
+          <div class="nav">
+            <div class="ttl">
+              <div class="t" data-en="Mushaf" data-ar="المصحف"></div>
+              <div class="s" data-en="The Noble Qur'an" data-ar="القرآن الكريم"></div>
+            </div>
+            <div class="acts">
+              <span class="ico" title="Sort" style="flex-direction:column;gap:3px">
+                <i style="width:16px;height:2px;background:var(--gold);border-radius:2px"></i>
+                <i style="width:11px;height:2px;background:var(--gold);border-radius:2px"></i>
+                <i style="width:6px;height:2px;background:var(--gold);border-radius:2px"></i>
+              </span>
+              <span class="ico" title="Last page">📖</span>
+              <span class="ico">⋮</span>
+            </div>
+          </div>
+          <div class="search">
+            <span class="lens">🔍</span>
+            <span class="ph" data-en="Search the Quran" data-ar="بحث في القرآن"></span>
+          </div>
+          <div class="tabs in-bar">
+            <div class="tab" data-en="Surahs" data-ar="سورة"></div>
+            <div class="tab" data-en="Juz'" data-ar="الجزء"></div>
+            <div class="tab on" data-en="Bookmarks" data-ar="المرجعيات"></div>
+          </div>
+        </div>
+        <div class="body"><div class="scroll">
+          <div class="card">
+            <div class="crow">
+              <span class="ic">🕌</span>
+              <div class="tx grow">
+                <div class="t" style="font-size:13px;font-weight:800;color:var(--text)" data-en="Continue reading" data-ar="متابعة القراءة"></div>
+                <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px"><span class="ar">سُورَةُ الفَاتِحَةِ</span> · <span data-en="Page 1, Juz' 1" data-ar="صفحة ١، جزء ١"></span></div>
+              </div>
+              <span class="btn gold" style="padding:8px 14px">▸ <span data-en="Read" data-ar="قراءة"></span></span>
+            </div>
+          </div>
+          <div class="juzband" style="margin:8px -12px 2px;border-radius:0"><span class="jt" data-en="Recent pages" data-ar="آخر المتصفحات"></span></div>
+          <div class="list">
+            <div class="row">
+              <div class="ic">📄</div>
+              <div class="tx">
+                <div class="t"><span class="ar">سُورَةُ الفَاتِحَةِ</span></div>
+                <div class="s"><span data-en="Page 1, Juz' 1" data-ar="صفحة ١، جزء ١"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="1" data-ar="١"></span></div>
+            </div>
+            <div class="row">
+              <div class="ic">📄</div>
+              <div class="tx">
+                <div class="t"><span class="ar">سُورَةُ البَقَرَةِ</span></div>
+                <div class="s"><span data-en="Page 4, Juz' 1" data-ar="صفحة ٤، جزء ١"></span></div>
+              </div>
+              <div class="end"><span class="pg" data-en="4" data-ar="٤"></span></div>
+            </div>
+          </div>
+        </div></div>
+
+        <!-- Sort & display sheet -->
+        <div class="scrim"></div>
+        <div class="sheet">
+          <div class="grab"></div>
+          <div class="sh-head">
+            <div class="t" data-en="Sort & display" data-ar="الترتيب والعرض"></div>
+            <span class="x">✕</span>
+          </div>
+          <div class="sec" style="padding:4px 16px 4px"><span data-en="Sort by" data-ar="ترتيب حسب"></span><span class="ln"></span></div>
+          <div class="prow">
+            <div class="radio on"></div>
+            <div class="tx"><div class="t" data-en="Date added" data-ar="تاريخ الإضافة"></div></div>
+          </div>
+          <div class="prow">
+            <div class="radio"></div>
+            <div class="tx"><div class="t" data-en="Location in Quran" data-ar="الموضع في المصحف"></div></div>
+          </div>
+          <div class="sec" style="padding:10px 16px 4px"><span data-en="Display" data-ar="العرض"></span><span class="ln"></span></div>
+          <div class="prow">
+            <div class="ic">🏷</div>
+            <div class="tx"><div class="t" data-en="Group by tags" data-ar="التجميع حسب الوسوم"></div><div class="s" data-en="Show bookmarks under their tags" data-ar="عرض المرجعيات ضمن وسومها"></div></div>
+            <div class="sw on"><div class="k"></div></div>
+          </div>
+          <div class="prow">
+            <div class="ic">📄</div>
+            <div class="tx"><div class="t" data-en="Show recent pages" data-ar="إظهار آخر المتصفحات"></div></div>
+            <div class="sw on"><div class="k"></div></div>
+          </div>
+          <div class="prow" style="padding-bottom:18px">
+            <div class="ic">🕘</div>
+            <div class="tx"><div class="t" data-en="Show date" data-ar="إظهار التاريخ"></div><div class="s" data-en="When each bookmark was added" data-ar="تاريخ إضافة كل مرجعية"></div></div>
+            <div class="sw"><div class="k"></div></div>
+          </div>
+        </div>
       </div></div>
     </div>

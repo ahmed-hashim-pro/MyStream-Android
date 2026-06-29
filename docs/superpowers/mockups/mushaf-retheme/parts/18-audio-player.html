@@ -1,51 +1,353 @@
-<!-- ====== 18 · FULL-SCREEN AUDIO PLAYER ====== -->
-<div class="phone-col">
-  <div class="phone-cap">
-    <div class="n" data-en="Audio Player" data-ar="مشغّل الصوت"></div>
-    <div class="d" data-en="Full-screen recitation player" data-ar="مشغّل التلاوة بملء الشاشة"></div>
-  </div>
-  <div class="phone"><div class="notch"></div><div class="screen">
-    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+    <!-- ============ 18 · AUDIO STATUS BAR — docked over the reader page ============ -->
+    <!-- Real AudioStatusBar = a ~48dp navy bar overlaid on the bottom of the visible Quran
+         page (NOT a full-screen now-playing). Modes: STOPPED / PLAYING+PAUSED / DOWNLOADING+
+         LOADING / PROMPT_DOWNLOAD / RECITATION (listening·stopped·playing). No scrubber, no
+         time read-outs; the only horizontal progress is the download bar. Gear opens the
+         From/To range panel. Gold accents the Play/Pause icon only. -->
 
-    <div style="position:absolute;inset:0;background:linear-gradient(160deg,var(--navy-700),var(--navy-900));color:var(--on-navy);display:flex;flex-direction:column">
-
-      <!-- top row -->
-      <div class="between" style="padding:8px 14px 4px">
-        <span class="ico" style="font-size:22px;color:var(--gold)">⌄</span>
-        <div class="t" data-en="Now playing" data-ar="يُشغّل الآن" style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--on-navy-dim)"></div>
-        <span class="ico" style="font-size:20px;color:var(--gold)">⋮</span>
+    <!-- ---------- (A) STOPPED ---------- -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Audio Bar · Stopped" data-ar="شريط الصوت · متوقّف"></div>
+        <div class="d" data-en="48dp docked bar — gold Play + reciter (Qari) picker ▾ + Mic (when recitation on)" data-ar="شريط ٤٨dp — تشغيل ذهبي + اختيار القارئ ▾ + ميكروفون (عند تفعيل التسميع)"></div>
       </div>
-
-      <!-- artwork + titles -->
-      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px;gap:6px">
-        <div style="width:180px;height:180px;border-radius:50%;border:3px solid var(--gold);background:radial-gradient(circle at 50% 38%,var(--navy-500),var(--navy-900));box-shadow:0 0 0 6px var(--gold-faint),var(--shadow);display:flex;align-items:center;justify-content:center;margin-bottom:18px">
-          <span class="ar" style="font-family:'Amiri',serif;font-size:52px;color:var(--gold-light)">۩</span>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t"><span class="ar">الفاتحة</span></div>
+              <div class="s"><span data-en="Page 1 · Juz' 1" data-ar="صفحة ١ · الجزء ١"></span></div>
+            </div>
+            <div class="acts"><span class="ico" title="Show translation">🌐</span><span class="ico" title="Bookmark">☆</span><span class="ico">⋮</span></div>
+          </div>
         </div>
-        <div class="ar" style="font-family:'Amiri',serif;font-size:23px;font-weight:700;color:var(--on-navy)">سورة البقرة</div>
-        <div class="t" data-en="Mishary Alafasy" data-ar="مشاري العفاسي" style="font-size:13px;font-weight:600;color:var(--on-navy-dim)"></div>
-      </div>
 
-      <!-- seek bar -->
-      <div style="padding:0 24px 6px">
-        <div style="height:5px;border-radius:5px;background:var(--gold-faint);position:relative">
-          <i style="display:block;height:100%;width:38%;border-radius:5px;background:var(--gold)"></i>
-          <span style="position:absolute;inset-inline-start:38%;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:var(--shadow-sm)"></span>
+        <div class="grow" style="position:relative;flex:1;overflow:hidden">
+          <div class="page auto-paper sepia">
+            <div class="surah-band">سُورَةُ الفَاتِحَة</div>
+            <div class="quran">
+              بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">1</span> <span style="background:var(--gold-faint);border-radius:5px">ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ</span> <span class="mk">2</span> ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">3</span> مَٰلِكِ يَوۡمِ ٱلدِّينِ <span class="mk">4</span> إِيَّاكَ نَعۡبُدُ وَإِيَّاكَ نَسۡتَعِينُ <span class="mk">5</span> ٱهۡدِنَا ٱلصِّرَٰطَ ٱلۡمُسۡتَقِيمَ <span class="mk">6</span> صِرَٰطَ ٱلَّذِينَ أَنۡعَمۡتَ عَلَيۡهِمۡ <span class="mk">7</span>
+            </div>
+            <div class="pageno">١</div>
+          </div>
+          <!-- floating Day / Sepia / Night reading-mode pill (sits just above the audio bar) -->
+          <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:30;
+                      display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);
+                      border-radius:22px;box-shadow:var(--shadow);padding:6px">
+            <span class="chip" data-paper-chip="day" data-en="Day" data-ar="نهار"></span>
+            <span class="chip solid" data-paper-chip="sepia" data-en="Sepia" data-ar="ورقي"></span>
+            <span class="chip" data-paper-chip="night" data-en="Night" data-ar="ليل"></span>
+          </div>
         </div>
-        <div class="between" style="margin-top:8px;font-size:11px;font-weight:700;color:var(--on-navy-dim)">
-          <span>1:02</span>
-          <span>2:48</span>
+
+        <!-- STOPPED: Play(gold) · | · Qari spinner ▾ · | · Mic -->
+        <div class="audiobar" style="gap:0;padding:6px 8px">
+          <span class="ctl" title="Play" style="flex:none;width:42px;text-align:center;color:var(--gold);font-size:22px">▶</span>
+          <span style="width:1px;align-self:stretch;background:rgba(255,255,255,.22);margin:8px 7px"></span>
+          <div title="Choose reciter (Qari)" style="flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:7px 11px">
+            <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;font-weight:700" data-en="Mishary Alafasy" data-ar="مشاري العفاسي"></span>
+            <span style="color:var(--gold);flex:none">▾</span>
+          </div>
+          <span style="width:1px;align-self:stretch;background:rgba(255,255,255,.22);margin:8px 7px"></span>
+          <span class="ctl" title="Recite (mic)" style="flex:none;width:42px;text-align:center;font-size:19px">🎙</span>
         </div>
-      </div>
-
-      <!-- controls -->
-      <div style="display:flex;align-items:center;justify-content:center;gap:22px;padding:8px 24px 30px">
-        <span class="ctl" style="font-size:20px;color:var(--on-navy-dim)">🔀</span>
-        <span class="ctl" style="font-size:24px;color:var(--on-navy)">⏮</span>
-        <span class="play" style="width:64px;height:64px;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 10px 24px -8px var(--gold)">⏸</span>
-        <span class="ctl fwd" style="font-size:24px;color:var(--on-navy)">⏭</span>
-        <span class="ctl" style="font-size:20px;color:var(--on-navy-dim)">🔁</span>
-      </div>
-
+      </div></div>
     </div>
-  </div></div>
-</div>
+
+    <!-- ---------- (B) PLAYING / PAUSED ---------- -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Audio Bar · Playing" data-ar="شريط الصوت · يُشغّل"></div>
+        <div class="d" data-en="Six equal controls — Stop, Prev, Play/Pause (gold), Next, Repeat ×N, Settings. No scrubber/time." data-ar="ستة أزرار متساوية — إيقاف، السابق، تشغيل/إيقاف (ذهبي)، التالي، تكرار ×ن، الإعدادات. بلا شريط تمرير أو وقت"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t"><span class="ar">الفاتحة</span></div>
+              <div class="s"><span data-en="Page 1 · Juz' 1" data-ar="صفحة ١ · الجزء ١"></span></div>
+            </div>
+            <div class="acts"><span class="ico" title="Show translation">🌐</span><span class="ico" title="Bookmark">☆</span><span class="ico">⋮</span></div>
+          </div>
+        </div>
+
+        <div class="grow" style="position:relative;flex:1;overflow:hidden">
+          <div class="page auto-paper sepia">
+            <div class="surah-band">سُورَةُ الفَاتِحَة</div>
+            <div class="quran">
+              بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">1</span> <span style="background:var(--gold-faint);border-radius:5px">ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ</span> <span class="mk">2</span> ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">3</span> مَٰلِكِ يَوۡمِ ٱلدِّينِ <span class="mk">4</span> إِيَّاكَ نَعۡبُدُ وَإِيَّاكَ نَسۡتَعِينُ <span class="mk">5</span> ٱهۡدِنَا ٱلصِّرَٰطَ ٱلۡمُسۡتَقِيمَ <span class="mk">6</span> صِرَٰطَ ٱلَّذِينَ أَنۡعَمۡتَ عَلَيۡهِمۡ <span class="mk">7</span>
+            </div>
+            <div class="pageno">١</div>
+          </div>
+          <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:30;
+                      display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);
+                      border-radius:22px;box-shadow:var(--shadow);padding:6px">
+            <span class="chip" data-paper-chip="day" data-en="Day" data-ar="نهار"></span>
+            <span class="chip solid" data-paper-chip="sepia" data-en="Sepia" data-ar="ورقي"></span>
+            <span class="chip" data-paper-chip="night" data-en="Night" data-ar="ليل"></span>
+          </div>
+        </div>
+
+        <!-- PLAYING: Stop · Prev · Play/Pause(gold) · Next · Repeat(count) · Settings -->
+        <div class="audiobar" style="gap:0;padding:4px 4px">
+          <span class="ctl" title="Stop" style="flex:1;text-align:center;font-size:20px">⏹</span>
+          <span class="ctl" title="Previous" style="flex:1;text-align:center;font-size:20px">⏮</span>
+          <span title="Pause" style="flex:1;text-align:center;font-size:22px;color:var(--gold)">⏸</span>
+          <span class="ctl fwd" title="Next" style="flex:1;text-align:center;font-size:20px">⏭</span>
+          <span class="ctl" title="Repeat — tap cycles 1 · 2 · 3 · ∞" style="flex:1;text-align:center;font-size:19px"><span style="position:relative;display:inline-block">🔁<span style="position:absolute;top:-4px;inset-inline-end:-6px;font-size:9px;font-weight:800;color:var(--gold-light)">3</span></span></span>
+          <span class="ctl" title="Audio settings" style="flex:1;text-align:center;font-size:19px">⚙</span>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ---------- (C) DOWNLOADING / LOADING — matches the as-built screenshot ---------- -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Audio Bar · Downloading" data-ar="شريط الصوت · جارٍ التحميل"></div>
+        <div class="d" data-en="As-built — gold progress bar + status text + Cancel ✕ (this is the only horizontal progress; no seek/time)" data-ar="كما هو — شريط تقدّم ذهبي + نص الحالة + إلغاء ✕ (هذا هو التقدّم الأفقي الوحيد؛ بلا تمرير أو وقت)"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t"><span class="ar">الفاتحة</span></div>
+              <div class="s"><span data-en="Page 1 · Juz' 1" data-ar="صفحة ١ · الجزء ١"></span></div>
+            </div>
+            <div class="acts"><span class="ico" title="Show translation">🌐</span><span class="ico" title="Bookmark">☆</span><span class="ico">⋮</span></div>
+          </div>
+        </div>
+
+        <div class="grow" style="position:relative;flex:1;overflow:hidden">
+          <div class="page auto-paper sepia">
+            <div class="surah-band">سُورَةُ الفَاتِحَة</div>
+            <div class="quran">
+              بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">1</span> <span style="background:var(--gold-faint);border-radius:5px">ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ</span> <span class="mk">2</span> ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">3</span> مَٰلِكِ يَوۡمِ ٱلدِّينِ <span class="mk">4</span> إِيَّاكَ نَعۡبُدُ وَإِيَّاكَ نَسۡتَعِينُ <span class="mk">5</span> ٱهۡدِنَا ٱلصِّرَٰطَ ٱلۡمُسۡتَقِيمَ <span class="mk">6</span> صِرَٰطَ ٱلَّذِينَ أَنۡعَمۡتَ عَلَيۡهِمۡ <span class="mk">7</span>
+            </div>
+            <div class="pageno">١</div>
+          </div>
+          <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:30;
+                      display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);
+                      border-radius:22px;box-shadow:var(--shadow);padding:6px">
+            <span class="chip" data-paper-chip="day" data-en="Day" data-ar="نهار"></span>
+            <span class="chip solid" data-paper-chip="sepia" data-en="Sepia" data-ar="ورقي"></span>
+            <span class="chip" data-paper-chip="night" data-en="Night" data-ar="ليل"></span>
+          </div>
+        </div>
+
+        <!-- DOWNLOADING: gold progress line on top · Cancel ✕ · status text -->
+        <div class="audiobar" style="gap:0;padding:6px 8px">
+          <div class="aprog"><i style="width:46%"></i></div>
+          <span class="ctl" title="Cancel download" style="flex:none;width:42px;text-align:center;font-size:20px">✕</span>
+          <span style="width:1px;align-self:stretch;background:rgba(255,255,255,.22);margin:8px 7px"></span>
+          <div style="flex:1;min-width:0;font-size:12.5px;font-weight:700" data-en="Downloading…" data-ar="جارٍ التحميل…"></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ---------- (D) PROMPT_DOWNLOAD — not on Wi-Fi ---------- -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Audio Bar · Not on Wi-Fi" data-ar="شريط الصوت · بدون واي فاي"></div>
+        <div class="d" data-en="PROMPT_DOWNLOAD — Accept ✓ · 'Download data anyway?' · Cancel ✕" data-ar="طلب التحميل — قبول ✓ · 'تحميل البيانات على أية حال؟' · إلغاء ✕"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t"><span class="ar">الفاتحة</span></div>
+              <div class="s"><span data-en="Page 1 · Juz' 1" data-ar="صفحة ١ · الجزء ١"></span></div>
+            </div>
+            <div class="acts"><span class="ico" title="Show translation">🌐</span><span class="ico" title="Bookmark">☆</span><span class="ico">⋮</span></div>
+          </div>
+        </div>
+
+        <div class="grow" style="position:relative;flex:1;overflow:hidden">
+          <div class="page auto-paper sepia">
+            <div class="surah-band">سُورَةُ الفَاتِحَة</div>
+            <div class="quran">
+              بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">1</span> <span style="background:var(--gold-faint);border-radius:5px">ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ</span> <span class="mk">2</span> ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">3</span> مَٰلِكِ يَوۡمِ ٱلدِّينِ <span class="mk">4</span> إِيَّاكَ نَعۡبُدُ وَإِيَّاكَ نَسۡتَعِينُ <span class="mk">5</span> ٱهۡدِنَا ٱلصِّرَٰطَ ٱلۡمُسۡتَقِيمَ <span class="mk">6</span> صِرَٰطَ ٱلَّذِينَ أَنۡعَمۡتَ عَلَيۡهِمۡ <span class="mk">7</span>
+            </div>
+            <div class="pageno">١</div>
+          </div>
+          <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:30;
+                      display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);
+                      border-radius:22px;box-shadow:var(--shadow);padding:6px">
+            <span class="chip" data-paper-chip="day" data-en="Day" data-ar="نهار"></span>
+            <span class="chip solid" data-paper-chip="sepia" data-en="Sepia" data-ar="ورقي"></span>
+            <span class="chip" data-paper-chip="night" data-en="Night" data-ar="ليل"></span>
+          </div>
+        </div>
+
+        <!-- PROMPT_DOWNLOAD: Accept(gold) ✓ · | · prompt · Cancel ✕ -->
+        <div class="audiobar" style="gap:0;padding:6px 8px">
+          <span class="ctl" title="Download anyway" style="flex:none;width:40px;text-align:center;color:var(--gold);font-size:20px">✓</span>
+          <span style="width:1px;align-self:stretch;background:rgba(255,255,255,.22);margin:8px 7px"></span>
+          <div style="flex:1;min-width:0;font-size:10.5px;font-weight:600;line-height:1.3" data-en="You are not on Wi-Fi. Download data anyway?" data-ar="أنت لست على واي فاي. تحميل البيانات على أية حال؟"></div>
+          <span class="ctl" title="Cancel" style="flex:none;width:40px;text-align:center;font-size:20px">✕</span>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ---------- (E) RECITATION (mic) ---------- -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Audio Bar · Recitation (mic)" data-ar="شريط الصوت · التسميع (ميكروفون)"></div>
+        <div class="d" data-en="Mic (long-press) + Transcript + Hide-page. Listening tints mic cyan; stopped/playing add Play/Pause + Cancel." data-ar="ميكروفون (ضغط مطوّل) + النص + إخفاء الصفحة. الاستماع يلوّن الميكروفون سماوي؛ المتوقّف/المشغّل يضيف تشغيل/إيقاف + إلغاء"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t"><span class="ar">الفاتحة</span></div>
+              <div class="s"><span data-en="Recitation · listening" data-ar="التسميع · يستمع"></span></div>
+            </div>
+            <div class="acts"><span class="ico" title="Show translation">🌐</span><span class="ico" title="Bookmark">☆</span><span class="ico">⋮</span></div>
+          </div>
+        </div>
+
+        <div class="grow" style="position:relative;flex:1;overflow:hidden">
+          <div class="page auto-paper sepia">
+            <div class="surah-band">سُورَةُ الفَاتِحَة</div>
+            <div class="quran">
+              بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">1</span> <span style="background:var(--gold-faint);border-radius:5px">ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ</span> <span class="mk">2</span> ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">3</span> مَٰلِكِ يَوۡمِ ٱلدِّينِ <span class="mk">4</span> إِيَّاكَ نَعۡبُدُ وَإِيَّاكَ نَسۡتَعِينُ <span class="mk">5</span> ٱهۡدِنَا ٱلصِّرَٰطَ ٱلۡمُسۡتَقِيمَ <span class="mk">6</span> صِرَٰطَ ٱلَّذِينَ أَنۡعَمۡتَ عَلَيۡهِمۡ <span class="mk">7</span>
+            </div>
+            <div class="pageno">١</div>
+          </div>
+          <!-- listening hint chip -->
+          <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:30;
+                      display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);
+                      border-radius:22px;box-shadow:var(--shadow);padding:7px 13px">
+            <span style="color:#19b6c9;font-size:14px">●</span>
+            <span style="font-size:11.5px;font-weight:700;color:var(--text)" data-en="Listening to your recitation…" data-ar="يستمع لتلاوتك…"></span>
+          </div>
+        </div>
+
+        <!-- RECITATION_LISTENING: Hide-page · (spacer) · Transcript · Mic(cyan) -->
+        <div class="audiobar" style="gap:0;padding:6px 8px">
+          <span class="ctl" title="Hide verses" style="flex:none;width:42px;text-align:center;font-size:19px">👁</span>
+          <span style="flex:1"></span>
+          <span class="ctl" title="Transcript" style="flex:none;width:42px;text-align:center;font-size:18px">📝</span>
+          <span style="width:1px;align-self:stretch;background:rgba(255,255,255,.22);margin:8px 7px"></span>
+          <span title="Mic — long-press to end session" style="flex:none;width:42px;text-align:center;font-size:20px;color:#2fd0e3">🎙</span>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ---------- (F) AUDIO SETTINGS — slide-up From/To range panel (opened by the gear) ---------- -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Audio Settings · From/To range" data-ar="إعدادات الصوت · النطاق من/إلى"></div>
+        <div class="d" data-en="Gear opens this — From/To sura+ayah, repeat-range &amp; per-verse (1–25), restrict-to-range, Apply" data-ar="يفتحها الترس — من/إلى سورة+آية، تكرار النطاق وكل آية (١–٢٥)، الحصر في النطاق، تطبيق"></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t"><span class="ar">الفاتحة</span></div>
+              <div class="s"><span data-en="Page 1 · Juz' 1" data-ar="صفحة ١ · الجزء ١"></span></div>
+            </div>
+            <div class="acts"><span class="ico" title="Show translation">🌐</span><span class="ico" title="Bookmark">☆</span><span class="ico">⋮</span></div>
+          </div>
+        </div>
+
+        <div class="grow" style="position:relative;flex:1;overflow:hidden">
+          <div class="page auto-paper sepia">
+            <div class="surah-band">سُورَةُ الفَاتِحَة</div>
+            <div class="quran">
+              بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">1</span> ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ <span class="mk">2</span> ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">3</span>
+            </div>
+            <div class="pageno">١</div>
+          </div>
+
+          <!-- scrim -->
+          <div class="scrim"></div>
+
+          <!-- navy slide-up audio-settings panel -->
+          <div class="sheet" style="background:linear-gradient(160deg,var(--navy-700),var(--navy-900));color:var(--on-navy);max-height:80%">
+            <div class="grab" style="background:rgba(255,255,255,.32)"></div>
+
+            <!-- panel tab strip: Play · Translation · Tags · collapse -->
+            <div style="display:flex;align-items:center;justify-content:space-around;padding:4px 18px 8px;border-bottom:1px solid rgba(255,255,255,.10)">
+              <span title="Playback" style="position:relative;color:var(--gold);font-size:20px;padding-bottom:8px">▸<i style="position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:26px;height:3px;border-radius:3px;background:var(--gold)"></i></span>
+              <span title="Translation" style="color:var(--on-navy-dim);font-size:19px">🌐</span>
+              <span title="Tags" style="color:var(--on-navy-dim);font-size:18px">🏷</span>
+              <span title="Collapse" style="color:var(--on-navy-dim);font-size:18px">⌄</span>
+            </div>
+
+            <div class="pad" style="padding:10px 16px 18px">
+              <!-- From -->
+              <div class="field" style="margin-top:6px">
+                <div class="lab" style="color:var(--gold);font-weight:800" data-en="From" data-ar="من"></div>
+                <div style="display:flex;gap:8px">
+                  <div class="inp" style="flex:2;background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18);color:var(--on-navy);justify-content:space-between">
+                    <span><span style="color:var(--gold)" data-en="1." data-ar="١."></span> <span class="ar">الفاتحة</span></span>
+                    <span style="color:var(--gold)">▾</span>
+                  </div>
+                  <div class="inp" style="flex:1;background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18);color:var(--on-navy);justify-content:space-between">
+                    <span data-en="2" data-ar="٢"></span><span style="color:var(--gold)">▾</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- To -->
+              <div class="field">
+                <div class="lab" style="color:var(--gold);font-weight:800" data-en="To" data-ar="إلى"></div>
+                <div style="display:flex;gap:8px">
+                  <div class="inp" style="flex:2;background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18);color:var(--on-navy);justify-content:space-between">
+                    <span><span style="color:var(--gold)" data-en="1." data-ar="١."></span> <span class="ar">الفاتحة</span></span>
+                    <span style="color:var(--gold)">▾</span>
+                  </div>
+                  <div class="inp" style="flex:1;background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18);color:var(--on-navy);justify-content:space-between">
+                    <span data-en="7" data-ar="٧"></span><span style="color:var(--gold)">▾</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Play set of verses (range repeat) — 1..25 + ∞ -->
+              <div class="between" style="margin-top:16px">
+                <div style="font-size:12.5px;font-weight:700"><span data-en="Play set of verses" data-ar="تشغيل مجموعة الآيات"></span><span style="color:var(--on-navy-dim)">:</span><div style="font-size:9.5px;color:var(--on-navy-dim);font-weight:600" data-en="1–25 or ∞" data-ar="١–٢٥ أو ∞"></div></div>
+                <div style="display:flex;align-items:center;gap:14px;font-size:14px;font-weight:700">
+                  <span style="opacity:.4">∞</span>
+                  <span style="color:var(--gold-light);font-weight:800;border-bottom:2px solid var(--gold);padding-bottom:1px"><span data-en="1" data-ar="١"></span></span>
+                  <span style="opacity:.5"><span data-en="2" data-ar="٢"></span></span>
+                  <span style="opacity:.3"><span data-en="3" data-ar="٣"></span></span>
+                </div>
+              </div>
+
+              <!-- Play each verse (per-verse repeat) — 1..25 + ∞ -->
+              <div class="between" style="margin-top:12px">
+                <div style="font-size:12.5px;font-weight:700"><span data-en="Play each verse" data-ar="تشغيل كل آية"></span><span style="color:var(--on-navy-dim)">:</span><div style="font-size:9.5px;color:var(--on-navy-dim);font-weight:600" data-en="1–25 or ∞" data-ar="١–٢٥ أو ∞"></div></div>
+                <div style="display:flex;align-items:center;gap:14px;font-size:14px;font-weight:700">
+                  <span style="opacity:.4">∞</span>
+                  <span style="color:var(--gold-light);font-weight:800;border-bottom:2px solid var(--gold);padding-bottom:1px"><span data-en="1" data-ar="١"></span></span>
+                  <span style="opacity:.5"><span data-en="2" data-ar="٢"></span></span>
+                  <span style="opacity:.3"><span data-en="3" data-ar="٣"></span></span>
+                </div>
+              </div>
+
+              <!-- restrict-to-range checkbox -->
+              <div class="crow" style="padding:14px 2px 2px">
+                <div class="tx" style="flex:1">
+                  <div style="font-size:12.5px;font-weight:700" data-en="Only play the above verses" data-ar="شغّل ما تم اختياره من الآيات فقط"></div>
+                </div>
+                <div class="cbx" style="border-color:rgba(255,255,255,.45)"></div>
+              </div>
+
+              <button class="btn gold block" style="margin-top:14px" data-en="Apply &amp; Play" data-ar="تطبيق وتشغيل"></button>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </div>

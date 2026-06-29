@@ -1,60 +1,97 @@
-<!-- ====== 10 · JUMP TO AYAH ====== -->
+<!-- ====== 10 · QUICK-JUMP DIALOG (Go to page) ====== -->
 <div class="phone-col">
   <div class="phone-cap">
-    <div class="n" data-en="Jump to Ayah" data-ar="الانتقال إلى آية"></div>
-    <div class="d" data-en="Quick navigation dialog" data-ar="نافذة تنقّل سريع"></div>
+    <div class="n" data-en="Quick-jump dialog" data-ar="نافذة الانتقال السريع"></div>
+    <div class="d" data-en="Go to page · keyboard auto-opens · type to search a surah · OK jumps & highlights" data-ar="انتقال سريع · تفتح لوحة المفاتيح تلقائياً · اكتب للبحث عن سورة · موافق ينتقل ويظلّل الآية"></div>
   </div>
   <div class="phone"><div class="notch"></div><div class="screen">
     <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
 
-    <!-- dimmed reader behind the dialog -->
-    <div class="bar">
-      <div class="nav">
-        <span class="bk">‹</span>
-        <div class="ttl">
-          <div class="t"><span class="ar">البقرة</span></div>
-          <div class="s"><span data-en="Page 49 · Juz' 1" data-ar="صفحة 49 · الجزء 1"></span></div>
+    <div class="grow" style="position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden">
+      <!-- dimmed Mushaf index behind the dialog -->
+      <div class="bar round">
+        <div class="nav">
+          <div class="ttl">
+            <div class="t" data-en="Mushaf" data-ar="المصحف"></div>
+            <div class="s" data-en="The Noble Qur'an" data-ar="القرآن الكريم"></div>
+          </div>
+          <div class="acts"><span class="ico" title="Last page">📖</span><span class="ico">⋮</span></div>
         </div>
-        <div class="acts"><span class="ico">☆</span><span class="ico">🌙</span><span class="ico">⋮</span></div>
-      </div>
-    </div>
-
-    <div class="grow" style="position:relative;flex:1;overflow:hidden">
-      <div class="page auto-paper sepia">
-        <div class="surah-band">سُورَةُ البَقَرَة</div>
-        <div class="quran">
-          الٓمٓ <span class="mk">1</span> ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ <span class="mk">2</span> ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَٰهُمْ يُنفِقُونَ <span class="mk">3</span>
+        <div class="search">
+          <span class="lens">🔍</span>
+          <span class="ph" data-en="Search the Quran" data-ar="بحث في القرآن"></span>
         </div>
-        <div class="pageno">٤٩</div>
+        <div class="tabs in-bar">
+          <div class="tab" data-en="Surahs" data-ar="سورة"></div>
+          <div class="tab" data-en="Juz'" data-ar="الجزء"></div>
+          <div class="tab on" data-en="Bookmarks" data-ar="المرجعيات"></div>
+        </div>
       </div>
 
-      <!-- scrim + dialog -->
+      <div class="body"><div class="scroll">
+        <div class="card">
+          <div class="crow">
+            <span class="ic">🕌</span>
+            <div class="tx grow">
+              <div class="t" style="font-size:13px;font-weight:800;color:var(--text)" data-en="Continue reading" data-ar="متابعة القراءة"></div>
+              <div class="s" style="font-size:11.5px;color:var(--text2);margin-top:2px"><span class="ar">سُورَةُ الفَاتِحَةِ</span> · <span data-en="Page 1, Juz' 1" data-ar="صفحة ١، جزء ١"></span></div>
+            </div>
+            <span class="btn gold" style="padding:8px 14px">▸ <span data-en="Read" data-ar="قراءة"></span></span>
+          </div>
+        </div>
+        <div class="sec"><span data-en="Recent" data-ar="آخر المتصفحات"></span><span class="ln"></span></div>
+        <div class="list">
+          <div class="row">
+            <div class="num"><span data-en="1" data-ar="١"></span></div>
+            <div class="tx"><div class="t"><span class="ar">سُورَةُ الفَاتِحَةِ</span></div>
+              <div class="s"><span data-en="Page 1, Juz' 1" data-ar="صفحة ١، جزء ١"></span></div></div>
+          </div>
+          <div class="row">
+            <div class="num"><span data-en="2" data-ar="٢"></span></div>
+            <div class="tx"><div class="t"><span class="ar">سُورَةُ البَقَرَةِ</span></div>
+              <div class="s"><span data-en="Page 6, Juz' 1" data-ar="صفحة ٦، جزء ١"></span></div></div>
+          </div>
+        </div>
+      </div></div>
+
+      <!-- scrim + quick-jump dialog (navy+gold themed card) -->
       <div class="scrim"></div>
       <div class="dialog">
-        <div class="dh" data-en="Jump to" data-ar="الانتقال إلى"></div>
+        <div class="dh" data-en="Go to page" data-ar="انتقال سريع"></div>
         <div class="db">
-          <div class="field">
-            <div class="lab" data-en="Page number" data-ar="رقم الصفحة"></div>
-            <div class="inp"><span>49</span><span class="grow"></span><span class="ph" data-en="1–604" data-ar="1–604"></span></div>
+
+          <!-- 1) page-number field — cream rounded, numeric, maxLength 3, GO keyboard action -->
+          <div class="field" style="margin-top:2px">
+            <div class="lab" data-en="Go to page" data-ar="أدخل رقم الصفحة"></div>
+            <div class="inp focus">
+              <span style="font-weight:800" data-en="49" data-ar="٤٩"></span>
+              <span class="grow"></span>
+              <span style="font-size:10px;font-weight:800;color:var(--gold)" data-en="⏎ Go" data-ar="⏎ انتقال"></span>
+            </div>
+            <div style="font-size:10px;color:var(--text2);margin-top:5px;line-height:1.4" data-en="Up to 3 digits · auto-fills the Surah &amp; Ayah · jumps and highlights the verse" data-ar="حتى ٣ أرقام · يملأ السورة والآية تلقائياً · ينتقل ويظلّل الآية"></div>
           </div>
 
-          <div class="center" style="font-size:11px;font-weight:700;color:var(--muted);padding:12px 0 2px">
-            <span data-en="— or —" data-ar="— أو —"></span>
+          <!-- 2) shared section label (string menu_jump) over ONE Surah + Ayah row -->
+          <div class="lab" style="margin-top:14px" data-en="Go to page" data-ar="انتقال سريع"></div>
+          <div style="display:flex;gap:8px;margin-top:5px">
+            <!-- Surah: typeable searchable autocomplete shown as "{n}. {name}" + caret (wide, on the right in RTL) -->
+            <div class="inp focus" style="flex:1;gap:7px">
+              <span class="lens" style="font-size:13px;color:var(--gold)">🔍</span>
+              <span><span data-en="2" data-ar="٢"></span>. <span class="ar">البَقَرَة</span></span>
+              <span class="grow"></span>
+              <span class="gold">▾</span>
+            </div>
+            <!-- Ayah: narrow centered number box (~64dp), value only (on the left in RTL) -->
+            <div class="inp" style="flex:none;min-width:62px;justify-content:center;padding:11px 8px">
+              <span style="font-weight:800" data-en="255" data-ar="٢٥٥"></span>
+            </div>
           </div>
-
-          <div class="field">
-            <div class="lab" data-en="Surah" data-ar="السورة"></div>
-            <div class="inp focus"><span class="ar">البقرة</span><span class="grow"></span><span class="gold">▾</span></div>
-          </div>
-
-          <div class="field">
-            <div class="lab" data-en="Ayah" data-ar="الآية"></div>
-            <div class="inp"><span>255</span><span class="grow"></span><span class="ph" data-en="1–286" data-ar="1–286"></span></div>
-          </div>
+          <div style="font-size:10px;color:var(--text2);margin-top:5px;line-height:1.4" data-en="Type a surah name or number to search (diacritic-insensitive) · sets the page above" data-ar="اكتب اسم السورة أو رقمها للبحث (دون تشكيل) · يُحدّث رقم الصفحة أعلاه"></div>
         </div>
+
+        <!-- single OK button (gold/primary), end-aligned (left in RTL) — no negative button -->
         <div class="df">
-          <span class="btn ghost" data-en="Cancel" data-ar="إلغاء"></span>
-          <span class="btn gold" data-en="Go" data-ar="انتقال"></span>
+          <span class="btn gold" data-en="OK" data-ar="موافق"></span>
         </div>
       </div>
     </div>

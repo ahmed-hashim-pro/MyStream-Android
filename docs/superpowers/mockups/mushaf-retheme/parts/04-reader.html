@@ -1,8 +1,8 @@
-    <!-- ============ 04 · PAGE READER (navy chrome + paper) ============ -->
+    <!-- ============ 04 · PAGE READER — IMAGE MODE (navy chrome + paper) ============ -->
     <div class="phone-col">
       <div class="phone-cap">
-        <div class="n" data-en="Page Reader" data-ar="قارئ الصفحة"></div>
-        <div class="d" data-en="PagerActivity — navy chrome, readable paper/sepia/night page" data-ar="PagerActivity — إطار كحلي وصفحة ورقية/داكنة قابلة للقراءة"></div>
+        <div class="n" data-en="Page Reader · image mode" data-ar="قارئ الصفحة · وضع الصورة"></div>
+        <div class="d" data-en="PagerActivity — printed madani page image; globe 🌐 → text mode (08). Tap page = toggle chrome." data-ar="PagerActivity — صورة صفحة المصحف المطبوعة؛ الكرة الأرضية 🌐 ← وضع النص (٠٨). نقرة = إظهار/إخفاء الإطار"></div>
       </div>
       <div class="phone"><div class="notch"></div><div class="screen">
         <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
@@ -11,23 +11,23 @@
             <span class="bk">‹</span>
             <div class="ttl">
               <div class="t"><span class="ar">البقرة</span></div>
-              <div class="s"><span data-en="Page 49 · Juz' 1" data-ar="صفحة 49 · الجزء 1"></span></div>
+              <div class="s"><span data-en="Page 49 · Juz' 1" data-ar="صفحة ٤٩ · الجزء ١"></span></div>
             </div>
-            <div class="acts"><span class="ico">☆</span><span class="ico">🌙</span><span class="ico">⋮</span></div>
+            <div class="acts"><span class="ico" title="Show translation">🌐</span><span class="ico" title="Bookmark">☆</span><span class="ico">⋮</span></div>
           </div>
         </div>
 
         <div class="grow" style="position:relative;flex:1;overflow:hidden">
-          <!-- paper page (auto: sepia in light app theme, night in dark) -->
-          <div class="page auto-paper sepia">
+          <!-- printed-mushaf PAGE IMAGE (auto: sepia in light app theme, night in dark) -->
+          <div class="page auto-paper sepia" style="margin:10px;border:1px solid var(--paper-edge);border-radius:6px;box-shadow:inset 0 0 0 4px var(--paper),inset 0 0 0 5px var(--gold-semi),0 6px 18px -12px rgba(0,0,0,.4)">
             <div class="surah-band">سُورَةُ البَقَرَة</div>
             <div class="quran">
-              الٓمٓ <span class="mk">1</span> ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ <span class="mk">2</span> ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَٰهُمْ يُنفِقُونَ <span class="mk">3</span> وَٱلَّذِينَ يُؤْمِنُونَ بِمَآ أُنزِلَ إِلَيْكَ وَمَآ أُنزِلَ مِن قَبْلِكَ وَبِٱلْءَاخِرَةِ هُمْ يُوقِنُونَ <span class="mk">4</span>
+              الٓمٓ <span class="mk">1</span> ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ <span class="mk">2</span> ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَٰهُمْ يُنفِقُونَ <span class="mk">3</span> وَٱلَّذِينَ يُؤْمِنُونَ بِمَآ أُنزِلَ إِلَيْكَ وَمَآ أُنزِلَ مِن قَبْلِكَ وَبِٱلْءَاخِرَةِ هُمْ يُوقِنُونَ <span class="mk">4</span> أُو۟لَٰٓئِكَ عَلَىٰ هُدًى مِّن رَّبِّهِمْ ۖ وَأُو۟لَٰٓئِكَ هُمُ ٱلْمُفْلِحُونَ <span class="mk">5</span>
             </div>
             <div class="pageno">٤٩</div>
           </div>
 
-          <!-- floating reading-mode chooser -->
+          <!-- floating reading-mode chooser (Day / Sepia / Night paper tint) -->
           <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:30;
                       display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);
                       border-radius:22px;box-shadow:var(--shadow);padding:6px">
@@ -37,16 +37,18 @@
           </div>
         </div>
 
+        <!-- audio bar · PLAYING state (reciter spinner · transport · repeat · settings) -->
         <div class="audiobar">
           <div class="aprog"><i style="width:38%"></i></div>
           <span class="av">🎙️</span>
           <div class="meta">
-            <div class="t" data-en="Mishary Alafasy" data-ar="مشاري العفاسي"></div>
-            <div class="s" data-en="Al-Baqarah 2 · 1:02 / 2:48" data-ar="البقرة 2 · 1:02 / 2:48"></div>
+            <div class="t" style="display:flex;align-items:center;gap:5px"><span data-en="Mishary Alafasy" data-ar="مشاري العفاسي"></span><span style="font-size:9px;opacity:.7">▾</span></div>
+            <div class="s"><span class="ar">البقرة ٢</span> · <span>1:02 / 2:48</span></div>
           </div>
-          <span class="ctl">⏮</span>
+          <span class="ctl" title="Repeat" style="position:relative">🔁<span style="position:absolute;top:-3px;inset-inline-end:-5px;font-size:8px;font-weight:800;color:var(--gold-light)">∞</span></span>
           <span class="play">⏸</span>
-          <span class="ctl fwd">⏭</span>
+          <span class="ctl" title="Audio settings">⚙️</span>
+          <span class="ctl" title="Stop">⏹</span>
         </div>
       </div></div>
     </div>

@@ -1,76 +1,163 @@
-<!-- ====== 07 · AYAH ACTION PANEL — TAGS TAB ====== -->
-<div class="phone-col">
-  <div class="phone-cap">
-    <div class="n" data-en="Ayah Panel · Tags" data-ar="لوحة الآية · الوسوم"></div>
-    <div class="d" data-en="Tag the selected ayah" data-ar="وسم الآية المحددة"></div>
-  </div>
-  <div class="phone"><div class="notch"></div><div class="screen">
-    <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
-    <div class="bar">
-      <div class="nav">
-        <span class="bk">‹</span>
-        <div class="ttl">
-          <div class="t"><span class="ar">البقرة</span></div>
-          <div class="s"><span data-en="Page 49 · Juz' 1" data-ar="صفحة 49 · الجزء 1"></span></div>
-        </div>
-        <div class="acts"><span class="ico">☆</span><span class="ico">🌙</span><span class="ico">⋮</span></div>
+    <!-- ============ 07 · FLOATING AYAH ACTION TOOLBAR (PRIMARY) ============ -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Ayah Action Toolbar" data-ar="شريط أدوات الآية"></div>
+        <div class="d" data-en="Tap an ayah → a navy bar floats over it: Bookmark · Tag · Share · Tafsir · Play. The pip flips above/below the ayah, long-press an icon for its label, bookmark fills gold once saved, and 🎙 Recite appears when recitation is on." data-ar="انقر آية ← يطفو شريط أزرق فوقها: مرجعية · تصنيف · مشاركة · تفسير · تشغيل. ينقلب المؤشّر أعلى/أسفل، واضغط مطوّلًا على أيقونة لإظهار اسمها، وتمتلئ المرجعية ذهبيًا بعد الحفظ، ويظهر 🎙 التلاوة عند تفعيلها."></div>
       </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-paper"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+
+        <div class="grow" style="position:relative;flex:1;overflow:hidden">
+          <div class="page auto-paper sepia">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 20px 0;font-family:'Amiri',serif;font-size:12.5px;color:var(--paper-ink);opacity:.62" dir="rtl">
+              <span>الجزء ١</span><span>سُورَةُ الفَاتِحَة</span>
+            </div>
+            <div class="surah-band">سُورَةُ الفَاتِحَةِ</div>
+            <div class="quran">
+              بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">١</span>
+              <span style="background:rgba(184,134,11,.22);border-radius:7px;padding:2px 7px">ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ <span class="mk">٢</span></span>
+              ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">٣</span> مَٰلِكِ يَوۡمِ ٱلدِّينِ <span class="mk">٤</span> إِيَّاكَ نَعۡبُدُ وَإِيَّاكَ نَسۡتَعِينُ <span class="mk">٥</span>
+              <span style="background:rgba(184,134,11,.22);border-radius:7px;padding:2px 7px">ٱهۡدِنَا ٱلصِّرَٰطَ ٱلۡمُسۡتَقِيمَ <span class="mk">٦</span></span>
+              صِرَٰطَ ٱلَّذِينَ أَنۡعَمۡتَ عَلَيۡهِمۡ غَيۡرِ ٱلۡمَغۡضُوبِ عَلَيۡهِمۡ وَلَا ٱلضَّآلِّينَ <span class="mk">٧</span>
+            </div>
+            <div class="pageno">١</div>
+          </div>
+
+          <!-- PRIMARY toolbar — default 5 icons, pip DOWN onto the highlighted ayah -->
+          <div class="ayatb" style="inset-inline:auto;left:50%;transform:translateX(-50%);top:120px;width:auto;background:var(--navy-700);border:0;border-radius:14px;padding:6px 4px;gap:0;box-shadow:0 14px 30px -14px rgba(0,0,0,.6)">
+            <span title="Bookmark this Ayah" style="width:40px;height:38px;display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--on-navy)">☆</span>
+            <span title="Tag this Ayah" style="width:40px;height:38px;display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--on-navy)">🏷</span>
+            <span title="Share Ayah Link" style="width:40px;height:38px;display:flex;align-items:center;justify-content:center;color:var(--on-navy)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><line x1="8.3" y1="10.6" x2="15.7" y2="6.4"/><line x1="8.3" y1="13.4" x2="15.7" y2="17.6"/></svg></span>
+            <span title="Ayah Translation / Tafseer" style="width:40px;height:38px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--on-navy)">🌐</span>
+            <span title="Play from Here" style="width:40px;height:38px;display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--on-navy)">▶</span>
+            <span style="position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:8px solid var(--navy-700)"></span>
+          </div>
+
+          <!-- VARIANT toolbar — flipped pip UP, bookmark SAVED (gold), + conditional 🎙 Recite -->
+          <div class="ayatb" style="inset-inline:auto;left:50%;transform:translateX(-50%);top:352px;width:auto;background:var(--navy-700);border:0;border-radius:14px;padding:6px 4px;gap:0;box-shadow:0 14px 30px -14px rgba(0,0,0,.6)">
+            <span title="Bookmarked" style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--gold-light)">★</span>
+            <span title="Tag this Ayah" style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--on-navy)">🏷</span>
+            <span title="Share Ayah Link" style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;color:var(--on-navy)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><line x1="8.3" y1="10.6" x2="15.7" y2="6.4"/><line x1="8.3" y1="13.4" x2="15.7" y2="17.6"/></svg></span>
+            <span title="Ayah Translation / Tafseer" style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--on-navy)">🌐</span>
+            <span title="Play from Here" style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--on-navy)">▶</span>
+            <span title="Recite from here" style="position:relative;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--gold-light)">🎙
+              <span style="position:absolute;top:-29px;left:50%;transform:translateX(-50%);background:#0b1018;color:#fff;font-size:9.5px;font-weight:700;padding:4px 8px;border-radius:7px;white-space:nowrap;box-shadow:0 6px 14px -6px rgba(0,0,0,.6)"><span data-en="Recite from here" data-ar="سجّل التلاوة من هنا"></span></span>
+            </span>
+            <span style="position:absolute;left:50%;top:-7px;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:8px solid var(--navy-700)"></span>
+          </div>
+        </div>
+      </div></div>
     </div>
 
-    <div class="grow" style="position:relative;flex:1;overflow:hidden">
-      <!-- dimmed reader behind the sheet -->
-      <div class="page auto-paper sepia">
-        <div class="surah-band">سُورَةُ البَقَرَة</div>
-        <div class="quran">
-          الٓمٓ <span class="mk">1</span> ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ <span class="mk">2</span> ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَٰهُمْ يُنفِقُونَ <span class="mk">3</span> وَٱلَّذِينَ يُؤْمِنُونَ بِمَآ أُنزِلَ إِلَيْكَ وَمَآ أُنزِلَ مِن قَبْلِكَ وَبِٱلْءَاخِرَةِ هُمْ يُوقِنُونَ <span class="mk">4</span>
-        </div>
-        <div class="pageno">٤٩</div>
+    <!-- ============ 07 · AYAH PANEL — TAGS PAGE (swipeable pager) ============ -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Ayah Panel · Tags" data-ar="لوحة الآية · التصنيفات"></div>
+        <div class="d" data-en="One page of a swipeable panel (Tags · Tafsir · Audio). Gold checkboxes toggle live and save on close — no buttons. ‘New Tag’ opens a Name dialog." data-ar="صفحة من لوحة قابلة للسحب (تصنيفات · تفسير · صوت). الخانات الذهبية تعمل فورًا وتُحفظ عند الإغلاق — بلا أزرار. «صنف جديد» يفتح مربّع الاسم."></div>
       </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-paper"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
 
-      <!-- scrim -->
-      <div class="scrim"></div>
+        <div class="grow" style="position:relative;flex:1;overflow:hidden">
+          <!-- dimmed reader behind -->
+          <div class="page auto-paper sepia">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 20px 0;font-family:'Amiri',serif;font-size:12.5px;color:var(--paper-ink);opacity:.62" dir="rtl">
+              <span>الجزء ١</span><span>سُورَةُ الفَاتِحَة</span>
+            </div>
+            <div class="surah-band">سُورَةُ الفَاتِحَةِ</div>
+            <div class="quran">
+              بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">١</span>
+              <span style="background:rgba(184,134,11,.22);border-radius:7px;padding:2px 7px">ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ <span class="mk">٢</span></span>
+              ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">٣</span> مَٰلِكِ يَوۡمِ ٱلدِّينِ <span class="mk">٤</span>
+            </div>
+          </div>
 
-      <!-- tags sheet -->
-      <div class="sheet">
-        <div class="grab"></div>
-        <div class="sh-head">
-          <div class="t" data-en="Add to tags" data-ar="إضافة إلى الوسوم"></div>
-          <span class="x">✕</span>
+          <div class="scrim"></div>
+
+          <!-- TAGS PANEL — navy_700, icon page-indicator, collapse chevron, no title, no buttons -->
+          <div class="sheet" style="background:var(--navy-700);box-shadow:0 -18px 44px -16px rgba(0,0,0,.6)">
+            <div class="grab" style="background:rgba(255,255,255,.28)"></div>
+
+            <div class="sh-head" style="padding:2px 14px 4px;align-items:flex-end">
+              <span title="Collapse" style="font-size:21px;color:var(--gold-light);line-height:1;flex:none">⌄</span>
+              <div class="grow" style="display:flex;justify-content:center;align-items:flex-end;gap:22px">
+                <span title="Tags" style="font-size:18px;color:var(--gold);padding-bottom:4px;border-bottom:2.5px solid var(--gold)">🏷</span>
+                <span title="Translation / Tafsir" style="font-size:16px;color:rgba(255,255,255,.42)">🌐</span>
+                <span title="Audio" style="font-size:15px;color:rgba(255,255,255,.42)">▶</span>
+              </div>
+              <span style="width:21px;flex:none"></span>
+            </div>
+            <div style="text-align:center;font-size:10px;color:var(--on-navy-dim);padding:0 0 8px">
+              <span data-en="Tags · swipe ‹ › for Tafsir &amp; Audio" data-ar="تصنيفات · اسحب ‹ › للتفسير والصوت"></span>
+            </div>
+
+            <div style="padding:0 4px 8px">
+              <div style="display:flex;align-items:center;gap:13px;padding:13px 14px">
+                <span class="cbx on">✓</span>
+                <span style="flex:1;font-size:14px;font-weight:700;color:var(--on-navy)"><span data-en="Daily wird" data-ar="وردي اليومي"></span></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:13px;padding:13px 14px;border-top:1px solid rgba(255,255,255,.08)">
+                <span class="cbx" style="border-color:rgba(255,255,255,.5)"></span>
+                <span style="flex:1;font-size:14px;font-weight:700;color:var(--on-navy)"><span data-en="Mercy verses" data-ar="آيات الرحمة"></span></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:13px;padding:13px 14px;border-top:1px solid rgba(255,255,255,.08)">
+                <span class="cbx on">✓</span>
+                <span style="flex:1;font-size:14px;font-weight:700;color:var(--on-navy)"><span data-en="To review" data-ar="للمراجعة"></span></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:13px;padding:13px 14px;border-top:1px solid rgba(255,255,255,.08)">
+                <span class="cbx" style="border-color:rgba(255,255,255,.5)"></span>
+                <span style="flex:1;font-size:14px;font-weight:700;color:var(--on-navy)"><span data-en="Reflecting on" data-ar="أتدبّرها"></span></span>
+              </div>
+              <div style="display:flex;align-items:center;gap:13px;padding:14px 14px;border-top:1px solid rgba(255,255,255,.08)">
+                <span style="width:22px;height:22px;border-radius:7px;background:var(--gold-faint);color:var(--gold-light);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex:none">＋</span>
+                <span style="flex:1;font-size:14px;font-weight:800;color:var(--gold-light)"><span data-en="New Tag" data-ar="صنف جديد"></span></span>
+                <span style="font-size:10px;color:var(--on-navy-dim)"><span data-en="opens Name dialog" data-ar="يفتح مربّع الاسم"></span></span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="dots"><i></i><i></i><i class="on"></i></div>
-
-        <div class="card flat" style="margin:0 12px 12px">
-          <div class="crow">
-            <span style="width:10px;height:10px;border-radius:50%;background:var(--ok);flex:none"></span>
-            <div class="tx grow"><div class="t" style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Memorizing" data-ar="الحفظ"></div></div>
-            <div class="cbx on">✓</div>
-          </div>
-          <div class="crow">
-            <span style="width:10px;height:10px;border-radius:50%;background:var(--gold);flex:none"></span>
-            <div class="tx grow"><div class="t" style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Favorites" data-ar="المفضلة"></div></div>
-            <div class="cbx"></div>
-          </div>
-          <div class="crow">
-            <span style="width:10px;height:10px;border-radius:50%;background:var(--warn);flex:none"></span>
-            <div class="tx grow"><div class="t" style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Tafsir" data-ar="تفسير"></div></div>
-            <div class="cbx"></div>
-          </div>
-          <div class="crow">
-            <span style="width:10px;height:10px;border-radius:50%;background:var(--danger);flex:none"></span>
-            <div class="tx grow"><div class="t" style="font-size:13.5px;font-weight:700;color:var(--text)" data-en="Difficult" data-ar="صعبة"></div></div>
-            <div class="cbx"></div>
-          </div>
-          <div class="crow">
-            <span class="ic" style="width:24px;height:24px;border-radius:8px;font-size:16px">＋</span>
-            <div class="tx grow"><div class="t" style="font-size:13.5px;font-weight:800;color:var(--gold)" data-en="New tag" data-ar="وسم جديد"></div></div>
-          </div>
-        </div>
-
-        <div class="df" style="padding:0 14px 16px">
-          <span class="btn ghost" data-en="Cancel" data-ar="إلغاء"></span>
-          <span class="btn gold" data-en="Save" data-ar="حفظ"></span>
-        </div>
-      </div>
+      </div></div>
     </div>
-  </div></div>
-</div>
+
+    <!-- ============ 07 · SHARE SUBMENU (icons swap to 3 options) ============ -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Share Submenu" data-ar="قائمة المشاركة"></div>
+        <div class="d" data-en="Tapping Share swaps the toolbar icons for three options. Share is hidden in the qaloon flavor." data-ar="النقر على المشاركة يبدّل أيقونات الشريط بثلاثة خيارات. تُخفى المشاركة في نسخة قالون."></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-paper"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+
+        <div class="grow" style="position:relative;flex:1;overflow:hidden">
+          <div class="page auto-paper sepia">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 20px 0;font-family:'Amiri',serif;font-size:12.5px;color:var(--paper-ink);opacity:.62" dir="rtl">
+              <span>الجزء ١</span><span>سُورَةُ الفَاتِحَة</span>
+            </div>
+            <div class="surah-band">سُورَةُ الفَاتِحَةِ</div>
+            <div class="quran">
+              بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">١</span>
+              <span style="background:rgba(184,134,11,.22);border-radius:7px;padding:2px 7px">ٱلۡحَمۡدُ لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ <span class="mk">٢</span></span>
+              ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ <span class="mk">٣</span> مَٰلِكِ يَوۡمِ ٱلدِّينِ <span class="mk">٤</span> إِيَّاكَ نَعۡبُدُ وَإِيَّاكَ نَسۡتَعِينُ <span class="mk">٥</span>
+            </div>
+            <div class="pageno">١</div>
+          </div>
+
+          <!-- floating navy panel: Share icons replaced by 3 inline options, pip DOWN -->
+          <div class="ayatb" style="inset-inline:auto;left:50%;transform:translateX(-50%);top:118px;width:212px;flex-direction:column;background:var(--navy-700);border:0;border-radius:14px;padding:4px 0;gap:0;box-shadow:0 16px 32px -14px rgba(0,0,0,.65)">
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 15px;width:100%">
+              <span style="font-size:16px;color:var(--gold-light);width:20px;text-align:center;flex:none">🔗</span>
+              <span style="font-size:13px;font-weight:700;color:var(--on-navy)"><span data-en="Share Ayah Link" data-ar="شارك رابط الآية"></span></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 15px;width:100%;border-top:1px solid rgba(255,255,255,.09)">
+              <span style="font-size:16px;color:var(--gold-light);width:20px;text-align:center;flex:none">📄</span>
+              <span style="font-size:13px;font-weight:700;color:var(--on-navy)"><span data-en="Share Ayah Text" data-ar="شارك نص الآية"></span></span>
+            </div>
+            <div style="display:flex;align-items:center;gap:13px;padding:11px 15px;width:100%;border-top:1px solid rgba(255,255,255,.09)">
+              <span style="font-size:16px;color:var(--gold-light);width:20px;text-align:center;flex:none">📋</span>
+              <span style="font-size:13px;font-weight:700;color:var(--on-navy)"><span data-en="Copy Ayah" data-ar="نسخ الآية"></span></span>
+            </div>
+            <span style="position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:8px solid var(--navy-700)"></span>
+          </div>
+        </div>
+      </div></div>
+    </div>
