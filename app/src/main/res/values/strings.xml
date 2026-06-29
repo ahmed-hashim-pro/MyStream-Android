@@ -515,6 +515,8 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="menu_get_translations">Get Translations</string>
     <string name="menu_jump">@string/gotoPage</string>
     <string name="gotoPage">Go to page</string>
+    <string name="jump_page_hint">Up to 3 digits · auto-fills the Surah &amp; Ayah · jumps and highlights the verse</string>
+    <string name="jump_sura_hint">Type a surah name or number to search (diacritic-insensitive) · sets the page above</string>
     <!--  <string name="cancel">Cancel</string>-->
     <string name="please_wait">Please wait…</string>
 

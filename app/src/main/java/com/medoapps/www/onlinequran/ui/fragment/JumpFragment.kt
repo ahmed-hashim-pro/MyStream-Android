@@ -164,15 +164,16 @@ class JumpFragment : DialogFragment() {
       }
     })
 
-    builder.setView(layout)
-    builder.setPositiveButton(
-        getString(string.dialog_ok)
-    ) { _: DialogInterface?, _: Int ->
-      // trigger sura completion
+    // Single filled-gold OK lives in the dialog content (matches the new UX),
+    // replacing the default AlertDialog text button.
+    layout.findViewById<View>(R.id.jump_ok).setOnClickListener {
+      // trigger sura completion (focus loss commits the autocomplete), then jump
       layout.requestFocus()
       dismiss()
       onSubmit()
     }
+
+    builder.setView(layout)
     return builder.create()
   }
 
@@ -206,6 +207,18 @@ class JumpFragment : DialogFragment() {
     dialog?.window?.setSoftInputMode(
         LayoutParams.SOFT_INPUT_STATE_VISIBLE or LayoutParams.SOFT_INPUT_ADJUST_PAN
     )
+  }
+
+  override fun onStart() {
+    super.onStart()
+    // AlertDialog sizes its window to wrap the content (set in onStart, after the
+    // window exists), which starves the weighted Surah field; pin a comfortable
+    // width so the input boxes lay out properly. Must be onStart, not earlier.
+    dialog?.window?.let { window ->
+      val dm = resources.displayMetrics
+      val width = minOf((340 * dm.density).toInt(), (dm.widthPixels * 0.92f).toInt())
+      window.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+    }
   }
 
   /**

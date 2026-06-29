@@ -311,6 +311,8 @@
     <string name="menu_get_translations">حمل التفاسير/التراجم</string>
     <string name="menu_jump">انتقال سريع</string>
     <string name="gotoPage">أدخل رقم الصفحة</string>
+    <string name="jump_page_hint">حتى ٣ أرقام · يملأ السورة والآية تلقائياً · ينتقل ويظلّل الآية</string>
+    <string name="jump_sura_hint">اكتب اسم السورة أو رقمها للبحث (دون تشكيل) · يُحدّث رقم الصفحة أعلاه</string>
 <!--    <string name="cancel">إلغاء</string>-->
 
     <string name="help_title">الأسئلة المتداولة</string>
