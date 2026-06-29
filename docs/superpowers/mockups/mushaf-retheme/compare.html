@@ -1,0 +1,2664 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mushaf re-theme — design preview · My Stream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MY STREAM — MUSHAF RE-THEME · DESIGN TOKENS
+   Values mirror app res/values/colors.xml + values-night/colors.xml
+   ============================================================ */
+:root{
+  /* gold accent (primary action) */
+  --gold:#B8860B; --gold-2:#d9b24a; --gold-light:#E9C778;
+  --gold-faint:rgba(184,134,11,.15);    /* icon frames / faint bg  */
+  --gold-semi:rgba(184,134,11,.40);     /* dividers / outlines     */
+  /* navy hero — FIXED in both light & dark */
+  --navy-900:#172033; --navy-700:#1F2A44; --navy-500:#2C3A5E;
+  --on-navy:#FFFFFF; --on-navy-dim:rgba(255,255,255,.62);
+  /* surfaces / text */
+  --bg:#FFF8F0; --surface:#FFFFFF; --card:#FFFFFF;
+  --text:#1C1B1F; --text2:#49454E; --muted:#cdbfa9;
+  --line:#EFE6D2; --line-soft:rgba(28,27,31,.08);
+  --badge-bg:#F3E7C9; --badge-tx:#7a5a12;
+  --ok:#3a9d6b; --warn:#C2641E; --danger:#C84B4B;
+  --shadow:0 16px 38px -18px rgba(23,32,51,.40);
+  --shadow-sm:0 6px 16px -10px rgba(23,32,51,.5);
+  /* reading-page paper modes */
+  --paper:#FFFFFF; --paper-ink:#1d1a12; --paper-edge:rgba(0,0,0,.06);
+}
+[data-theme="dark"]{
+  --gold:#D4A44C; --gold-2:#caa24f; --gold-light:#E9C778;
+  --gold-faint:rgba(212,164,76,.15); --gold-semi:rgba(212,164,76,.40);
+  --bg:#121212; --surface:#1E1E1E; --card:#282828;
+  --text:#FFFFFF; --text2:#B3B3B3; --muted:#4a443a;
+  --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.07);
+  --badge-bg:#3a3320; --badge-tx:#E9C778;
+  --shadow:0 18px 44px -18px rgba(0,0,0,.75);
+  --shadow-sm:0 8px 18px -10px rgba(0,0,0,.7);
+  --paper:#161310; --paper-ink:#e9e0cf; --paper-edge:rgba(255,255,255,.06);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans','Cairo',system-ui,sans-serif;color:#e8eaf0;min-height:100vh;
+  padding:26px 22px 70px;
+  background:radial-gradient(1100px 520px at 12% -8%,#20304f 0,transparent 60%),
+             radial-gradient(900px 480px at 100% 0,#11182a 0,transparent 55%),#0c111d;}
+[dir="rtl"] body{font-family:'Cairo','Plus Jakarta Sans',system-ui,sans-serif}
+.wrap{max-width:1320px;margin:0 auto}
+
+/* ---------- page header + controls ---------- */
+h1.title{font-size:23px;font-weight:800;letter-spacing:-.02em;margin:0 0 3px;display:flex;align-items:center;gap:10px;color:#fff}
+h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 12px var(--gold-light)}
+.sub{color:#9fb0d0;font-size:13.5px;margin:0 0 18px;max-width:980px;line-height:1.55}
+.sub code{background:#161d2e;border:1px solid #273350;border-radius:5px;padding:1px 6px;font-size:12px;color:#cdd6ea}
+.controls{position:sticky;top:0;z-index:200;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 -22px 24px;
+  padding:14px 22px;background:rgba(9,13,22,.82);backdrop-filter:blur(10px);border-bottom:1px solid #1c2335}
+.seg{display:inline-flex;background:#161d2e;border:1px solid #273350;border-radius:12px;padding:4px;gap:3px}
+.seg .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#5f6f8e;padding:0 6px;align-self:center;font-weight:800}
+.seg button{font:inherit;font-size:12.5px;font-weight:700;color:#9fb0d0;background:transparent;border:0;padding:7px 15px;border-radius:9px;cursor:pointer;transition:.15s}
+.seg button.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305;box-shadow:0 4px 14px -6px var(--gold)}
+.hint{color:#7e8db0;font-size:12px;margin-inline-start:auto}.hint b{color:#cdd6ea}
+
+/* ---------- grid of phones ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(312px,1fr));gap:40px 26px;justify-items:center}
+.phone-col{display:flex;flex-direction:column;align-items:center;gap:12px;width:312px}
+.phone-cap{text-align:center}
+.phone-cap .n{font-size:12.5px;font-weight:800;letter-spacing:.03em;color:#e7ecf7}
+.phone-cap .d{font-size:11px;color:#7e8db0;margin-top:2px;line-height:1.35}
+.phone{width:312px;height:680px;border-radius:40px;background:#05070c;padding:9px;flex:none;position:relative;
+  box-shadow:0 34px 80px -30px rgba(0,0,0,.85),0 0 0 2px #1c2335,inset 0 0 0 2px #000}
+.screen{width:100%;height:100%;border-radius:32px;overflow:hidden;position:relative;background:var(--bg);color:var(--text);
+  display:flex;flex-direction:column}
+.notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:100px;height:22px;background:#05070c;border-radius:0 0 14px 14px;z-index:120}
+
+/* ---------- status bar (phone) ---------- */
+.sb{height:30px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:11.5px;font-weight:700;z-index:80}
+.sb .r{display:flex;gap:5px;align-items:center}
+.sb.on-navy{background:var(--navy-700);color:var(--on-navy)} .sb.on-paper{background:var(--paper);color:var(--paper-ink)}
+.sb-dots:after{content:"●●●";letter-spacing:1px;font-size:7px}
+
+/* ---------- app bar / hero (navy) ---------- */
+.bar{background:linear-gradient(150deg,var(--navy-700),var(--navy-900));color:var(--on-navy);position:relative;
+  padding:4px 12px 12px;flex:none;box-shadow:0 6px 18px -12px rgba(0,0,0,.6)}
+.bar.round{border-radius:0 0 22px 22px}
+.bar:before{content:"";position:absolute;inset:0;border-radius:inherit;
+  background:radial-gradient(220px 120px at 88% -20%,rgba(212,164,76,.30),transparent 70%);pointer-events:none}
+.bar .nav{display:flex;align-items:center;gap:10px;position:relative;min-height:40px}
+.bar .ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--gold);flex:none}
+.bar .bk{font-size:21px;color:var(--gold)}
+.bar .ttl{flex:1;min-width:0}
+.bar .ttl .t{font-size:17px;font-weight:800;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .ttl .s{font-size:11px;color:var(--on-navy-dim);margin-top:1px}
+[dir="rtl"] .bar .bk{transform:scaleX(-1)}
+.bar .acts{display:flex;gap:2px;align-items:center}
+
+/* hero block (big title under nav, for index/landing) */
+.hero-h{position:relative;margin-top:10px}
+.hero-h .big{font-size:21px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.hero-h .big .em{font-size:22px}
+.hero-h .p{font-size:11.5px;color:var(--on-navy-dim);margin-top:4px;line-height:1.45}
+
+/* ---------- tabs strip ---------- */
+.tabs{display:flex;position:relative}
+.tabs.in-bar{margin:12px -4px -4px}
+.tabs .tab{flex:1;text-align:center;font-size:12.5px;font-weight:700;padding:10px 4px 11px;color:var(--on-navy-dim);position:relative;cursor:pointer}
+.tabs .tab.on{color:var(--on-navy)}
+.tabs .tab.on:after{content:"";position:absolute;left:18%;right:18%;bottom:0;height:3px;border-radius:3px;background:var(--gold)}
+/* light tabs (on surface) */
+.tabs.light .tab{color:var(--text2)} .tabs.light .tab.on{color:var(--gold)}
+.tabs.light .tab.on:after{background:var(--gold)}
+
+/* ---------- search field ---------- */
+.search{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);
+  border-radius:13px;padding:9px 13px;margin-top:12px;color:var(--on-navy);position:relative}
+.search .ph{font-size:12.5px;color:var(--on-navy-dim)}
+.search.onlight{background:var(--surface);border:1px solid var(--line);color:var(--text);box-shadow:var(--shadow-sm)}
+.search.onlight .ph{color:var(--text2)}
+.search .lens{font-size:15px;color:var(--gold)}
+
+/* ---------- body / scroller ---------- */
+.body{flex:1;overflow:hidden;position:relative}
+.scroll{position:absolute;inset:0;overflow-y:auto;padding:12px 12px 22px}
+.scroll::-webkit-scrollbar{width:0}
+.pad{padding:12px 12px 22px}
+
+/* ---------- section header ---------- */
+.sec{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--text2);padding:14px 8px 8px;display:flex;align-items:center;gap:8px}
+.sec .ln{flex:1;height:1px;background:var(--line)}
+
+/* ---------- classic list row (Widget.MyStream.ListRow) ---------- */
+.list{display:flex;flex-direction:column}
+.row{display:flex;align-items:center;gap:13px;padding:12px 12px;min-height:62px;position:relative;cursor:pointer}
+.row+.row:before{content:"";position:absolute;top:0;inset-inline:12px;height:1px;background:var(--line-soft)}
+.row .num{width:40px;height:40px;border-radius:11px;background:var(--gold-faint);color:var(--gold);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex:none;line-height:1}
+.row .num .nm{font-size:7px;font-weight:700;color:var(--text2);margin-top:1px;text-transform:uppercase;letter-spacing:.04em}
+.row .ic{width:40px;height:40px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:19px;flex:none}
+.row .tx{flex:1;min-width:0}
+.row .tx .t{font-size:15px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:7px}
+.row .tx .t .ar{font-family:'Amiri',serif;font-size:17px;font-weight:700}
+.row .tx .s{font-size:12px;color:var(--text2);margin-top:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.row .end{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex:none;text-align:end}
+.row .end .pg{font-size:11px;font-weight:700;color:var(--text2)}
+.row .chev{color:var(--muted);font-size:17px;flex:none}
+[dir="rtl"] .row .chev{transform:scaleX(-1)}
+.row .star{font-size:16px;color:var(--gold)}
+.dot-sep{width:3px;height:3px;border-radius:50%;background:var(--muted);display:inline-block}
+.pill-min{font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;background:var(--gold-faint);color:var(--gold)}
+
+/* ---------- card ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:13px}
+.card.flat{box-shadow:none}
+.crow{display:flex;align-items:center;gap:12px;padding:13px 14px}
+.crow+.crow{border-top:1px solid var(--line-soft)}
+
+/* ---------- preference row + controls ---------- */
+.prow{display:flex;align-items:center;gap:12px;padding:13px 14px}
+.prow+.prow{border-top:1px solid var(--line-soft)}
+.prow .ic{width:38px;height:38px;border-radius:11px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.prow .tx{flex:1;min-width:0}
+.prow .tx .t{font-size:13.5px;font-weight:700;color:var(--text)}
+.prow .tx .s{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.35}
+.prow .val{font-size:11.5px;font-weight:700;color:var(--gold)}
+.prow .chev{color:var(--muted);font-size:16px}
+[dir="rtl"] .prow .chev{transform:scaleX(-1)}
+.sw{width:44px;height:26px;border-radius:14px;background:var(--muted);position:relative;flex:none;transition:.2s}
+.sw.on{background:linear-gradient(135deg,var(--gold),var(--gold-2))}
+.sw .k{position:absolute;top:3px;inset-inline-start:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sw.on .k{inset-inline-start:21px}
+.cbx{width:22px;height:22px;border-radius:7px;border:2px solid var(--muted);flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
+.cbx.on{background:var(--gold);border-color:var(--gold)}
+.radio{width:22px;height:22px;border-radius:50%;border:2px solid var(--muted);flex:none;display:flex;align-items:center;justify-content:center}
+.radio.on{border-color:var(--gold)} .radio.on:after{content:"";width:11px;height:11px;border-radius:50%;background:var(--gold)}
+
+/* segmented control (inside a screen) */
+.seg2{display:flex;gap:6px;padding:4px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
+.seg2 .sg{flex:1;text-align:center;font-size:11.5px;font-weight:700;padding:8px 6px;border-radius:9px;color:var(--text2);cursor:pointer}
+.seg2 .sg.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305}
+
+/* ---------- buttons / chips ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-size:13px;font-weight:800;
+  padding:11px 16px;border-radius:13px;border:0;cursor:pointer}
+.btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305;box-shadow:0 8px 18px -8px var(--gold)}
+.btn.ghost{background:transparent;border:1.5px solid var(--gold-semi);color:var(--gold)}
+.btn.block{display:flex;width:100%}
+.btn.nav-cta{background:var(--gold);color:#1a1305}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px;background:var(--gold-faint);color:var(--gold)}
+.chip.outline{background:transparent;border:1px solid var(--gold-semi)}
+.chip.solid{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305}
+
+/* ---------- progress ---------- */
+.prog{height:6px;border-radius:6px;background:var(--gold-faint);overflow:hidden}
+.prog > i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--gold-2))}
+
+/* ---------- empty state ---------- */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:100%;padding:30px;gap:12px}
+.empty .glyph{width:74px;height:74px;border-radius:22px;background:var(--gold-faint);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:34px}
+.empty .t{font-size:15px;font-weight:800;color:var(--text)}
+.empty .s{font-size:12px;color:var(--text2);line-height:1.5;max-width:230px}
+
+/* ---------- bottom sheet / ayah action panel ---------- */
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--surface);border-radius:22px 22px 0 0;box-shadow:0 -18px 40px -16px rgba(0,0,0,.5);z-index:60;display:flex;flex-direction:column}
+.sheet .grab{width:42px;height:5px;border-radius:5px;background:var(--muted);margin:9px auto 4px}
+.sheet .sh-head{display:flex;align-items:center;gap:10px;padding:6px 16px 12px}
+.sheet .sh-head .t{flex:1;font-size:14px;font-weight:800;color:var(--text)}
+.sheet .sh-head .x{color:var(--text2);font-size:18px}
+.dots{display:flex;gap:6px;justify-content:center;padding:4px 0 12px}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.dots i.on{background:var(--gold);width:18px;border-radius:4px}
+.scrim{position:absolute;inset:0;background:rgba(8,11,20,.45);z-index:55}
+
+/* ---------- READING PAGE (paper) ---------- */
+.page{position:absolute;inset:0;background:var(--paper);color:var(--paper-ink);display:flex;flex-direction:column}
+.page.sepia{--paper:#F6ECCD;--paper-ink:#4a3b22;--paper-edge:rgba(74,59,34,.10)}
+.page.night{--paper:#15171C;--paper-ink:#d7d2c4;--paper-edge:rgba(255,255,255,.06)}
+.page .surah-band{text-align:center;font-family:'Amiri',serif;font-size:16px;font-weight:700;color:var(--gold);
+  padding:14px 0 10px;margin:14px 16px 6px;border:1.5px solid var(--gold-semi);border-radius:12px;background:var(--gold-faint)}
+.page .quran{flex:1;overflow:hidden;padding:6px 20px;font-family:'Amiri','Scheherazade New',serif;direction:rtl;
+  font-size:24px;line-height:2.15;text-align:justify;text-align-last:center;color:var(--paper-ink)}
+.page .quran .mk{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;margin:0 2px;
+  font-size:12px;color:var(--gold);font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;vertical-align:middle;position:relative}
+.page .quran .mk:before{content:"۝";position:absolute;font-family:'Amiri',serif;font-size:30px;color:var(--gold-semi)}
+.page .pageno{text-align:center;font-size:11px;font-weight:700;color:var(--paper-ink);opacity:.6;padding:8px 0 12px}
+
+/* ---------- audio bar ---------- */
+.audiobar{background:linear-gradient(150deg,var(--navy-700),var(--navy-900));color:var(--on-navy);padding:11px 14px;flex:none;display:flex;align-items:center;gap:12px;position:relative;z-index:40}
+.audiobar .av{width:38px;height:38px;border-radius:11px;background:rgba(212,164,76,.2);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--gold-light);flex:none}
+.audiobar .meta{flex:1;min-width:0}
+.audiobar .meta .t{font-size:12.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.audiobar .meta .s{font-size:10.5px;color:var(--on-navy-dim);margin-top:1px}
+.audiobar .play{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305;display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.audiobar .ctl{font-size:18px;color:var(--on-navy)}
+[dir="rtl"] .audiobar .ctl.fwd{transform:scaleX(-1)}
+.aprog{position:absolute;left:0;right:0;top:0;height:3px;background:rgba(255,255,255,.14)}
+.aprog > i{display:block;height:100%;background:var(--gold)}
+
+/* ---------- floating ayah toolbar ---------- */
+.ayatb{position:absolute;inset-inline:18px;display:flex;gap:4px;justify-content:space-around;background:var(--surface);
+  border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:8px 6px;z-index:50}
+.ayatb .b{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text2);font-size:9px;font-weight:700;flex:1}
+.ayatb .b .g{font-size:18px;color:var(--gold)}
+
+/* ---------- dialog ---------- */
+.dialog{position:absolute;inset-inline:22px;top:50%;transform:translateY(-50%);background:var(--surface);border-radius:20px;box-shadow:var(--shadow);z-index:60;overflow:hidden}
+.dialog .dh{padding:16px 18px 4px;font-size:16px;font-weight:800;color:var(--text)}
+.dialog .db{padding:8px 18px 14px}
+.dialog .df{display:flex;justify-content:flex-end;gap:8px;padding:8px 14px 14px}
+.field{margin-top:12px}
+.field .lab{font-size:11px;font-weight:700;color:var(--text2);margin-bottom:5px}
+.field .inp{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:12px;padding:11px 13px;font-size:13px;color:var(--text);background:var(--bg)}
+.field .inp.focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-faint)}
+.field .inp .ph{color:var(--muted)}
+.txtlink{font-size:13px;font-weight:800;color:var(--gold)}
+
+/* notice / warning banner */
+.notice{display:flex;gap:10px;align-items:flex-start;background:var(--gold-faint);border:1px solid var(--gold-semi);border-radius:13px;padding:11px 13px;margin:12px;color:var(--text)}
+.notice .g{font-size:18px;color:var(--gold);flex:none}
+.notice .t{font-size:12px;line-height:1.45} .notice .t b{font-weight:800}
+
+/* misc helpers */
+.muted{color:var(--text2)} .gold{color:var(--gold)} .grow{flex:1}
+.center{display:flex;align-items:center;justify-content:center}
+.stack{display:flex;flex-direction:column}
+.between{display:flex;align-items:center;justify-content:space-between}
+.quran-inline{font-family:'Amiri',serif}
+
+/* ===== COMPARE GALLERY layout ===== */
+.cmpwrap{max-width:1360px;margin:0 auto;display:flex;flex-direction:column}
+.cmpsection{margin:30px 0 6px;padding-top:14px;border-top:1px solid #1c2335}
+.cmphead .t{font-size:18px;font-weight:800;color:#fff;display:flex;gap:9px;align-items:baseline}
+.cmphead .t .num{color:var(--gold-light);font-size:14px;font-weight:800}
+.cmphead .d{font-size:12.5px;color:#9fb0d0;margin:5px 0 16px;max-width:1040px;line-height:1.55}
+.cmphead .d b{color:#e7ecf7}
+.cmprow{display:flex;gap:34px;flex-wrap:wrap;align-items:flex-start}
+.vcol{display:flex;flex-direction:column;align-items:center;gap:11px;width:312px}
+.vlabel{font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:5px 15px;border-radius:20px}
+.vlabel.cur{background:#3a2326;color:#ff9d9d;border:1px solid #5c3030}
+.vlabel.prop{background:#16331f;color:#94e6ab;border:1px solid #2c5a37}
+.vnote{font-size:11px;color:#7e8db0;text-align:center;max-width:300px;line-height:1.4;min-height:30px}
+/* legacy (current/before) sepia chrome — no dark override on purpose (mirrors the bug) */
+.lbar{background:#FFF8F0;color:#1E1B16;padding:12px 14px;flex:none;display:flex;align-items:center;gap:12px;border-bottom:1px solid #E7DCC6}
+.lbar.gold{background:#B8860B;color:#fff;border-bottom-color:#9c7209}
+.lbar.lav{background:#E7E0F0;color:#3a3550}
+.lbar .lt{flex:1;min-width:0;font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lbar .li{font-size:19px;opacity:.8}
+.lteal{color:#22A5AD}.bg-teal{background:#B2DFDB}.bg-teal-soft{background:#E0F2F1}
+.bg-green{background:#5E9800;color:#fff}.bg-brick{background:#A50800;color:#fff}.bg-slate{background:#556F79;color:#fff}
+.lsb{background:#6750A4;color:#fff}  /* default M3 purple status bar */
+.lcirc{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:19px;flex:none}
+.lrow{display:flex;align-items:center;gap:13px;padding:14px 14px;min-height:62px;border-bottom:1px solid rgba(0,0,0,.06)}
+.lnum{width:46px;text-align:center;font-size:22px;font-weight:400;color:#B8860B;flex:none}
+.lpopup{background:#2b2b2b;color:#fff;border-radius:4px;box-shadow:0 8px 24px rgba(0,0,0,.5);padding:6px 0;width:200px}
+.lpopup .it{padding:12px 16px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="title"><span class="dot"></span> Mushaf re-theme — <span data-en="Current vs Proposed" data-ar="الحالي مقابل المقترح">Current vs Proposed</span></h1>
+  <p class="sub" data-en="Every Mushaf surface, side by side: the LEFT phone is the current/legacy design (sepia chrome, teal/green accents, default dialogs), the RIGHT is the proposed My Stream navy + gold design that is now in the app. Toggle theme &amp; language — both sides reflow. Mockup; Quran text shown in Amiri (app uses page images)."
+     data-ar="كل شاشات المصحف جنبًا إلى جنب: الهاتف على اليسار هو التصميم الحالي/القديم (ألوان سيبيا، لمسات فيروزية/خضراء، حوارات افتراضية)، وعلى اليمين التصميم المقترح بهوية My Stream الكحلي + الذهبي الموجود الآن في التطبيق. بدّل السمة واللغة — يتغيّر الجانبان. نموذج تجريبي؛ نص القرآن بخط أميري.">…</p>
+  <div class="controls">
+    <div class="seg"><span class="lbl" data-en="Theme" data-ar="السمة">Theme</span>
+      <button data-theme-btn="light" class="on">☀︎ <span data-en="Light" data-ar="فاتح">Light</span></button>
+      <button data-theme-btn="dark">☾ <span data-en="Dark" data-ar="داكن">Dark</span></button>
+    </div>
+    <div class="seg"><span class="lbl" data-en="Language" data-ar="اللغة">Language</span>
+      <button data-lang-btn="en" class="on">EN</button>
+      <button data-lang-btn="ar">العربية</button>
+    </div>
+    <span class="hint" data-en="Current ◀ vs ▶ Proposed · tap a toggle to flip everything" data-ar="الحالي ◀ مقابل ▶ المقترح · بدّل لقلب الكل">Current ◀ vs ▶ Proposed</span>
+  </div>
+  <main class="cmpwrap">
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">01</span> <span data-en="Quran Index — Surah list" data-ar="فهرس المصحف — قائمة السور">Quran Index — Surah list</span></div>
+    <div class="d" data-en="The first Mushaf screen. <b>Current:</b> cream/sepia bar + gold app action bar, a search icon, and plain rows with a big bare sura number. <b>Proposed:</b> a collapsing <b>navy hero</b> (title + always-on search field + Surahs/Juz/Bookmarks tabs with a gold indicator), a Continue-reading card, and classic rows with a rounded gold badge." data-ar="أول شاشة في المصحف. الحالي: شريط سيبيا/كريمي مع شريط أدوات ذهبي وأيقونة بحث وصفوف عادية برقم سورة كبير. المقترح: ترويسة كحلية قابلة للطي (عنوان + حقل بحث دائم + تبويبات السور/الأجزاء/العلامات بمؤشر ذهبي)، وبطاقة متابعة القراءة، وصفوف بشارة ذهبية دائرية.">The first Mushaf screen. <b>Current:</b> cream/sepia bar + gold app action bar, a search icon, and plain rows with a big bare sura number. <b>Proposed:</b> a collapsing <b>navy hero</b> (title + always-on search field + Surahs/Juz/Bookmarks tabs with a gold indicator), a Continue-reading card, and classic rows with a rounded gold badge.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- ═══════════════════════════ CURRENT ═══════════════════════════ -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen" style="background:#F5F0E8;display:flex;flex-direction:column;overflow:hidden">
+
+          <!-- Purple-ish default status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Sepia app bar -->
+          <div class="lbar" style="background:#EDE0CF;color:#5C4A1E;border-bottom:1px solid #D4C4A0;padding:0 12px;display:flex;align-items:center;gap:8px;min-height:52px">
+            <span class="li" style="font-size:20px;color:#5C4A1E">≡</span>
+            <div style="flex:1;font-size:16px;font-weight:700;color:#5C4A1E" data-en="Mushaf" data-ar="مصحف">Mushaf</div>
+            <span class="li" style="font-size:20px;color:#5C4A1E">🔍</span>
+            <span class="li" style="font-size:20px;color:#5C4A1E">⋮</span>
+          </div>
+
+          <!-- Gold action bar (old secondary bar) -->
+          <div class="lbar gold" style="display:flex;align-items:center;justify-content:center;padding:0 14px;gap:10px;min-height:40px">
+            <span style="font-size:13px;font-weight:700;color:#fff;border-bottom:2px solid #fff;padding-bottom:2px" data-en="Surahs" data-ar="السور">Surahs</span>
+            <span style="font-size:13px;color:rgba(255,255,255,0.65)" data-en="Juz'" data-ar="الأجزاء">Juz'</span>
+            <span style="font-size:13px;color:rgba(255,255,255,0.65)" data-en="Bookmarks" data-ar="العلامات">Bookmarks</span>
+          </div>
+
+          <!-- Juz separator -->
+          <div style="background:#EDE0CF;padding:10px 14px;color:#B8860B;font-weight:700;font-size:12px;letter-spacing:.5px" data-en="Juz' 1" data-ar="الجزء الأول">Juz' 1</div>
+
+          <!-- Plain list rows -->
+          <div style="background:#FAF6EE;flex:1;overflow:hidden">
+
+            <!-- Row 1 -->
+            <div class="lrow" style="display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid #EDE0CF;gap:10px">
+              <span class="lnum" style="font-size:22px;font-weight:700;color:#B8860B;width:32px;text-align:center">1</span>
+              <div class="tx" style="flex:1">
+                <div class="t" style="font-weight:700;color:var(--text)">
+                  <span class="ar" style="font-family:'Amiri',serif;font-size:16px" data-en="الفاتحة" data-ar="الفاتحة">الفاتحة</span>
+                </div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="Meccan · 7 verses" data-ar="مكية · 7 آيات">Meccan · 7 verses</div>
+              </div>
+              <span style="font-size:11px;color:#22A5AD" data-en="Page 1" data-ar="ص 1">Page 1</span>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="lrow" style="display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid #EDE0CF;gap:10px">
+              <span class="lnum" style="font-size:22px;font-weight:700;color:#B8860B;width:32px;text-align:center">2</span>
+              <div class="tx" style="flex:1">
+                <div class="t" style="font-weight:700;color:var(--text)">
+                  <span class="ar" style="font-family:'Amiri',serif;font-size:16px" data-en="البقرة" data-ar="البقرة">البقرة</span>
+                </div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="Medinan · 286 verses" data-ar="مدنية · 286 آية">Medinan · 286 verses</div>
+              </div>
+              <span style="font-size:11px;color:#22A5AD" data-en="Page 2" data-ar="ص 2">Page 2</span>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="lrow" style="display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid #EDE0CF;gap:10px">
+              <span class="lnum" style="font-size:22px;font-weight:700;color:#B8860B;width:32px;text-align:center">3</span>
+              <div class="tx" style="flex:1">
+                <div class="t" style="font-weight:700;color:var(--text)">
+                  <span class="ar" style="font-family:'Amiri',serif;font-size:16px" data-en="آل عمران" data-ar="آل عمران">آل عمران</span>
+                </div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="Medinan · 200 verses" data-ar="مدنية · 200 آية">Medinan · 200 verses</div>
+              </div>
+              <span style="font-size:11px;color:#22A5AD" data-en="Page 50" data-ar="ص 50">Page 50</span>
+            </div>
+
+            <!-- Row 4 (extra) -->
+            <div class="lrow" style="display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid #EDE0CF;gap:10px">
+              <span class="lnum" style="font-size:22px;font-weight:700;color:#B8860B;width:32px;text-align:center">4</span>
+              <div class="tx" style="flex:1">
+                <div class="t" style="font-weight:700;color:var(--text)">
+                  <span class="ar" style="font-family:'Amiri',serif;font-size:16px" data-en="النساء" data-ar="النساء">النساء</span>
+                </div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="Medinan · 176 verses" data-ar="مدنية · 176 آية">Medinan · 176 verses</div>
+              </div>
+              <span style="font-size:11px;color:#22A5AD" data-en="Page 77" data-ar="ص 77">Page 77</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Sepia bar, plain numbers, teal-tinted controls." data-ar="شريط سيبيا وأرقام عادية ولمسات فيروزية.">Sepia bar, plain numbers, teal-tinted controls.</div>
+    </div>
+
+    <!-- ═══════════════════════════ PROPOSED ═══════════════════════════ -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen" style="display:flex;flex-direction:column;overflow:hidden;background:var(--surface,#F8F9FA)">
+
+          <!-- Navy status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Navy hero bar -->
+          <div class="bar round" style="padding-bottom:0">
+            <div class="nav">
+              <span class="ico">☰</span>
+              <div class="ttl">
+                <div class="t" data-en="Mushaf" data-ar="مصحف">Mushaf</div>
+              </div>
+              <div class="acts"><span class="ico">⋮</span></div>
+            </div>
+            <!-- Big hero -->
+            <div class="hero-h" style="padding-bottom:10px">
+              <div class="big" data-en="Mushaf" data-ar="المصحف">Mushaf</div>
+              <div class="p" data-en="The Noble Qur'an" data-ar="القرآن الكريم">The Noble Qur'an</div>
+            </div>
+            <!-- Always-on search -->
+            <div class="search onlight" style="margin:0 14px 10px">
+              <span class="lens">🔍</span>
+              <span class="ph" data-en="Search surah…" data-ar="ابحث عن سورة…">Search surah…</span>
+            </div>
+            <!-- Tabs -->
+            <div class="tabs in-bar">
+              <div class="tab on" data-en="Surahs" data-ar="السور">Surahs</div>
+              <div class="tab" data-en="Juz'" data-ar="الأجزاء">Juz'</div>
+              <div class="tab" data-en="Bookmarks" data-ar="العلامات">Bookmarks</div>
+            </div>
+          </div>
+
+          <!-- Continue-reading card -->
+          <div style="padding:10px 12px 4px">
+            <div class="card">
+              <div class="crow" style="align-items:center;gap:10px">
+                <div style="flex:1">
+                  <div style="font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px" data-en="Continue Reading" data-ar="متابعة القراءة">Continue Reading</div>
+                  <div style="font-size:14px;font-weight:700;color:var(--text)" data-en="Al-Baqarah" data-ar="البقرة">Al-Baqarah</div>
+                  <div style="font-size:11px;color:var(--text2)" data-en="Verse 255 · Page 42" data-ar="الآية 255 · ص 42">Verse 255 · Page 42</div>
+                  <div class="prog" style="margin-top:6px"><i style="width:18%"></i></div>
+                </div>
+                <span class="btn gold" data-en="▸ Read" data-ar="▸ اقرأ">▸ Read</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section header -->
+          <div class="sec" style="margin:4px 0 0">
+            <span data-en="Juz' 1" data-ar="الجزء الأول">Juz' 1</span>
+            <span class="ln"></span>
+          </div>
+
+          <!-- Navy list rows -->
+          <div class="list" style="flex:1;overflow:hidden">
+
+            <!-- Row 1 -->
+            <div class="row">
+              <span class="num">1</span>
+              <div class="tx">
+                <div class="t"><span class="ar" style="font-family:'Amiri',serif;font-size:16px" data-en="الفاتحة" data-ar="الفاتحة">الفاتحة</span></div>
+                <div class="s" data-en="Meccan · 7 verses" data-ar="مكية · 7 آيات">Meccan · 7 verses</div>
+              </div>
+              <div class="end"><span class="pg" data-en="Page 1" data-ar="ص 1">Page 1</span></div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="row">
+              <span class="num">2</span>
+              <div class="tx">
+                <div class="t"><span class="ar" style="font-family:'Amiri',serif;font-size:16px" data-en="البقرة" data-ar="البقرة">البقرة</span></div>
+                <div class="s" data-en="Medinan · 286 verses" data-ar="مدنية · 286 آية">Medinan · 286 verses</div>
+              </div>
+              <div class="end"><span class="pg" data-en="Page 2" data-ar="ص 2">Page 2</span></div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="row">
+              <span class="num">3</span>
+              <div class="tx">
+                <div class="t"><span class="ar" style="font-family:'Amiri',serif;font-size:16px" data-en="آل عمران" data-ar="آل عمران">آل عمران</span></div>
+                <div class="s" data-en="Medinan · 200 verses" data-ar="مدنية · 200 آية">Medinan · 200 verses</div>
+              </div>
+              <div class="end"><span class="pg" data-en="Page 50" data-ar="ص 50">Page 50</span></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Navy hero, gold badges, search + tabs in the header." data-ar="ترويسة كحلية وشارات ذهبية وبحث وتبويبات.">Navy hero, gold badges, search + tabs in the header.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">02</span> <span data-en="Index — Juz' list &amp; progress markers" data-ar="الفهرس — قائمة الأجزاء وعلامات التقدّم">Index — Juz' list &amp; progress markers</span></div>
+    <div class="d" data-en="The Juz' tab. <b>Current:</b> sepia section band and <b>teal pie markers</b> (rub' al-hizb quarter/half markers) with a sepia number. <b>Proposed:</b> a pale-navy band with navy/gold text and <b>gold pie markers</b> with a navy number." data-ar="تبويب الأجزاء. الحالي: شريط سيبيا وعلامات دائرية فيروزية (أرباع الحزب) برقم سيبيا. المقترح: شريط كحلي فاتح بنص كحلي/ذهبي وعلامات دائرية ذهبية برقم كحلي.">The Juz' tab. <b>Current:</b> sepia section band and <b>teal pie markers</b> (rub' al-hizb quarter/half markers) with a sepia number. <b>Proposed:</b> a pale-navy band with navy/gold text and <b>gold pie markers</b> with a navy number.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- CURRENT -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <!-- Purple legacy status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+          <!-- Sepia toolbar -->
+          <div class="lbar">
+            <span class="li">≡</span>
+            <div class="lt" data-en="Mushaf" data-ar="مصحف">Mushaf</div>
+            <span class="li">⋮</span>
+          </div>
+          <!-- Tab bar (old style, plain underline tabs) -->
+          <div style="display:flex;background:#EDE0CF;border-bottom:1px solid #D4C4A8;">
+            <div style="flex:1;text-align:center;padding:9px 0;font-size:13px;color:#B8860B;border-bottom:2px solid #B8860B;font-weight:700;" data-en="Surah" data-ar="السور">Surah</div>
+            <div style="flex:1;text-align:center;padding:9px 0;font-size:13px;color:#A09070;border-bottom:2px solid transparent;" data-en="Juz'" data-ar="الأجزاء">Juz'</div>
+            <div style="flex:1;text-align:center;padding:9px 0;font-size:13px;color:#A09070;border-bottom:2px solid transparent;" data-en="Page" data-ar="الصفحات">Page</div>
+          </div>
+          <!-- Sepia juz band -->
+          <div style="background:#EDE0CF;color:#B8860B;padding:10px 14px;font-weight:700;font-size:13.5px;border-bottom:1px solid #D4C4A8;" data-en="Juz' 1 — Al-Fatiha" data-ar="الجزء الأول — الفاتحة">Juz' 1 — Al-Fatiha</div>
+
+          <!-- Row 1: Fatihah a1 — full teal circle "1" -->
+          <div class="lrow" style="display:flex;align-items:center;padding:10px 14px;gap:10px;border-bottom:1px solid #E8D8C4;background:#F5EBDA;">
+            <div class="tx" style="flex:1;min-width:0;">
+              <div class="t" style="font-weight:700;color:var(--text);">
+                <span class="ar" style="font-family:'Amiri',serif;font-size:15px;" data-en="بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ" data-ar="بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</span>
+              </div>
+              <div class="s" style="font-size:12px;color:var(--text2);" data-en="Surah Al-Fatiha · Ayah 1" data-ar="سورة الفاتحة · الآية ١">Surah Al-Fatiha · Ayah 1</div>
+            </div>
+            <!-- Full teal circle -->
+            <div style="width:40px;height:40px;border-radius:50%;background:#22A5AD;display:flex;align-items:center;justify-content:center;color:#EDE0CF;font-weight:800;font-size:12px;flex-shrink:0;">1</div>
+          </div>
+
+          <!-- Row 2: Baqarah a26 — quarter teal -->
+          <div class="lrow" style="display:flex;align-items:center;padding:10px 14px;gap:10px;border-bottom:1px solid #E8D8C4;background:#F5EBDA;">
+            <div class="tx" style="flex:1;min-width:0;">
+              <div class="t" style="font-weight:700;color:var(--text);">
+                <span class="ar" style="font-family:'Amiri',serif;font-size:15px;" data-en="إِنَّ ٱللَّهَ لَا يَسْتَحْيِۦٓ" data-ar="إِنَّ ٱللَّهَ لَا يَسْتَحْيِۦٓ">إِنَّ ٱللَّهَ لَا يَسْتَحْيِۦٓ</span>
+              </div>
+              <div class="s" style="font-size:12px;color:var(--text2);" data-en="Surah Al-Baqarah · Ayah 26" data-ar="سورة البقرة · الآية ٢٦">Surah Al-Baqarah · Ayah 26</div>
+            </div>
+            <!-- Quarter teal pie -->
+            <div style="width:40px;height:40px;border-radius:50%;background:conic-gradient(#22A5AD 0 25%, #B2DFDB 0);display:flex;align-items:center;justify-content:center;color:#EDE0CF;font-weight:800;font-size:12px;flex-shrink:0;">¼</div>
+          </div>
+
+          <!-- Row 3: Baqarah a44 — half teal -->
+          <div class="lrow" style="display:flex;align-items:center;padding:10px 14px;gap:10px;background:#F5EBDA;">
+            <div class="tx" style="flex:1;min-width:0;">
+              <div class="t" style="font-weight:700;color:var(--text);">
+                <span class="ar" style="font-family:'Amiri',serif;font-size:15px;" data-en="أَتَأْمُرُونَ ٱلنَّاسَ بِٱلْبِرِّ" data-ar="أَتَأْمُرُونَ ٱلنَّاسَ بِٱلْبِرِّ">أَتَأْمُرُونَ ٱلنَّاسَ بِٱلْبِرِّ</span>
+              </div>
+              <div class="s" style="font-size:12px;color:var(--text2);" data-en="Surah Al-Baqarah · Ayah 44" data-ar="سورة البقرة · الآية ٤٤">Surah Al-Baqarah · Ayah 44</div>
+            </div>
+            <!-- Half teal pie -->
+            <div style="width:40px;height:40px;border-radius:50%;background:conic-gradient(#22A5AD 0 50%, #B2DFDB 0);display:flex;align-items:center;justify-content:center;color:#EDE0CF;font-weight:800;font-size:12px;flex-shrink:0;">½</div>
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Teal pie markers + sepia band — off the navy theme." data-ar="علامات فيروزية وشريط سيبيا — خارج الهوية.">Teal pie markers + sepia band — off the navy theme.</div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <!-- Navy status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+          <!-- Navy app bar with tabs -->
+          <div class="bar round">
+            <div class="nav">
+              <span class="bk">‹</span>
+              <div class="ttl">
+                <div class="t" data-en="Mushaf" data-ar="مصحف">Mushaf</div>
+              </div>
+              <div class="acts"><span class="ico">⋮</span></div>
+            </div>
+            <div class="tabs in-bar">
+              <div class="tab" data-en="Surah" data-ar="السور">Surah</div>
+              <div class="tab on" data-en="Juz'" data-ar="الأجزاء">Juz'</div>
+              <div class="tab" data-en="Page" data-ar="الصفحات">Page</div>
+            </div>
+          </div>
+
+          <!-- Pale-navy section band for Juz' 1 -->
+          <div class="sec">
+            <span data-en="Juz' 1 — Al-Fatiha" data-ar="الجزء الأول — الفاتحة">Juz' 1 — Al-Fatiha</span>
+            <span class="ln"></span>
+          </div>
+
+          <!-- Proposed list rows -->
+          <div class="list">
+
+            <!-- Row 1: Fatihah a1 — full gold circle "1" -->
+            <div class="row" style="display:flex;align-items:center;padding:10px 14px;gap:10px;">
+              <div class="tx" style="flex:1;min-width:0;">
+                <div class="t">
+                  <span class="ar" style="font-family:'Amiri',serif;font-size:15px;" data-en="بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ" data-ar="بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</span>
+                </div>
+                <div class="s" data-en="Surah Al-Fatiha · Ayah 1" data-ar="سورة الفاتحة · الآية ١">Surah Al-Fatiha · Ayah 1</div>
+              </div>
+              <!-- Full gold circle -->
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;color:var(--navy-900);font-weight:800;font-size:12px;flex-shrink:0;">1</div>
+            </div>
+
+            <!-- Row 2: Baqarah a26 — quarter gold pie -->
+            <div class="row" style="display:flex;align-items:center;padding:10px 14px;gap:10px;">
+              <div class="tx" style="flex:1;min-width:0;">
+                <div class="t">
+                  <span class="ar" style="font-family:'Amiri',serif;font-size:15px;" data-en="إِنَّ ٱللَّهَ لَا يَسْتَحْيِۦٓ" data-ar="إِنَّ ٱللَّهَ لَا يَسْتَحْيِۦٓ">إِنَّ ٱللَّهَ لَا يَسْتَحْيِۦٓ</span>
+                </div>
+                <div class="s" data-en="Surah Al-Baqarah · Ayah 26" data-ar="سورة البقرة · الآية ٢٦">Surah Al-Baqarah · Ayah 26</div>
+              </div>
+              <!-- Quarter gold pie -->
+              <div style="width:40px;height:40px;border-radius:50%;background:conic-gradient(var(--gold) 0 25%, var(--gold-faint) 0);display:flex;align-items:center;justify-content:center;color:var(--navy-900);font-weight:800;font-size:12px;flex-shrink:0;">¼</div>
+            </div>
+
+            <!-- Row 3: Baqarah a44 — half gold pie -->
+            <div class="row" style="display:flex;align-items:center;padding:10px 14px;gap:10px;">
+              <div class="tx" style="flex:1;min-width:0;">
+                <div class="t">
+                  <span class="ar" style="font-family:'Amiri',serif;font-size:15px;" data-en="أَتَأْمُرُونَ ٱلنَّاسَ بِٱلْبِرِّ" data-ar="أَتَأْمُرُونَ ٱلنَّاسَ بِٱلْبِرِّ">أَتَأْمُرُونَ ٱلنَّاسَ بِٱلْبِرِّ</span>
+                </div>
+                <div class="s" data-en="Surah Al-Baqarah · Ayah 44" data-ar="سورة البقرة · الآية ٤٤">Surah Al-Baqarah · Ayah 44</div>
+              </div>
+              <!-- Half gold pie -->
+              <div style="width:40px;height:40px;border-radius:50%;background:conic-gradient(var(--gold) 0 50%, var(--gold-faint) 0);display:flex;align-items:center;justify-content:center;color:var(--navy-900);font-weight:800;font-size:12px;flex-shrink:0;">½</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Gold pie markers, navy/gold band." data-ar="علامات ذهبية وشريط كحلي/ذهبي.">Gold pie markers, navy/gold band.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">03</span> <span data-en="Bookmarks list &amp; tags (+ multi-select)" data-ar="العلامات والوسوم (+ تحديد متعدد)">Bookmarks list &amp; tags (+ multi-select)</span></div>
+    <div class="d" data-en="Bookmarks tab + the long-press multi-select bar. <b>Current:</b> <b>teal</b> tag chips and a teal contextual action bar. <b>Proposed:</b> gold-faint tag chips, and a <b>navy</b> contextual bar with gold icons over gold-faint selected rows." data-ar="تبويب العلامات وشريط التحديد المتعدد. الحالي: وسوم فيروزية وشريط إجراءات فيروزي. المقترح: وسوم ذهبية خفيفة وشريط إجراءات كحلي بأيقونات ذهبية وصفوف محددة بخلفية ذهبية خفيفة.">Bookmarks tab + the long-press multi-select bar. <b>Current:</b> <b>teal</b> tag chips and a teal contextual action bar. <b>Proposed:</b> gold-faint tag chips, and a <b>navy</b> contextual bar with gold icons over gold-faint selected rows.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- CURRENT -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+
+          <!-- Purple status bar (old default) -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Teal contextual action bar (multi-select active) -->
+          <div style="background:#B2DFDB;color:#0b3b3f;display:flex;align-items:center;gap:14px;padding:14px">
+            <span>✕</span>
+            <span style="flex:1;font-weight:700" data-en="2 selected" data-ar="٢ محدد">2 selected</span>
+            <span>🏷</span>
+            <span>🗑</span>
+          </div>
+
+          <!-- Section header -->
+          <div style="padding:10px 14px 4px;font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.5px;text-transform:uppercase"
+               data-en="My Bookmarks" data-ar="علاماتي المرجعية">My Bookmarks</div>
+
+          <!-- Row 1 — selected (teal highlight) -->
+          <div class="lrow" style="background:#E0F2F1;padding:12px 14px;border-bottom:1px solid #e0e0e0">
+            <span class="lnum" style="color:#B8860B;font-size:20px;font-weight:800;min-width:36px;text-align:center">☑</span>
+            <div class="tx" style="flex:1">
+              <div class="t" style="font-weight:700;color:var(--text);font-size:13.5px" data-en="Al-Baqarah" data-ar="البقرة">Al-Baqarah</div>
+              <div class="s" style="font-size:11px;color:var(--text2);margin-top:1px" data-en="Page 49 · Verse 255" data-ar="صفحة ٤٩ · آية ٢٥٥">Page 49 · Verse 255</div>
+              <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">
+                <span style="background:#B2DFDB;color:#0b3b3f;font-size:10px;font-weight:700;padding:3px 9px;border-radius:4px;margin-inline-end:5px"
+                      data-en="Memorize" data-ar="حفظ">Memorize</span>
+                <span style="background:#B2DFDB;color:#0b3b3f;font-size:10px;font-weight:700;padding:3px 9px;border-radius:4px"
+                      data-en="Favourite" data-ar="المفضلة">Favourite</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2 — selected (teal highlight) -->
+          <div class="lrow" style="background:#E0F2F1;padding:12px 14px;border-bottom:1px solid #e0e0e0">
+            <span class="lnum" style="color:#B8860B;font-size:20px;font-weight:800;min-width:36px;text-align:center">☑</span>
+            <div class="tx" style="flex:1">
+              <div class="t" style="font-weight:700;color:var(--text);font-size:13.5px" data-en="Yusuf" data-ar="يوسف">Yusuf</div>
+              <div class="s" style="font-size:11px;color:var(--text2);margin-top:1px" data-en="Page 235 · Verse 4" data-ar="صفحة ٢٣٥ · آية ٤">Page 235 · Verse 4</div>
+              <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">
+                <span style="background:#B2DFDB;color:#0b3b3f;font-size:10px;font-weight:700;padding:3px 9px;border-radius:4px;margin-inline-end:5px"
+                      data-en="Memorize" data-ar="حفظ">Memorize</span>
+                <span style="background:#B2DFDB;color:#0b3b3f;font-size:10px;font-weight:700;padding:3px 9px;border-radius:4px"
+                      data-en="Stories" data-ar="القصص">Stories</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3 — normal (unselected) -->
+          <div class="lrow" style="background:var(--surface);padding:12px 14px;border-bottom:1px solid #e0e0e0">
+            <span class="lnum" style="color:#B8860B;font-size:20px;font-weight:800;min-width:36px;text-align:center">☐</span>
+            <div class="tx" style="flex:1">
+              <div class="t" style="font-weight:700;color:var(--text);font-size:13.5px" data-en="Al-Kahf" data-ar="الكهف">Al-Kahf</div>
+              <div class="s" style="font-size:11px;color:var(--text2);margin-top:1px" data-en="Page 293 · Verse 10" data-ar="صفحة ٢٩٣ · آية ١٠">Page 293 · Verse 10</div>
+              <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">
+                <span style="background:#B2DFDB;color:#0b3b3f;font-size:10px;font-weight:700;padding:3px 9px;border-radius:4px"
+                      data-en="Friday" data-ar="الجمعة">Friday</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Old sepia bottom bar hint -->
+          <div class="lbar" style="margin-top:auto;border-top:1px solid #d4c9a0">
+            <span class="li">🔖</span>
+            <span class="li" style="color:#22A5AD">🏷</span>
+            <span class="li">⚙</span>
+          </div>
+
+        </div>
+      </div>
+      <div class="vnote" data-en="Teal tag chips + teal selection bar." data-ar="وسوم فيروزية وشريط تحديد فيروزي.">Teal tag chips + teal selection bar.</div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+
+          <!-- Navy status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Navy contextual action bar (multi-select active) -->
+          <div style="background:var(--navy-700);color:var(--on-navy);display:flex;align-items:center;gap:14px;padding:14px">
+            <span style="color:var(--gold)">✕</span>
+            <span style="flex:1;font-weight:700" data-en="2 selected" data-ar="٢ محدد">2 selected</span>
+            <span style="color:var(--gold)">🏷</span>
+            <span style="color:var(--gold)">🗑</span>
+          </div>
+
+          <!-- Tabs in bar (below contextual bar, bookmarks tab active) -->
+          <div style="background:var(--navy);display:flex;border-bottom:2px solid var(--navy-700)">
+            <div style="flex:1;padding:10px 0;text-align:center;font-size:12.5px;font-weight:700;color:var(--gold);border-bottom:2px solid var(--gold);margin-bottom:-2px"
+                 data-en="Bookmarks" data-ar="العلامات">Bookmarks</div>
+            <div style="flex:1;padding:10px 0;text-align:center;font-size:12.5px;color:var(--on-navy);opacity:.65"
+                 data-en="Tags" data-ar="الوسوم">Tags</div>
+          </div>
+
+          <!-- Row 1 — selected (gold-faint highlight) -->
+          <div class="row" style="background:var(--gold-faint);border-bottom:1px solid var(--divider);padding:12px 14px">
+            <span style="font-size:18px;color:var(--gold);min-width:32px;text-align:center">☑</span>
+            <div class="tx" style="flex:1;margin-inline-start:10px">
+              <div class="t" data-en="Al-Baqarah" data-ar="البقرة">Al-Baqarah</div>
+              <div class="s" data-en="Page 49 · Verse 255" data-ar="صفحة ٤٩ · آية ٢٥٥">Page 49 · Verse 255</div>
+              <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">
+                <span class="chip" data-en="Memorize" data-ar="حفظ">Memorize</span>
+                <span class="chip" data-en="Favourite" data-ar="المفضلة">Favourite</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2 — selected (gold-faint highlight) -->
+          <div class="row" style="background:var(--gold-faint);border-bottom:1px solid var(--divider);padding:12px 14px">
+            <span style="font-size:18px;color:var(--gold);min-width:32px;text-align:center">☑</span>
+            <div class="tx" style="flex:1;margin-inline-start:10px">
+              <div class="t" data-en="Yusuf" data-ar="يوسف">Yusuf</div>
+              <div class="s" data-en="Page 235 · Verse 4" data-ar="صفحة ٢٣٥ · آية ٤">Page 235 · Verse 4</div>
+              <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">
+                <span class="chip" data-en="Memorize" data-ar="حفظ">Memorize</span>
+                <span class="chip" data-en="Stories" data-ar="القصص">Stories</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 3 — normal (unselected) -->
+          <div class="row" style="background:var(--surface);border-bottom:1px solid var(--divider);padding:12px 14px">
+            <span style="font-size:18px;color:var(--text2);min-width:32px;text-align:center">☐</span>
+            <div class="tx" style="flex:1;margin-inline-start:10px">
+              <div class="t" data-en="Al-Kahf" data-ar="الكهف">Al-Kahf</div>
+              <div class="s" data-en="Page 293 · Verse 10" data-ar="صفحة ٢٩٣ · آية ١٠">Page 293 · Verse 10</div>
+              <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px">
+                <span class="chip" data-en="Friday" data-ar="الجمعة">Friday</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="vnote" data-en="Gold chips, navy bar w/ gold icons, gold-faint selection." data-ar="وسوم ذهبية وشريط كحلي بأيقونات ذهبية وتحديد ذهبي.">Gold chips, navy bar w/ gold icons, gold-faint selection.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">04</span> <span data-en="Search results screen" data-ar="شاشة نتائج البحث">Search results screen</span></div>
+    <div class="d" data-en="Full-screen verse search. <b>Current:</b> gold action bar + lavender &quot;My Stream&quot; toolbar, a plain list, near-invisible white-on-cream text and a teal match highlight. <b>Proposed:</b> a navy hero (back + Search + field), a navy result-count band, result <b>cards</b> with a <b>gold</b> match highlight, and a themed empty state." data-ar="بحث الآيات بملء الشاشة. الحالي: شريط ذهبي + شريط «My Stream» بنفسجي، قائمة عادية، نص أبيض شبه مخفي على كريمي، وتظليل تطابق فيروزي. المقترح: ترويسة كحلية (رجوع + بحث + حقل)، شريط عدد نتائج كحلي، بطاقات نتائج بتظليل تطابق ذهبي، وحالة فارغة منسّقة.">Full-screen verse search. <b>Current:</b> gold action bar + lavender "My Stream" toolbar, a plain list, near-invisible white-on-cream text and a teal match highlight. <b>Proposed:</b> a navy hero (back + Search + field), a navy result-count band, result <b>cards</b> with a <b>gold</b> match highlight, and a themed empty state.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- CURRENT -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+
+          <!-- Purple status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Gold action bar: Search -->
+          <div class="lbar gold">
+            <span class="li">←</span>
+            <div class="lt" data-en="Search" data-ar="بحث">Search</div>
+            <span class="li">⋮</span>
+          </div>
+
+          <!-- Lavender "My Stream" strip -->
+          <div class="lbar lav">
+            <div class="lt" data-en="My Stream" data-ar="My Stream">My Stream</div>
+          </div>
+
+          <!-- Plain results list -->
+          <div style="background:#F3F4E6;flex:1;overflow:hidden">
+
+            <!-- Row 1 -->
+            <div class="lrow" style="flex-direction:column;align-items:flex-start;padding:10px 14px;border-bottom:1px solid #DDD8CC">
+              <div class="lteal" style="font-size:12px;font-weight:700;margin-bottom:4px" data-en="Al-Fatihah 1:1" data-ar="الفاتحة ١:١">Al-Fatihah 1:1</div>
+              <div style="font-size:13px;line-height:1.5">
+                <span style="color:#F3F4E6">In the name of Allah, the Most </span><span style="color:#33B5E5">mercy</span><span style="color:#F3F4E6">ful, the Most Merciful</span>
+              </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="lrow" style="flex-direction:column;align-items:flex-start;padding:10px 14px;border-bottom:1px solid #DDD8CC">
+              <div class="lteal" style="font-size:12px;font-weight:700;margin-bottom:4px" data-en="Al-Baqarah 2:37" data-ar="البقرة ٢:٣٧">Al-Baqarah 2:37</div>
+              <div style="font-size:13px;line-height:1.5">
+                <span style="color:#F3F4E6">Then Adam received words from his Lord — indeed He is the </span><span style="color:#33B5E5">mercy</span><span style="color:#F3F4E6">-Giver</span>
+              </div>
+            </div>
+
+            <!-- Row 3 (partial, hinting more) -->
+            <div class="lrow" style="flex-direction:column;align-items:flex-start;padding:10px 14px;border-bottom:1px solid #DDD8CC">
+              <div class="lteal" style="font-size:12px;font-weight:700;margin-bottom:4px" data-en="Al-Imran 3:8" data-ar="آل عمران ٣:٨">Al-Imran 3:8</div>
+              <div style="font-size:13px;line-height:1.5">
+                <span style="color:#F3F4E6">Grant us from Yourself </span><span style="color:#33B5E5">mercy</span><span style="color:#F3F4E6">; indeed You are the Bestower</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Gold+lavender bars, invisible text, teal highlight." data-ar="شريطان ذهبي/بنفسجي، نص مخفي، تظليل فيروزي.">Gold+lavender bars, invisible text, teal highlight.</div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+
+          <!-- Navy status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Navy hero bar with back + title + search field -->
+          <div class="bar round">
+            <div class="nav">
+              <span class="bk">‹</span>
+              <div class="ttl">
+                <div class="t" data-en="Search" data-ar="بحث">Search</div>
+                <div class="s" data-en="The Holy Quran" data-ar="القرآن الكريم">The Holy Quran</div>
+              </div>
+            </div>
+            <div class="search onlight">
+              <span class="lens">🔍</span>
+              <span class="ph" data-en="Search the Quran…" data-ar="ابحث في القرآن…">Search the Quran…</span>
+            </div>
+          </div>
+
+          <!-- Result count band -->
+          <div style="background:var(--navy-700);color:var(--on-navy);padding:12px 14px;font-weight:700;font-size:13px" data-en="154 results for 'mercy'" data-ar="١٥٤ نتيجة عن «mercy»">154 results for 'mercy'</div>
+
+          <!-- Result cards -->
+          <div style="flex:1;overflow:hidden;background:var(--surface);padding:10px 10px 6px">
+
+            <!-- Card 1 -->
+            <div class="card" style="margin-bottom:10px">
+              <div class="crow" style="flex-direction:column;align-items:flex-start;gap:5px">
+                <div class="gold" style="font-weight:800;font-size:12px" data-en="Al-Fatihah 1:1" data-ar="الفاتحة ١:١">Al-Fatihah 1:1</div>
+                <div style="font-size:13px;line-height:1.55;color:var(--text)">
+                  <span data-en="In the name of Allah, the Most " data-ar="بسم الله الرحمن ">In the name of Allah, the Most </span><span class="gold" style="font-weight:800" data-en="mercy" data-ar="mercy">mercy</span><span data-en="ful, the Most Merciful." data-ar="ful, the Most Merciful.">ful, the Most Merciful.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card" style="margin-bottom:10px">
+              <div class="crow" style="flex-direction:column;align-items:flex-start;gap:5px">
+                <div class="gold" style="font-weight:800;font-size:12px" data-en="Al-Baqarah 2:37" data-ar="البقرة ٢:٣٧">Al-Baqarah 2:37</div>
+                <div style="font-size:13px;line-height:1.55;color:var(--text)">
+                  <span data-en="Then Adam received words from his Lord — He is the " data-ar="Then Adam received words from his Lord — He is the ">Then Adam received words from his Lord — He is the </span><span class="gold" style="font-weight:800" data-en="mercy" data-ar="mercy">mercy</span><span data-en="-Giver, the Merciful." data-ar="-Giver, the Merciful.">-Giver, the Merciful.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3 (partial) -->
+            <div class="card">
+              <div class="crow" style="flex-direction:column;align-items:flex-start;gap:5px">
+                <div class="gold" style="font-weight:800;font-size:12px" data-en="Al-Imran 3:8" data-ar="آل عمران ٣:٨">Al-Imran 3:8</div>
+                <div style="font-size:13px;line-height:1.55;color:var(--text)">
+                  <span data-en="Grant us from Yourself " data-ar="Grant us from Yourself ">Grant us from Yourself </span><span class="gold" style="font-weight:800" data-en="mercy" data-ar="mercy">mercy</span><span data-en="; indeed You are the Bestower." data-ar="; indeed You are the Bestower.">; indeed You are the Bestower.</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Navy hero, result cards, gold highlight." data-ar="ترويسة كحلية وبطاقات وتظليل ذهبي.">Navy hero, result cards, gold highlight.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">05</span> <span data-en="Inline search &amp; the hero corner rule" data-ar="البحث المضمّن وقاعدة زاوية الترويسة">Inline search &amp; the hero corner rule</span></div>
+    <div class="d" data-en="Searching from the index. <b>Current:</b> a system suggestions <b>dropdown</b> floats under the field (off-theme list). <b>Proposed:</b> results render <b>inline</b> over the list — a navy count band attaches to the hero, so the hero bottom goes square and the rounding flows to the band (one continuous navy block), with gold-highlighted result cards." data-ar="البحث من الفهرس. الحالي: قائمة اقتراحات النظام تظهر أسفل الحقل (قائمة خارج الهوية). المقترح: تظهر النتائج مضمّنة فوق القائمة — شريط عدد كحلي يلتصق بالترويسة، فتصبح حافة الترويسة السفلية مستقيمة وينتقل التدوير إلى الشريط (كتلة كحلية متصلة)، مع بطاقات نتائج بتظليل ذهبي.">Searching from the index. <b>Current:</b> a system suggestions <b>dropdown</b> floats under the field (off-theme list). <b>Proposed:</b> results render <b>inline</b> over the list — a navy count band attaches to the hero, so the hero bottom goes square and the rounding flows to the band (one continuous navy block), with gold-highlighted result cards.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- CURRENT -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+
+          <!-- Purple legacy status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Navy-ish legacy bar with sepia tint + search field -->
+          <div class="lbar" style="background:#1B3A5C;padding:0;display:flex;flex-direction:column;gap:0;border-radius:0">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px 8px">
+              <span class="li" style="color:#fff;font-size:20px">‹</span>
+              <div class="lt" style="color:#fff;flex:1;font-size:16px;font-weight:700" data-en="Mushaf" data-ar="المصحف">Mushaf</div>
+              <span class="li" style="color:#fff;font-size:20px">⋮</span>
+            </div>
+            <!-- Search field — active, showing "mercy" typed -->
+            <div style="margin:0 12px 10px;background:#fff;border-radius:8px;display:flex;align-items:center;gap:8px;padding:7px 10px;position:relative">
+              <span style="color:#888;font-size:15px">🔍</span>
+              <span style="color:#222;font-size:14px;flex:1" data-en="mercy" data-ar="mercy">mercy</span>
+              <span style="color:#aaa;font-size:16px">✕</span>
+            </div>
+          </div>
+
+          <!-- System dropdown floating under the field — off-theme -->
+          <div style="position:relative;z-index:60">
+            <div style="position:absolute;top:0;inset-inline:14px;background:#fff;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.3);z-index:60">
+              <!-- Row 1 -->
+              <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #22A5AD">
+                <span style="color:#22A5AD;font-size:14px">🔍</span>
+                <span style="color:#333;font-size:13.5px" data-en="mercy of Allah" data-ar="mercy of Allah">mercy of Allah</span>
+              </div>
+              <!-- Row 2 -->
+              <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #22A5AD">
+                <span style="color:#22A5AD;font-size:14px">🔍</span>
+                <span style="color:#333;font-size:13.5px" data-en="mercy on believers" data-ar="mercy on believers">mercy on believers</span>
+              </div>
+              <!-- Row 3 -->
+              <div style="display:flex;align-items:center;gap:10px;padding:12px 14px">
+                <span style="color:#22A5AD;font-size:14px">🔍</span>
+                <span style="color:#333;font-size:13.5px" data-en="mercy to the worlds" data-ar="mercy to the worlds">mercy to the worlds</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Surah list behind dropdown (visible sides) -->
+          <div class="list" style="margin-top:112px;opacity:.45">
+            <div class="lrow"><span class="lnum">1</span><div class="tx"><div class="t" style="font-weight:700;color:var(--text)" data-en="Al-Fatihah" data-ar="الفاتحة">Al-Fatihah</div><div class="s" style="font-size:12px;color:var(--text2)" data-en="Meccan · 7 verses" data-ar="مكية · ٧ آيات">Meccan · 7 verses</div></div></div>
+            <div class="lrow"><span class="lnum">2</span><div class="tx"><div class="t" style="font-weight:700;color:var(--text)" data-en="Al-Baqarah" data-ar="البقرة">Al-Baqarah</div><div class="s" style="font-size:12px;color:var(--text2)" data-en="Medinan · 286 verses" data-ar="مدنية · ٢٨٦ آية">Medinan · 286 verses</div></div></div>
+          </div>
+
+        </div><!-- /screen -->
+      </div>
+      <div class="vnote" data-en="Off-theme system dropdown under the field." data-ar="قائمة نظام خارج الهوية أسفل الحقل.">Off-theme system dropdown under the field.</div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+
+          <!-- Navy status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Navy bar WITHOUT round — square bottom so it merges with count band -->
+          <div class="bar" style="border-radius:18px 18px 0 0">
+            <div class="nav">
+              <span class="bk">‹</span>
+              <div class="ttl">
+                <div class="t" data-en="Mushaf" data-ar="المصحف">Mushaf</div>
+                <div class="s" data-en="The Noble Qur'an" data-ar="القرآن الكريم">The Noble Qur'an</div>
+              </div>
+              <div class="acts"><span class="ico">⋮</span></div>
+            </div>
+            <!-- Active search field showing "mercy" -->
+            <div class="search onlight" style="background:rgba(255,255,255,.15);border-radius:10px;margin:6px 14px 10px">
+              <span class="lens">🔍</span>
+              <span style="color:#fff;font-size:14px;flex:1" data-en="mercy" data-ar="mercy">mercy</span>
+              <span style="color:rgba(255,255,255,.6);font-size:15px;margin-inline-start:6px">✕</span>
+            </div>
+          </div>
+
+          <!-- Count band: square top (flush to bar), rounded bottom — completes the block -->
+          <div style="background:var(--navy-700);color:var(--on-navy);padding:10px 14px;font-weight:700;font-size:13.5px;border-radius:0 0 18px 18px;display:flex;align-items:center;justify-content:space-between" data-en="154 results" data-ar="١٥٤ نتيجة">
+            <span data-en="154 results" data-ar="١٥٤ نتيجة">154 results</span>
+            <span style="font-size:12px;font-weight:400;opacity:.75" data-en="across 48 surahs" data-ar="في ٤٨ سورة">across 48 surahs</span>
+          </div>
+
+          <!-- Gold-highlighted result cards -->
+          <div style="padding:10px 12px;display:flex;flex-direction:column;gap:10px">
+
+            <!-- Result card 1 -->
+            <div class="card" style="border-inline-start:3px solid var(--gold);background:rgba(184,134,11,.07)">
+              <div class="crow" style="flex-direction:column;gap:4px;align-items:flex-start">
+                <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
+                  <span style="font-size:12px;font-weight:700;color:var(--gold)" data-en="Al-A'raf 7:56" data-ar="الأعراف ٧:٥٦">Al-A'raf 7:56</span>
+                  <span style="font-size:11px;color:var(--text2)" data-en="Page 158" data-ar="صفحة ١٥٨">Page 158</span>
+                </div>
+                <div style="font-size:15px;font-family:'Amiri',serif;color:var(--text);line-height:1.7;text-align:end;width:100%" data-en="إِنَّ رَحْمَتَ اللَّهِ قَرِيبٌ مِّنَ الْمُحْسِنِينَ" data-ar="إِنَّ رَحْمَتَ اللَّهِ قَرِيبٌ مِّنَ الْمُحْسِنِينَ">إِنَّ رَحْمَتَ اللَّهِ قَرِيبٌ مِّنَ الْمُحْسِنِينَ</div>
+                <div style="font-size:12px;color:var(--text2)" data-en="Indeed, the mercy of Allah is near to the doers of good." data-ar="Indeed, the mercy of Allah is near to the doers of good.">Indeed, the mercy of Allah is near to the doers of good.</div>
+              </div>
+            </div>
+
+            <!-- Result card 2 -->
+            <div class="card" style="border-inline-start:3px solid var(--gold);background:rgba(184,134,11,.07)">
+              <div class="crow" style="flex-direction:column;gap:4px;align-items:flex-start">
+                <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
+                  <span style="font-size:12px;font-weight:700;color:var(--gold)" data-en="Al-Anbiya 21:107" data-ar="الأنبياء ٢١:١٠٧">Al-Anbiya 21:107</span>
+                  <span style="font-size:11px;color:var(--text2)" data-en="Page 331" data-ar="صفحة ٣٣١">Page 331</span>
+                </div>
+                <div style="font-size:15px;font-family:'Amiri',serif;color:var(--text);line-height:1.7;text-align:end;width:100%" data-en="وَمَا أَرْسَلْنَاكَ إِلَّا رَحْمَةً لِّلْعَالَمِينَ" data-ar="وَمَا أَرْسَلْنَاكَ إِلَّا رَحْمَةً لِّلْعَالَمِينَ">وَمَا أَرْسَلْنَاكَ إِلَّا رَحْمَةً لِّلْعَالَمِينَ</div>
+                <div style="font-size:12px;color:var(--text2)" data-en="And We have not sent you except as a mercy to the worlds." data-ar="And We have not sent you except as a mercy to the worlds.">And We have not sent you except as a mercy to the worlds.</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div><!-- /screen -->
+      </div>
+      <div class="vnote" data-en="Inline results; hero corner flows into the count band." data-ar="نتائج مضمّنة؛ تدوير الترويسة ينتقل لشريط العدد.">Inline results; hero corner flows into the count band.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">06</span> <span data-en="Reader page — chrome &amp; paper modes" data-ar="صفحة القارئ — الإطار وأوضاع الورق">Reader page — chrome &amp; paper modes</span></div>
+    <div class="d" data-en="The page reader. <b>Current:</b> a sepia top bar and a dark translucent audio bar around the page image; no clear paper-mode control. <b>Proposed:</b> a <b>navy</b> top bar (back/translation/bookmark), gold <b>Day/Sepia/Night</b> chips, and a navy audio bar with a gold play button — the readable page image keeps its paper modes under navy chrome." data-ar="قارئ الصفحة. الحالي: شريط علوي سيبيا وشريط صوت داكن شفاف حول صورة الصفحة؛ بلا تحكّم واضح بوضع الورق. المقترح: شريط علوي كحلي (رجوع/ترجمة/علامة)، وأزرار نهار/ورقي/ليل ذهبية، وشريط صوت كحلي بزر تشغيل ذهبي — مع بقاء أوضاع الورق تحت إطار كحلي.">The page reader. <b>Current:</b> a sepia top bar and a dark translucent audio bar around the page image; no clear paper-mode control. <b>Proposed:</b> a <b>navy</b> top bar (back/translation/bookmark), gold <b>Day/Sepia/Night</b> chips, and a navy audio bar with a gold play button — the readable page image keeps its paper modes under navy chrome.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- ── CURRENT ── -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <!-- purple status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- sepia lbar overlaid on the page -->
+          <div style="position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden;">
+            <!-- sepia reading page fills the area -->
+            <div class="page sepia" style="position:absolute;inset:0;overflow:hidden;">
+              <div class="surah-band" data-en="سورة الفاتحة" data-ar="سورة الفاتحة" style="font-family:'Amiri',serif;margin-top:48px">سورة الفاتحة</div>
+              <div class="quran" style="font-family:'Amiri',serif;font-size:18px;line-height:2;padding:4px 16px;text-align:center;">
+                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<span class="mk">1</span>
+                الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ<span class="mk">2</span>
+                الرَّحْمَٰنِ الرَّحِيمِ<span class="mk">3</span>
+                مَالِكِ يَوْمِ الدِّينِ<span class="mk">4</span>
+                إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ<span class="mk">5</span>
+              </div>
+              <div class="pageno" data-en="Page 1" data-ar="صفحة ١">Page 1</div>
+            </div>
+
+            <!-- sepia lbar overlay top -->
+            <div class="lbar" style="position:absolute;top:0;left:0;right:0;z-index:30;">
+              <span class="li">←</span>
+              <div class="lt" data-en="Al-Fatihah · p.1" data-ar="الفاتحة · ص.١">Al-Fatihah · p.1</div>
+              <span class="li">🌐</span>
+            </div>
+
+            <!-- dark translucent audio bar bottom -->
+            <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.67);color:#fff;display:flex;align-items:center;gap:12px;padding:12px;z-index:30;">
+              <span>⏮</span>
+              <span style="color:#5E9800;font-size:22px">▶</span>
+              <span>⏭</span>
+              <div style="flex:1" data-en="Mishary Rashid" data-ar="مشاري راشد">Mishary Rashid</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Sepia bar + dark/green audio bar." data-ar="شريط سيبيا وشريط صوت داكن/أخضر.">Sepia bar + dark/green audio bar.</div>
+    </div>
+
+    <!-- ── PROPOSED ── -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <!-- navy status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <div style="position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden;">
+            <!-- sepia reading page fills the area -->
+            <div class="page sepia" style="position:absolute;inset:0;overflow:hidden;">
+              <div class="surah-band" data-en="سورة الفاتحة" data-ar="سورة الفاتحة" style="font-family:'Amiri',serif;margin-top:52px">سورة الفاتحة</div>
+              <div class="quran" style="font-family:'Amiri',serif;font-size:18px;line-height:2;padding:4px 16px;text-align:center;">
+                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<span class="mk">1</span>
+                الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ<span class="mk">2</span>
+                الرَّحْمَٰنِ الرَّحِيمِ<span class="mk">3</span>
+                مَالِكِ يَوْمِ الدِّينِ<span class="mk">4</span>
+                إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ<span class="mk">5</span>
+              </div>
+              <div class="pageno" data-en="Page 1" data-ar="صفحة ١">Page 1</div>
+            </div>
+
+            <!-- navy bar overlay top -->
+            <div class="bar round" style="position:absolute;top:0;left:0;right:0;z-index:30;border-radius:0;">
+              <div class="nav">
+                <span class="bk">‹</span>
+                <span class="ico">🌐</span>
+                <div class="ttl">
+                  <div class="t" data-en="Al-Fatihah" data-ar="الفاتحة">Al-Fatihah</div>
+                  <div class="s" data-en="Page 1 · Juz 1" data-ar="صفحة ١ · جزء ١">Page 1 · Juz 1</div>
+                </div>
+                <div class="acts">
+                  <span class="ico">🔖</span>
+                  <span class="ico">⋮</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- gold Day/Sepia/Night chip group -->
+            <div class="seg2" style="position:absolute;bottom:78px;inset-inline:60px;z-index:30;">
+              <div class="sg" data-en="Night" data-ar="ليل">Night</div>
+              <div class="sg on" data-en="Sepia" data-ar="ورقي">Sepia</div>
+              <div class="sg" data-en="Day" data-ar="نهار">Day</div>
+            </div>
+
+            <!-- navy audio bar bottom -->
+            <div class="audiobar" style="position:absolute;bottom:0;left:0;right:0;z-index:30;">
+              <div class="aprog"><i style="width:32%"></i></div>
+              <span class="ctl">⏮</span>
+              <span class="play">⏸</span>
+              <span class="ctl fwd">⏭</span>
+              <div class="meta">
+                <div class="t" data-en="Mishary Rashid" data-ar="مشاري راشد">Mishary Rashid</div>
+                <div class="s" data-en="Al-Fatihah" data-ar="الفاتحة">Al-Fatihah</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Navy chrome, gold paper chips + gold play." data-ar="إطار كحلي وأزرار ورق ذهبية وتشغيل ذهبي.">Navy chrome, gold paper chips + gold play.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">07</span> <span data-en="Reader overflow menu" data-ar="قائمة القارئ المنسدلة">Reader overflow menu</span></div>
+    <div class="d" data-en="The ⋮ overflow in the reader. <b>Current:</b> the default dark/grey AppCompat popup. <b>Proposed:</b> a rounded <b>navy</b> popup with white items and gold controls — consistent with the index &amp; audio-manager menus." data-ar="قائمة ⋮ في القارئ. الحالي: قائمة AppCompat الرمادية الافتراضية. المقترح: قائمة كحلية بزوايا دائرية ونص أبيض وعناصر تحكّم ذهبية — متناسقة مع قوائم الفهرس ومدير الصوت.">The ⋮ overflow in the reader. <b>Current:</b> the default dark/grey AppCompat popup. <b>Proposed:</b> a rounded <b>navy</b> popup with white items and gold controls — consistent with the index &amp; audio-manager menus.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- CURRENT -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <!-- Purple legacy status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Sepia reader toolbar -->
+          <div class="lbar" style="background:#F5E6C8;color:#5D4037;border-bottom:1px solid #D6C49A;display:flex;align-items:center;padding:0 8px;height:48px;gap:6px">
+            <span class="li" style="font-size:20px;color:#5D4037">‹</span>
+            <div class="lt" style="flex:1;font-weight:700;font-size:16px;color:#5D4037" data-en="Mushaf" data-ar="مصحف">Mushaf</div>
+            <span class="li" style="font-size:20px;color:#5D4037">🔍</span>
+            <span class="li" style="font-size:20px;color:#5D4037">⋮</span>
+          </div>
+
+          <!-- Faint sepia reading page in background -->
+          <div style="position:relative;flex:1;overflow:hidden">
+            <div class="page sepia" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:20px 16px 12px;opacity:0.55">
+              <div class="surah-band" data-en="سورة الكهف" data-ar="سورة الكهف" style="font-family:'Amiri',serif;margin-bottom:14px">سورة الكهف</div>
+              <div class="quran" style="font-family:'Amiri',serif;font-size:17px;line-height:2;text-align:center;color:#3b2a1a;direction:rtl">
+                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<span class="mk">1</span>
+                الْحَمْدُ لِلَّهِ الَّذِي أَنزَلَ عَلَىٰ عَبْدِهِ الْكِتَابَ<span class="mk">2</span>
+              </div>
+              <div class="pageno" data-en="Page 293" data-ar="صفحة ٢٩٣" style="margin-top:auto">Page 293</div>
+            </div>
+
+            <!-- Default dark/grey AppCompat popup -->
+            <div class="lpopup" style="position:absolute;top:4px;inset-inline-start:8px;z-index:60">
+              <div class="it" data-en="Search" data-ar="بحث">Search</div>
+              <div class="it" data-en="Night reading" data-ar="القراءة الليلية">Night reading</div>
+              <div class="it" data-en="Jump" data-ar="انتقال سريع">Jump</div>
+              <div class="it" data-en="Settings" data-ar="الإعدادات">Settings</div>
+              <div class="it" data-en="Help" data-ar="مساعدة">Help</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Default grey system popup." data-ar="قائمة نظام رمادية افتراضية.">Default grey system popup.</div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <!-- Navy status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Navy app bar -->
+          <div class="bar round" style="padding-bottom:0">
+            <div class="nav">
+              <span class="bk">‹</span>
+              <div class="ttl">
+                <div class="t" data-en="Mushaf" data-ar="مصحف">Mushaf</div>
+              </div>
+              <div class="acts">
+                <span class="ico">🔍</span>
+                <span class="ico">⋮</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Faint sepia reading page in background -->
+          <div style="position:relative;flex:1;overflow:hidden">
+            <div class="page sepia" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:20px 16px 12px;opacity:0.55">
+              <div class="surah-band" data-en="سورة الكهف" data-ar="سورة الكهف" style="font-family:'Amiri',serif;margin-bottom:14px">سورة الكهف</div>
+              <div class="quran" style="font-family:'Amiri',serif;font-size:17px;line-height:2;text-align:center;color:#3b2a1a;direction:rtl">
+                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<span class="mk">1</span>
+                الْحَمْدُ لِلَّهِ الَّذِي أَنزَلَ عَلَىٰ عَبْدِهِ الْكِتَابَ<span class="mk">2</span>
+              </div>
+              <div class="pageno" data-en="Page 293" data-ar="صفحة ٢٩٣" style="margin-top:auto">Page 293</div>
+            </div>
+
+            <!-- Rounded navy popup -->
+            <div style="position:absolute;top:4px;inset-inline-start:10px;background:var(--navy-700);color:var(--on-navy);border-radius:12px;box-shadow:var(--shadow);padding:6px 0;width:215px;z-index:60">
+
+              <!-- Search -->
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;font-size:13.5px" data-en="Search" data-ar="بحث">
+                <span data-en="Search" data-ar="بحث">Search</span>
+              </div>
+
+              <div style="height:1px;background:rgba(255,255,255,0.08);margin:0 12px"></div>
+
+              <!-- Night reading — checkable, gold tick -->
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;font-size:13.5px">
+                <span data-en="Night reading" data-ar="القراءة الليلية">Night reading</span>
+                <span style="color:var(--gold);font-size:15px;font-weight:700">✓</span>
+              </div>
+
+              <!-- Focus mode — checkable, gold tick -->
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;font-size:13.5px">
+                <span data-en="Focus mode" data-ar="وضع التركيز">Focus mode</span>
+                <span style="color:var(--gold);font-size:15px;font-weight:700">✓</span>
+              </div>
+
+              <div style="height:1px;background:rgba(255,255,255,0.08);margin:0 12px"></div>
+
+              <!-- Jump -->
+              <div style="padding:12px 16px;font-size:13.5px" data-en="Jump" data-ar="انتقال سريع">
+                <span data-en="Jump" data-ar="انتقال سريع">Jump</span>
+              </div>
+
+              <!-- Settings -->
+              <div style="padding:12px 16px;font-size:13.5px" data-en="Settings" data-ar="الإعدادات">
+                <span data-en="Settings" data-ar="الإعدادات">Settings</span>
+              </div>
+
+              <!-- Help -->
+              <div style="padding:12px 16px;font-size:13.5px" data-en="Help" data-ar="مساعدة">
+                <span data-en="Help" data-ar="مساعدة">Help</span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Rounded navy popup, gold checks." data-ar="قائمة كحلية دائرية بعلامات ذهبية.">Rounded navy popup, gold checks.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">08</span> <span data-en="Ayah action panel &amp; highlight" data-ar="لوحة إجراءات الآية والتظليل">Ayah action panel &amp; highlight</span></div>
+    <div class="d" data-en="Tapping a verse. &lt;b&gt;Current:&lt;/b&gt; a teal selection band on the page and a panel with teal labels / default controls. &lt;b&gt;Proposed:&lt;/b&gt; a &lt;b&gt;gold&lt;/b&gt; ayah highlight, a navy bottom-sheet panel with gold labels, gold checkbox and gold play controls." data-ar="لمس آية. الحالي: شريط تحديد فيروزي على الصفحة ولوحة بعناوين فيروزية. المقترح: تظليل آية ذهبي، ولوحة سفلية كحلية بعناوين ذهبية وصندوق اختيار ذهبي وأزرار تشغيل ذهبية.">Tapping a verse. <b>Current:</b> a teal selection band on the page and a panel with teal labels / default controls. <b>Proposed:</b> a <b>gold</b> ayah highlight, a navy bottom-sheet panel with gold labels, gold checkbox and gold play controls.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- CURRENT -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen" style="position:relative;display:flex;flex-direction:column;">
+
+          <!-- Legacy status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Legacy sepia toolbar -->
+          <div class="lbar" style="background:#F5EFD6;color:#5C4A1A;border-bottom:1px solid #D9C98A;">
+            <span class="li" style="color:#5C4A1A;">‹</span>
+            <div class="lt" style="color:#5C4A1A;flex:1;text-align:center;font-weight:700;" data-en="Al-Baqarah · Page 22" data-ar="البقرة · صفحة ٢٢">Al-Baqarah · Page 22</div>
+            <span class="li" style="color:#5C4A1A;">⋮</span>
+          </div>
+
+          <!-- Reading page (sepia) -->
+          <div class="page sepia" style="flex:1;padding:16px 14px 180px;overflow:hidden;display:flex;flex-direction:column;gap:10px;">
+
+            <div class="surah-band" data-en="سورة البقرة" data-ar="سورة البقرة" style="font-family:'Amiri',serif;">سورة البقرة</div>
+
+            <div class="quran" style="font-family:'Amiri',serif;font-size:17px;line-height:2;direction:rtl;text-align:justify;color:#3a2e1a;">
+              <span data-en="ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ" data-ar="ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ" style="font-family:'Amiri',serif;">ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ</span><span class="mk">٢</span>
+            </div>
+
+            <!-- TEAL selection band on the selected verse -->
+            <div style="background:rgba(70,148,166,.35);border-radius:6px;padding:4px 8px;direction:rtl;text-align:justify;">
+              <span class="quran" style="font-family:'Amiri',serif;font-size:17px;line-height:2;color:#3a2e1a;" data-en="الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ" data-ar="الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ" style="font-family:'Amiri',serif;">الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ</span><span class="mk">٣</span>
+            </div>
+
+            <div class="quran" style="font-family:'Amiri',serif;font-size:17px;line-height:2;direction:rtl;text-align:justify;color:#3a2e1a;">
+              <span data-en="وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ" data-ar="وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ" style="font-family:'Amiri',serif;">وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ</span><span class="mk">٤</span>
+            </div>
+
+          </div>
+
+          <!-- Old action panel — dark bg, teal labels, grey default controls -->
+          <div style="position:absolute;left:0;right:0;bottom:0;background:#1F2A44;color:#fff;padding:14px;z-index:50;border-top-left-radius:14px;border-top-right-radius:14px;">
+            <div style="width:36px;height:4px;background:rgba(255,255,255,.3);border-radius:2px;margin:0 auto 12px;"></div>
+
+            <div style="font-size:12px;color:#B2DFDB;font-weight:800;letter-spacing:.5px;margin-bottom:10px;" data-en="VERSE 3 · AL-BAQARAH" data-ar="الآية ٣ · البقرة">VERSE 3 · AL-BAQARAH</div>
+
+            <!-- Teal play-from-here row -->
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+              <span style="color:#B2DFDB;font-size:20px;">▶</span>
+              <span style="color:#B2DFDB;font-weight:800;font-size:14px;" data-en="Play from here" data-ar="تشغيل من هنا">Play from here</span>
+            </div>
+
+            <!-- Default grey checkbox row -->
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+              <span style="font-size:18px;color:#9E9E9E;">☐</span>
+              <span style="font-size:13.5px;color:#ccc;" data-en="Repeat range" data-ar="تكرار النطاق">Repeat range</span>
+            </div>
+
+            <!-- Row: bookmark + copy + share with default teal accent -->
+            <div style="display:flex;gap:16px;margin-bottom:14px;">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+                <span style="font-size:20px;">🔖</span>
+                <span style="font-size:11px;color:#B2DFDB;" data-en="Bookmark" data-ar="إشارة مرجعية">Bookmark</span>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+                <span style="font-size:20px;">📋</span>
+                <span style="font-size:11px;color:#B2DFDB;" data-en="Copy" data-ar="نسخ">Copy</span>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+                <span style="font-size:20px;">↗</span>
+                <span style="font-size:11px;color:#B2DFDB;" data-en="Share" data-ar="مشاركة">Share</span>
+              </div>
+            </div>
+
+            <!-- Apply link in teal -->
+            <div style="text-align:center;">
+              <span style="color:#22A5AD;font-weight:800;font-size:14px;" data-en="Apply" data-ar="تطبيق">Apply</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="vnote" data-en="Teal ayah band + teal panel labels." data-ar="شريط آية فيروزي وعناوين لوحة فيروزية.">Teal ayah band + teal panel labels.</div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen" style="position:relative;display:flex;flex-direction:column;">
+
+          <!-- Navy status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Navy app bar -->
+          <div class="bar round" style="padding-bottom:10px;">
+            <div class="nav">
+              <span class="bk">‹</span>
+              <div class="ttl">
+                <div class="t" data-en="Al-Baqarah" data-ar="البقرة">Al-Baqarah</div>
+                <div class="s" data-en="Page 22" data-ar="صفحة ٢٢">Page 22</div>
+              </div>
+              <div class="acts"><span class="ico">⋮</span></div>
+            </div>
+          </div>
+
+          <!-- Reading page (sepia) -->
+          <div class="page sepia" style="flex:1;padding:16px 14px 220px;overflow:hidden;display:flex;flex-direction:column;gap:10px;position:relative;">
+
+            <div class="surah-band" data-en="سورة البقرة" data-ar="سورة البقرة" style="font-family:'Amiri',serif;">سورة البقرة</div>
+
+            <div class="quran" style="font-family:'Amiri',serif;font-size:17px;line-height:2;direction:rtl;text-align:justify;color:#3a2e1a;">
+              <span data-en="ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ" data-ar="ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ" style="font-family:'Amiri',serif;">ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ</span><span class="mk">٢</span>
+            </div>
+
+            <!-- GOLD highlight on selected verse -->
+            <div style="background:rgba(184,134,11,.30);border-radius:6px;padding:4px 8px;direction:rtl;text-align:justify;">
+              <span class="quran" style="font-family:'Amiri',serif;font-size:17px;line-height:2;color:#3a2e1a;" data-en="الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ" data-ar="الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ" style="font-family:'Amiri',serif;">الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ</span><span class="mk">٣</span>
+            </div>
+
+            <div class="quran" style="font-family:'Amiri',serif;font-size:17px;line-height:2;direction:rtl;text-align:justify;color:#3a2e1a;">
+              <span data-en="وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ" data-ar="وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ" style="font-family:'Amiri',serif;">وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ</span><span class="mk">٤</span>
+            </div>
+
+            <!-- Floating ayah toolbar (above the sheet) -->
+            <div class="ayatb" style="bottom:200px;left:0;right:0;position:absolute;">
+              <div class="b"><span class="g">▶</span><span data-en="Play" data-ar="تشغيل">Play</span></div>
+              <div class="b"><span class="g">📖</span><span data-en="Tafsir" data-ar="تفسير">Tafsir</span></div>
+              <div class="b"><span class="g">🔖</span><span data-en="Bookmark" data-ar="إشارة">Bookmark</span></div>
+              <div class="b"><span class="g">📋</span><span data-en="Copy" data-ar="نسخ">Copy</span></div>
+            </div>
+
+          </div>
+
+          <!-- Scrim -->
+          <div class="scrim" style="position:absolute;inset:0;bottom:0;z-index:40;background:rgba(0,0,0,.25);pointer-events:none;"></div>
+
+          <!-- Navy bottom sheet -->
+          <div class="sheet" style="position:absolute;left:0;right:0;bottom:0;z-index:50;">
+            <div class="grab"></div>
+            <div class="sh-head">
+              <div class="t" data-en="Playback" data-ar="تشغيل">Playback</div>
+              <div class="x">✕</div>
+            </div>
+
+            <!-- From here row -->
+            <div class="prow" style="border-bottom:1px solid rgba(255,255,255,.08);">
+              <div class="tx">
+                <div class="t" data-en="Start from" data-ar="ابدأ من">Start from</div>
+                <div class="s" data-en="Selected verse" data-ar="الآية المحددة">Selected verse</div>
+              </div>
+              <div class="val" data-en="From here" data-ar="من هنا">From here</div>
+            </div>
+
+            <!-- Repeat range row with gold checkbox -->
+            <div class="prow">
+              <div class="tx">
+                <div class="t" data-en="Repeat range" data-ar="تكرار النطاق">Repeat range</div>
+              </div>
+              <div class="cbx on">✓</div>
+            </div>
+
+            <!-- Apply button gold -->
+            <div style="padding:12px 16px 4px;">
+              <span class="btn gold" style="display:block;text-align:center;" data-en="▸ Apply" data-ar="▸ تطبيق">▸ Apply</span>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="vnote" data-en="Gold highlight, navy panel, gold controls." data-ar="تظليل ذهبي ولوحة كحلية وعناصر ذهبية.">Gold highlight, navy panel, gold controls.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">09</span> <span data-en="Translation / Tafsir reading view" data-ar="عرض الترجمة/التفسير">Translation / Tafsir reading view</span></div>
+    <div class="d" data-en="Translation mode in the reader. <b>Current:</b> <b>teal</b> translator names and a pale-teal selected-verse band. <b>Proposed:</b> gold translator names, a gold-faint selected band, and gold-highlighted search matches." data-ar="وضع الترجمة في القارئ. الحالي: أسماء المترجمين فيروزية وشريط آية محددة فيروزي فاتح. المقترح: أسماء مترجمين ذهبية وشريط محدد ذهبي خفيف وتطابقات بحث ذهبية.">Translation mode in the reader. <b>Current:</b> <b>teal</b> translator names and a pale-teal selected-verse band. <b>Proposed:</b> gold translator names, a gold-faint selected band, and gold-highlighted search matches.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- ═══════════════ CURRENT ═══════════════ -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen" style="background:#FAF8F2;display:flex;flex-direction:column">
+
+          <!-- Purple legacy status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Sepia/cream toolbar -->
+          <div class="lbar" style="background:#F5EDD8;color:#5C4A1E;border-bottom:1px solid #DDD3B0">
+            <span class="li" style="color:#5C4A1E">‹</span>
+            <div class="lt" data-en="Translation" data-ar="الترجمة" style="flex:1;text-align:center;font-weight:700;color:#5C4A1E">Translation</div>
+            <span class="li" style="color:#5C4A1E">⋮</span>
+          </div>
+
+          <!-- Verse list on cream background -->
+          <div style="flex:1;overflow:hidden;background:#FAF8F2;padding:8px 0">
+
+            <!-- Verse 1 — plain -->
+            <div class="lrow" style="border-bottom:1px solid #EDE8D8;padding:10px 12px;background:#FAF8F2">
+              <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:4px">
+                <span class="lnum" style="font-size:11px;color:#B8860B;min-width:18px;text-align:center">1</span>
+                <div class="t" style="font-family:'Amiri',serif;font-size:15px;color:#2C1A0E;line-height:1.7;direction:rtl;text-align:right;flex:1" data-en="بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ" data-ar="بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+              </div>
+              <div style="padding-inline-start:26px">
+                <div style="color:#22A5AD;font-weight:700;font-size:11px;margin-bottom:2px" data-en="Sahih International" data-ar="Sahih International">Sahih International</div>
+                <div style="font-size:12.5px;color:#444;line-height:1.5" data-en="In the name of Allah, the Entirely Merciful, the Especially Merciful." data-ar="In the name of Allah, the Entirely Merciful, the Especially Merciful.">In the name of Allah, the Entirely Merciful, the Especially Merciful.</div>
+              </div>
+            </div>
+
+            <!-- Verse 2 — selected pale teal -->
+            <div class="lrow" style="border-bottom:1px solid #EDE8D8;padding:10px 12px;background:#E0F2F1">
+              <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:4px">
+                <span class="lnum" style="font-size:11px;color:#B8860B;min-width:18px;text-align:center">2</span>
+                <div class="t" style="font-family:'Amiri',serif;font-size:15px;color:#2C1A0E;line-height:1.7;direction:rtl;text-align:right;flex:1" data-en="الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ" data-ar="الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</div>
+              </div>
+              <div style="padding-inline-start:26px">
+                <div style="color:#22A5AD;font-weight:700;font-size:11px;margin-bottom:2px" data-en="Sahih International" data-ar="Sahih International">Sahih International</div>
+                <div style="font-size:12.5px;color:#444;line-height:1.5" data-en="[All] praise is [due] to Allah, Lord of the worlds —" data-ar="[All] praise is [due] to Allah, Lord of the worlds —">[All] praise is [due] to Allah, Lord of the worlds —</div>
+              </div>
+            </div>
+
+            <!-- Verse 3 — plain -->
+            <div class="lrow" style="border-bottom:1px solid #EDE8D8;padding:10px 12px;background:#FAF8F2">
+              <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:4px">
+                <span class="lnum" style="font-size:11px;color:#B8860B;min-width:18px;text-align:center">3</span>
+                <div class="t" style="font-family:'Amiri',serif;font-size:15px;color:#2C1A0E;line-height:1.7;direction:rtl;text-align:right;flex:1" data-en="الرَّحْمَٰنِ الرَّحِيمِ" data-ar="الرَّحْمَٰنِ الرَّحِيمِ">الرَّحْمَٰنِ الرَّحِيمِ</div>
+              </div>
+              <div style="padding-inline-start:26px">
+                <div style="color:#22A5AD;font-weight:700;font-size:11px;margin-bottom:2px" data-en="Sahih International" data-ar="Sahih International">Sahih International</div>
+                <div style="font-size:12.5px;color:#444;line-height:1.5" data-en="The Entirely Merciful, the Especially Merciful," data-ar="The Entirely Merciful, the Especially Merciful,">The Entirely Merciful, the Especially Merciful,</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Old translucent audio bar -->
+          <div style="background:#5C4A1E;color:#F5EDD8;padding:8px 12px;display:flex;align-items:center;gap:10px">
+            <span style="font-size:16px">⏮</span>
+            <span style="font-size:20px">⏸</span>
+            <span style="font-size:16px">⏭</span>
+            <div style="flex:1;margin-inline-start:6px">
+              <div style="font-size:11px;font-weight:700;color:#F5EDD8" data-en="Al-Minshawi" data-ar="المنشاوي">Al-Minshawi</div>
+              <div style="font-size:10px;color:#C9B88A" data-en="Al-Fatiha" data-ar="الفاتحة">Al-Fatiha</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="vnote" data-en="Teal translator names + pale-teal selection." data-ar="أسماء مترجمين فيروزية وتحديد فيروزي فاتح.">Teal translator names + pale-teal selection.</div>
+    </div>
+
+    <!-- ═══════════════ PROPOSED ═══════════════ -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen" style="display:flex;flex-direction:column">
+
+          <!-- Navy status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Navy app bar -->
+          <div class="bar round" style="padding-bottom:6px">
+            <div class="nav">
+              <span class="bk">‹</span>
+              <div class="ttl">
+                <div class="t" data-en="Translation" data-ar="الترجمة">Translation</div>
+                <div class="s" data-en="Al-Fatiha · 7 verses" data-ar="الفاتحة · ٧ آيات">Al-Fatiha · 7 verses</div>
+              </div>
+              <div class="acts"><span class="ico">⋮</span></div>
+            </div>
+          </div>
+
+          <!-- Verse list -->
+          <div style="flex:1;overflow:hidden;background:var(--bg);padding:6px 0">
+
+            <!-- Verse 1 — plain -->
+            <div style="border-bottom:1px solid var(--divider);padding:10px 14px;background:var(--bg)">
+              <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:5px">
+                <span class="num" style="min-width:24px;text-align:center;font-size:11px">1</span>
+                <div style="font-family:'Amiri',serif;font-size:15px;color:var(--text);line-height:1.7;direction:rtl;text-align:right;flex:1" data-en="بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ" data-ar="بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+              </div>
+              <div style="padding-inline-start:32px">
+                <div class="gold" style="font-weight:700;font-size:11px;margin-bottom:2px" data-en="Sahih International" data-ar="Sahih International">Sahih International</div>
+                <div style="font-size:12.5px;color:var(--text);line-height:1.5" data-en="In the name of Allah, the Entirely Merciful, the Especially Merciful." data-ar="In the name of Allah, the Entirely Merciful, the Especially Merciful.">In the name of Allah, the Entirely Merciful, the Especially Merciful.</div>
+              </div>
+            </div>
+
+            <!-- Verse 2 — gold-faint selected -->
+            <div style="border-bottom:1px solid var(--divider);padding:10px 14px;background:var(--gold-faint)">
+              <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:5px">
+                <span class="num" style="min-width:24px;text-align:center;font-size:11px">2</span>
+                <div style="font-family:'Amiri',serif;font-size:15px;color:var(--text);line-height:1.7;direction:rtl;text-align:right;flex:1" data-en="الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ" data-ar="الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ">الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ</div>
+              </div>
+              <div style="padding-inline-start:32px">
+                <div class="gold" style="font-weight:700;font-size:11px;margin-bottom:2px" data-en="Sahih International" data-ar="Sahih International">Sahih International</div>
+                <div style="font-size:12.5px;color:var(--text);line-height:1.5" data-en="[All] praise is [due] to Allah, Lord of the worlds —" data-ar="[All] praise is [due] to Allah, Lord of the worlds —">[All] praise is [due] to Allah, Lord of the worlds —</div>
+              </div>
+            </div>
+
+            <!-- Verse 3 — plain, with gold-highlighted search match -->
+            <div style="border-bottom:1px solid var(--divider);padding:10px 14px;background:var(--bg)">
+              <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:5px">
+                <span class="num" style="min-width:24px;text-align:center;font-size:11px">3</span>
+                <div style="font-family:'Amiri',serif;font-size:15px;color:var(--text);line-height:1.7;direction:rtl;text-align:right;flex:1" data-en="الرَّحْمَٰنِ الرَّحِيمِ" data-ar="الرَّحْمَٰنِ الرَّحِيمِ">الرَّحْمَٰنِ الرَّحِيمِ</div>
+              </div>
+              <div style="padding-inline-start:32px">
+                <div class="gold" style="font-weight:700;font-size:11px;margin-bottom:2px" data-en="Sahih International" data-ar="Sahih International">Sahih International</div>
+                <div style="font-size:12.5px;color:var(--text);line-height:1.5" data-en='The Entirely <mark style="background:var(--gold-faint);color:var(--gold);border-radius:3px;padding:0 2px">Merciful</mark>, the Especially <mark style="background:var(--gold-faint);color:var(--gold);border-radius:3px;padding:0 2px">Merciful</mark>,' data-ar='The Entirely <mark style="background:var(--gold-faint);color:var(--gold);border-radius:3px;padding:0 2px">Merciful</mark>, the Especially <mark style="background:var(--gold-faint);color:var(--gold);border-radius:3px;padding:0 2px">Merciful</mark>,'>The Entirely <mark style="background:var(--gold-faint);color:var(--gold);border-radius:3px;padding:0 2px">Merciful</mark>, the Especially <mark style="background:var(--gold-faint);color:var(--gold);border-radius:3px;padding:0 2px">Merciful</mark>,</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Navy audio bar -->
+          <div class="audiobar">
+            <div class="aprog"><i style="width:35%"></i></div>
+            <span class="ctl">⏮</span>
+            <span class="play">⏸</span>
+            <span class="ctl fwd">⏭</span>
+            <div class="meta">
+              <div class="t" data-en="Al-Minshawi" data-ar="المنشاوي">Al-Minshawi</div>
+              <div class="s" data-en="Al-Fatiha" data-ar="الفاتحة">Al-Fatiha</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="vnote" data-en="Gold translator names, gold-faint selection." data-ar="أسماء مترجمين ذهبية وتحديد ذهبي خفيف.">Gold translator names, gold-faint selection.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">10</span> <span data-en="Reciter audio download manager" data-ar="مدير تنزيل صوتيات القرّاء">Reciter audio download manager</span></div>
+    <div class="d" data-en="The reciters list. <b>Current:</b> a gold action bar with slate-teal &quot;download&quot; circles and a <b>green</b> &quot;downloaded&quot; circle on plain rows. <b>Proposed:</b> a navy hero (Audio Manager + subtitle) with gold-faint download discs (gold ⬇) and a gold ✓ &quot;Saved&quot; chip for fully-downloaded reciters." data-ar="قائمة القرّاء. الحالي: شريط ذهبي بدوائر تنزيل فيروزية ودائرة خضراء «مُحمّلة» على صفوف عادية. المقترح: ترويسة كحلية (مدير الصوت + وصف) بأقراص تنزيل ذهبية خفيفة (⬇ ذهبي) وشارة ✓ ذهبية «مُحمّلة».">The reciters list. <b>Current:</b> a gold action bar with slate-teal "download" circles and a <b>green</b> "downloaded" circle on plain rows. <b>Proposed:</b> a navy hero (Audio Manager + subtitle) with gold-faint download discs (gold ⬇) and a gold ✓ "Saved" chip for fully-downloaded reciters.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- CURRENT -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+
+          <!-- Old purple status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Old gold action bar -->
+          <div class="lbar gold">
+            <span class="li">≡</span>
+            <div class="lt" data-en="Audio Manager" data-ar="مدير الصوت">Audio Manager</div>
+            <span class="li">⋮</span>
+          </div>
+
+          <!-- Plain reciter rows -->
+          <div style="flex:1;overflow:hidden;background:var(--surface,#fff)">
+
+            <!-- Reciter 1: not downloaded -->
+            <div class="lrow" style="display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid var(--div,#eee)">
+              <span class="lnum" style="font-size:18px;font-weight:700;color:#B8860B;width:32px;text-align:center;flex-shrink:0">1</span>
+              <div class="tx" style="flex:1;margin-inline-start:12px">
+                <div class="t" style="font-weight:700;color:var(--text)" data-en="Mishary Rashid Al-Afasy" data-ar="مشاري راشد العفاسي">Mishary Rashid Al-Afasy</div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="0 surahs" data-ar="0 سور">0 surahs</div>
+              </div>
+              <!-- Slate-teal download circle -->
+              <span class="lcirc bg-slate" style="display:flex;align-items:center;justify-content:center;font-size:16px">⬇</span>
+            </div>
+
+            <!-- Reciter 2: fully downloaded (green circle) -->
+            <div class="lrow" style="display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid var(--div,#eee)">
+              <span class="lnum" style="font-size:18px;font-weight:700;color:#B8860B;width:32px;text-align:center;flex-shrink:0">2</span>
+              <div class="tx" style="flex:1;margin-inline-start:12px">
+                <div class="t" style="font-weight:700;color:var(--text)" data-en="Abdul Basit Abd us-Samad" data-ar="عبد الباسط عبد الصمد">Abdul Basit Abd us-Samad</div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="114 surahs" data-ar="114 سورة">114 surahs</div>
+              </div>
+              <!-- Green downloaded circle -->
+              <span class="lcirc bg-green" style="display:flex;align-items:center;justify-content:center;font-size:16px">⬇</span>
+            </div>
+
+            <!-- Reciter 3: not downloaded -->
+            <div class="lrow" style="display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid var(--div,#eee)">
+              <span class="lnum" style="font-size:18px;font-weight:700;color:#B8860B;width:32px;text-align:center;flex-shrink:0">3</span>
+              <div class="tx" style="flex:1;margin-inline-start:12px">
+                <div class="t" style="font-weight:700;color:var(--text)" data-en="Mahmoud Khalil Al-Husary" data-ar="محمود خليل الحصري">Mahmoud Khalil Al-Husary</div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="0 surahs" data-ar="0 سور">0 surahs</div>
+              </div>
+              <!-- Slate-teal download circle -->
+              <span class="lcirc bg-slate" style="display:flex;align-items:center;justify-content:center;font-size:16px">⬇</span>
+            </div>
+
+            <!-- Reciter 4: not downloaded -->
+            <div class="lrow" style="display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid var(--div,#eee)">
+              <span class="lnum" style="font-size:18px;font-weight:700;color:#B8860B;width:32px;text-align:center;flex-shrink:0">4</span>
+              <div class="tx" style="flex:1;margin-inline-start:12px">
+                <div class="t" style="font-weight:700;color:var(--text)" data-en="Saad Al-Ghamdi" data-ar="سعد الغامدي">Saad Al-Ghamdi</div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="0 surahs" data-ar="0 سور">0 surahs</div>
+              </div>
+              <span class="lcirc bg-slate" style="display:flex;align-items:center;justify-content:center;font-size:16px">⬇</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Gold bar, slate/green circles, plain rows." data-ar="شريط ذهبي ودوائر فيروزية/خضراء وصفوف عادية.">Gold bar, slate/green circles, plain rows.</div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+
+          <!-- Navy status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Navy bar with hero -->
+          <div class="bar round">
+            <div class="nav">
+              <span class="bk">‹</span>
+              <div class="ttl">
+                <div class="t" data-en="Audio Manager" data-ar="مدير الصوت">Audio Manager</div>
+                <div class="s" data-en="Reciters · tap to manage surahs" data-ar="القرّاء · اضغط لإدارة السور">Reciters · tap to manage surahs</div>
+              </div>
+              <div class="acts"><span class="ico">⋮</span></div>
+            </div>
+          </div>
+
+          <!-- Reciter list rows -->
+          <div class="list" style="flex:1;overflow:hidden">
+
+            <!-- Reciter 1: not downloaded — gold faint disc -->
+            <div class="row" style="display:flex;align-items:center">
+              <span class="num">1</span>
+              <div class="tx" style="flex:1">
+                <div class="t" data-en="Mishary Rashid Al-Afasy" data-ar="مشاري راشد العفاسي">Mishary Rashid Al-Afasy</div>
+                <div class="s" data-en="0 surahs" data-ar="0 سور">0 surahs</div>
+              </div>
+              <div class="end">
+                <span class="ic" style="border-radius:50%">⬇</span>
+              </div>
+            </div>
+
+            <!-- Reciter 2: fully downloaded — gold ✓ disc + Saved chip -->
+            <div class="row" style="display:flex;align-items:center">
+              <span class="num">2</span>
+              <div class="tx" style="flex:1">
+                <div class="t" data-en="Abdul Basit Abd us-Samad" data-ar="عبد الباسط عبد الصمد">Abdul Basit Abd us-Samad</div>
+                <div class="s" data-en="114 / 114" data-ar="114 / 114">114 / 114</div>
+              </div>
+              <div class="end" style="display:flex;align-items:center;gap:6px">
+                <span class="chip solid"><span style="font-weight:900">✓</span> <span data-en="Saved" data-ar="مُحمّلة">Saved</span></span>
+              </div>
+            </div>
+
+            <!-- Reciter 3: not downloaded — gold faint disc -->
+            <div class="row" style="display:flex;align-items:center">
+              <span class="num">3</span>
+              <div class="tx" style="flex:1">
+                <div class="t" data-en="Mahmoud Khalil Al-Husary" data-ar="محمود خليل الحصري">Mahmoud Khalil Al-Husary</div>
+                <div class="s" data-en="0 surahs" data-ar="0 سور">0 surahs</div>
+              </div>
+              <div class="end">
+                <span class="ic" style="border-radius:50%">⬇</span>
+              </div>
+            </div>
+
+            <!-- Reciter 4: not downloaded -->
+            <div class="row" style="display:flex;align-items:center">
+              <span class="num">4</span>
+              <div class="tx" style="flex:1">
+                <div class="t" data-en="Saad Al-Ghamdi" data-ar="سعد الغامدي">Saad Al-Ghamdi</div>
+                <div class="s" data-en="0 surahs" data-ar="0 سور">0 surahs</div>
+              </div>
+              <div class="end">
+                <span class="ic" style="border-radius:50%">⬇</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Navy hero, gold discs, gold ✓ Saved chip." data-ar="ترويسة كحلية وأقراص ذهبية وشارة ✓ ذهبية.">Navy hero, gold discs, gold ✓ Saved chip.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">11</span> <span data-en="Per-reciter surahs &amp; multi-select" data-ar="سور القارئ والتحديد المتعدد">Per-reciter surahs &amp; multi-select</span></div>
+    <div class="d" data-en="Managing one reciter's surahs. <b>Current:</b> gold action bar; slate &quot;download&quot; / green &quot;downloaded&quot; / <b>brick-red</b> cancel circles; teal multi-select. <b>Proposed:</b> a navy toolbar (reciter name + &quot;X / 114&quot;), gold download discs, an <b>error-red</b> trash for downloaded surahs, a navy multi-select bar (gold icons / gold-faint rows) and a navy+gold success snackbar." data-ar="إدارة سور قارئ واحد. الحالي: شريط ذهبي؛ دوائر تنزيل فيروزية/خضراء/حمراء طوبية للإلغاء؛ تحديد فيروزي. المقترح: شريط كحلي (اسم القارئ + «X / ١١٤»)، أقراص تنزيل ذهبية، وسلة حذف بأحمر الخطأ للسور المُحمّلة، وشريط تحديد كحلي وإشعار نجاح كحلي+ذهبي.">Managing one reciter's surahs. <b>Current:</b> gold action bar; slate "download" / green "downloaded" / <b>brick-red</b> cancel circles; teal multi-select. <b>Proposed:</b> a navy toolbar (reciter name + "X / 114"), gold download discs, an <b>error-red</b> trash for downloaded surahs, a navy multi-select bar (gold icons / gold-faint rows) and a navy+gold success snackbar.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- CURRENT -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen" style="display:flex;flex-direction:column;background:#FAFAFA">
+
+          <!-- Old purple status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Old gold action bar -->
+          <div class="lbar gold" style="display:flex;align-items:center;gap:10px;padding:0 12px">
+            <span class="li">‹</span>
+            <div class="lt" style="flex:1" data-en="عبد الباسط" data-ar="عبد الباسط"><span style="font-family:'Amiri',serif">عبد الباسط</span></div>
+            <span class="li">⬇</span>
+            <span class="li">⋮</span>
+          </div>
+
+          <!-- Old plain list rows -->
+          <div style="flex:1;overflow:hidden;background:#FAFAFA">
+
+            <!-- Row 1: downloading → slate circle -->
+            <div class="lrow" style="display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid #EEE;gap:10px">
+              <span class="lnum">1</span>
+              <div class="tx" style="flex:1">
+                <div class="t" style="font-weight:700;color:var(--text)" data-en="الفاتحة" data-ar="الفاتحة"><span style="font-family:'Amiri',serif">الفاتحة</span></div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="Download" data-ar="تنزيل">Download</div>
+              </div>
+              <div class="lcirc bg-slate" style="display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff">⬇</div>
+            </div>
+
+            <!-- Row 2: downloaded → brick-red cancel circle -->
+            <div class="lrow" style="display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid #EEE;gap:10px;background:#E0F2F1">
+              <span class="lnum">2</span>
+              <div class="tx" style="flex:1">
+                <div class="t" style="font-weight:700;color:var(--text)" data-en="البقرة" data-ar="البقرة"><span style="font-family:'Amiri',serif">البقرة</span></div>
+                <div class="s" style="font-size:12px;color:#22A5AD" data-en="Downloaded" data-ar="تم التنزيل">Downloaded</div>
+              </div>
+              <div class="lcirc bg-brick" style="display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff">✕</div>
+            </div>
+
+            <!-- Row 3: not yet → slate circle -->
+            <div class="lrow" style="display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid #EEE;gap:10px">
+              <span class="lnum">3</span>
+              <div class="tx" style="flex:1">
+                <div class="t" style="font-weight:700;color:var(--text)" data-en="آل عمران" data-ar="آل عمران"><span style="font-family:'Amiri',serif">آل عمران</span></div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="Download" data-ar="تنزيل">Download</div>
+              </div>
+              <div class="lcirc bg-slate" style="display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff">⬇</div>
+            </div>
+
+            <!-- Row 4: downloaded + green -->
+            <div class="lrow" style="display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid #EEE;gap:10px">
+              <span class="lnum">4</span>
+              <div class="tx" style="flex:1">
+                <div class="t" style="font-weight:700;color:var(--text)" data-en="النساء" data-ar="النساء"><span style="font-family:'Amiri',serif">النساء</span></div>
+                <div class="s" style="font-size:12px;color:#5E9800" data-en="Downloaded" data-ar="تم التنزيل">Downloaded</div>
+              </div>
+              <div class="lcirc bg-green" style="display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff">✓</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Slate/green/brick circles, teal selection." data-ar="دوائر فيروزية/خضراء/طوبية وتحديد فيروزي.">Slate/green/brick circles, teal selection.</div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen" style="display:flex;flex-direction:column;background:var(--surface,#F6F0E8);position:relative">
+
+          <!-- Navy status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Navy app bar -->
+          <div class="bar round" style="border-radius:0">
+            <div class="nav">
+              <span class="bk">‹</span>
+              <div class="ttl">
+                <div class="t" data-en="عبد الباسط" data-ar="عبد الباسط"><span style="font-family:'Amiri',serif">عبد الباسط</span></div>
+                <div class="s" data-en="0 / 114 surahs" data-ar="٠ / ١١٤ سورة">0 / 114 surahs</div>
+              </div>
+              <div class="acts">
+                <span class="ico" style="color:var(--gold-light,#F6C95A)">⬇</span>
+                <span class="ico" style="color:var(--gold-light,#F6C95A)">☑</span>
+                <span class="ico">⋮</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proposed list rows -->
+          <div class="list" style="flex:1;overflow:hidden">
+
+            <!-- Row 1: pending download → gold disc -->
+            <div class="row" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(0,0,0,.06)">
+              <span class="num">1</span>
+              <div class="tx" style="flex:1">
+                <div class="t"><span class="ar" data-en="الفاتحة" data-ar="الفاتحة" style="font-family:'Amiri',serif">الفاتحة</span></div>
+                <div class="s" data-en="Meccan · 7 verses" data-ar="مكية · ٧ آيات">Meccan · 7 verses</div>
+              </div>
+              <!-- gold download disc -->
+              <div class="ic" style="display:flex;align-items:center;justify-content:center;font-size:16px">⬇</div>
+            </div>
+
+            <!-- Row 2: downloaded → error-red trash -->
+            <div class="row" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(0,0,0,.06);background:rgba(246,201,90,.08)">
+              <span class="num">2</span>
+              <div class="tx" style="flex:1">
+                <div class="t"><span class="ar" data-en="البقرة" data-ar="البقرة" style="font-family:'Amiri',serif">البقرة</span></div>
+                <div class="s" data-en="Medinan · 286 verses" data-ar="مدنية · ٢٨٦ آية">Medinan · 286 verses</div>
+              </div>
+              <!-- error-red trash -->
+              <span style="width:38px;height:38px;border-radius:50%;background:rgba(186,26,26,.12);color:#BA1A1A;display:flex;align-items:center;justify-content:center">🗑</span>
+            </div>
+
+            <!-- Row 3: pending download → gold disc -->
+            <div class="row" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(0,0,0,.06)">
+              <span class="num">3</span>
+              <div class="tx" style="flex:1">
+                <div class="t"><span class="ar" data-en="آل عمران" data-ar="آل عمران" style="font-family:'Amiri',serif">آل عمران</span></div>
+                <div class="s" data-en="Medinan · 200 verses" data-ar="مدنية · ٢٠٠ آية">Medinan · 200 verses</div>
+              </div>
+              <div class="ic" style="display:flex;align-items:center;justify-content:center;font-size:16px">⬇</div>
+            </div>
+
+            <!-- Row 4: downloaded → error-red trash -->
+            <div class="row" style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid rgba(0,0,0,.06)">
+              <span class="num">4</span>
+              <div class="tx" style="flex:1">
+                <div class="t"><span class="ar" data-en="النساء" data-ar="النساء" style="font-family:'Amiri',serif">النساء</span></div>
+                <div class="s" data-en="Medinan · 176 verses" data-ar="مدنية · ١٧٦ آية">Medinan · 176 verses</div>
+              </div>
+              <span style="width:38px;height:38px;border-radius:50%;background:rgba(186,26,26,.12);color:#BA1A1A;display:flex;align-items:center;justify-content:center">🗑</span>
+            </div>
+
+          </div>
+
+          <!-- Navy+gold success snackbar pinned bottom -->
+          <div style="position:absolute;left:12px;right:12px;bottom:14px;background:var(--navy-700);color:var(--on-navy);border-radius:13px;padding:12px 14px;display:flex;gap:10px;align-items:center;z-index:40">
+            <span style="color:var(--gold-light)">✓</span>
+            <span style="flex:1;font-weight:700" data-en="1 surah removed" data-ar="تمت إزالة سورة">1 surah removed</span>
+          </div>
+
+        </div>
+      </div>
+      <div class="vnote" data-en="Navy toolbar, gold discs, error-red trash, navy snackbar." data-ar="شريط كحلي وأقراص ذهبية وحذف أحمر وإشعار كحلي.">Navy toolbar, gold discs, error-red trash, navy snackbar.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">12</span> <span data-en="Translation / Tafsir manager" data-ar="مدير الترجمات/التفاسير">Translation / Tafsir manager</span></div>
+    <div class="d" data-en="Downloading translations. <b>Current:</b> gold action bar, <b>near-invisible</b> translator names, teal section headers and a teal globe. <b>Proposed:</b> a navy hero (Translations), readable rows, <b>gold</b> section headers + dividers, and gold download arrows." data-ar="تنزيل الترجمات. الحالي: شريط ذهبي وأسماء مترجمين شبه مخفية وعناوين أقسام فيروزية وكرة أرضية فيروزية. المقترح: ترويسة كحلية (الترجمات) وصفوف واضحة وعناوين أقسام وفواصل ذهبية وأسهم تنزيل ذهبية.">Downloading translations. <b>Current:</b> gold action bar, <b>near-invisible</b> translator names, teal section headers and a teal globe. <b>Proposed:</b> a navy hero (Translations), readable rows, <b>gold</b> section headers + dividers, and gold download arrows.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- CURRENT -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <!-- Purple legacy status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Gold action bar -->
+          <div class="lbar gold">
+            <span class="li">‹</span>
+            <div class="lt" data-en="Translations" data-ar="الترجمات">Translations</div>
+            <span class="li">⋮</span>
+          </div>
+
+          <!-- Teal section header -->
+          <div style="color:#22A5AD;font-weight:700;padding:10px 14px;font-size:13px;letter-spacing:.5px;text-transform:uppercase" data-en="Available" data-ar="المتاحة">Available</div>
+
+          <!-- Row 1: near-invisible name, teal globe, teal download -->
+          <div class="lrow" style="align-items:center;padding:10px 14px;border-bottom:1px solid #e0e0e0">
+            <span style="font-size:20px;color:#22A5AD;margin-inline-end:12px">🌐</span>
+            <div class="tx" style="flex:1">
+              <!-- near-invisible name on cream/white surface -->
+              <div style="font-weight:700;color:#F3F4E6;font-size:15px" data-en="Sahih International" data-ar="صحيح إنترناشيونال">Sahih International</div>
+              <div class="s" style="font-size:12px;color:#ccc" data-en="English · Quran.com" data-ar="إنجليزي · Quran.com">English · Quran.com</div>
+            </div>
+            <span style="font-size:20px;color:#22A5AD">⬇</span>
+          </div>
+
+          <!-- Teal section header 2 -->
+          <div style="color:#22A5AD;font-weight:700;padding:10px 14px;font-size:13px;letter-spacing:.5px;text-transform:uppercase" data-en="Arabic Tafsir" data-ar="التفسير العربي">Arabic Tafsir</div>
+
+          <!-- Row 2: near-invisible name, teal globe, teal download -->
+          <div class="lrow" style="align-items:center;padding:10px 14px;border-bottom:1px solid #e0e0e0">
+            <span style="font-size:20px;color:#22A5AD;margin-inline-end:12px">🌐</span>
+            <div class="tx" style="flex:1">
+              <div style="font-weight:700;color:#F3F4E6;font-size:15px" data-en="Tafsir Ibn Kathir" data-ar="تفسير ابن كثير">Tafsir Ibn Kathir</div>
+              <div class="s" style="font-size:12px;color:#ccc" data-en="Arabic · Classical" data-ar="عربي · كلاسيكي">Arabic · Classical</div>
+            </div>
+            <span style="font-size:20px;color:#22A5AD">⬇</span>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="lrow" style="align-items:center;padding:10px 14px;border-bottom:1px solid #e0e0e0">
+            <span style="font-size:20px;color:#22A5AD;margin-inline-end:12px">🌐</span>
+            <div class="tx" style="flex:1">
+              <div style="font-weight:700;color:#F3F4E6;font-size:15px" data-en="Al-Jalalayn" data-ar="الجلالين">Al-Jalalayn</div>
+              <div class="s" style="font-size:12px;color:#ccc" data-en="Arabic · Classical" data-ar="عربي · كلاسيكي">Arabic · Classical</div>
+            </div>
+            <span style="font-size:20px;color:#22A5AD">⬇</span>
+          </div>
+
+        </div>
+      </div>
+      <div class="vnote" data-en="Invisible names, teal headers/globe." data-ar="أسماء مخفية وعناوين/كرة فيروزية.">Invisible names, teal headers/globe.</div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <!-- Navy status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- Navy hero bar -->
+          <div class="bar round">
+            <div class="nav">
+              <span class="bk">‹</span>
+              <div class="ttl">
+                <div class="t" data-en="Translations" data-ar="الترجمات">Translations</div>
+                <div class="s" data-en="Translations &amp; Tafsir" data-ar="الترجمات والتفاسير">Translations &amp; Tafsir</div>
+              </div>
+              <div class="acts"><span class="ico">⋮</span></div>
+            </div>
+          </div>
+
+          <!-- Gold section header: Available -->
+          <div class="sec"><span data-en="Available" data-ar="المتاحة">Available</span><span class="ln"></span></div>
+
+          <!-- List rows -->
+          <div class="list">
+
+            <!-- Row 1: Sahih International — downloadable -->
+            <div class="row" style="align-items:center">
+              <div class="ic">🌐</div>
+              <div class="tx">
+                <div class="t" data-en="Sahih International" data-ar="صحيح إنترناشيونال">Sahih International</div>
+                <div class="s" data-en="English · Quran.com" data-ar="إنجليزي · Quran.com">English · Quran.com</div>
+              </div>
+              <div class="end">
+                <span style="font-size:18px;color:var(--gold)">⬇</span>
+              </div>
+            </div>
+
+            <!-- Row 2: Pickthall — downloaded (gold checkmark) -->
+            <div class="row" style="align-items:center">
+              <div class="ic">🌐</div>
+              <div class="tx">
+                <div class="t" data-en="Pickthall" data-ar="بيكتال">Pickthall</div>
+                <div class="s" data-en="English · Downloaded" data-ar="إنجليزي · محمَّل">English · Downloaded</div>
+              </div>
+              <div class="end">
+                <span style="font-size:18px;color:var(--gold);font-weight:900">✓</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Gold section header: Arabic Tafsir -->
+          <div class="sec"><span data-en="Arabic Tafsir" data-ar="التفسير العربي">Arabic Tafsir</span><span class="ln"></span></div>
+
+          <div class="list">
+
+            <!-- Row 3: Ibn Kathir — downloadable -->
+            <div class="row" style="align-items:center">
+              <div class="ic">🌐</div>
+              <div class="tx">
+                <div class="t" data-en="Tafsir Ibn Kathir" data-ar="تفسير ابن كثير">Tafsir Ibn Kathir</div>
+                <div class="s" data-en="Arabic · Classical" data-ar="عربي · كلاسيكي">Arabic · Classical</div>
+              </div>
+              <div class="end">
+                <span style="font-size:18px;color:var(--gold)">⬇</span>
+              </div>
+            </div>
+
+            <!-- Row 4: Al-Jalalayn — downloadable -->
+            <div class="row" style="align-items:center">
+              <div class="ic">🌐</div>
+              <div class="tx">
+                <div class="t" data-en="Al-Jalalayn" data-ar="الجلالين">Al-Jalalayn</div>
+                <div class="s" data-en="Arabic · Classical" data-ar="عربي · كلاسيكي">Arabic · Classical</div>
+              </div>
+              <div class="end">
+                <span style="font-size:18px;color:var(--gold)">⬇</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="vnote" data-en="Navy hero, gold headers, readable rows." data-ar="ترويسة كحلية وعناوين ذهبية وصفوف واضحة.">Navy hero, gold headers, readable rows.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">13</span> <span data-en="About screen" data-ar="شاشة «عنّا»">About screen</span></div>
+    <div class="d" data-en="App credits / sources. <b>Current:</b> a <b>purple</b> status bar above the navy toolbar and <b>teal</b> category headers. <b>Proposed:</b> a navy status bar and <b>gold</b> category headers on a readable surface." data-ar="حول التطبيق/المصادر. الحالي: شريط حالة بنفسجي فوق شريط الأدوات الكحلي وعناوين أقسام فيروزية. المقترح: شريط حالة كحلي وعناوين أقسام ذهبية على سطح واضح.">App credits / sources. <b>Current:</b> a <b>purple</b> status bar above the navy toolbar and <b>teal</b> category headers. <b>Proposed:</b> a navy status bar and <b>gold</b> category headers on a readable surface.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- ── CURRENT ── -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone"><div class="notch"></div><div class="screen">
+
+        <!-- Purple status bar -->
+        <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+        <!-- Navy toolbar (already navy, but status bar mismatch is the issue) -->
+        <div class="lbar" style="background:var(--navy-800,#0D2B45);color:#fff;display:flex;align-items:center;padding:0 12px;min-height:52px;gap:10px">
+          <span class="li" style="color:#fff;font-size:20px">‹</span>
+          <div class="lt" data-en="About" data-ar="عنّا" style="color:#fff;font-size:17px;font-weight:700;flex:1">About</div>
+        </div>
+
+        <!-- App icon + name block -->
+        <div style="display:flex;flex-direction:column;align-items:center;padding:28px 16px 16px;background:#FAFAFA">
+          <div style="width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,#0D2B45,#1A4870);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:10px">🌊</div>
+          <div style="font-size:18px;font-weight:800;color:var(--text,#1a1a1a)" data-en="My Stream" data-ar="ماي ستريم">My Stream</div>
+          <div style="font-size:12px;color:var(--text2,#666);margin-top:3px" data-en="Version 4.2.1 · Islamic companion app" data-ar="الإصدار 4.2.1 · تطبيق الرفيق الإسلامي">Version 4.2.1 · Islamic companion app</div>
+        </div>
+
+        <!-- TEAL category header — the bug -->
+        <div style="color:#22A5AD;font-weight:700;padding:12px 14px;background:#FAFAFA;font-size:13px;letter-spacing:.5px;text-transform:uppercase" data-en="Information sources" data-ar="مصادر المعلومات">Information sources</div>
+
+        <!-- Pref rows -->
+        <div class="lrow" style="background:#fff;border-bottom:1px solid #eee">
+          <div class="tx">
+            <div class="t" style="font-weight:700;color:var(--text,#1a1a1a)" data-en="Images" data-ar="الصور">Images</div>
+            <div class="s" style="font-size:12px;color:var(--text2,#888)" data-en="Unsplash — free-to-use photography" data-ar="Unsplash — تصوير مجاني الاستخدام">Unsplash — free-to-use photography</div>
+          </div>
+          <span class="chev" style="color:#22A5AD">›</span>
+        </div>
+
+        <div class="lrow" style="background:#fff;border-bottom:1px solid #eee">
+          <div class="tx">
+            <div class="t" style="font-weight:700;color:var(--text,#1a1a1a)" data-en="QuranicAudio" data-ar="QuranicAudio">QuranicAudio</div>
+            <div class="s" style="font-size:12px;color:var(--text2,#888)" data-en="Recitation streaming &amp; downloads" data-ar="بث التلاوات وتنزيلها">Recitation streaming &amp; downloads</div>
+          </div>
+          <span class="chev" style="color:#22A5AD">›</span>
+        </div>
+
+        <!-- Second teal header -->
+        <div style="color:#22A5AD;font-weight:700;padding:12px 14px;background:#FAFAFA;font-size:13px;letter-spacing:.5px;text-transform:uppercase" data-en="Open-source projects" data-ar="مشاريع مفتوحة المصدر">Open-source projects</div>
+
+        <div class="lrow" style="background:#fff;border-bottom:1px solid #eee">
+          <div class="tx">
+            <div class="t" style="font-weight:700;color:var(--text,#1a1a1a)" data-en="Quran for Android" data-ar="القرآن لأندرويد">Quran for Android</div>
+            <div class="s" style="font-size:12px;color:var(--text2,#888)" data-en="Embedded Mushaf reader" data-ar="قارئ المصحف المدمج">Embedded Mushaf reader</div>
+          </div>
+          <span class="chev" style="color:#22A5AD">›</span>
+        </div>
+
+        <div class="lrow" style="background:#fff">
+          <div class="tx">
+            <div class="t" style="font-weight:700;color:var(--text,#1a1a1a)" data-en="OkHttp" data-ar="OkHttp">OkHttp</div>
+            <div class="s" style="font-size:12px;color:var(--text2,#888)" data-en="HTTP networking library" data-ar="مكتبة شبكة HTTP">HTTP networking library</div>
+          </div>
+          <span class="chev" style="color:#22A5AD">›</span>
+        </div>
+
+      </div></div>
+      <div class="vnote" data-en="Purple status bar, teal headers." data-ar="شريط حالة بنفسجي وعناوين فيروزية.">Purple status bar, teal headers.</div>
+    </div>
+
+    <!-- ── PROPOSED ── -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone"><div class="notch"></div><div class="screen">
+
+        <!-- Navy status bar -->
+        <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+        <!-- Navy app bar -->
+        <div class="bar" style="border-radius:0">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t" data-en="About" data-ar="عنّا">About</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- App glyph + name block -->
+        <div style="display:flex;flex-direction:column;align-items:center;padding:28px 16px 16px;background:var(--surface,#F8F9FA)">
+          <div style="width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,var(--navy-800,#0D2B45),var(--navy-600,#1A4870));display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:10px">🌊</div>
+          <div style="font-size:18px;font-weight:800;color:var(--text,#1a1a1a)" data-en="My Stream" data-ar="ماي ستريم">My Stream</div>
+          <div style="font-size:12px;color:var(--text2,#666);margin-top:3px" data-en="Version 4.2.1 · Islamic companion app" data-ar="الإصدار 4.2.1 · تطبيق الرفيق الإسلامي">Version 4.2.1 · Islamic companion app</div>
+        </div>
+
+        <!-- GOLD section header -->
+        <div class="sec"><span data-en="Information sources" data-ar="مصادر المعلومات">Information sources</span><span class="ln"></span></div>
+
+        <!-- Pref rows -->
+        <div class="list" style="margin:0">
+          <div class="prow">
+            <div class="tx">
+              <div class="t" data-en="Images" data-ar="الصور">Images</div>
+              <div class="s" data-en="Unsplash — free-to-use photography" data-ar="Unsplash — تصوير مجاني الاستخدام">Unsplash — free-to-use photography</div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+          <div class="prow">
+            <div class="tx">
+              <div class="t" data-en="QuranicAudio" data-ar="QuranicAudio">QuranicAudio</div>
+              <div class="s" data-en="Recitation streaming &amp; downloads" data-ar="بث التلاوات وتنزيلها">Recitation streaming &amp; downloads</div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+        </div>
+
+        <!-- Second gold section header -->
+        <div class="sec"><span data-en="Open-source projects" data-ar="مشاريع مفتوحة المصدر">Open-source projects</span><span class="ln"></span></div>
+
+        <div class="list" style="margin:0">
+          <div class="prow">
+            <div class="tx">
+              <div class="t" data-en="Quran for Android" data-ar="القرآن لأندرويد">Quran for Android</div>
+              <div class="s" data-en="Embedded Mushaf reader" data-ar="قارئ المصحف المدمج">Embedded Mushaf reader</div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+          <div class="prow">
+            <div class="tx">
+              <div class="t" data-en="OkHttp" data-ar="OkHttp">OkHttp</div>
+              <div class="s" data-en="HTTP networking library" data-ar="مكتبة شبكة HTTP">HTTP networking library</div>
+            </div>
+            <span class="chev">›</span>
+          </div>
+        </div>
+
+      </div></div>
+      <div class="vnote" data-en="Navy status bar, gold category headers." data-ar="شريط حالة كحلي وعناوين ذهبية.">Navy status bar, gold category headers.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">14</span> <span data-en="Help screen" data-ar="شاشة المساعدة">Help screen</span></div>
+    <div class="d" data-en="FAQ / help. <b>Current:</b> a default action bar and body text hardcoded white — <b>invisible on the light background</b>. <b>Proposed:</b> a navy hero with a gold back, and readable text on the surface." data-ar="الأسئلة الشائعة/المساعدة. الحالي: شريط أدوات افتراضي ونص أبيض ثابت — مخفي على الخلفية الفاتحة. المقترح: ترويسة كحلية بزر رجوع ذهبي ونص واضح على السطح.">FAQ / help. <b>Current:</b> a default action bar and body text hardcoded white — <b>invisible on the light background</b>. <b>Proposed:</b> a navy hero with a gold back, and readable text on the surface.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- CURRENT -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+
+          <!-- purple status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- lavender default action bar -->
+          <div class="lbar lav">
+            <span class="li">‹</span>
+            <div class="lt" data-en="Help" data-ar="مساعدة">Help</div>
+            <span class="li">⋮</span>
+          </div>
+
+          <!-- body: cream surface, all text near-white = invisible -->
+          <div style="flex:1;background:#F3F4E6;padding:16px;overflow:hidden;display:flex;flex-direction:column;gap:14px;">
+
+            <!-- FAQ heading — invisible white on cream -->
+            <div style="font-size:18px;font-weight:800;color:#F3F4E6;" data-en="FAQ" data-ar="الأسئلة الشائعة">FAQ</div>
+
+            <!-- Q1 block -->
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:14px;font-weight:700;color:#F3F4E6;" data-en="How do I play audio?" data-ar="كيف أشغّل الصوت؟">How do I play audio?</div>
+              <div style="font-size:13px;line-height:1.55;color:#F3F4E6;" data-en="Open any surah from the Quran tab, then tap the Play button at the bottom of the screen. You can choose your preferred reciter from the Reciters screen." data-ar="افتح أي سورة من تبويب القرآن، ثم اضغط على زر التشغيل في أسفل الشاشة. يمكنك اختيار القارئ المفضّل من شاشة القرّاء.">Open any surah from the Quran tab, then tap the Play button at the bottom of the screen. You can choose your preferred reciter from the Reciters screen.</div>
+            </div>
+
+            <!-- Q2 block -->
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:14px;font-weight:700;color:#F3F4E6;" data-en="Can I read offline?" data-ar="هل يمكنني القراءة دون اتصال؟">Can I read offline?</div>
+              <div style="font-size:13px;line-height:1.55;color:#F3F4E6;" data-en="Yes. Download the reciter's audio files from the Reciters screen and the Mushaf will remain fully accessible without an internet connection." data-ar="نعم. قم بتنزيل ملفات الصوت من شاشة القرّاء وسيبقى المصحف متاحاً بالكامل بدون اتصال بالإنترنت.">Yes. Download the reciter's audio files from the Reciters screen and the Mushaf will remain fully accessible without an internet connection.</div>
+            </div>
+
+            <!-- contact line — also invisible -->
+            <div style="font-size:13px;color:#F3F4E6;margin-top:8px;" data-en="Still need help? Email us." data-ar="ما زلت بحاجة إلى مساعدة؟ راسلنا.">Still need help? Email us.</div>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="vnote" data-en="White-on-cream text — invisible." data-ar="نص أبيض على كريمي — مخفي.">White-on-cream text — invisible.</div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+
+          <!-- navy status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- navy app bar -->
+          <div class="bar round">
+            <div class="nav">
+              <span class="bk">‹</span>
+              <div class="ttl">
+                <div class="t" data-en="Help" data-ar="مساعدة">Help</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- body: default surface, readable text -->
+          <div class="pad" style="flex:1;overflow:hidden;display:flex;flex-direction:column;gap:16px;">
+
+            <!-- FAQ heading -->
+            <div style="font-size:18px;font-weight:800;color:var(--text);" data-en="FAQ" data-ar="الأسئلة الشائعة">FAQ</div>
+
+            <!-- Q1 block -->
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:14px;font-weight:700;color:var(--text);" data-en="How do I play audio?" data-ar="كيف أشغّل الصوت؟">How do I play audio?</div>
+              <div style="font-size:13px;line-height:1.6;color:var(--text2);" data-en="Open any surah from the Quran tab, then tap the Play button at the bottom of the screen. You can choose your preferred reciter from the Reciters screen." data-ar="افتح أي سورة من تبويب القرآن، ثم اضغط على زر التشغيل في أسفل الشاشة. يمكنك اختيار القارئ المفضّل من شاشة القرّاء.">Open any surah from the Quran tab, then tap the Play button at the bottom of the screen. You can choose your preferred reciter from the Reciters screen.</div>
+            </div>
+
+            <!-- divider -->
+            <div style="height:1px;background:var(--divider);"></div>
+
+            <!-- Q2 block -->
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="font-size:14px;font-weight:700;color:var(--text);" data-en="Can I read offline?" data-ar="هل يمكنني القراءة دون اتصال؟">Can I read offline?</div>
+              <div style="font-size:13px;line-height:1.6;color:var(--text2);" data-en="Yes. Download the reciter's audio files from the Reciters screen and the Mushaf will remain fully accessible without an internet connection." data-ar="نعم. قم بتنزيل ملفات الصوت من شاشة القرّاء وسيبقى المصحف متاحاً بالكامل بدون اتصال بالإنترنت.">Yes. Download the reciter's audio files from the Reciters screen and the Mushaf will remain fully accessible without an internet connection.</div>
+            </div>
+
+            <!-- divider -->
+            <div style="height:1px;background:var(--divider);"></div>
+
+            <!-- contact line -->
+            <div style="font-size:13px;color:var(--text2);" data-en="Still need help?" data-ar="ما زلت بحاجة إلى مساعدة؟">Still need help? <span class="txtlink" data-en="Email us" data-ar="راسلنا">Email us</span></div>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="vnote" data-en="Navy hero, readable text." data-ar="ترويسة كحلية ونص واضح.">Navy hero, readable text.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">15</span> <span data-en="Dialogs — Jump &amp; Tag" data-ar="الحوارات — الانتقال والوسم">Dialogs — Jump &amp; Tag</span></div>
+    <div class="d" data-en="Utility dialogs. <b>Current:</b> bare default dialogs — a purple Material accent and (for the tag list) <b>invisible</b> near-white row text. <b>Proposed:</b> gold-accented dialogs on a proper surface, with readable rows and gold checks." data-ar="حوارات مساعدة. الحالي: حوارات افتراضية — لمسة بنفسجية، وفي قائمة الوسوم نص صفوف شبه مخفي. المقترح: حوارات بلمسة ذهبية على سطح مناسب وصفوف واضحة وعلامات ذهبية.">Utility dialogs. <b>Current:</b> bare default dialogs — a purple Material accent and (for the tag list) <b>invisible</b> near-white row text. <b>Proposed:</b> gold-accented dialogs on a proper surface, with readable rows and gold checks.</div>
+  </div>
+  <div class="cmprow">
+
+    <!-- CURRENT -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <!-- status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- faint reading page behind the scrim -->
+          <div class="page sepia" style="flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative">
+            <div class="lbar" style="background:#9E8B6C;color:#fff;flex-shrink:0">
+              <span class="li">≡</span>
+              <div class="lt" data-en="Mushaf" data-ar="مصحف">Mushaf</div>
+              <span class="li">⋮</span>
+            </div>
+            <div class="quran" style="padding:12px 14px;font-family:'Amiri',serif;font-size:15px;line-height:2;text-align:justify;color:#4a3728;flex:1">
+              <span data-en="بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ" data-ar="بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</span>
+              <span class="mk">١</span>
+              <span data-en="ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ" data-ar="ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ">ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ</span>
+              <span class="mk">٢</span>
+            </div>
+
+            <!-- scrim -->
+            <div class="scrim" style="position:absolute;inset:0;z-index:10"></div>
+
+            <!-- Jump dialog — default M3 style -->
+            <div class="dialog" style="position:absolute;inset-inline-start:16px;inset-inline-end:16px;top:50%;transform:translateY(-55%);z-index:20;background:#FFFBFE;border-radius:28px;padding:24px 24px 20px;box-shadow:0 8px 32px rgba(0,0,0,0.28)">
+              <div class="dh" style="color:#1d1b20;font-size:17px;font-weight:700;margin-bottom:14px" data-en="Jump" data-ar="انتقال سريع">Jump</div>
+              <div class="db">
+                <div style="font-size:12px;color:#49454e;margin-bottom:6px" data-en="Enter page number" data-ar="أدخل رقم الصفحة">Enter page number</div>
+                <div style="border-bottom:1.5px solid #79747e;padding:8px 0;color:#1d1b20;font-size:15px">1</div>
+              </div>
+              <div class="df" style="display:flex;justify-content:flex-end;margin-top:18px">
+                <span style="color:#6750A4;font-weight:800;font-size:14px;padding:4px 8px;cursor:pointer" data-en="OK" data-ar="موافق">OK</span>
+              </div>
+            </div>
+
+            <!-- Tag list dialog partially visible below to show invisible text bug -->
+            <div style="position:absolute;inset-inline-start:16px;inset-inline-end:16px;bottom:12px;z-index:20;background:#FFFBFE;border-radius:16px 16px 0 0;padding:16px 20px 14px;box-shadow:0 -4px 20px rgba(0,0,0,0.18)">
+              <div style="font-size:13px;font-weight:700;color:#1d1b20;margin-bottom:10px" data-en="Tag Ayah" data-ar="وسم الآية">Tag Ayah</div>
+              <!-- invisible text rows — near-white on cream surface = the bug -->
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0ede8">
+                <div style="width:18px;height:18px;border:1.5px solid #c8c4bc;border-radius:3px;flex-shrink:0"></div>
+                <span style="font-size:13px;color:#F3F4E6" data-en="Favourite" data-ar="المفضلة">Favourite</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 0">
+                <div style="width:18px;height:18px;border:1.5px solid #c8c4bc;border-radius:3px;flex-shrink:0"></div>
+                <span style="font-size:13px;color:#F3F4E6" data-en="Memorising" data-ar="للحفظ">Memorising</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Default surface, purple accent (and invisible tag text)." data-ar="سطح افتراضي ولمسة بنفسجية (ونص وسوم مخفي).">Default surface, purple accent (and invisible tag text).</div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <!-- status bar on paper -->
+          <div class="sb on-paper"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+
+          <!-- faint reading page behind the scrim -->
+          <div class="page sepia" style="flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative">
+            <!-- navy chrome bar -->
+            <div class="bar" style="flex-shrink:0">
+              <div class="nav">
+                <span class="bk">‹</span>
+                <div class="ttl">
+                  <div class="t" data-en="Mushaf" data-ar="مصحف">Mushaf</div>
+                </div>
+                <div class="acts"><span class="ico">⋮</span></div>
+              </div>
+            </div>
+            <div class="quran" style="padding:12px 14px;font-family:'Amiri',serif;font-size:15px;line-height:2;text-align:justify;color:#4a3728;flex:1">
+              <span data-en="بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ" data-ar="بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ" style="font-family:'Amiri',serif">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</span>
+              <span class="mk">١</span>
+              <span data-en="ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ" data-ar="ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ" style="font-family:'Amiri',serif">ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ</span>
+              <span class="mk">٢</span>
+            </div>
+
+            <!-- scrim -->
+            <div class="scrim" style="position:absolute;inset:0;z-index:10"></div>
+
+            <!-- Jump dialog — kit navy+gold style -->
+            <div class="dialog" style="position:absolute;inset-inline-start:14px;inset-inline-end:14px;top:46%;transform:translateY(-60%);z-index:20">
+              <div class="dh" data-en="Jump to Page" data-ar="انتقال إلى صفحة">Jump to Page</div>
+              <div class="db">
+                <div class="field">
+                  <div class="lab" data-en="Enter page number" data-ar="أدخل رقم الصفحة">Enter page number</div>
+                  <div class="inp focus"><span data-en="1" data-ar="1">1</span></div>
+                </div>
+              </div>
+              <div class="df">
+                <span class="txtlink" data-en="Cancel" data-ar="إلغاء">Cancel</span>
+                <span class="txtlink" style="font-weight:800" data-en="OK" data-ar="موافق">OK</span>
+              </div>
+            </div>
+
+            <!-- Tag ayah bottom sheet — readable rows + gold checkboxes -->
+            <div style="position:absolute;inset-inline-start:14px;inset-inline-end:14px;bottom:10px;z-index:20;background:var(--surface,#1e2d45);border-radius:16px 16px 0 0;padding:14px 18px 16px;box-shadow:0 -4px 24px rgba(0,0,0,0.38)">
+              <div style="font-size:13px;font-weight:700;color:var(--on-navy,#F0E6C8);margin-bottom:10px" data-en="Tag Ayah" data-ar="وسم الآية">Tag Ayah</div>
+              <!-- readable row + gold check -->
+              <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(240,230,200,0.12)">
+                <div class="cbx on" style="flex-shrink:0">✓</div>
+                <span style="font-size:13px;color:var(--on-navy,#F0E6C8)" data-en="Favourite" data-ar="المفضلة">Favourite</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:7px 0">
+                <div class="cbx" style="flex-shrink:0"></div>
+                <span style="font-size:13px;color:var(--on-navy,#F0E6C8)" data-en="Memorising" data-ar="للحفظ">Memorising</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Gold-accented dialog, gold focus + OK." data-ar="حوار بلمسة ذهبية وتركيز و«موافق» ذهبي.">Gold-accented dialog, gold focus + OK.</div>
+    </div>
+
+  </div>
+</section>
+<section class="cmpsection">
+  <div class="cmphead">
+    <div class="t"><span class="num">16</span> <span data-en="Confirmations — toast vs snackbar" data-ar="التأكيدات — Toast مقابل Snackbar">Confirmations — toast vs snackbar</span></div>
+    <div class="d" data-en="Success confirmations (e.g. &quot;surah removed&quot;). <b>Current:</b> a plain neutral system toast. <b>Proposed:</b> a navy + gold snackbar matching the chrome." data-ar="تأكيدات النجاح (مثل «تمت إزالة سورة»). الحالي: Toast نظام محايد عادي. المقترح: Snackbar كحلي + ذهبي يطابق الهوية.">Success confirmations (e.g. "surah removed"). <b>Current:</b> a plain neutral system toast. <b>Proposed:</b> a navy + gold snackbar matching the chrome.</div>
+  </div>
+  <div class="cmprow">
+    <!-- CURRENT -->
+    <div class="vcol">
+      <span class="vlabel cur" data-en="Current" data-ar="الحالي">Current</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen" style="position:relative;display:flex;flex-direction:column;background:#FAFAFA;">
+          <!-- Status bar -->
+          <div class="sb lsb"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+          <!-- Sepia toolbar -->
+          <div class="lbar" style="background:#F0E8D5;color:#5C4A1E;">
+            <span class="li" style="color:#5C4A1E;">≡</span>
+            <div class="lt" style="color:#5C4A1E;flex:1;text-align:center;font-size:15px;font-weight:700;" data-en="My Surahs" data-ar="سورهاي">My Surahs</div>
+            <span class="li" style="color:#5C4A1E;">⋮</span>
+          </div>
+          <!-- Faint surah list -->
+          <div style="flex:1;overflow:hidden;background:#FAFAFA;opacity:0.72;">
+            <div class="lrow" style="border-bottom:1px solid #E8E0D0;">
+              <span class="lnum">1</span>
+              <div class="tx">
+                <div class="t" style="font-weight:700;color:var(--text)" data-en="Al-Fatiha" data-ar="الفاتحة"><span class="ar" data-en="الفاتحة" data-ar="الفاتحة" style="font-family:'Amiri',serif;">الفاتحة</span></div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="Meccan · 7 verses" data-ar="مكية · 7 آيات">Meccan · 7 verses</div>
+              </div>
+            </div>
+            <div class="lrow" style="border-bottom:1px solid #E8E0D0;">
+              <span class="lnum">2</span>
+              <div class="tx">
+                <div class="t" style="font-weight:700;color:var(--text)" data-en="Al-Baqara" data-ar="البقرة"><span class="ar" data-en="البقرة" data-ar="البقرة" style="font-family:'Amiri',serif;">البقرة</span></div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="Medinan · 286 verses" data-ar="مدنية · 286 آية">Medinan · 286 verses</div>
+              </div>
+            </div>
+            <div class="lrow" style="border-bottom:1px solid #E8E0D0;">
+              <span class="lnum">3</span>
+              <div class="tx">
+                <div class="t" style="font-weight:700;color:var(--text)" data-en="Ali 'Imran" data-ar="آل عمران"><span class="ar" data-en="آل عمران" data-ar="آل عمران" style="font-family:'Amiri',serif;">آل عمران</span></div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="Medinan · 200 verses" data-ar="مدنية · 200 آية">Medinan · 200 verses</div>
+              </div>
+            </div>
+            <div class="lrow" style="border-bottom:1px solid #E8E0D0;opacity:0.5;">
+              <span class="lnum">4</span>
+              <div class="tx">
+                <div class="t" style="font-weight:700;color:var(--text)" data-en="An-Nisa" data-ar="النساء"><span class="ar" data-en="النساء" data-ar="النساء" style="font-family:'Amiri',serif;">النساء</span></div>
+                <div class="s" style="font-size:12px;color:var(--text2)" data-en="Medinan · 176 verses" data-ar="مدنية · 176 آية">Medinan · 176 verses</div>
+              </div>
+            </div>
+          </div>
+          <!-- Plain grey system toast -->
+          <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:60px;background:#323232;color:#fff;border-radius:24px;padding:11px 22px;font-size:13px;z-index:40;white-space:nowrap;" data-en="1 surah removed" data-ar="تمت إزالة سورة">1 surah removed</div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Plain grey system toast." data-ar="إشعار نظام رمادي عادي.">Plain grey system toast.</div>
+    </div>
+
+    <!-- PROPOSED -->
+    <div class="vcol">
+      <span class="vlabel prop" data-en="Proposed" data-ar="المقترح">Proposed</span>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen" style="position:relative;display:flex;flex-direction:column;background:#FAFAFA;">
+          <!-- Status bar -->
+          <div class="sb on-navy"><span>9:41</span><span class="r">5G <span class="sb-dots"></span> 100</span></div>
+          <!-- Navy app bar -->
+          <div class="bar round" style="border-radius:0;">
+            <div class="nav">
+              <span class="ico">≡</span>
+              <div class="ttl">
+                <div class="t" data-en="My Surahs" data-ar="سورهاي">My Surahs</div>
+              </div>
+              <div class="acts"><span class="ico">⋮</span></div>
+            </div>
+          </div>
+          <!-- Faint surah list -->
+          <div style="flex:1;overflow:hidden;background:#FAFAFA;opacity:0.72;">
+            <div class="row" style="border-bottom:1px solid #E8E0D0;">
+              <span class="num">1</span>
+              <div class="tx">
+                <div class="t"><span class="ar" data-en="الفاتحة" data-ar="الفاتحة" style="font-family:'Amiri',serif;">الفاتحة</span></div>
+                <div class="s" data-en="Meccan · 7 verses" data-ar="مكية · 7 آيات">Meccan · 7 verses</div>
+              </div>
+            </div>
+            <div class="row" style="border-bottom:1px solid #E8E0D0;">
+              <span class="num">2</span>
+              <div class="tx">
+                <div class="t"><span class="ar" data-en="البقرة" data-ar="البقرة" style="font-family:'Amiri',serif;">البقرة</span></div>
+                <div class="s" data-en="Medinan · 286 verses" data-ar="مدنية · 286 آية">Medinan · 286 verses</div>
+              </div>
+            </div>
+            <div class="row" style="border-bottom:1px solid #E8E0D0;">
+              <span class="num">3</span>
+              <div class="tx">
+                <div class="t"><span class="ar" data-en="آل عمران" data-ar="آل عمران" style="font-family:'Amiri',serif;">آل عمران</span></div>
+                <div class="s" data-en="Medinan · 200 verses" data-ar="مدنية · 200 آية">Medinan · 200 verses</div>
+              </div>
+            </div>
+            <div class="row" style="border-bottom:1px solid #E8E0D0;opacity:0.5;">
+              <span class="num">4</span>
+              <div class="tx">
+                <div class="t"><span class="ar" data-en="النساء" data-ar="النساء" style="font-family:'Amiri',serif;">النساء</span></div>
+                <div class="s" data-en="Medinan · 176 verses" data-ar="مدنية · 176 آية">Medinan · 176 verses</div>
+              </div>
+            </div>
+          </div>
+          <!-- Navy+gold snackbar -->
+          <div style="position:absolute;left:12px;right:12px;bottom:16px;background:var(--navy-700);color:var(--on-navy);border-radius:13px;padding:13px 15px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow);z-index:40">
+            <span style="color:var(--gold-light);font-size:16px">✓</span>
+            <span style="flex:1;font-weight:700;font-size:13px" data-en="1 surah removed" data-ar="تمت إزالة سورة">1 surah removed</span>
+            <span style="color:var(--gold-light);font-weight:800" data-en="Undo" data-ar="تراجع">Undo</span>
+          </div>
+        </div>
+      </div>
+      <div class="vnote" data-en="Navy+gold snackbar with Undo." data-ar="إشعار كحلي+ذهبي مع تراجع.">Navy+gold snackbar with Undo.</div>
+    </div>
+  </div>
+</section>
+  </main>
+</div>
+<script>
+const root = document.documentElement;
+function setTheme(t){
+  root.setAttribute('data-theme', t);
+  document.querySelectorAll('[data-theme-btn]').forEach(b => b.classList.toggle('on', b.getAttribute('data-theme-btn') === t));
+}
+function setLang(l){
+  root.setAttribute('data-lang', l);
+  root.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+  root.setAttribute('lang', l);
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const v = l === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+    if (v !== null) { if (v.indexOf('<') >= 0) el.innerHTML = v; else el.textContent = v; }
+  });
+  document.querySelectorAll('[data-lang-btn]').forEach(b => b.classList.toggle('on', b.getAttribute('data-lang-btn') === l));
+}
+document.querySelectorAll('[data-theme-btn]').forEach(b => b.addEventListener('click', () => setTheme(b.getAttribute('data-theme-btn'))));
+document.querySelectorAll('[data-lang-btn]').forEach(b => b.addEventListener('click', () => setLang(b.getAttribute('data-lang-btn'))));
+setTheme('light'); setLang('en');
+</script>
+</body>
+</html>
