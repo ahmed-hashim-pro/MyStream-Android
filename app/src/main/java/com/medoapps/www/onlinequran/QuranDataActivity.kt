@@ -236,7 +236,7 @@ class QuranDataActivity : Activity(), SimpleDownloadListener, OnRequestPermissio
   }
 
   private fun migrateFromTo(destination: String) {
-    val migrationDialog = AlertDialog.Builder(this)
+    val migrationDialog = AlertDialog.Builder(this, R.style.ThemeOverlay_MyStream_Dialog)
         .setView(R.layout.migration_upgrade)
         .create()
     updateDialog = migrationDialog
@@ -352,7 +352,7 @@ class QuranDataActivity : Activity(), SimpleDownloadListener, OnRequestPermissio
   private fun showFatalErrorDialog(errorId: Int) {
     val bsDialog = AppBottomSheet.showConfirmation(
         this,
-        "",
+        getString(R.string.download_failed_title),
         getString(errorId),
         getString(R.string.download_retry),
         getString(R.string.download_cancel),

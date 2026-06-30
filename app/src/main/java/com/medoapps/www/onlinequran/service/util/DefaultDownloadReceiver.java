@@ -162,7 +162,9 @@ public class DefaultDownloadReceiver extends BroadcastReceiver {
 
   private void makeProgressDialog() {
     if (mProgressDialog == null) {
-      mProgressDialog = new ProgressDialog(mContext);
+      // Gold-accent the (deprecated) progress dialog so the download/processing
+      // progress bar + cancel button match the navy+gold language.
+      mProgressDialog = new ProgressDialog(mContext, R.style.ThemeOverlay_MyStream_Dialog);
       mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
       mProgressDialog.setCancelable(mCanCancelDownload);
       mProgressDialog.setCanceledOnTouchOutside(false);
