@@ -4,4 +4,7 @@
    android:layout_height="wrap_content"
    android:layout_gravity="center_vertical"
    android:paddingTop="2dp"
+   android:progressTint="@color/gold_accent"
+   android:indeterminateTint="@color/gold_accent"
+   android:progressBackgroundTint="@color/gold_accent_faint"
    style="?android:attr/progressBarStyleHorizontal" />

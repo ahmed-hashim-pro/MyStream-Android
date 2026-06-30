@@ -72,6 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
+        android:textColor="@color/text_on_navy"
         android:text="@string/play_restrict_range"
         />
 

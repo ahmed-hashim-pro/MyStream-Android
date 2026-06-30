@@ -25,7 +25,8 @@ class RepeatButton @JvmOverloads constructor(
   private val textYPadding = resources.getDimensionPixelSize(R.dimen.repeat_text_y_padding)
 
   init {
-    paint.color = Color.WHITE
+    // gold repeat-count superscript (1·2·3·∞) to match the navy+gold bar
+    paint.color = androidx.core.content.ContextCompat.getColor(context, R.color.gold_accent)
     val resources = context.resources
     paint.textSize = resources.getDimensionPixelSize(R.dimen.repeat_superscript_text_size).toFloat()
   }

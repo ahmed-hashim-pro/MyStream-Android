@@ -330,6 +330,9 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     if (spinner == null) {
       spinner = new QuranSpinner(context, null,
           R.attr.actionDropDownStyle);
+      // Navy dropdown so the (near-white) reciter names are readable; without this
+      // the popup inherits the light activity theme = white-on-white.
+      spinner.setPopupBackgroundResource(R.drawable.bg_popup_navy);
       spinner.setDropDownVerticalOffset(spinnerPadding);
       spinner.setAdapter(adapter);
 
@@ -392,7 +395,8 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
 
   private void addDownloadOver3gPrompt() {
     TextView mPromptText = new TextView(context);
-    mPromptText.setTextColor(Color.WHITE);
+    mPromptText.setTextColor(
+        androidx.core.content.ContextCompat.getColor(context, R.color.text_on_navy));
     mPromptText.setGravity(Gravity.CENTER_VERTICAL);
     mPromptText.setTextSize(TypedValue.COMPLEX_UNIT_PX,
         textFontSize);
@@ -433,7 +437,8 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
         LayoutParams.WRAP_CONTENT);
 
     progressText = new TextView(context);
-    progressText.setTextColor(Color.WHITE);
+    progressText.setTextColor(
+        androidx.core.content.ContextCompat.getColor(context, R.color.text_on_navy));
     progressText.setGravity(Gravity.CENTER_VERTICAL);
     progressText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textFontSize);
     progressText.setText(text);
@@ -583,7 +588,7 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
 
   private void addSeparator() {
     ImageView separator = new ImageView(context);
-    separator.setBackgroundColor(Color.WHITE);
+    separator.setBackgroundColor(0x38FFFFFF);  // soft translucent rule, not harsh full white
     separator.setPadding(0, separatorSpacing, 0, separatorSpacing);
     LinearLayout.LayoutParams paddingParams =
         new LayoutParams(separatorWidth, LayoutParams.MATCH_PARENT);
