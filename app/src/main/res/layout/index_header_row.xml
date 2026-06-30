@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
+    android:paddingStart="26dp"
+    android:paddingEnd="26dp"
     android:orientation="horizontal"
     android:background="@drawable/list_header_background">
 
@@ -14,8 +14,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:fontFamily="@font/cairo_extrabold"
         android:textColor="@color/header_text_color"
-        android:textSize="16sp"
+        android:textSize="13sp"
         tools:text="Juz' 1"/>
 
     <TextView
@@ -23,7 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:fontFamily="@font/cairo_bold"
         android:textColor="@color/header_text_color"
-        android:textSize="16sp"
+        android:textSize="12sp"
         tools:text="1"/>
 </com.medoapps.www.onlinequran.view.QuranHeaderView>

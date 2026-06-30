@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gold-gradient "Continue reading" CTA (mockup 01 .btn.gold: linear-gradient 135° gold→gold-2). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+  <gradient
+      android:angle="315"
+      android:startColor="@color/gold_accent"
+      android:endColor="@color/gold_accent_2" />
+  <corners android:radius="13dp" />
+</shape>

@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Mushaf index hero: same radial navy gradient as bg_header_navy, but with
-     rounded bottom corners so the whole header reads as one card. -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <gradient
-        android:type="radial"
-        android:centerX="0.8"
-        android:centerY="0.0"
-        android:gradientRadius="440dp"
-        android:startColor="@color/navy_500"
-        android:centerColor="@color/navy_700"
-        android:endColor="@color/navy_900" />
-    <corners
-        android:bottomLeftRadius="@dimen/mushaf_hero_corner_radius"
-        android:bottomRightRadius="@dimen/mushaf_hero_corner_radius" />
-</shape>
+<!-- Mushaf index hero: uniform dark navy (navy_700→navy_900) with a faint warm
+     gold glow in the top-right corner, matching the mockup .bar gradient. Rounded
+     bottom corners so the whole header reads as one card. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item>
+    <shape android:shape="rectangle">
+      <gradient
+          android:type="radial"
+          android:centerX="0.8"
+          android:centerY="0.0"
+          android:gradientRadius="520dp"
+          android:startColor="@color/navy_700"
+          android:endColor="@color/navy_900" />
+      <corners
+          android:bottomLeftRadius="@dimen/mushaf_hero_corner_radius"
+          android:bottomRightRadius="@dimen/mushaf_hero_corner_radius" />
+    </shape>
+  </item>
+  <item>
+    <shape android:shape="rectangle">
+      <gradient
+          android:type="radial"
+          android:centerX="0.9"
+          android:centerY="-0.05"
+          android:gradientRadius="240dp"
+          android:startColor="#4DD4A44C"
+          android:endColor="#00D4A44C" />
+      <corners
+          android:bottomLeftRadius="@dimen/mushaf_hero_corner_radius"
+          android:bottomRightRadius="@dimen/mushaf_hero_corner_radius" />
+    </shape>
+  </item>
+</layer-list>

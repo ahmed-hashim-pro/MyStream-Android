@@ -131,12 +131,25 @@ class QuranListAdapter(
 
   private fun getQuranRow(position: Int): QuranRow = elements[position]
 
+  // Set typefaces programmatically — the Mushaf theme's default Cairo fontFamily
+  // silently overrides any view-level android:fontFamily, so XML fonts don't stick.
+  private val amiriTypeface: android.graphics.Typeface? by lazy {
+    androidx.core.content.res.ResourcesCompat.getFont(context, R.font.amiri_bold)
+  }
+  private val cairoExtraBold: android.graphics.Typeface? by lazy {
+    androidx.core.content.res.ResourcesCompat.getFont(context, R.font.cairo_extrabold)
+  }
+  private val cairoBold: android.graphics.Typeface? by lazy {
+    androidx.core.content.res.ResourcesCompat.getFont(context, R.font.cairo_bold)
+  }
+
   private fun bindRow(vh: HeaderHolder, position: Int) {
     val holder = vh as ViewHolder
     bindHeader(vh, position)
     val item = elements[position]
 
     with(holder) {
+      amiriTypeface?.let { title.typeface = it }
       number.text = QuranUtils.getLocalizedNumber(context, item.sura)
       metadata.visibility = View.VISIBLE
       metadata.text = item.metadata
@@ -201,6 +214,10 @@ class QuranListAdapter(
 
   private fun bindHeader(holder: HeaderHolder, pos: Int) {
     val item = elements[pos]
+    // Juz' band label = Cairo ExtraBold (800), page number = Cairo Bold (700).
+    // (bindRow re-sets the title to Amiri afterwards for surah rows.)
+    cairoExtraBold?.let { holder.title.typeface = it }
+    cairoBold?.let { holder.pageNumber.typeface = it }
     holder.title.text = item.text
     if (item.page == 0) {
       holder.pageNumber.visibility = View.GONE

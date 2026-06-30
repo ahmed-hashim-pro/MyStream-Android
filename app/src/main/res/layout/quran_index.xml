@@ -73,6 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layoutDirection="locale"
+                android:theme="@style/ThemeOverlay.MyStream.AudioActionBar"
                 app:contentInsetStart="0dp"
                 app:contentInsetStartWithNavigation="0dp"
                 app:layout_collapseMode="pin"
@@ -90,10 +91,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
+                        android:fontFamily="@font/cairo_extrabold"
                         android:singleLine="true"
                         android:textColor="@color/text_on_navy"
                         android:textSize="19sp"
-                        android:textStyle="bold"
                         tools:text="Mushaf" />
 
                     <TextView
@@ -118,15 +119,17 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/continue_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
             android:visibility="gone"
             app:cardBackgroundColor="@color/background_card"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="2dp">
+            app:cardCornerRadius="16dp"
+            app:cardElevation="6dp"
+            app:strokeColor="@color/divider_warm"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -135,15 +138,13 @@
                 android:gravity="center_vertical"
                 android:padding="12dp">
 
-                <ImageView
+                <TextView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginEnd="12dp"
-                    android:background="@drawable/bg_icon_frame_gold"
-                    android:padding="9dp"
-                    android:src="@drawable/ic_nav_mushaf"
-                    android:contentDescription="@string/continue_reading"
-                    app:tint="@color/gold_accent" />
+                    android:gravity="center"
+                    android:text="🕌"
+                    android:textSize="20sp" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -164,7 +165,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:textColor="@color/sura_details_color"
+                        android:textColor="@color/text_secondary"
                         android:textSize="12sp"
                         tools:text="Al-Baqarah · Page 49" />
                 </LinearLayout>
@@ -173,15 +174,21 @@
                     android:id="@+id/continue_read_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_reading_chip_on"
+                    android:background="@drawable/bg_continue_read_cta"
+                    android:drawablePadding="6dp"
+                    android:elevation="4dp"
+                    android:gravity="center_vertical"
+                    android:outlineAmbientShadowColor="@color/gold_accent"
+                    android:outlineSpotShadowColor="@color/gold_accent"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="8dp"
                     android:text="@string/continue_read_action"
                     android:textColor="@color/navy_900"
                     android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:drawableStartCompat="@drawable/ic_play_triangle" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <FrameLayout
             android:layout_width="match_parent"

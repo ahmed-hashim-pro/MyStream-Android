@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Juz' separator band (API21+): inset rounded pill (matches mockup .juzband). -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_activated="true" android:drawable="@color/gold_accent_faint" />
-    <item android:drawable="@drawable/header_ripple"/>
+  <item android:state_activated="true">
+    <inset
+        android:insetBottom="5dp"
+        android:insetLeft="12dp"
+        android:insetRight="12dp"
+        android:insetTop="5dp">
+      <shape android:shape="rectangle">
+        <corners android:radius="9dp" />
+        <solid android:color="@color/gold_accent_faint" />
+      </shape>
+    </inset>
+  </item>
+  <item android:state_pressed="true">
+    <inset
+        android:insetBottom="5dp"
+        android:insetLeft="12dp"
+        android:insetRight="12dp"
+        android:insetTop="5dp">
+      <shape android:shape="rectangle">
+        <corners android:radius="9dp" />
+        <solid android:color="@color/gold_accent_faint" />
+      </shape>
+    </inset>
+  </item>
+  <item>
+    <inset
+        android:insetBottom="5dp"
+        android:insetLeft="12dp"
+        android:insetRight="12dp"
+        android:insetTop="5dp">
+      <shape android:shape="rectangle">
+        <corners android:radius="9dp" />
+        <solid android:color="@color/juz_header_band" />
+      </shape>
+    </inset>
+  </item>
 </selector>

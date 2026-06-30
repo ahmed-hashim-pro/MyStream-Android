@@ -60,6 +60,14 @@ class SuraListFragment : Fragment() {
       layoutManager = LinearLayoutManager(context)
       itemAnimator = DefaultItemAnimator()
       adapter = QuranListAdapter(requireActivity(), recyclerView, getSuraList(), false)
+      // Faint inset hairline between consecutive surah rows (view type 1), matching the mockup.
+      addItemDecoration(
+          com.medoapps.www.onlinequran.ui.helpers.InsetRowDivider(
+              resources.displayMetrics.density,
+              androidx.core.content.ContextCompat.getColor(context, R.color.row_divider_hairline),
+              1
+          )
+      )
     }
     return view
   }

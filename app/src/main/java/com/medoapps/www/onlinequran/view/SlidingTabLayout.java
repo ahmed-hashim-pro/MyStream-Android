@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -183,7 +184,13 @@ public class SlidingTabLayout extends HorizontalScrollView {
     TextView textView = new TextView(context);
     textView.setGravity(Gravity.CENTER);
     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, TAB_VIEW_TEXT_SIZE_SP);
-    textView.setTypeface(Typeface.DEFAULT_BOLD);
+    Typeface cairoBold = null;
+    try {
+      cairoBold = ResourcesCompat.getFont(context, R.font.cairo_bold);
+    } catch (Exception ignored) {
+      // fall back below
+    }
+    textView.setTypeface(cairoBold != null ? cairoBold : Typeface.DEFAULT_BOLD);
     textView.setSingleLine();
     textView.setTextColor(mUnselectedTabColor);
 
@@ -195,8 +202,10 @@ public class SlidingTabLayout extends HorizontalScrollView {
     textView.setBackgroundResource(outValue.resourceId);
     textView.setAllCaps(true);
 
+    // Compact, mockup-style vertical padding so the gold underline hugs the label
+    // (was 16dp all round, which detached the underline ~16dp below the text).
     int padding = mTabPadding;
-    textView.setPadding(padding, padding, padding, padding);
+    textView.setPadding(padding, padding * 5 / 8, padding, padding * 3 / 8);
 
     return textView;
   }
@@ -210,7 +219,13 @@ public class SlidingTabLayout extends HorizontalScrollView {
         TypedValue.COMPLEX_UNIT_SP, TAB_VIEW_TEXT_SIZE_SP, metrics);
     final TextPaint paint = new TextPaint();
     paint.setTextSize(fontSize);
-    paint.setTypeface(Typeface.DEFAULT_BOLD);
+    Typeface cairoBold = null;
+    try {
+      cairoBold = ResourcesCompat.getFont(getContext(), R.font.cairo_bold);
+    } catch (Exception ignored) {
+      // fall back below
+    }
+    paint.setTypeface(cairoBold != null ? cairoBold : Typeface.DEFAULT_BOLD);
 
     int targetWidth = 0;
     final int tabs = adapter.getCount();

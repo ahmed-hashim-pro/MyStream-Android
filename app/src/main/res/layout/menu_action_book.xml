@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Toolbar "last page" action rendered as the 📖 emoji (matches the Android/Noto UX). -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="48dp"
+    android:layout_height="match_parent"
+    android:background="?android:attr/selectableItemBackgroundBorderless"
+    android:clickable="true"
+    android:contentDescription="@string/menu_jump_last_page"
+    android:focusable="true"
+    android:gravity="center"
+    android:text="📖"
+    android:textSize="20sp" />

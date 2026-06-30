@@ -6,6 +6,8 @@
     <item name="spinnerDropDownItemStyle">@style/SherlockDropDownItem</item>
     <item name="spinnerItemStyle">@style/SherlockSpinnerItem</item>
     <item name="android:forceDarkAllowed">false</item>
+    <item name="android:fontFamily">@font/cairo</item>
+    <item name="fontFamily">@font/cairo</item>
   </style>
 
   <style name="QuranToolBar" parent="Theme.Material3.DayNight.NoActionBar">
@@ -16,6 +18,8 @@
     <item name="spinnerDropDownItemStyle">@style/SherlockDropDownItem</item>
     <item name="spinnerItemStyle">@style/SherlockSpinnerItem</item>
     <item name="android:forceDarkAllowed">false</item>
+    <item name="android:fontFamily">@font/cairo</item>
+    <item name="fontFamily">@font/cairo</item>
     <!-- Navy chrome (the base QuranToolBar sets these; the v29 variant must too,
          otherwise the status bar falls back to the M3 default purple). -->
     <item name="android:statusBarColor">@color/navy_900</item>

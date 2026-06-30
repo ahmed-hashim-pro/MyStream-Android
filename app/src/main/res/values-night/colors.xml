@@ -157,6 +157,8 @@
     <color name="text_attribution">#555555</color>
     <color name="text_hint">#B3B3B3</color>
     <color name="gold_accent">#D4A44C</color>
+    <color name="gold_accent_2">#CAA24F</color>
+    <color name="row_divider_hairline">#1AFFFFFF</color>
     <color name="gold_accent_semi">#66D4A44C</color>
     <color name="gold_accent_faint">#26D4A44C</color>
     <!-- Search match highlight: mirror the day def to the night gold so the

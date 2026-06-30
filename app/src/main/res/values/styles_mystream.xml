@@ -17,8 +17,8 @@
     </style>
 
     <style name="Widget.MyStream.ListRow.Badge">
-        <item name="android:layout_width">30dp</item>
-        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_width">38dp</item>
+        <item name="android:layout_height">38dp</item>
         <!-- reset the 16dp horizontal padding inherited (via dot-notation) from
              the parent ListRow style; paddingStart/End take precedence over
              android:padding, and 32dp > the 30dp badge width collapses the
@@ -30,7 +30,7 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/gold_accent</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:background">@drawable/bg_listrow_badge</item>
     </style>
 
@@ -40,15 +40,15 @@
          surah row to ~150dp. These are plain wrap_content text lines. -->
     <style name="Widget.MyStream.ListRow.Title" parent="">
         <item name="android:textColor">?attr/colorOnSurface</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">17sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
     </style>
 
     <style name="Widget.MyStream.ListRow.Meta" parent="">
-        <item name="android:textColor">@color/sura_details_color</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
     </style>

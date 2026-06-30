@@ -31,8 +31,8 @@ class SlidingTabStrip extends LeftToRightLinearLayout {
   private static final int SELECTED_INDICATOR_THICKNESS_DIPS = 3;
   private static final int DEFAULT_SELECTED_INDICATOR_COLOR = 0xFF33B5E5;
   // The selection underline is a short, centered pill (matches the mushaf hero
-  // mockup: inset ~24% on each side, fully rounded ends) rather than a full-width bar.
-  private static final float INDICATOR_INSET_FRACTION = 0.24f;
+  // mockup .tab.on:after: left:18%/right:18% inset, fully rounded ends) rather than a full-width bar.
+  private static final float INDICATOR_INSET_FRACTION = 0.18f;
 
   private final int mBottomBorderThickness;
   private final Paint mBottomBorderPaint;

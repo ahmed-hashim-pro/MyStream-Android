@@ -441,6 +441,10 @@ class QuranActivity : AppCompatActivity(),
     inflater.inflate(R.menu.home_menu, menu)
     // search now lives in the hero field (setupHeaderSearch), not in the toolbar
 
+    // The "last page" action is rendered as the 📖 emoji (Android/Noto UX) via an
+    // action view, so wire its click to the same handler as the menu item.
+    menu.findItem(R.id.last_page)?.actionView?.setOnClickListener { jumpToLastPage() }
+
     // Add additional injected screens (if any)
     extraScreens
       .sortedBy { it.order }
@@ -528,7 +532,18 @@ class QuranActivity : AppCompatActivity(),
               } else {
                 val name = quranDisplayData.getSuraNameFromPage(this, recentPage, true)
                 val sub = quranDisplayData.getPageSubtitle(this, recentPage)
-                subtitle.text = if (name.isNotEmpty()) "$name · $sub" else sub
+                subtitle.text = if (name.isNotEmpty()) {
+                  // Render the surah name in Amiri (serif), the rest in Cairo, like the mockup.
+                  val full = "$name · $sub"
+                  val span = android.text.SpannableString(full)
+                  androidx.core.content.res.ResourcesCompat.getFont(this, R.font.amiri)?.let { amiri ->
+                    span.setSpan(
+                        com.medoapps.www.onlinequran.view.CustomTypefaceSpan(amiri),
+                        0, name.length, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                  }
+                  span
+                } else sub
                 card.setOnClickListener { jumpTo(recentPage) }
                 // Keep it hidden while inline search results are showing.
                 continueCardWasVisible = true
