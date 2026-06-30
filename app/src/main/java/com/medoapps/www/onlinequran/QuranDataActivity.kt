@@ -7,6 +7,8 @@ import android.app.Dialog
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -239,6 +241,8 @@ class QuranDataActivity : Activity(), SimpleDownloadListener, OnRequestPermissio
     val migrationDialog = AlertDialog.Builder(this, R.style.ThemeOverlay_MyStream_Dialog)
         .setView(R.layout.migration_upgrade)
         .create()
+    // Transparent window so only the navy card (mockup 17 · E) shows.
+    migrationDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     updateDialog = migrationDialog
     migrationDialog.show()
 

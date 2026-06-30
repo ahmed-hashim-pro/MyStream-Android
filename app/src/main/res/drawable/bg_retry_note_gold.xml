@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Non-fatal auto-retry note inside the navy download card (STATE_ERROR_WILL_RETRY). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+  <solid android:color="#24D4A44C" />
+  <corners android:radius="9dp" />
+</shape>

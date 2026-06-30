@@ -68,6 +68,8 @@
     <color name="text_on_navy">#FFFFFFFF</color>
     <!-- Muted always-white hint for fixed-navy surfaces. Fixed (no night override), like text_on_navy. -->
     <color name="hint_on_navy">#99FFFFFF</color>
+    <!-- Faint white progress-track on fixed-navy surfaces (download card). Fixed, no night override. -->
+    <color name="track_on_navy">#24FFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="black_overlay">#66000000</color>
 

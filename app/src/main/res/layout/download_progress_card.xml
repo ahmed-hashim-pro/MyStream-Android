@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- First-run navy+gold download / processing card (mockup 17 · C/D).
+     Replaces the deprecated ProgressDialog. Fixed-navy gradient, so it reads
+     the same in light & dark. Driven by DefaultDownloadReceiver. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_navy_progress_card"
+    android:layoutDirection="locale"
+    android:minWidth="280dp"
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingTop="18dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="14dp">
+
+  <TextView
+      android:id="@+id/dpc_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textColor="@color/text_on_navy"
+      android:textSize="17sp"
+      android:textStyle="bold"
+      tools:text="Downloading…" />
+
+  <TextView
+      android:id="@+id/dpc_subtitle"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="5dp"
+      android:lineSpacingMultiplier="1.15"
+      android:textColor="@color/hint_on_navy"
+      android:textSize="12sp" />
+
+  <ProgressBar
+      android:id="@+id/dpc_progress"
+      style="?android:attr/progressBarStyleHorizontal"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="14dp"
+      android:max="100"
+      android:progressBackgroundTint="@color/track_on_navy"
+      android:progressTint="@color/gold_light" />
+
+  <TextView
+      android:id="@+id/dpc_status"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dp"
+      android:textColor="@color/text_on_navy"
+      android:textSize="13sp"
+      android:textStyle="bold" />
+
+  <!-- Non-fatal auto-retry note (STATE_ERROR_WILL_RETRY) — download keeps going. -->
+  <LinearLayout
+      android:id="@+id/dpc_retry_note"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="12dp"
+      android:background="@drawable/bg_retry_note_gold"
+      android:gravity="center_vertical"
+      android:orientation="horizontal"
+      android:paddingStart="10dp"
+      android:paddingTop="8dp"
+      android:paddingEnd="10dp"
+      android:paddingBottom="8dp"
+      android:visibility="gone">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="7dp"
+        android:text="⟳"
+        android:textColor="@color/gold_light"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/dpc_retry_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingMultiplier="1.15"
+        android:textColor="@color/gold_light"
+        android:textSize="11sp" />
+  </LinearLayout>
+
+  <!-- Plain TextView (not MaterialButton) so it renders reliably inside the
+       transparent-window AlertDialog regardless of the dialog theme overlay. -->
+  <TextView
+      android:id="@+id/dpc_cancel"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"
+      android:layout_marginTop="8dp"
+      android:background="?android:attr/selectableItemBackgroundBorderless"
+      android:clickable="true"
+      android:minHeight="44dp"
+      android:gravity="center"
+      android:paddingStart="14dp"
+      android:paddingTop="8dp"
+      android:paddingEnd="14dp"
+      android:paddingBottom="8dp"
+      android:text="@android:string/cancel"
+      android:textColor="@color/gold_light"
+      android:textSize="14sp"
+      android:textStyle="bold"
+      android:visibility="gone" />
+
+</LinearLayout>

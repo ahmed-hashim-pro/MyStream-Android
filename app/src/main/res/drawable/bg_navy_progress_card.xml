@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- First-run download / processing / migration card. Fixed navy gradient
+     (no night override) so it reads the same in light & dark, like the navy hero. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+  <gradient
+      android:angle="135"
+      android:startColor="@color/navy_700"
+      android:endColor="@color/navy_900" />
+  <corners android:radius="22dp" />
+</shape>

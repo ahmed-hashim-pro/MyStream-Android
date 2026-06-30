@@ -1,23 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- First-run migration spinner (mockup 17 · E) — Android 11+ file move.
+     Compact centered navy card with an indeterminate gold spinner.
+     Shown via AlertDialog with a transparent window in QuranDataActivity. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="150dp"
-    android:orientation="horizontal"
-    android:layout_margin="16dp"
-    >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_navy_progress_card"
+    android:gravity="center"
+    android:minWidth="220dp"
+    android:orientation="vertical"
+    android:paddingStart="24dp"
+    android:paddingTop="26dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="26dp">
 
   <ProgressBar
       android:id="@+id/progress_bar"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:padding="16dp"
-      android:layout_gravity="center_vertical"
-      android:indeterminateTint="@color/gold_accent" />
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:indeterminateTint="@color/gold_light" />
 
   <TextView
-      android:layout_width="match_parent"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="center_vertical"
-      android:textColor="@color/text_primary"
-      android:text="@string/please_wait" />
+      android:layout_marginTop="14dp"
+      android:text="@string/please_wait"
+      android:textColor="@color/text_on_navy"
+      android:textSize="14sp"
+      android:textStyle="bold" />
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="4dp"
+      android:gravity="center"
+      android:text="@string/migration_message"
+      android:textColor="@color/hint_on_navy"
+      android:textSize="11sp" />
 </LinearLayout>

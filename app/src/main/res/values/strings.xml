@@ -496,6 +496,8 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="downloading_title">Downloading&#8230;</string>
     <string name="downloading_message">Please wait for the files to download (resume supported).</string>
     <string name="extracting_title">Processing&#8230;</string>
+    <string name="extracting_message">Unpacking the downloaded pages — almost ready.</string>
+    <string name="migration_message">Moving files to app storage</string>
     <string name="menu_about">About Us</string>
     <string name="menu_other_apps">Other apps</string>
     <string name="menu_settings">Settings</string>

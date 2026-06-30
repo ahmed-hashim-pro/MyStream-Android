@@ -294,6 +294,8 @@
     <string name="downloading_title">جاري التحميل....</string>
     <string name="downloading_message">يرجى الإنتظار حتى نهاية التحميل</string>
     <string name="extracting_title">تجهيز…</string>
+    <string name="extracting_message">جارٍ فك الصفحات المحمّلة — على وشك الانتهاء.</string>
+    <string name="migration_message">نقل الملفات إلى تخزين التطبيق</string>
     <string name="menu_about">عنا</string>
     <string name="menu_other_apps">تطبيقات أخرى‎</string>
     <string name="menu_settings">الإعدادات</string>

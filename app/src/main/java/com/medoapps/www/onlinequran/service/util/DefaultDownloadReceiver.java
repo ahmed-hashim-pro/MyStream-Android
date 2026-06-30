@@ -1,12 +1,19 @@
 package com.medoapps.www.onlinequran.service.util;
 
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.medoapps.www.onlinequran.R;
 import com.medoapps.www.onlinequran.service.QuranDownloadService;
@@ -18,7 +25,15 @@ public class DefaultDownloadReceiver extends BroadcastReceiver {
 
   private final int mDownloadType;
   private SimpleDownloadListener mListener;
-  private ProgressDialog mProgressDialog;
+  // Navy+gold first-run progress card (mockup 17 · C/D) replacing the old ProgressDialog.
+  private AlertDialog mProgressDialog;
+  private TextView mTitleView;
+  private TextView mSubtitleView;
+  private ProgressBar mProgressBar;
+  private TextView mStatusView;
+  private View mRetryNote;
+  private TextView mRetryText;
+  private TextView mCancelButton;
   private final Context mContext;
   private boolean mDidReceiveBroadcast;
   private boolean mCanCancelDownload;
@@ -155,41 +170,53 @@ public class DefaultDownloadReceiver extends BroadcastReceiver {
 
   private void makeAndShowProgressDialog() {
     makeProgressDialog();
-    if (mProgressDialog != null) {
+    if (mProgressDialog != null && !mProgressDialog.isShowing()) {
       mProgressDialog.show();
     }
   }
 
   private void makeProgressDialog() {
-    if (mProgressDialog == null) {
-      // Gold-accent the (deprecated) progress dialog so the download/processing
-      // progress bar + cancel button match the navy+gold language.
-      mProgressDialog = new ProgressDialog(mContext, R.style.ThemeOverlay_MyStream_Dialog);
-      mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-      mProgressDialog.setCancelable(mCanCancelDownload);
-      mProgressDialog.setCanceledOnTouchOutside(false);
-      if (mCanCancelDownload) {
-        mProgressDialog.setOnCancelListener(
-            new DialogInterface.OnCancelListener() {
-              @Override
-              public void onCancel(DialogInterface dialog) {
-                cancelDownload();
-              }
-            });
-        mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-            mContext.getString(R.string.cancel),
-            new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                cancelDownload();
-              }
-            });
-      }
-
-      mProgressDialog.setTitle(R.string.downloading_title);
-      mProgressDialog.setMessage(mContext.getString(
-          R.string.downloading_message));
+    if (mProgressDialog != null) {
+      return;
     }
+
+    // Navy+gold first-run progress card (mockup 17 · C/D) — a custom view in a
+    // transparent-window AlertDialog, replacing the deprecated ProgressDialog.
+    View card = LayoutInflater.from(mContext)
+        .inflate(R.layout.download_progress_card, null, false);
+    mTitleView = card.findViewById(R.id.dpc_title);
+    mSubtitleView = card.findViewById(R.id.dpc_subtitle);
+    mProgressBar = card.findViewById(R.id.dpc_progress);
+    mStatusView = card.findViewById(R.id.dpc_status);
+    mRetryNote = card.findViewById(R.id.dpc_retry_note);
+    mRetryText = card.findViewById(R.id.dpc_retry_text);
+    mCancelButton = card.findViewById(R.id.dpc_cancel);
+
+    mTitleView.setText(R.string.downloading_title);
+    mSubtitleView.setText(R.string.downloading_message);
+
+    if (mCanCancelDownload) {
+      mCancelButton.setVisibility(View.VISIBLE);
+      mCancelButton.setOnClickListener(v -> {
+        cancelDownload();
+        dismissDialog();
+      });
+    }
+
+    AlertDialog dialog = new AlertDialog.Builder(mContext, R.style.ThemeOverlay_MyStream_Dialog)
+        .setView(card)
+        .setCancelable(mCanCancelDownload)
+        .create();
+    dialog.setCanceledOnTouchOutside(false);
+    if (mCanCancelDownload) {
+      dialog.setOnCancelListener(d -> cancelDownload());
+    }
+    // Transparent window so only the navy card's rounded gradient is visible.
+    Window window = dialog.getWindow();
+    if (window != null) {
+      window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    }
+    mProgressDialog = dialog;
   }
 
   private void cancelDownload() {
@@ -200,87 +227,85 @@ public class DefaultDownloadReceiver extends BroadcastReceiver {
 
   private void updateDownloadProgress(int progress,
       long downloadedSize, long totalSize, int currentSura, int currentAyah) {
+    makeAndShowProgressDialog();
     if (mProgressDialog == null) {
-      makeAndShowProgressDialog();
+      return;
     }
-    if (mProgressDialog != null) {
-      if (!mProgressDialog.isShowing()) {
-        mProgressDialog.show();
-      }
-      if (progress == -1) {
-        int titleId = R.string.downloading_title;
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage(mContext.getString(titleId));
-        return;
-      }
 
-      mProgressDialog.setIndeterminate(false);
-      mProgressDialog.setMax(100);
-      mProgressDialog.setProgress(progress);
-
-      DecimalFormat df = new DecimalFormat("###.00");
-      int mb = 1024 * 1024;
-      String downloaded = mContext.getString(R.string.prefs_megabytes_str,
-          df.format((1.0 * downloadedSize / mb)));
-      String total = mContext.getString(R.string.prefs_megabytes_str,
-          df.format((1.0 * totalSize / mb)));
-
-      String message;
-      if (currentSura < 1) {
-        message = String.format(
-            mContext.getString(R.string.download_progress),
-            downloaded, total);
-      } else if (currentAyah <= 0) {
-        message = String.format(
-            mContext.getString(R.string.download_sura_progress),
-            downloaded, total, currentSura);
-      } else {
-        message = String.format(mContext.getString(R.string.download_sura_ayah_progress),
-            currentSura, currentAyah);
-      }
-      mProgressDialog.setMessage(message);
+    mTitleView.setText(R.string.downloading_title);
+    mSubtitleView.setText(R.string.downloading_message);
+    mRetryNote.setVisibility(View.GONE);
+    if (mCanCancelDownload) {
+      mCancelButton.setVisibility(View.VISIBLE);
     }
+
+    if (progress == -1) {
+      mProgressBar.setIndeterminate(true);
+      mStatusView.setText("");
+      return;
+    }
+
+    mProgressBar.setIndeterminate(false);
+    mProgressBar.setMax(100);
+    mProgressBar.setProgress(progress);
+
+    DecimalFormat df = new DecimalFormat("###.00");
+    int mb = 1024 * 1024;
+    String downloaded = mContext.getString(R.string.prefs_megabytes_str,
+        df.format((1.0 * downloadedSize / mb)));
+    String total = mContext.getString(R.string.prefs_megabytes_str,
+        df.format((1.0 * totalSize / mb)));
+
+    String message;
+    if (currentSura < 1) {
+      message = String.format(
+          mContext.getString(R.string.download_progress),
+          downloaded, total);
+    } else if (currentAyah <= 0) {
+      message = String.format(
+          mContext.getString(R.string.download_sura_progress),
+          downloaded, total, currentSura);
+    } else {
+      message = String.format(mContext.getString(R.string.download_sura_ayah_progress),
+          currentSura, currentAyah);
+    }
+    mStatusView.setText(message);
   }
 
   private void updateProcessingProgress(int progress,
       int processedFiles, int totalFiles) {
+    makeAndShowProgressDialog();
     if (mProgressDialog == null) {
-      makeAndShowProgressDialog();
+      return;
     }
-    if (mProgressDialog != null) {
-      if (!mProgressDialog.isShowing()) {
-        mProgressDialog.show();
-      }
-      if (progress == -1) {
-        int titleId = R.string.extracting_title;
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setMessage(mContext.getString(titleId));
-        return;
-      }
 
-      mProgressDialog.setIndeterminate(false);
-      mProgressDialog.setMax(100);
-      mProgressDialog.setProgress(progress);
+    mTitleView.setText(R.string.extracting_title);
+    mSubtitleView.setText(R.string.extracting_message);
+    mRetryNote.setVisibility(View.GONE);
+    // No Cancel during extraction (mockup 17 · D) — it must finish before the reader opens.
+    mCancelButton.setVisibility(View.GONE);
 
-      mProgressDialog.setMessage(mContext.getString(R.string.extracting_title));
-
-      String message = String.format(
-          mContext.getString(R.string.process_progress),
-          processedFiles, totalFiles);
-      mProgressDialog.setMessage(message);
+    if (progress == -1) {
+      mProgressBar.setIndeterminate(true);
+      mStatusView.setText("");
+      return;
     }
+
+    mProgressBar.setIndeterminate(false);
+    mProgressBar.setMax(100);
+    mProgressBar.setProgress(progress);
+    mStatusView.setText(String.format(
+        mContext.getString(R.string.process_progress),
+        processedFiles, totalFiles));
   }
 
   private void handleNonFatalError(int msgId) {
+    makeAndShowProgressDialog();
     if (mProgressDialog == null) {
-      makeAndShowProgressDialog();
+      return;
     }
-    if (mProgressDialog != null) {
-      if (!mProgressDialog.isShowing()) {
-        mProgressDialog.show();
-      }
-      mProgressDialog.setMessage(mContext.getString(msgId));
-    }
+    mRetryText.setText(msgId);
+    mRetryNote.setVisibility(View.VISIBLE);
   }
 
   public void setListener(SimpleDownloadListener listener) {
