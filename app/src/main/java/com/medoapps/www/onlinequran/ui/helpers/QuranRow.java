@@ -22,6 +22,8 @@ public class QuranRow {
   public Integer juzType;
   public String juzOverlayText;
   public long dateAddedInMillis;
+  // Bookmark tag-group header: count of bookmarks in the group (0 = hidden).
+  public int headerCount;
 
   // For Bookmarks
   public long tagId;
@@ -43,6 +45,12 @@ public class QuranRow {
     private long dateAddedInMillis;
     private Integer imageFilterColor;
     private Bookmark bookmark;
+    private int headerCount;
+
+    public Builder withHeaderCount(int count) {
+      this.headerCount = count;
+      return this;
+    }
 
     public Builder withType(int type) {
       rowType = type;
@@ -113,16 +121,17 @@ public class QuranRow {
     public QuranRow build() {
       return new QuranRow(text, metadata, rowType, sura,
           ayah, page, imageResource, imageFilterColor, juzType,
-          juzOverlayText, bookmarkId, tagId, bookmark, dateAddedInMillis);
+          juzOverlayText, bookmarkId, tagId, bookmark, dateAddedInMillis, headerCount);
     }
   }
 
   private QuranRow(String text, String metadata, int rowType,
       int sura, int ayah, int page, Integer imageResource, Integer filterColor,
       Integer juzType, String juzOverlayText, long bookmarkId, long tagId, Bookmark bookmark,
-                   long dateAddedInMillis) {
+                   long dateAddedInMillis, int headerCount) {
     this.text = text;
     this.rowType = rowType;
+    this.headerCount = headerCount;
     this.sura = sura;
     this.ayah = ayah;
     this.page = page;

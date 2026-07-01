@@ -423,7 +423,7 @@
     <string name="prefs_dual_page_mode_enabled">عرض صفحتين متجاورتين في الوضع الأفقي</string>
     <string name="prefs_dual_page_mode_disabled">عرض صفحة واحدة في الوضع الأفقي</string>
     <string name="prefs_import_title">استيراد</string>
-    <string name="prefs_import_summary">استيراد الإشارات المرجعية والعلامات</string>
+    <string name="prefs_import_summary">استيراد المرجعيات والتصنيفات</string>
     <string name="prefs_send_logs_title">إرسال السجلات</string>
     <string name="prefs_send_logs_summary">إرسال سجلات التصحيح للمطور</string>
     <string name="prefs_sura_translated_name_summary">إظهار أسماء السور مترجمة</string>
@@ -540,12 +540,12 @@
     <!-- bookmarks & tags contextual action bar -->
     <string name="tag_bookmark">تصنيف المرجعية</string>
     <string name="delete_tag">حذف التصنيف</string>
-    <string name="edit_tag">تعديل الصنف</string>
-    <string name="new_tag">صنف جديد</string>
+    <string name="edit_tag">تعديل التصنيف</string>
+    <string name="new_tag">تصنيف جديد</string>
     <string name="not_tagged">غير مصنف</string>
 
     <!-- tag dialog -->
-    <string name="tag_dlg_title">صنف</string>
+    <string name="tag_dlg_title">تصنيف</string>
     <string name="tag_name">اسم الصنف</string>
 
     <!-- bookmark & tag list -->

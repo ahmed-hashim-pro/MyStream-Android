@@ -510,7 +510,7 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="menu_sort">Sort</string>
     <string name="menu_sort_date">Date Added</string>
     <string name="menu_sort_location">Location in Quran</string>
-    <string name="menu_sort_group_by_tags">Group by Tags</string>
+    <string name="menu_sort_group_by_tags">Sort by Categories</string>
     <string name="menu_show_recents" translatable="false">@string/recent_pages</string>
     <string name="menu_show_date">Show Date</string>
     <string name="menu_translation">Show Translation</string>
@@ -712,11 +712,11 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="prefs_category_advanced">Advanced Options</string>
     <string name="prefs_category_advanced_summary">Import/export bookmarks, set Quran data directory, etc.</string>
     <string name="prefs_import_title">Import</string>
-    <string name="prefs_import_summary">Import bookmarks and tags</string>
+    <string name="prefs_import_summary">Import bookmarks and categories</string>
     <string name="prefs_export_title">Export</string>
-    <string name="prefs_export_summary">Export a copy of bookmarks and tags</string>
+    <string name="prefs_export_summary">Export a copy of bookmarks and categories</string>
     <string name="prefs_export_csv_title">Export CSV</string>
-    <string name="prefs_export_csv_summary">Export a copy of bookmarks and tags in CSV</string>
+    <string name="prefs_export_csv_summary">Export a copy of bookmarks and categories in CSV</string>
     <string name="prefs_page_type_title">Page Type (experimental)</string>
     <string name="prefs_page_type_summary">Select the type of reading pages</string>
     <string name="prefs_sura_translated_name_summary">Show the translation of surah name</string>
@@ -728,7 +728,7 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="import_data_permissions_error">Unable to read backup file due to permissions error.</string>
     <string name="import_data_error">Invalid backup file (or unable to read backup file).</string>
     <string name="import_data">Import Data</string>
-    <string name="import_data_and_override">If you import this file, it will replace all your bookmarks with %1$d bookmark(s) and %2$d tag(s). Import?</string>
+    <string name="import_data_and_override">If you import this file, it will replace all your bookmarks with %1$d bookmark(s) and %2$d category(ies). Import?</string>
     <string name="import_successful">Import Successful</string>
     <string name="export_data_error">Error exporting data</string>
     <string name="exported_data">Data exported to %1$s</string>
@@ -856,11 +856,11 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="ayah_copied_popup">Ayah Copied</string>
 
     <!-- bookmarks & tags contextual action bar -->
-    <string name="tag_bookmark">Tag Bookmark</string>
-    <string name="delete_tag">Delete Tag</string>
-    <string name="edit_tag">Edit Tag</string>
-    <string name="new_tag">New Tag</string>
-    <string name="not_tagged">Not Tagged</string>
+    <string name="tag_bookmark">Categorize Bookmark</string>
+    <string name="delete_tag">Delete Category</string>
+    <string name="edit_tag">Edit Category</string>
+    <string name="new_tag">New Category</string>
+    <string name="not_tagged">Uncategorized</string>
     <plurals name="bookmark_tag_deleted">
         <item quantity="one">Deleted one item</item>
         <item quantity="other">Deleted %d items</item>
@@ -874,10 +874,10 @@ Press the button below to set the time for this , then you can start the app </s
     </plurals>
 
     <!-- tag dialog -->
-    <string name="tag_dlg_title">Tag</string>
+    <string name="tag_dlg_title">Category</string>
     <string name="tag_name">Name</string>
-    <string name="tag_blank_tag_error">Tag names cannot be blank!</string>
-    <string name="tag_duplicate_tag_error">Tag name already exists!</string>
+    <string name="tag_blank_tag_error">Category names cannot be blank!</string>
+    <string name="tag_duplicate_tag_error">Category name already exists!</string>
 
     <!-- widgets -->
     <string name="bookmarks_list_empty">No Bookmarks</string>

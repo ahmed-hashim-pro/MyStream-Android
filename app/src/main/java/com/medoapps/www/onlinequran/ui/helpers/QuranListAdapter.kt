@@ -236,19 +236,30 @@ class QuranListAdapter @JvmOverloads constructor(
     // (bindRow re-sets the title to Amiri afterwards for surah rows.)
     cairoExtraBold?.let { holder.title.typeface = it }
     cairoBold?.let { holder.pageNumber.typeface = it }
+    // Bookmark tab bands are full-width squares (mockup .juzband override), unlike the
+    // Surahs/Juz' inset pill. Guard to real headers — bindRow() also calls bindHeader().
+    if (isEditable && item.isHeader) {
+      holder.view.setBackgroundResource(R.drawable.bookmark_header_background)
+    }
     holder.title.text = item.text
-    if (item.page == 0) {
-      holder.pageNumber.visibility = View.GONE
-    } else {
-      holder.pageNumber.visibility = View.VISIBLE
-      val pageNum = QuranUtils.getLocalizedNumber(context, item.page)
-      // "صفحة N" only on the Juz' separator band; per-row page numbers stay bare.
-      holder.pageNumber.text =
-        if (labelHeaderPage && item.isHeader) {
-          context.getString(R.string.juz_band_page) + " " + pageNum
-        } else {
-          pageNum
-        }
+    when {
+      // Tag-group band shows the count of bookmarks in the group on the trailing end.
+      item.isBookmarkHeader && item.headerCount > 0 -> {
+        holder.pageNumber.visibility = View.VISIBLE
+        holder.pageNumber.text = QuranUtils.getLocalizedNumber(context, item.headerCount)
+      }
+      item.page == 0 -> holder.pageNumber.visibility = View.GONE
+      else -> {
+        holder.pageNumber.visibility = View.VISIBLE
+        val pageNum = QuranUtils.getLocalizedNumber(context, item.page)
+        // "صفحة N" only on the Juz' separator band; per-row page numbers stay bare.
+        holder.pageNumber.text =
+          if (labelHeaderPage && item.isHeader) {
+            context.getString(R.string.juz_band_page) + " " + pageNum
+          } else {
+            pageNum
+          }
+      }
     }
     holder.setChecked(isItemChecked(pos))
     holder.setEnabled(isEnabled(pos))

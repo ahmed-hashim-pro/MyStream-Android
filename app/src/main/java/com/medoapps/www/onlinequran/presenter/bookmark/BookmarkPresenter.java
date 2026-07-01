@@ -339,9 +339,10 @@ public class BookmarkPresenter implements Presenter<BookmarksFragment> {
     Map<Long, List<Bookmark>> tagsMapping = generateTagsMapping(tags, bookmarks);
     for (int i = 0, tagsSize = tags.size(); i < tagsSize; i++) {
       Tag tag = tags.get(i);
-      rows.add(quranRowFactory.fromTag(tag));
       List<Bookmark> tagBookmarks = tagsMapping.get(tag.getId());
-      for (int j = 0, tagBookmarksSize = tagBookmarks == null ? 0 : tagBookmarks.size(); j < tagBookmarksSize; j++) {
+      int tagBookmarksSize = tagBookmarks == null ? 0 : tagBookmarks.size();
+      rows.add(quranRowFactory.fromTag(tag, tagBookmarksSize));
+      for (int j = 0; j < tagBookmarksSize; j++) {
         rows.add(quranRowFactory.fromBookmark(appContext, tagBookmarks.get(j), tag.getId()));
       }
     }
@@ -349,7 +350,7 @@ public class BookmarkPresenter implements Presenter<BookmarksFragment> {
     // add untagged bookmarks
     List<Bookmark> untagged = tagsMapping.get(BOOKMARKS_WITHOUT_TAGS_ID);
     if (untagged != null && untagged.size() > 0) {
-      rows.add(QuranRowFactory.fromNotTaggedHeader(appContext));
+      rows.add(QuranRowFactory.fromNotTaggedHeader(appContext, untagged.size()));
       for (int i = 0, untaggedSize = untagged.size(); i < untaggedSize; i++) {
         rows.add(quranRowFactory.fromBookmark(appContext, untagged.get(i)));
       }

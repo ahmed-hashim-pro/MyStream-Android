@@ -96,18 +96,20 @@ public class QuranRowFactory {
     return builder.build();
   }
 
-  public QuranRow fromTag(Tag tag) {
+  public QuranRow fromTag(Tag tag, int count) {
     return new QuranRow.Builder()
         .withType(QuranRow.BOOKMARK_HEADER)
         .withText(tag.getName())
         .withTagId(tag.getId())
+        .withHeaderCount(count)
         .build();
   }
 
-  public static QuranRow fromNotTaggedHeader(Context context) {
+  public static QuranRow fromNotTaggedHeader(Context context, int count) {
     return new QuranRow.Builder()
         .withType(QuranRow.BOOKMARK_HEADER)
         .withText(context.getString(R.string.not_tagged))
+        .withHeaderCount(count)
         .build();
   }
 }

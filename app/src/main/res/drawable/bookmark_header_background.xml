@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bookmark-tab section / tag-group band: full-width square (mockup .juzband override
+     margin:8px -12px 2px; border-radius:0) — distinct from the Surahs/Juz' inset pill. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:state_activated="true">
+    <shape android:shape="rectangle">
+      <solid android:color="@color/gold_accent_faint" />
+    </shape>
+  </item>
+  <item android:state_pressed="true">
+    <shape android:shape="rectangle">
+      <solid android:color="@color/gold_accent_faint" />
+    </shape>
+  </item>
+  <item>
+    <shape android:shape="rectangle">
+      <solid android:color="@color/juz_header_band" />
+    </shape>
+  </item>
+</selector>
