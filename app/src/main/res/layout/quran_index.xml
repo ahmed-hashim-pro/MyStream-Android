@@ -73,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layoutDirection="locale"
-                android:theme="@style/ThemeOverlay.MyStream.AudioActionBar"
+                android:theme="@style/ThemeOverlay.MyStream.GoldActionBar"
                 app:contentInsetStart="0dp"
                 app:contentInsetStartWithNavigation="0dp"
                 app:layout_collapseMode="pin"

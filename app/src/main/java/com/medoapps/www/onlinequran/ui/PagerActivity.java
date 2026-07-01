@@ -202,6 +202,7 @@ public class PagerActivity extends AppCompatActivity implements
   private AudioRequest lastAudioRequest;
   private boolean isDualPages = false;
   private View toolBarArea;
+  private Toolbar toolbar;
   private View readingModeBar;
   private View sepiaOverlay;
   private TextView readingModeDay;
@@ -379,7 +380,7 @@ public class PagerActivity extends AppCompatActivity implements
     final View statusBarBackground = findViewById(R.id.status_bg);
     statusBarBackground.getLayoutParams().height = getStatusBarHeight();
 
-    final Toolbar toolbar = findViewById(R.id.toolbar);
+    toolbar = findViewById(R.id.toolbar);
     if (quranSettings.isArabicNames() || QuranUtils.isRtl()) {
       // remove when we remove LTR from quran_page_activity's root
       ViewCompat.setLayoutDirection(toolbar, ViewCompat.LAYOUT_DIRECTION_RTL);
@@ -1327,6 +1328,21 @@ public class PagerActivity extends AppCompatActivity implements
       actionBar.setTitle(sura);
       String desc = quranDisplayData.getPageSubtitle(this, page);
       actionBar.setSubtitle(desc);
+      // Amiri's tall diacritics + font padding clipped the subtitle inside the
+      // toolbar; drop the extra padding so surah name + "Page N · Juz M" both show.
+      stripToolbarTitlePadding();
+    }
+  }
+
+  private void stripToolbarTitlePadding() {
+    if (toolbar == null) {
+      return;
+    }
+    for (int i = 0; i < toolbar.getChildCount(); i++) {
+      View child = toolbar.getChildAt(i);
+      if (child instanceof TextView) {
+        ((TextView) child).setIncludeFontPadding(false);
+      }
     }
   }
 

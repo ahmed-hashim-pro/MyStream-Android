@@ -30,7 +30,7 @@
     <item name="materialAlertDialogTheme">@style/ThemeOverlay.MyStream.MaterialDialog</item>
     <item name="actionModeBackground">@color/navy_700</item>
     <item name="actionModeStyle">@style/Widget.MyStream.AudioActionMode</item>
-    <item name="actionBarTheme">@style/ThemeOverlay.MyStream.AudioActionBar</item>
+    <item name="actionBarTheme">@style/ThemeOverlay.MyStream.GoldActionBar</item>
   </style>
 
   <!-- About screen: gold preference-category headers (was teal colorAccent). -->

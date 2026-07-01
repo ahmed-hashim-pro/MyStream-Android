@@ -62,7 +62,7 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/navy_700</item>
         <item name="actionModeStyle">@style/Widget.MyStream.AudioActionMode</item>
-        <item name="actionBarTheme">@style/ThemeOverlay.MyStream.AudioActionBar</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.MyStream.GoldActionBar</item>
         <!-- Gold-accent the bulk-download range picker / confirm dialogs -->
         <item name="alertDialogTheme">@style/ThemeOverlay.MyStream.Dialog</item>
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.MyStream.MaterialDialog</item>
@@ -73,9 +73,25 @@
         <item name="background">@color/navy_700</item>
     </style>
 
-    <style name="ThemeOverlay.MyStream.AudioActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <!-- Close (✕) and contextual menu icons drawn in gold on the navy bar -->
+    <!-- Shared navy action-bar overlay: gold icons/controls on the navy bar.
+         Used by the index toolbar, the reader (PagerActivity) toolbar, and the
+         audio-manager contextual bar. -->
+    <style name="ThemeOverlay.MyStream.GoldActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorControlNormal">@color/gold_accent</item>
+    </style>
+
+    <!-- Reader (PagerActivity) toolbar: keep the surah name + "Page N · Juz M" subtitle
+         both visible inside actionBarSize (the default 20sp title clipped the subtitle
+         with tall Arabic diacritics). Surah name = Amiri serif, subtitle = Cairo. -->
+    <style name="TextAppearance.MyStream.ReaderTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">17sp</item>
+        <item name="android:fontFamily">@font/amiri_bold</item>
+        <item name="fontFamily">@font/amiri_bold</item>
+    </style>
+    <style name="TextAppearance.MyStream.ReaderSubtitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/cairo</item>
+        <item name="fontFamily">@font/cairo</item>
     </style>
 
     <!-- Gold-accented dialog surfaces for the Mushaf (jump / tag / download dialogs).
