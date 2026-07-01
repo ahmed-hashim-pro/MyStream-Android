@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Gold uppercase translator/tafsir header stacked above each translation (mockup .mk
+     header: 10px/800/gold/letter-spacing). Color = translation_translator_color (gold). -->
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
+    android:paddingHorizontal="16dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="2dp"
     android:textAllCaps="true"
-    android:textSize="12sp"
+    android:textSize="11sp"
+    android:textStyle="bold"
+    android:letterSpacing="0.07"
     android:textColor="@color/translation_translator_color"
     />

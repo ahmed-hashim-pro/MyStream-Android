@@ -21,6 +21,7 @@ import com.medoapps.www.onlinequran.common.QuranAyahInfo
 import com.medoapps.www.onlinequran.model.translation.ArabicDatabaseUtils
 import com.medoapps.www.onlinequran.ui.helpers.ExpandTafseerSpan
 import com.medoapps.www.onlinequran.ui.helpers.HighlightTypes
+import com.medoapps.www.onlinequran.ui.helpers.InlineAyahMarkerSpan
 import com.medoapps.www.onlinequran.ui.helpers.UthmaniSpan
 import com.medoapps.www.onlinequran.ui.util.TypefaceManager
 import com.medoapps.www.onlinequran.util.QuranSettings
@@ -69,16 +70,14 @@ internal class TranslationAdapter(
     return if (highlightedStartPosition > -1) {
       val highlightedEndPosition = highlightedStartPosition + highlightedRowCount
 
-      // find the row with the verse number
-      val versePosition = data.withIndex().firstOrNull {
+      // anchor on the Arabic row of the highlighted ayah (the number is now inline in it);
+      // fall back to the first highlighted row when there's no Arabic (e.g. arabic db absent)
+      val anchorIndex = data.withIndex().firstOrNull {
         it.index in highlightedStartPosition until highlightedEndPosition &&
-            it.value.type == TranslationViewRow.Type.VERSE_NUMBER
-      }
+            it.value.type == TranslationViewRow.Type.QURAN_TEXT
+      }?.index ?: highlightedStartPosition
 
-      // find out where to position the popup based on the center of the box
-      versePosition?.let {
-        positionForViewHolderIndex(versePosition.index)
-      }
+      positionForViewHolderIndex(anchorIndex)
     } else {
       null
     }
@@ -95,11 +94,17 @@ internal class TranslationAdapter(
 
   private fun positionForViewHolderIndex(index: Int): IntArray? {
     val viewHolder = recyclerView.findViewHolderForAdapterPosition(index) as RowViewHolder?
-    return viewHolder?.ayahNumber?.let { ayahNumberView ->
-      val x = (ayahNumberView.left + ayahNumberView.boxCenterX)
-      val y = (ayahNumberView.top + ayahNumberView.boxBottomY)
-      intArrayOf(x, y)
+      ?: return null
+    // legacy: a dedicated ayah-number box (kept for safety, no longer emitted)
+    viewHolder.ayahNumber?.let { ayahNumberView ->
+      return intArrayOf(
+        ayahNumberView.left + ayahNumberView.boxCenterX,
+        ayahNumberView.top + ayahNumberView.boxBottomY
+      )
     }
+    // inline-number rows have no box: anchor at the row's horizontal center / bottom
+    val row = viewHolder.itemView
+    return intArrayOf(row.left + row.width / 2, row.top + row.height)
   }
 
   fun setData(data: List<TranslationViewRow>) {
@@ -305,7 +310,7 @@ internal class TranslationAdapter(
           // force Amiri over the theme's Cairo so it reads like the mockup .surah-band.
           amiriTypeface?.let { holder.text.typeface = it }
         } else if (row.type == TranslationViewRow.Type.BASMALLAH || row.type == TranslationViewRow.Type.QURAN_TEXT) {
-          val str = SpannableString(
+          val arabic: CharSequence =
             if (row.type == TranslationViewRow.Type.BASMALLAH) {
               ArabicDatabaseUtils.AR_BASMALLAH
             } else {
@@ -313,10 +318,26 @@ internal class TranslationAdapter(
                 row.ayahInfo.sura, row.ayahInfo.ayah, row.ayahInfo.arabicText
               )
             }
-          )
-          str.setSpan(UthmaniSpan(context), 0, str.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+          val builder = SpannableStringBuilder(arabic)
+          builder.setSpan(UthmaniSpan(context), 0, arabic.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-          text = str
+          // Inline ayah-end marker (mockup .mk) — gold-faint pill with the gold ayah
+          // number, at the end of the Arabic line. Not on the basmala.
+          if (row.type == TranslationViewRow.Type.QURAN_TEXT) {
+            builder.append(' ')
+            val markerStart = builder.length
+            builder.append('￼')
+            builder.setSpan(
+              InlineAyahMarkerSpan(
+                QuranUtils.getLocalizedNumber(context, row.ayahInfo.ayah),
+                ContextCompat.getColor(context, R.color.gold_accent_faint),
+                ContextCompat.getColor(context, R.color.gold_accent)
+              ),
+              markerStart, builder.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+          }
+
+          text = builder
           // Basmala in gold (mockup); ayah text keeps the paper-ink color.
           holder.text.setTextColor(
             if (row.type == TranslationViewRow.Type.BASMALLAH) {

@@ -409,6 +409,7 @@ public class PagerActivity extends AppCompatActivity implements
 
     if (showingTranslation && translationNames != null) {
       updateActionBarSpinner();
+      updateTranslationSourceStrip();
     } else {
       updateActionBarTitle(numberOfPages - page);
     }
@@ -1258,6 +1259,25 @@ public class PagerActivity extends AppCompatActivity implements
     translationSourceName.setText(name);
   }
 
+  /**
+   * Single source of truth for the text-mode font/source strip. Shows it whenever we're
+   * in translation mode (including when the reader is restored/opened directly into text
+   * mode, where switchToTranslation() is never called) and hides it otherwise.
+   */
+  private void updateTranslationSourceStrip() {
+    if (translationSourceStrip == null) {
+      return;
+    }
+    if (showingTranslation) {
+      translationSourceStrip.setVisibility(View.VISIBLE);
+      translationSourceStrip.setTranslationY(isActionBarHidden
+          ? -(toolBarArea.getHeight() + translationSourceStrip.getHeight()) : 0);
+      updateTranslationSourceName();
+    } else {
+      translationSourceStrip.setVisibility(View.GONE);
+    }
+  }
+
   private void refreshQuranPages() {
     int pos = viewPager.getCurrentItem();
     int start = (pos == 0) ? pos : pos - 1;
@@ -1286,9 +1306,7 @@ public class PagerActivity extends AppCompatActivity implements
       final int position = quranInfo.getPositionFromPage(page, true);
       viewPager.setCurrentItem(position);
     }
-    if (translationSourceStrip != null) {
-      translationSourceStrip.setVisibility(View.GONE);
-    }
+    updateTranslationSourceStrip();
 
     supportInvalidateOptionsMenu();
     updateActionBarTitle(page);
@@ -1312,12 +1330,7 @@ public class PagerActivity extends AppCompatActivity implements
         final int position = quranInfo.getPositionFromPage(page, false);
         viewPager.setCurrentItem(position);
       }
-      if (translationSourceStrip != null) {
-        translationSourceStrip.setVisibility(View.VISIBLE);
-        translationSourceStrip.setTranslationY(isActionBarHidden
-            ? -(toolBarArea.getHeight() + translationSourceStrip.getHeight()) : 0);
-        updateTranslationSourceName();
-      }
+      updateTranslationSourceStrip();
       supportInvalidateOptionsMenu();
       updateActionBarSpinner();
     }
@@ -1580,6 +1593,9 @@ public class PagerActivity extends AppCompatActivity implements
                 if (showingTranslation) {
                   // Since translation items have changed, need to
                   updateActionBarSpinner();
+                  // names are only known now, so (re)show + label the source strip —
+                  // covers the reader being opened directly into text mode
+                  updateTranslationSourceStrip();
                 }
               }
 

@@ -107,7 +107,9 @@ public class TranslationView extends FrameLayout implements View.OnClickListener
 
     List<TranslationViewRow> rows = new ArrayList<>();
     int currentSura = -1;
-    boolean wantTranslationHeaders = translations.length > 1;
+    // Mockup 04b stacks a gold translator header above every translation, even for a
+    // single source (the header reads the translator/tafsir name).
+    boolean wantTranslationHeaders = translations.length >= 1;
     for (int i = 0, size = verses.size(); i < size; i++) {
       QuranAyahInfo verse = verses.get(i);
       int sura = verse.sura;
@@ -121,8 +123,9 @@ public class TranslationView extends FrameLayout implements View.OnClickListener
         rows.add(new TranslationViewRow(TranslationViewRow.Type.BASMALLAH, verse));
       }
 
-      rows.add(new TranslationViewRow(TranslationViewRow.Type.VERSE_NUMBER, verse));
-
+      // No separate VERSE_NUMBER box row: the ayah number is drawn inline at the end of
+      // the Arabic line (see TranslationAdapter QURAN_TEXT binding). The selection popup
+      // re-anchors on the QURAN_TEXT row.
       if (verse.arabicText != null) {
         rows.add(new TranslationViewRow(TranslationViewRow.Type.QURAN_TEXT, verse));
       }
