@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Selected (collapsed) view of the ayah-panel translations selector: static gold
+     "Translations" label + caret at the row end (mockup 05 — the spinner text IS the
+     label; tapping opens the multi-select checklist). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layoutDirection="locale"
+    android:paddingHorizontal="18dp"
+    android:paddingVertical="12dp">
+
+  <TextView
+      android:id="@+id/title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:maxLines="1"
+      android:ellipsize="end"
+      android:textColor="@color/gold_light"
+      android:textSize="13sp"
+      android:textStyle="bold" />
+
+  <!-- kept for the adapter's SpinnerHolder (always set GONE for this row) -->
+  <TextView
+      android:id="@+id/subtitle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:visibility="gone" />
+
+  <Space
+      android:layout_width="0dp"
+      android:layout_height="1dp"
+      android:layout_weight="1" />
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="▾"
+      android:textColor="@color/gold_light"
+      android:textSize="12sp" />
+</LinearLayout>

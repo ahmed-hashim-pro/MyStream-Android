@@ -23,6 +23,7 @@ public class TranslationsSpinnerAdapter extends ArrayAdapter<String> {
 
   private Context context;
   private final LayoutInflater layoutInflater;
+  private final int selectedViewResource;
 
   private String[] translationNames;
   private List<LocalTranslation> translations;
@@ -35,12 +36,26 @@ public class TranslationsSpinnerAdapter extends ArrayAdapter<String> {
                                     List<LocalTranslation> translations,
                                     Set<String> selectedItems,
                                     OnSelectionChangedListener listener) {
+    this(context, resource, translationNames, translations, selectedItems, listener,
+        R.layout.translation_ab_spinner_selected);
+  }
+
+  public TranslationsSpinnerAdapter(Context context,
+                                    int resource,
+                                    String[] translationNames,
+                                    List<LocalTranslation> translations,
+                                    Set<String> selectedItems,
+                                    OnSelectionChangedListener listener,
+                                    int selectedViewResource) {
     // intentionally making a new ArrayList instead of using the constructor for String[].
     // this is because clear() relies on being able to clear the List passed into the constructor,
     // and the String[] constructor makes a new (immutable) List with the items of the array.
     super(context, resource, new ArrayList<>());
     this.context = context;
     this.layoutInflater = LayoutInflater.from(this.context);
+    // collapsed-state layout: navy toolbar title style by default; the ayah panel
+    // passes its gold "Translations" row (mockup 05) instead
+    this.selectedViewResource = selectedViewResource;
     translationNames = updateTranslationNames(translationNames);
     this.translationNames = translationNames;
     this.translations = translations;
@@ -83,7 +98,7 @@ public class TranslationsSpinnerAdapter extends ArrayAdapter<String> {
     SpinnerHolder holder;
     if (convertView == null) {
       holder = new SpinnerHolder();
-      convertView = layoutInflater.inflate(R.layout.translation_ab_spinner_selected, parent, false);
+      convertView = layoutInflater.inflate(selectedViewResource, parent, false);
       holder.title = convertView.findViewById(R.id.title);
       holder.subtitle = convertView.findViewById(R.id.subtitle);
       convertView.setTag(holder);

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Empty-state glyph box on the navy panel (mockup: 70px, radius 22, gold-faint). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/gold_accent_faint" />
+    <corners android:radius="22dp" />
+</shape>

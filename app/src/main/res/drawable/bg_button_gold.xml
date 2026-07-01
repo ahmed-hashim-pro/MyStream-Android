@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Solid gold call-to-action pill (mockup .btn.gold: gradient 135deg gold to gold-2,
+     dark ink text). Used by the panel "Get Translations" button. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="315"
+        android:startColor="@color/gold_accent"
+        android:endColor="@color/gold_accent_2" />
+    <corners android:radius="21dp" />
+</shape>

@@ -128,11 +128,14 @@ class AyahTranslationFragment : AyahActionFragment(), TranslationScreen {
           layout.translation_ab_spinner_item,
           activity.translationNames,
           translations,
-          activeTranslationsFilesNames
-        ) { selectedItems: Set<String?>? ->
-          quranSettings.activeTranslations = selectedItems
-          refreshView()
-        }
+          activeTranslationsFilesNames,
+          { selectedItems: Set<String?>? ->
+            quranSettings.activeTranslations = selectedItems
+            refreshView()
+          },
+          // gold "Translations" selector row (mockup 05), not the toolbar title style
+          layout.translation_panel_spinner_selected
+        )
         translator.adapter = translationAdapter
       } else {
         adapter.updateItems(

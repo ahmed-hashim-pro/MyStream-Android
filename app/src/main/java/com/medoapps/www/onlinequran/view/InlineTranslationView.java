@@ -7,6 +7,8 @@ import android.graphics.Typeface;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.StyleRes;
+import androidx.core.content.ContextCompat;
 
 import com.medoapps.www.onlinequran.R;
 import com.medoapps.www.onlinequran.common.LocalTranslation;
@@ -120,23 +123,26 @@ public class InlineTranslationView extends ScrollView {
     ayahView.setTextColor(Color.WHITE);
     ayahView.setTextSize(fontSize);
 
-    // translation
-    boolean showHeader = translations.length > 1;
+    // translation — every source under its own gold translator header (mockup 05
+    // stacks all enabled translations, each with a bold gold-light name header)
     SpannableStringBuilder builder = new SpannableStringBuilder();
     for (int i = 0; i < translations.length; i++) {
       final TranslationMetadata translationMetadata = ayah.texts.get(i);
       final CharSequence translationText = translationMetadata.getText();
       if (!TextUtils.isEmpty(translationText)) {
-        if (showHeader) {
-          if (i > 0) {
-            builder.append("\n\n");
-          }
-          int start = builder.length();
-          builder.append(translations[i].getTranslatorName());
-          builder.setSpan(new StyleSpan(Typeface.BOLD),
-              start, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if (i > 0) {
           builder.append("\n\n");
         }
+        int start = builder.length();
+        builder.append(translations[i].getTranslatorName());
+        builder.setSpan(new StyleSpan(Typeface.BOLD),
+            start, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder.setSpan(
+            new ForegroundColorSpan(ContextCompat.getColor(context, R.color.gold_light)),
+            start, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder.setSpan(new RelativeSizeSpan(0.82f),
+            start, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        builder.append("\n");
 
         // irrespective of whether it's a link or not, show the text
         builder.append(translationText);

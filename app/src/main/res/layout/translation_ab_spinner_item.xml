@@ -7,6 +7,7 @@
       android:id="@+id/checkbox"
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
+      android:buttonTint="@color/gold_accent"
       android:text="@null" />
 
   <TextView

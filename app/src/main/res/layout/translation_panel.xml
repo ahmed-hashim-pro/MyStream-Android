@@ -11,16 +11,13 @@
       android:layout_height="match_parent"
       android:orientation="vertical"
       >
+    <!-- static multi-select "Translations" selector (mockup 05: gold label + caret,
+         hairline underneath; the row itself is the only label) -->
     <com.medoapps.www.onlinequran.view.QuranSpinner
         android:id="@+id/translator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/translation_top_bottom_margin"
-        android:layout_marginStart="@dimen/translation_left_right_margin"
-        android:layout_marginEnd="@dimen/translation_left_right_margin"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:textColor="@color/gold_accent"
+        android:background="@drawable/bg_panel_spinner_row"
         />
     <com.medoapps.www.onlinequran.view.InlineTranslationView
         android:id="@+id/translation_view"
@@ -29,17 +26,22 @@
         />
   </LinearLayout>
 
+  <!-- icon-only prev/next ayah (single-ayah selection only). Intentionally LTR:
+       next (reading order) sits left, previous right, like the as-built app. -->
   <com.medoapps.www.onlinequran.view.LeftToRightLinearLayout
       android:id="@+id/controls"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
+      android:padding="12dp"
       >
     <ImageButton
         android:id="@+id/next_ayah"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/bg_panel_nav_btn"
         android:src="@drawable/ic_translation_next"
+        android:tint="@color/text_on_navy"
         android:contentDescription="@string/next"
         />
     <Space
@@ -49,32 +51,60 @@
         />
     <ImageButton
         android:id="@+id/previous_ayah"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/bg_panel_nav_btn"
         android:src="@drawable/ic_translation_previous"
+        android:tint="@color/text_on_navy"
         android:contentDescription="@string/previous"
         />
   </com.medoapps.www.onlinequran.view.LeftToRightLinearLayout>
 
+  <!-- nothing downloaded → @string/need_translation + gold Get Translations
+       (mockup 05b: gold-faint globe box, dim text, gold pill) -->
   <LinearLayout
       android:id="@+id/empty_state"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:padding="8dp"
+      android:layout_gravity="center"
+      android:padding="24dp"
       android:orientation="vertical"
+      android:gravity="center_horizontal"
       android:visibility="gone"
       >
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/bg_panel_empty_icon"
+        android:padding="19dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_translation"
+        android:tint="@color/gold_light"
+        android:importantForAccessibility="no"
+        />
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="13dp"
+        android:maxWidth="220dp"
         android:gravity="center_horizontal"
+        android:lineSpacingMultiplier="1.2"
+        android:textColor="@color/hint_on_navy"
+        android:textSize="13sp"
         android:text="@string/need_translation"
         />
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/get_translations_button"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:minHeight="42dp"
+        android:paddingHorizontal="22dp"
+        android:background="@drawable/bg_button_gold"
+        android:textAllCaps="false"
+        android:textColor="#1a1305"
+        android:textSize="13sp"
+        android:textStyle="bold"
         android:text="@string/get_translations"
         />
   </LinearLayout>
@@ -84,5 +114,6 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
+      android:indeterminateTint="@color/gold_accent"
       />
 </FrameLayout>
