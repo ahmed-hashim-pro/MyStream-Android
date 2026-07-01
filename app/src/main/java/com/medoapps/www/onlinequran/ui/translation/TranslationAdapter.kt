@@ -47,6 +47,11 @@ internal class TranslationAdapter(
   private var ayahSelectionColor: Int = 0
   private var isNightMode: Boolean = false
 
+  // Amiri serif for the gold surah band (theme default is Cairo, which would win otherwise).
+  private val amiriTypeface: android.graphics.Typeface? by lazy {
+    androidx.core.content.res.ResourcesCompat.getFont(context, R.font.amiri_bold)
+  }
+
   private var highlightedAyah: Int = 0
   private var highlightedRowCount: Int = 0
   private var highlightedStartPosition: Int = 0
@@ -296,7 +301,9 @@ internal class TranslationAdapter(
         val text: CharSequence?
         if (row.type == TranslationViewRow.Type.SURA_HEADER) {
           text = row.data
-          holder.text.setBackgroundColor(suraHeaderColor)
+          // Gold Amiri surah band (gold-faint box + border come from the row layout);
+          // force Amiri over the theme's Cairo so it reads like the mockup .surah-band.
+          amiriTypeface?.let { holder.text.typeface = it }
         } else if (row.type == TranslationViewRow.Type.BASMALLAH || row.type == TranslationViewRow.Type.QURAN_TEXT) {
           val str = SpannableString(
             if (row.type == TranslationViewRow.Type.BASMALLAH) {
@@ -310,7 +317,14 @@ internal class TranslationAdapter(
           str.setSpan(UthmaniSpan(context), 0, str.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
           text = str
-          holder.text.setTextColor(arabicTextColor)
+          // Basmala in gold (mockup); ayah text keeps the paper-ink color.
+          holder.text.setTextColor(
+            if (row.type == TranslationViewRow.Type.BASMALLAH) {
+              ContextCompat.getColor(context, R.color.gold_accent)
+            } else {
+              arabicTextColor
+            }
+          )
           holder.text.textSize = ARABIC_MULTIPLIER * fontSize
         } else {
           if (row.type == TranslationViewRow.Type.TRANSLATOR) {
@@ -386,7 +400,8 @@ internal class TranslationAdapter(
       holder.ayahNumber != null -> {
         val text = context.getString(R.string.sura_ayah, row.ayahInfo.sura, row.ayahInfo.ayah)
         holder.ayahNumber.setAyahString(text)
-        holder.ayahNumber.setTextColor(textColor)
+        // gold ayah marker (gold number on the gold-faint box), matching the mockup .mk
+        holder.ayahNumber.setTextColor(ContextCompat.getColor(context, R.color.gold_accent))
         holder.ayahNumber.setNightMode(isNightMode)
       }
     }
