@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <color name="toolbar_background">#ed1F2A44</color>
+  <!-- Saved-bookmark tint: gold-light per the mockup ("bookmark fills gold once saved") -->
+  <color name="toolbar_bookmarked">#E9C778</color>
 </resources>

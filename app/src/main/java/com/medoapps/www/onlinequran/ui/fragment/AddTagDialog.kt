@@ -63,12 +63,14 @@ class AddTagDialog : DialogFragment() {
     val originalName = args?.getString(EXTRA_NAME, "") ?: ""
 
     val activity = requireActivity()
-    val inflater = activity.layoutInflater
+    val builder = AlertDialog.Builder(activity)
+    // inflate against the dialog's themed context (alertDialogTheme = gold overlay);
+    // the activity inflater would resolve colorPrimary to the M3 baseline purple
+    val inflater = android.view.LayoutInflater.from(builder.context)
 
     @SuppressLint("InflateParams")
     val layout = inflater.inflate(R.layout.tag_dialog, null)
 
-    val builder = AlertDialog.Builder(activity)
     builder.setTitle(getString(R.string.tag_dlg_title))
 
     val text = layout.findViewById<TextInputEditText>(R.id.tag_name)

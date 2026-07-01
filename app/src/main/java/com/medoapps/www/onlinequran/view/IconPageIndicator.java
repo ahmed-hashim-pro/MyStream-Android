@@ -31,6 +31,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
@@ -195,6 +196,9 @@ public class IconPageIndicator extends HorizontalScrollView implements
     for (int i = 0; i < count; i++) {
       ImageView view = new ImageView(getContext(), null, R.attr.actionButtonStyle);
       view.setImageResource(iconAdapter.getIconResId(i));
+      // navy-sheet tab icons: gold when selected, dim white otherwise (mockup)
+      view.setImageTintList(
+          AppCompatResources.getColorStateList(getContext(), R.color.panel_tab_icon_tint));
       view.setTag(i);
       view.setOnClickListener(this);
       mIconsLayout.addView(view, new LayoutParams(WRAP_CONTENT, MATCH_PARENT));

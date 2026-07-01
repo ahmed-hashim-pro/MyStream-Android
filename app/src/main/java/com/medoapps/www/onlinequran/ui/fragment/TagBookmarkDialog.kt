@@ -3,6 +3,7 @@ package com.medoapps.www.onlinequran.ui.fragment
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -53,12 +54,17 @@ open class TagBookmarkDialog : DialogFragment() {
     }
   }
 
-  private fun createTagsListView(): ListView {
+  private fun createTagsListView(onNavy: Boolean): ListView {
     val context = requireContext()
-    adapter = TagsAdapter(context, tagBookmarkPresenter)
+    adapter = TagsAdapter(context, tagBookmarkPresenter, onNavy)
     val listview = ListView(context)
     listview.adapter = adapter
     listview.choiceMode = ListView.CHOICE_MODE_MULTIPLE
+    if (onNavy) {
+      // hairline separators on the navy sheet (mockup: white @ 8%)
+      listview.divider = ColorDrawable(0x14FFFFFF)
+      listview.dividerHeight = 1
+    }
     listview.onItemClickListener =
       OnItemClickListener { _: AdapterView<*>?, view: View, position: Int, _: Long ->
         val tag = adapter!!.getItem(position)
@@ -85,7 +91,7 @@ open class TagBookmarkDialog : DialogFragment() {
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val builder = Builder(requireActivity())
-    builder.setView(createTagsListView())
+    builder.setView(createTagsListView(onNavy = false))
     builder.setPositiveButton(string.dialog_ok) { _: DialogInterface?, _: Int -> }
     builder.setNegativeButton(string.cancel) { _: DialogInterface?, _: Int -> dismiss() }
     return builder.create()
@@ -118,12 +124,16 @@ open class TagBookmarkDialog : DialogFragment() {
     // If in dialog mode, don't do anything (or else it will cause exception)
     return if (showsDialog) {
       super.onCreateView(inflater, container, savedInstanceState)
-    } else createTagsListView()
+    } else createTagsListView(onNavy = true) // in-reader panel sits on the navy sheet
     // If not in dialog mode, treat as normal fragment onCreateView
   }
 
   class TagsAdapter internal constructor(
-    context: Context, presenter: TagBookmarkPresenter
+    context: Context,
+    presenter: TagBookmarkPresenter,
+    // true when rows sit on the fixed-navy ayah panel (needs on-navy ink),
+    // false in the plain AlertDialog (day/night surface)
+    private val onNavy: Boolean = false
   ) : BaseAdapter() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -161,13 +171,17 @@ open class TagBookmarkDialog : DialogFragment() {
 
       val (id, name) = getItem(position)
       holder = view!!.tag as ViewHolder
+      val context = parent.context
       if (id == -1L) {
         holder.apply {
           addImage.visibility = View.VISIBLE
           checkBox.visibility = View.GONE
           tagName.text = newTagString
-          // gold-accent the "New Tag" affordance (matches the mockup)
-          tagName.setTextColor(ContextCompat.getColor(parent.context, color.gold_accent))
+          // gold "New Tag" affordance — brighter gold on the navy panel (mockup)
+          val gold = if (onNavy) color.gold_light else color.gold_accent
+          tagName.setTextColor(ContextCompat.getColor(context, gold))
+          addImage.imageTintList =
+            ContextCompat.getColorStateList(context, gold)
         }
       } else {
         holder.apply {
@@ -175,8 +189,14 @@ open class TagBookmarkDialog : DialogFragment() {
           checkBox.visibility = View.VISIBLE
           checkBox.isChecked = checkedTags.contains(id)
           tagName.text = name
-          // reset (views are recycled) so normal tags keep the default ink
-          tagName.setTextColor(ContextCompat.getColor(parent.context, color.text_primary))
+          // reset (views are recycled); on the navy panel use fixed white ink
+          tagName.setTextColor(
+            ContextCompat.getColor(context, if (onNavy) color.text_on_navy else color.text_primary)
+          )
+          if (onNavy) {
+            checkBox.buttonTintList =
+              ContextCompat.getColorStateList(context, color.checkbox_on_navy_tint)
+          }
           checkBox.setOnClickListener { tagBookmarkPresenter.toggleTag(id) }
         }
       }

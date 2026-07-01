@@ -47,6 +47,7 @@ class AyahToolBar @JvmOverloads constructor(
   var flavor: String = ""
   var longPressLambda: ((CharSequence) -> Unit) = {}
   var isRecitationEnabled = false
+  private var isBookmarked = false
 
   @Inject
   lateinit var ayahToolBarPresenter: AyahToolBarPresenter
@@ -57,13 +58,14 @@ class AyahToolBar @JvmOverloads constructor(
     val toolBarHeight = resources.getDimensionPixelSize(R.dimen.toolbar_height)
     pipHeight = resources.getDimensionPixelSize(R.dimen.toolbar_pip_height)
     pipWidth = resources.getDimensionPixelSize(R.dimen.toolbar_pip_width)
-    val background = ContextCompat.getColor(context, R.color.toolbar_background)
 
     toolBarTotalHeight = resources.getDimensionPixelSize(R.dimen.toolbar_total_height)
 
     menuLayout = LinearLayout(context).apply {
       layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, toolBarHeight)
-      setBackgroundColor(background)
+      // rounded navy bar (mockup); clip so item pressed-states follow the corners
+      setBackgroundResource(R.drawable.ayah_toolbar_bg)
+      clipToOutline = true
     }
     addView(menuLayout)
 
@@ -167,6 +169,11 @@ class AyahToolBar @JvmOverloads constructor(
       layoutParams = LayoutParams(itemWidth, LayoutParams.MATCH_PARENT)
       setOnClickListener(this@AyahToolBar)
       setOnLongClickListener(this@AyahToolBar)
+      // saved bookmark reads gold (mockup) — menu views are rebuilt on submenu
+      // swaps, so re-apply the tint here, not only in setBookmarked
+      if (item.itemId == R.id.cab_bookmark_ayah && isBookmarked) {
+        setColorFilter(ContextCompat.getColor(context, R.color.toolbar_bookmarked))
+      }
     }
   }
 
@@ -176,10 +183,17 @@ class AyahToolBar @JvmOverloads constructor(
     get() = menu.size() * itemWidth
 
   fun setBookmarked(bookmarked: Boolean) {
+    isBookmarked = bookmarked
     val bookmarkItem = menu.findItem(R.id.cab_bookmark_ayah)
     bookmarkItem.setIcon(if (bookmarked) R.drawable.ic_favorite else R.drawable.ic_not_favorite)
     val bookmarkButton = findViewById<ImageButton>(R.id.cab_bookmark_ayah)
     bookmarkButton?.setImageDrawable(bookmarkItem.icon)
+    // filled bookmark turns gold once saved (mockup)
+    if (bookmarked) {
+      bookmarkButton?.setColorFilter(ContextCompat.getColor(context, R.color.toolbar_bookmarked))
+    } else {
+      bookmarkButton?.clearColorFilter()
+    }
   }
 
   override fun onSelectionChanged(selectionIndicator: SelectionIndicator, reset: Boolean) {

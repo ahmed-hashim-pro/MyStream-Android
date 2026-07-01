@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ayah-panel tab icons on the navy sheet: active = gold (with the gold underline
+     from the indicator), inactive = dim white at 42% (mockup). -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true" android:color="@color/gold_accent" />
+    <item android:color="#6BFFFFFF" />
+</selector>
