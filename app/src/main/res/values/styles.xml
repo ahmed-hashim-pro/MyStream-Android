@@ -87,11 +87,14 @@
         <item name="android:textSize">17sp</item>
         <item name="android:fontFamily">@font/amiri_bold</item>
         <item name="fontFamily">@font/amiri_bold</item>
+        <!-- fixed white on the always-navy toolbar (theme default resolves dark) -->
+        <item name="android:textColor">@color/text_on_navy</item>
     </style>
     <style name="TextAppearance.MyStream.ReaderSubtitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
         <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@font/cairo</item>
         <item name="fontFamily">@font/cairo</item>
+        <item name="android:textColor">@color/hint_on_navy</item>
     </style>
 
     <!-- Gold-accented dialog surfaces for the Mushaf (jump / tag / download dialogs).
