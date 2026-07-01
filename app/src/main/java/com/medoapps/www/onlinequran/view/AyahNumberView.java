@@ -91,7 +91,10 @@ public class AyahNumberView extends View {
 
   @Override
   protected void onDraw(Canvas canvas) {
-    canvas.drawRect(padding, padding, padding + boxWidth, padding + boxHeight, boxPaint);
+    // rounded gold marker (mockup .mk), not a hard square
+    final float radius = boxWidth * 0.32f;
+    canvas.drawRoundRect(padding, padding, padding + boxWidth, padding + boxHeight,
+        radius, radius, boxPaint);
     if (this.textLayout != null) {
       int startY = padding + ((boxHeight - this.textLayout.getHeight()) / 2);
       canvas.translate(padding, startY);
