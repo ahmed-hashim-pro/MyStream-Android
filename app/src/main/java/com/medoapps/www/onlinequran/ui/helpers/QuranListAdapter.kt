@@ -2,6 +2,7 @@ package com.medoapps.www.onlinequran.ui.helpers
 
 import android.content.Context
 import android.graphics.PorterDuff
+import androidx.core.content.ContextCompat
 import android.util.SparseBooleanArray
 import android.view.LayoutInflater
 import android.view.View
@@ -164,21 +165,37 @@ class QuranListAdapter @JvmOverloads constructor(
             JuzView(context, item.juzType, item.juzOverlayText)
           )
           image.visibility = View.VISIBLE
+          iconGlyph.visibility = View.GONE
           number.visibility = View.GONE
         }
         item.imageResource == null -> {
           number.visibility = View.VISIBLE
           image.visibility = View.GONE
+          iconGlyph.visibility = View.GONE
         }
         else -> {
-          image.setImageResource(item.imageResource)
-          if (item.imageFilterColor == null) {
-            image.colorFilter = null
-          } else {
-            image.setColorFilter(
-              item.imageFilterColor, PorterDuff.Mode.SRC_ATOP
-            )
+          // Bookmark / recent-page rows render the exact-UX glyph in a rounded chip
+          // (mockup .row .ic): 📄 recent page · ♥ page bookmark · ★ ayah bookmark.
+          image.visibility = View.GONE
+          when {
+            item.isAyahBookmark -> {
+              // U+FE0E forces monochrome/text presentation so the star takes textColor
+              iconGlyph.text = "★︎"
+              iconGlyph.setBackgroundResource(R.drawable.bg_icon_frame_gold_solid)
+              iconGlyph.setTextColor(ContextCompat.getColor(context, R.color.text_on_gold))
+            }
+            item.isBookmark -> {
+              iconGlyph.text = "♥︎"
+              iconGlyph.setBackgroundResource(R.drawable.bg_icon_frame_gold)
+              iconGlyph.setTextColor(ContextCompat.getColor(context, R.color.gold_accent))
+            }
+            else -> {
+              iconGlyph.text = "📄"
+              iconGlyph.setBackgroundResource(R.drawable.bg_icon_frame_gold)
+              iconGlyph.setTextColor(ContextCompat.getColor(context, R.color.gold_accent))
+            }
           }
+          iconGlyph.visibility = View.VISIBLE
 
           if (showDate) {
             val date = SimpleDateFormat("MMM dd, HH:mm", locale)
@@ -190,7 +207,6 @@ class QuranListAdapter @JvmOverloads constructor(
             }
           }
 
-          image.visibility = View.VISIBLE
           number.visibility = View.GONE
 
           val tagList = ArrayList<Tag>()
@@ -270,6 +286,7 @@ class QuranListAdapter @JvmOverloads constructor(
     val metadata: TextView = itemView.findViewById(R.id.metadata)
     val number: TextView = itemView.findViewById(R.id.suraNumber)
     val image: ImageView = itemView.findViewById(R.id.rowIcon)
+    val iconGlyph: TextView = itemView.findViewById(R.id.rowIconGlyph)
     val tags: TagsViewGroup = itemView.findViewById(R.id.tags)
     val date: TextView? = itemView.findViewById(R.id.show_date)
   }

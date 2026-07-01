@@ -13,12 +13,23 @@
 
     <ImageView
         android:id="@+id/rowIcon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="14dp"
         android:scaleType="centerInside"
         android:visibility="gone"
         android:contentDescription="@null" />
+
+    <TextView
+        android:id="@+id/rowIconGlyph"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="14dp"
+        android:gravity="center"
+        android:textSize="19sp"
+        android:includeFontPadding="false"
+        android:visibility="gone"
+        tools:text="♥" />
 
     <LinearLayout
         android:layout_width="0dp"
