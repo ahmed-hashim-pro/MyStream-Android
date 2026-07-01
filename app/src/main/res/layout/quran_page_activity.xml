@@ -60,6 +60,93 @@
     </androidx.appcompat.widget.Toolbar>
   </FrameLayout>
 
+  <!-- Text-mode strip: font size (A− / A+) + translation-source chip (mockup 04b).
+       Extends the navy chrome under the toolbar; shown only in translation mode. -->
+  <LinearLayout
+      android:id="@+id/translation_source_strip"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/toolbar_area"
+      android:background="@color/navy_900"
+      android:orientation="horizontal"
+      android:gravity="center_vertical"
+      android:layoutDirection="locale"
+      android:paddingHorizontal="12dp"
+      android:paddingVertical="8dp"
+      android:elevation="4dp"
+      android:visibility="gone">
+
+    <LinearLayout
+        android:id="@+id/translation_source_chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_translation_source_chip"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="6dp"
+        android:clickable="true"
+        android:focusable="true">
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="📚"
+          android:textSize="13sp" />
+
+      <TextView
+          android:id="@+id/translation_source_name"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="7dp"
+          android:maxWidth="180dp"
+          android:maxLines="1"
+          android:ellipsize="end"
+          android:textColor="@color/gold_accent"
+          android:textSize="12sp"
+          android:fontFamily="@font/cairo_bold" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="5dp"
+          android:text="▾"
+          android:textColor="@color/gold_accent"
+          android:textSize="11sp" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/translation_font_decrease"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="A−"
+        android:textColor="@color/hint_on_navy"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <TextView
+        android:id="@+id/translation_font_increase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="A+"
+        android:textColor="@color/gold_accent"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true" />
+  </LinearLayout>
+
   <com.medoapps.www.onlinequran.view.AudioStatusBar
       android:id="@+id/audio_area"
       android:layout_width="match_parent"

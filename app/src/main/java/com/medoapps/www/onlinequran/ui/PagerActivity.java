@@ -210,6 +210,8 @@ public class PagerActivity extends AppCompatActivity implements
   private TextView readingModeNight;
   private boolean promptedForExtraDownload;
   private QuranSpinner translationsSpinner;
+  private View translationSourceStrip;
+  private TextView translationSourceName;
   private ProgressDialog progressDialog;
   private ViewGroup.MarginLayoutParams audioBarParams;
   private boolean isInMultiWindowMode;
@@ -364,6 +366,16 @@ public class PagerActivity extends AppCompatActivity implements
 
     toolBarArea = findViewById(R.id.toolbar_area);
     translationsSpinner = findViewById(R.id.spinner);
+
+    // Text-mode strip: font A−/A+ + translation-source chip
+    translationSourceStrip = findViewById(R.id.translation_source_strip);
+    translationSourceName = findViewById(R.id.translation_source_name);
+    findViewById(R.id.translation_font_increase)
+        .setOnClickListener(v -> changeTranslationFontSize(2));
+    findViewById(R.id.translation_font_decrease)
+        .setOnClickListener(v -> changeTranslationFontSize(-2));
+    findViewById(R.id.translation_source_chip)
+        .setOnClickListener(v -> startTranslationManager());
 
     // Day / Sepia / Night reading-mode switcher
     readingModeBar = findViewById(R.id.reading_mode_bar);
@@ -748,6 +760,15 @@ public class PagerActivity extends AppCompatActivity implements
         .translationY(visible ? 0 : -toolBarArea.getHeight())
         .setDuration(250)
         .start();
+
+    // the text-mode strip sits just under the toolbar; slide it off with the chrome
+    if (translationSourceStrip != null && showingTranslation) {
+      translationSourceStrip.animate()
+          .translationY(visible ? 0
+              : -(toolBarArea.getHeight() + translationSourceStrip.getHeight()))
+          .setDuration(250)
+          .start();
+    }
 
     /* the bottom margin on the audio bar is not part of its height, and so we have to
      * take it into account when animating the audio bar off the screen. */
@@ -1218,6 +1239,25 @@ public class PagerActivity extends AppCompatActivity implements
     return super.onOptionsItemSelected(item);
   }
 
+  private void changeTranslationFontSize(int delta) {
+    quranSettings.setTranslationTextSize(quranSettings.getTranslationTextSize() + delta);
+    refreshQuranPages();
+  }
+
+  private void updateTranslationSourceName() {
+    if (translationSourceName == null) {
+      return;
+    }
+    String name = getString(R.string.menu_translation);
+    if (translationNames != null && translationNames.length > 0) {
+      name = translationNames[0];
+      if (translationNames.length > 1) {
+        name = name + "  +" + (translationNames.length - 1);
+      }
+    }
+    translationSourceName.setText(name);
+  }
+
   private void refreshQuranPages() {
     int pos = viewPager.getCurrentItem();
     int start = (pos == 0) ? pos : pos - 1;
@@ -1246,6 +1286,9 @@ public class PagerActivity extends AppCompatActivity implements
       final int position = quranInfo.getPositionFromPage(page, true);
       viewPager.setCurrentItem(position);
     }
+    if (translationSourceStrip != null) {
+      translationSourceStrip.setVisibility(View.GONE);
+    }
 
     supportInvalidateOptionsMenu();
     updateActionBarTitle(page);
@@ -1268,6 +1311,12 @@ public class PagerActivity extends AppCompatActivity implements
         }
         final int position = quranInfo.getPositionFromPage(page, false);
         viewPager.setCurrentItem(position);
+      }
+      if (translationSourceStrip != null) {
+        translationSourceStrip.setVisibility(View.VISIBLE);
+        translationSourceStrip.setTranslationY(isActionBarHidden
+            ? -(toolBarArea.getHeight() + translationSourceStrip.getHeight()) : 0);
+        updateTranslationSourceName();
       }
       supportInvalidateOptionsMenu();
       updateActionBarSpinner();

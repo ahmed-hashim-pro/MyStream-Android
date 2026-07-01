@@ -153,6 +153,11 @@ public class QuranSettings {
         Constants.DEFAULT_TEXT_SIZE);
   }
 
+  public void setTranslationTextSize(int textSize) {
+    final int clamped = Math.max(10, Math.min(40, textSize));
+    prefs.edit().putInt(Constants.PREF_TRANSLATION_TEXT_SIZE, clamped).apply();
+  }
+
   public int getLastPage() {
     return prefs.getInt(Constants.PREF_LAST_PAGE, Constants.NO_PAGE);
   }
