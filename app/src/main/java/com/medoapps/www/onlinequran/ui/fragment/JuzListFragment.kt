@@ -70,7 +70,7 @@ class JuzListFragment : Fragment() {
       itemAnimator = DefaultItemAnimator()
     }
 
-    val adapter = QuranListAdapter(context, recyclerView, emptyArray(), false)
+    val adapter = QuranListAdapter(context, recyclerView, emptyArray(), false, true)
     recyclerView.adapter = adapter
     this.recyclerView = recyclerView
     this.adapter = adapter
@@ -169,10 +169,18 @@ class JuzListFragment : Fragment() {
           .withPage(quranInfo.getStartingPageForJuz(juz))
         elements[ctr++] = builder.build()
       }
-      val metadata = getString(
-        string.sura_ayah_notification_str,
-        quranDisplayData.getSuraName(activity, pos.sura, false), pos.ayah
-      )
+      // "surahName · ayah · hizbLabel" (matches the mockup), where the hizb label
+      // mirrors the rub'-al-hizb pie: الحزب N / ربع الحزب / نصف الحزب / ثلاثة أرباع الحزب.
+      val suraName = quranDisplayData.getSuraName(activity, pos.sura, false)
+      val ayahNum = QuranUtils.getLocalizedNumber(activity, pos.ayah)
+      val hizb = getString(string.quran_hizb)
+      val hizbLabel = when (i % 4) {
+        1 -> getString(string.quran_rob3) + " " + hizb
+        2 -> getString(string.quran_nos) + " " + hizb
+        3 -> getString(string.quran_talt_arb3) + " " + hizb
+        else -> hizb + " " + QuranUtils.getLocalizedNumber(activity, 1 + i / 4)
+      }
+      val metadata = "$suraName · $ayahNum · $hizbLabel"
       val builder = Builder()
         .withText(quarters[i])
         .withMetadata(metadata)

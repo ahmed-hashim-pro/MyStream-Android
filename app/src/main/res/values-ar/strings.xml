@@ -450,6 +450,7 @@
     <string name="quran_hizb">الحزب</string>
     <string name="quran_juz2">الجزء</string>
     <string name="quran_page">الصفحة</string>
+    <string name="juz_band_page">صفحة</string>
     <string name="quran_sura">سورة</string>
     <string name="quran_ayah">آية %1$d</string>
     <string name="quran_ayah_details">%1$s - آية %2$s، جزء %3$s</string>

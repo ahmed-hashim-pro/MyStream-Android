@@ -21,11 +21,13 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import kotlin.collections.ArrayList
 
-class QuranListAdapter(
+class QuranListAdapter @JvmOverloads constructor(
   private val context: Context,
   private val recyclerView: RecyclerView,
   private var elements: Array<QuranRow>,
-  private val isEditable: Boolean
+  private val isEditable: Boolean,
+  // Juz' tab: prefix the separator-band page with "صفحة"/"Page" (mockup 02).
+  private val labelHeaderPage: Boolean = false
 ) : RecyclerView.Adapter<QuranListAdapter.HeaderHolder>(),
   View.OnClickListener, View.OnLongClickListener {
 
@@ -223,7 +225,14 @@ class QuranListAdapter(
       holder.pageNumber.visibility = View.GONE
     } else {
       holder.pageNumber.visibility = View.VISIBLE
-      holder.pageNumber.text = QuranUtils.getLocalizedNumber(context, item.page)
+      val pageNum = QuranUtils.getLocalizedNumber(context, item.page)
+      // "صفحة N" only on the Juz' separator band; per-row page numbers stay bare.
+      holder.pageNumber.text =
+        if (labelHeaderPage && item.isHeader) {
+          context.getString(R.string.juz_band_page) + " " + pageNum
+        } else {
+          pageNum
+        }
     }
     holder.setChecked(isItemChecked(pos))
     holder.setEnabled(isEnabled(pos))

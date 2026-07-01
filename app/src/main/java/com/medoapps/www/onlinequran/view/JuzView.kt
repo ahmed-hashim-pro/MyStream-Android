@@ -17,8 +17,10 @@ class JuzView(
   private var circleY = 0
   private val percentage: Int
   private var textOffset = 0f
+  private var ringStroke = 0f
 
   private lateinit var circleRect: RectF
+  private lateinit var ringRect: RectF
   private val circlePaint = Paint()
   private var overlayTextPaint: TextPaint? = null
   private val circleBackgroundPaint = Paint()
@@ -28,20 +30,25 @@ class JuzView(
     val circleColor = ContextCompat.getColor(context, R.color.gold_accent)
     val circleBackground = ContextCompat.getColor(context, R.color.gold_accent_faint)
 
+    // Ring/donut markers (matches the mockup .pie conic-gradient ring, not a filled disc).
     circlePaint.apply {
-      style = Paint.Style.FILL
+      style = Paint.Style.STROKE
+      strokeCap = Paint.Cap.BUTT
       color = circleColor
       isAntiAlias = true
     }
 
     circleBackgroundPaint.apply {
-      style = Paint.Style.FILL
+      style = Paint.Style.STROKE
+      strokeCap = Paint.Cap.BUTT
       color = circleBackground
       isAntiAlias = true
     }
 
     if (!overlayText.isNullOrEmpty()) {
-      val textPaintColor = ContextCompat.getColor(context, R.color.navy_900)
+      // Sits in the hollow ring centre now, so it must read on the row bg in both
+      // themes (dark in light, white in dark) — not the old navy on the gold disc.
+      val textPaintColor = ContextCompat.getColor(context, R.color.text_primary)
       val textPaintSize = resources.getDimensionPixelSize(R.dimen.juz_overlay_text_size)
       overlayTextPaint = TextPaint()
       overlayTextPaint?.apply {
@@ -75,13 +82,24 @@ class JuzView(
       left.toFloat(), (top + yOffset).toFloat(),
       right.toFloat(), (top + yOffset + 2 * radius).toFloat()
     )
+    // ~0.1 * diameter band (CSS .pie inset:4px on a 40px circle); inset the ring rect
+    // by half the stroke so the band's outer edge sits on the bounds.
+    ringStroke = radius * 0.22f
+    circlePaint.strokeWidth = ringStroke
+    circleBackgroundPaint.strokeWidth = ringStroke
+    val half = ringStroke / 2f
+    ringRect = RectF(
+      circleRect.left + half, circleRect.top + half,
+      circleRect.right - half, circleRect.bottom - half
+    )
   }
 
   override fun draw(canvas: Canvas) {
-    canvas.drawCircle(radius.toFloat(), circleY.toFloat(), radius.toFloat(), circleBackgroundPaint)
+    // faint full track ring, then the gold quarter arc on top (arc, not a filled wedge)
+    canvas.drawArc(ringRect, 0f, 360f, false, circleBackgroundPaint)
     canvas.drawArc(
-      circleRect, -90f,
-      (3.6 * percentage).toFloat(), true, circlePaint
+      ringRect, -90f,
+      (3.6 * percentage).toFloat(), false, circlePaint
     )
     overlayTextPaint?.let { textPaint ->
       if (overlayText != null) {
