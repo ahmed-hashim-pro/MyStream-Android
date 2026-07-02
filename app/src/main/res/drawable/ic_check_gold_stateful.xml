@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- End-of-row check: visible only on the current (activated) dropdown value; a
+     same-size transparent placeholder otherwise so text width stays stable. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_activated="true" android:drawable="@drawable/ic_check_gold" />
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <size android:width="18dp" android:height="18dp" />
+        </shape>
+    </item>
+</selector>

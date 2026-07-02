@@ -2,7 +2,11 @@ package com.medoapps.www.onlinequran.ui.util;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,11 +133,24 @@ public class TranslationsSpinnerAdapter extends ArrayAdapter<String> {
       float leftPadding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, r.getDisplayMetrics());
       holder.textView.setPadding(Math.round(leftPadding), 0, 0, 0);
       holder.textView.setText(R.string.more_translations);
+      // gold manager entry with a + glyph (approved mockup 06c)
+      final int gold = ContextCompat.getColor(context, R.color.gold_light);
+      holder.textView.setTextColor(gold);
+      Drawable plus = AppCompatResources.getDrawable(context, R.drawable.ic_new);
+      if (plus != null) {
+        plus = DrawableCompat.wrap(plus.mutate());
+        DrawableCompat.setTint(plus, gold);
+      }
+      holder.textView.setCompoundDrawablesRelativeWithIntrinsicBounds(plus, null, null, null);
+      holder.textView.setCompoundDrawablePadding(Math.round(leftPadding));
     } else {
       holder.checkBox.setVisibility(View.VISIBLE);
       holder.checkBox.setChecked(selectedItems.contains(translations.get(position).getFilename()));
       holder.checkBox.setOnClickListener(onCheckedChangeListener);
       holder.textView.setText(translationNames[position]);
+      // reset (rows are recycled): plain white name, no + glyph
+      holder.textView.setTextColor(ContextCompat.getColor(context, R.color.text_on_navy));
+      holder.textView.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null);
     }
 
     return convertView;

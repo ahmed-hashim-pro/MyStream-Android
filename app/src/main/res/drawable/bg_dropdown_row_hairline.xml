@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plain navy-dropdown row with the top hairline only (checklist rows, mockup 06c —
+     no activated/current-value band there). -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+    <item android:height="1dp" android:gravity="top">
+        <shape android:shape="rectangle">
+            <solid android:color="#12FFFFFF" />
+        </shape>
+    </item>
+</layer-list>

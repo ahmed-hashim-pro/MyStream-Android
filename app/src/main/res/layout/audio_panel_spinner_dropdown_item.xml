@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Navy-dropdown row for the playback From/To pickers (approved mockup 06b):
+     white 13.5sp value, hairline separator, gold-faint band + gold text + gold
+     check on the current value (state_activated, set by the spinner popup). -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="44dp"
+    android:gravity="center_vertical"
+    android:paddingStart="16dp"
+    android:paddingEnd="12dp"
+    android:singleLine="true"
+    android:ellipsize="end"
+    android:textSize="13.5sp"
+    android:textColor="@color/dropdown_item_text"
+    android:background="@drawable/bg_dropdown_navy_item"
+    android:drawableEnd="@drawable/ic_check_gold_stateful"
+    android:drawablePadding="8dp" />

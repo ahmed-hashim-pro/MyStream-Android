@@ -1,27 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Translations multi-select row inside the navy dropdown (approved mockup 06c):
+     gold checkbox (filled when active, half-white outline otherwise) + white name,
+     hairline separator. The last "More Translations & Tafsir" row is styled gold by
+     TranslationsSpinnerAdapter. -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/spinner_dropdown_item_height">
+    android:layout_height="@dimen/spinner_dropdown_item_height"
+    android:background="@drawable/bg_dropdown_row_hairline"
+    android:paddingStart="6dp"
+    android:paddingEnd="10dp">
 
   <CheckBox
       android:id="@+id/checkbox"
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
-      android:buttonTint="@color/gold_accent"
+      android:buttonTint="@color/checkbox_on_navy_tint"
       android:text="@null" />
 
   <TextView
       android:id="@+id/text"
-      style="?android:attr/spinnerDropDownItemStyle"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_alignBaseline="@+id/checkbox"
       android:layout_alignBottom="@+id/checkbox"
       android:layout_toEndOf="@+id/checkbox"
       android:background="?attr/selectableItemBackground"
-      android:ellipsize="marquee"
-      android:marqueeRepeatLimit="marquee_forever"
+      android:gravity="center_vertical"
+      android:ellipsize="end"
       android:singleLine="true"
+      android:textColor="@color/text_on_navy"
+      android:textSize="13.5sp"
+      android:textStyle="bold"
       android:paddingEnd="2dp"
-      android:paddingStart="2dp" />
+      android:paddingStart="6dp" />
 </RelativeLayout>

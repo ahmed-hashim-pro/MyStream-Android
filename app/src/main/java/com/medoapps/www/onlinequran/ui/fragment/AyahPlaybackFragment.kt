@@ -354,7 +354,8 @@ class AyahPlaybackFragment : AyahActionFragment() {
   companion object {
     // on-navy selected view with the gold caret (mockup 06 From/To boxes)
     private val ITEM_LAYOUT = R.layout.audio_panel_spinner_item
-    private val ITEM_DROPDOWN_LAYOUT = R.layout.sherlock_spinner_dropdown_item
+    // navy dropdown rows: gold-faint band + check on the current value (mockup 06b)
+    private val ITEM_DROPDOWN_LAYOUT = R.layout.audio_panel_spinner_dropdown_item
     private const val MAX_REPEATS = 25
   }
 }

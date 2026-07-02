@@ -56,6 +56,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:visibility="gone"
+          android:popupBackground="@drawable/bg_dropdown_navy"
           />
     </androidx.appcompat.widget.Toolbar>
   </FrameLayout>

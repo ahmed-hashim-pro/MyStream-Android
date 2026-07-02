@@ -18,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_panel_spinner_row"
+        android:popupBackground="@drawable/bg_dropdown_navy"
         />
     <com.medoapps.www.onlinequran.view.InlineTranslationView
         android:id="@+id/translation_view"
