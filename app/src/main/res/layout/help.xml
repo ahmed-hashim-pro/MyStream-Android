@@ -12,7 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_header_navy"
+        android:background="@drawable/bg_header_navy_rounded"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:minHeight="?attr/actionBarSize"

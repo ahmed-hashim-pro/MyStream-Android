@@ -17,7 +17,8 @@
         android:summary="@string/about_madani_images"
         android:title="@string/about_images"
         app:iconSpaceReserved="false"
-        app:singleLineTitle="true">
+        app:singleLineTitle="true"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_madani_images_url"/>
@@ -28,7 +29,8 @@
         android:summary="@string/about_naskh_images"
         android:title="@string/about_images"
         app:iconSpaceReserved="false"
-        app:singleLineTitle="true">
+        app:singleLineTitle="true"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_naskh_images_url"/>
@@ -46,7 +48,8 @@
         android:summary="@string/about_quranicaudio_summary"
         android:title="@string/about_quranicaudio"
         app:iconSpaceReserved="false"
-        app:singleLineTitle="true">
+        app:singleLineTitle="true"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_quranicaudio_url"/>
@@ -56,7 +59,8 @@
         android:summary="@string/about_quran_ksu_summary"
         android:title="@string/about_quran_ksu"
         app:iconSpaceReserved="false"
-        app:singleLineTitle="true">
+        app:singleLineTitle="true"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_quran_ksu_url"/>
@@ -66,7 +70,8 @@
         android:summary="@string/about_furqan_summary"
         android:title="@string/about_furqan"
         app:iconSpaceReserved="false"
-        app:singleLineTitle="true">
+        app:singleLineTitle="true"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_furqan_url"/>
@@ -76,7 +81,8 @@
         android:summary="@string/about_quran_enc_summary"
         android:title="@string/about_quran_enc"
         app:iconSpaceReserved="false"
-        app:singleLineTitle="true">
+        app:singleLineTitle="true"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_quran_enc_url"/>
@@ -86,7 +92,8 @@
         android:summary="@string/about_tanzil_summary"
         android:title="@string/about_tanzil"
         app:iconSpaceReserved="false"
-        app:singleLineTitle="true">
+        app:singleLineTitle="true"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_tanzil_url"/>
@@ -96,7 +103,8 @@
         android:summary="@string/about_noorhidayat_summary"
         android:title="@string/about_noorhidayat"
         app:iconSpaceReserved="false"
-        app:singleLineTitle="true">
+        app:singleLineTitle="true"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_noorhidayat_url"/>
@@ -110,7 +118,8 @@
     <Preference
         android:summary="@string/about_androidx_url"
         android:title="@string/about_androidx"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_androidx_url"/>
@@ -119,7 +128,8 @@
     <Preference
         android:summary="@string/about_kotlin_url"
         android:title="@string/about_kotlin"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_kotlin_url"/>
@@ -128,7 +138,8 @@
     <Preference
         android:summary="@string/about_dagger2_url"
         android:title="@string/about_dagger2"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_dagger2_url"/>
@@ -137,7 +148,8 @@
     <Preference
         android:summary="@string/about_okhttp_url"
         android:title="@string/about_okhttp"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_okhttp_url"/>
@@ -146,7 +158,8 @@
     <Preference
         android:summary="@string/about_rxjava_url"
         android:title="@string/about_rxjava"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_rxjava_url"/>
@@ -155,7 +168,8 @@
     <Preference
         android:summary="@string/about_rxandroid_url"
         android:title="@string/about_rxandroid"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_rxandroid_url"/>
@@ -164,7 +178,8 @@
     <Preference
         android:summary="@string/about_moshi_url"
         android:title="@string/about_moshi"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_moshi_url"/>
@@ -173,7 +188,8 @@
     <Preference
         android:summary="@string/about_sliding_panel_url"
         android:title="@string/about_sliding_panel"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_sliding_panel_url"/>
@@ -182,7 +198,8 @@
     <Preference
         android:summary="@string/about_timber_url"
         android:title="@string/about_timber"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_timber_url"/>
@@ -191,7 +208,8 @@
     <Preference
         android:summary="@string/about_material_components_url"
         android:title="@string/about_material_components"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_material_components_url"/>
@@ -200,7 +218,8 @@
     <Preference
         android:summary="@string/about_dnsjava_url"
         android:title="@string/about_dnsjava"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_dnsjava_url"/>
@@ -209,7 +228,8 @@
     <Preference
         android:summary="@string/about_numberPicker_url"
         android:title="@string/about_numberPicker"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_numberPicker_url"/>
@@ -223,7 +243,8 @@
     <Preference
         android:summary="@string/about_contributors_summary"
         android:title="@string/about_contributors"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        android:widgetLayout="@layout/preference_widget_external_link">
       <intent
           android:action="android.intent.action.VIEW"
           android:data="@string/about_contributors_url"/>
