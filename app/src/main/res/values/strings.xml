@@ -817,6 +817,7 @@ Press the button below to set the time for this , then you can start the app </s
 
     <!-- translation database stuff -->
     <string name="remove_dlg_title">Remove Translation?</string>
+    <string name="translation_selected">1 selected</string>
     <string name="remove_dlg_msg">Are you sure you would like to remove the %1$s?</string>
     <string name="error_getting_translation_list">Unable to download the list of translations. Please try again later.</string>
     <string name="search_data">Search Data</string>

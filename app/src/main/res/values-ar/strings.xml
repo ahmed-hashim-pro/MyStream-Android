@@ -496,6 +496,7 @@
 
     <!-- translation database stuff -->
     <string name="remove_dlg_title">امسح التفسير/الترجمة؟</string>
+    <string name="translation_selected">عنصر واحد محدد</string>
     <string name="remove_dlg_msg">هل ترغب في حذف %1$s؟</string>
     <string name="error_getting_translation_list">لم يتم تحميل الملف المطلوب، من فضلك أعد المحاولة</string>
     <string name="search_data">بيانات البحث</string>

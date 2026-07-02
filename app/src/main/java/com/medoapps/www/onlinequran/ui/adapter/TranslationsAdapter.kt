@@ -64,7 +64,16 @@ class TranslationsAdapter(private val downloadedMenuActionListener: DownloadedMe
           val rightImage = this.rightImage
 
           if (item.exists()) {
-            rightImage?.visibility = View.GONE
+            if (itemView.isActivated) {
+              // trailing gold check on the long-press-selected row (mockup 15)
+              rightImage?.setImageResource(R.drawable.ic_check_gold)
+              rightImage?.setOnClickListener(null)
+              rightImage?.isClickable = false
+              rightImage?.contentDescription = null
+              rightImage?.visibility = View.VISIBLE
+            } else {
+              rightImage?.visibility = View.GONE
+            }
             itemView.setOnLongClickListener(actionMenuListener)
             if (item.needsUpgrade()) {
               leftImage?.setImageResource(R.drawable.ic_download)
@@ -85,9 +94,12 @@ class TranslationsAdapter(private val downloadedMenuActionListener: DownloadedMe
             rightImage?.isClickable = false
             rightImage?.contentDescription = null
           }
+          // dim the not-downloaded rows while a row is selected (mockup 15)
+          itemView.alpha = if (selectedItem != null && !item.exists()) 0.55f else 1f
         }
         R.layout.translation_sep -> {
           itemView.isActivated = false
+          itemView.alpha = 1f
           separatorText?.text = rowItem.name()
         }
       }

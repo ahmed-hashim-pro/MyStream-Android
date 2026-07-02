@@ -1,11 +1,17 @@
 package com.medoapps.www.onlinequran.ui;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import androidx.core.content.ContextCompat;
+import androidx.core.text.HtmlCompat;
 import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -115,6 +121,9 @@ public class TranslationManagerActivity extends AppCompatActivity
     onClickRankDownDisposable = adapter.getOnClickRankDownSubject().subscribe(this::rankDownItem);
 
     translationSwipeRefresh.setOnRefreshListener(this::onRefresh);
+    // gold pull-to-refresh arc on a surface bubble (mockup 15 frame 4)
+    translationSwipeRefresh.setColorSchemeResources(R.color.gold_accent);
+    translationSwipeRefresh.setProgressBackgroundColorSchemeResource(R.color.background_surface);
     presenter.bind(this);
     translationSwipeRefresh.setRefreshing(true);
     presenter.getTranslationsList(false);
@@ -236,7 +245,7 @@ public class TranslationManagerActivity extends AppCompatActivity
     translationSwipeRefresh.setRefreshing(false);
     Snackbar
         .make(translationRecycler, R.string.error_getting_translation_list, Snackbar.LENGTH_SHORT)
-        .setBackgroundTint(ContextCompat.getColor(this, R.color.navy_700))
+        .setBackgroundTint(ContextCompat.getColor(this, R.color.navy_900))
         .setTextColor(ContextCompat.getColor(this, R.color.text_on_navy))
         .show();
   }
@@ -359,8 +368,12 @@ public class TranslationManagerActivity extends AppCompatActivity
 
     final TranslationItem selectedItem =
         (TranslationItem) translationRowData;
-    String msg = String.format(getString(R.string.remove_dlg_msg), selectedItem.name());
-    AppBottomSheet.showConfirmation(this,
+    // bold the translation name inside the message (mockup 15 frame 3)
+    CharSequence msg = HtmlCompat.fromHtml(
+        getString(R.string.remove_dlg_msg,
+            "<b>" + TextUtils.htmlEncode(selectedItem.name()) + "</b>"),
+        HtmlCompat.FROM_HTML_MODE_LEGACY);
+    BottomSheetDialog sheet = AppBottomSheet.showConfirmation(this,
         getString(R.string.remove_dlg_title),
         msg,
         getString(R.string.remove_button),
@@ -376,6 +389,15 @@ public class TranslationManagerActivity extends AppCompatActivity
                 generateListItems();
             }
         }, null);
+    // destructive action: danger-red Remove button (mockup 15 frame 3)
+    if (sheet != null) {
+      MaterialButton removeButton = sheet.findViewById(R.id.bs_btn_positive);
+      if (removeButton != null) {
+        removeButton.setBackgroundTintList(
+            ColorStateList.valueOf(ContextCompat.getColor(this, R.color.danger)));
+        removeButton.setTextColor(Color.WHITE);
+      }
+    }
   }
 
   private List<TranslationItem> sortedDownloadedItems() {
@@ -499,6 +521,7 @@ public class TranslationManagerActivity extends AppCompatActivity
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
       MenuInflater inflater = getMenuInflater();
       inflater.inflate(R.menu.downloaded_translation_menu, menu);
+      mode.setTitle(getString(R.string.translation_selected));
       return true;
     }
 

@@ -309,6 +309,7 @@
     <!-- Lighter gold for the gold-gradient CTA (mockup gold-2 token). -->
     <color name="gold_accent_2">#D9B24A</color>
     <color name="gold_accent_semi">#66B8860B</color>
+    <color name="danger">#C84B4B</color>
     <color name="gold_accent_faint">#26B8860B</color>
     <color name="divider_gold">#66B8860B</color>
     <color name="seekbar_background">#D0C5B4</color>
