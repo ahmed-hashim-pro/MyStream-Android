@@ -7,6 +7,15 @@
     android:paddingStart="24dp"
     android:paddingEnd="24dp">
 
+  <!-- descriptive line above the range fields (mockup 16c) -->
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="8dp"
+      android:text="@string/audio_manager_bulk_hint"
+      android:textColor="@color/text_secondary"
+      android:textSize="13sp"/>
+
   <TextView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

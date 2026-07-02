@@ -658,7 +658,33 @@
     <string name="please_wait">الرجاء الانتظار…</string>
     <string name="exported_data">صدرت البيانات إلى %1$s</string>
     <string name="audio_manager_remove_audio_title">حذف الملف الصوتي؟</string>
-    <string name="audio_manager_remove_audio_msg">سيتم حذف الملف الصوتي ل%1$s. متأكد؟</string>
+        <string name="audio_manager_no_downloads">لم يتم تحميل سور بعد</string>
+    <string name="audio_manager_bulk_hint">اختر نطاقاً من السور لتنزيله لهذا القارئ.</string>
+    <plurals name="audio_manager_selected_count">
+        <item quantity="zero">لا عناصر محددة</item>
+        <item quantity="one">عنصر واحد محدد</item>
+        <item quantity="two">عنصران محددان</item>
+        <item quantity="few">%d عناصر محددة</item>
+        <item quantity="many">%d عنصراً محدداً</item>
+        <item quantity="other">%d عنصر محدد</item>
+    </plurals>
+    <plurals name="audio_manager_delete_surah_success">
+        <item quantity="zero">لم يتم حذف سور</item>
+        <item quantity="one">تم حذف السورة بنجاح</item>
+        <item quantity="two">تم حذف سورتين بنجاح</item>
+        <item quantity="few">تم حذف %1$d سور بنجاح</item>
+        <item quantity="many">تم حذف %1$d سورة بنجاح</item>
+        <item quantity="other">تم حذف %1$d سورة بنجاح</item>
+    </plurals>
+    <plurals name="audio_manager_delete_surah_error">
+        <item quantity="zero">لم يتم حذف سور</item>
+        <item quantity="one">حدث خطأ أثناء حذف السورة</item>
+        <item quantity="two">حدث خطأ أثناء حذف سورتين</item>
+        <item quantity="few">حدث خطأ أثناء حذف %1$d سور</item>
+        <item quantity="many">حدث خطأ أثناء حذف %1$d سورة</item>
+        <item quantity="other">حدث خطأ أثناء حذف %1$d سورة</item>
+    </plurals>
+<string name="audio_manager_remove_audio_msg">سيتم حذف الملف الصوتي ل%1$s. متأكد؟</string>
     <string name="about_noorhidayat_summary">خط نورحِرا وترجمة مفتي تقي</string>
     <string name="about_qaloon_images">صور صفحات القرآن برواية قالون مأخوذة بتصريح من Nous-Mêmes Éditions Et Diffusion (تونس)</string>
     <string name="audio_updated_title">تحديث الملفات الصوتية</string>

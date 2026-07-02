@@ -211,12 +211,13 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
       override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
         mode.menuInflater.inflate(R.menu.surah_audio_manager_contextual_menu, menu)
         val gold = ContextCompat.getColor(this@SheikhAudioManagerActivity, R.color.gold_accent)
+        val danger = ContextCompat.getColor(this@SheikhAudioManagerActivity, R.color.danger_on_navy)
         for (i in 0 until menu.size()) {
-          menu.getItem(i).icon?.let {
-            it.mutate()
-            it.setTint(gold)
-          }
+          val item = menu.getItem(i)
+          // destructive trash reads light-red on the navy bar (mockup 16d)
+          item.icon?.mutate()?.setTint(if (item.itemId == R.id.cab_delete) danger else gold)
         }
+        surahAdapter.selectionMode = true
         return true
       }
 
@@ -227,6 +228,10 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
         val downloadButton = menu.findItem(R.id.cab_download)
         deleteButton.isVisible = fullyDownloadedCount > 0
         downloadButton.isVisible = notFullyDownloadedCount > 0
+        // "N selected" count title (mockup 16d)
+        val selected = fullyDownloadedCount + notFullyDownloadedCount
+        mode.title = resources.getQuantityString(
+            R.plurals.audio_manager_selected_count, selected, selected)
         return true
       }
 
@@ -247,6 +252,7 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
       }
 
       override fun onDestroyActionMode(mode: ActionMode) {
+        surahAdapter.selectionMode = false
         surahAdapter.uncheckAll()
         actionMode = null
       }
@@ -285,7 +291,11 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
             val downloaded = info.downloadedSuras[surah]
             if (downloaded) {
               val surahName = quranDisplayData.getSuraName(this, surah, true)
-              val msg = String.format(getString(R.string.audio_manager_remove_audio_msg), surahName)
+              // bold the surah name inside the message (mockup 16e)
+              val msg = androidx.core.text.HtmlCompat.fromHtml(
+                  getString(R.string.audio_manager_remove_audio_msg,
+                      "<b>" + android.text.TextUtils.htmlEncode(surahName) + "</b>"),
+                  androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY)
               dialogConfirm = AppBottomSheet.showConfirmation(
                   this,
                   getString(R.string.audio_manager_remove_audio_title),
@@ -343,11 +353,23 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
           R.plurals.audio_manager_delete_surah_success, successCount, successCount
       )
     }
-    // Navy+gold success snackbar (per the reciter-manager mockup) instead of a plain toast.
+    // Floating rounded navy snackbar with a leading gold check (mockup 16b).
+    val snackMessage = android.text.SpannableStringBuilder("✓  ").append(resultString)
+    snackMessage.setSpan(
+        android.text.style.ForegroundColorSpan(
+            ContextCompat.getColor(this, R.color.gold_light)),
+        0, 1, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
     com.google.android.material.snackbar.Snackbar
-        .make(recyclerView, resultString, com.google.android.material.snackbar.Snackbar.LENGTH_SHORT)
+        .make(recyclerView, snackMessage, com.google.android.material.snackbar.Snackbar.LENGTH_SHORT)
         .apply {
-          view.setBackgroundColor(ContextCompat.getColor(this@SheikhAudioManagerActivity, R.color.navy_700))
+          view.background = ContextCompat.getDrawable(
+              this@SheikhAudioManagerActivity, R.drawable.bg_snackbar_navy)
+          (view.layoutParams as? ViewGroup.MarginLayoutParams)?.let { lp ->
+            val side = (14 * resources.displayMetrics.density).toInt()
+            lp.setMargins(side, lp.topMargin, side,
+                (16 * resources.displayMetrics.density).toInt())
+            view.layoutParams = lp
+          }
           setTextColor(ContextCompat.getColor(this@SheikhAudioManagerActivity, R.color.text_on_navy))
         }
         .show()
@@ -406,6 +428,15 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
     private val context: Context
   ) : Adapter<SurahViewHolder>() {
     var qariDownloadInfo: QariDownloadInfo? = null
+
+    // while the contextual bar is up, trailing discs become checkboxes (mockup 16d)
+    var selectionMode = false
+      set(value) {
+        if (field != value) {
+          field = value
+          notifyDataSetChanged()
+        }
+      }
     private val inflater: LayoutInflater = LayoutInflater.from(this@SheikhAudioManagerActivity)
     private val fullyDownloadedCheckedState = SparseBooleanArray()
     private val notFullyDownloadedCheckedState = SparseBooleanArray()
@@ -436,12 +467,19 @@ class SheikhAudioManagerActivity : AppCompatActivity(), SimpleDownloadListener {
         surahStatusTint = R.color.gold_accent
       }
       holder.status.text = getString(surahStatus)
-      holder.image.setImageResource(surahStatusImage)
-      holder.image.setBackgroundResource(surahStatusBackground)
-      holder.image.setColorFilter(
-          ContextCompat.getColor(this@SheikhAudioManagerActivity, surahStatusTint),
-          PorterDuff.Mode.SRC_IN
-      )
+      if (selectionMode) {
+        // multi-select affordance: gold check box / muted empty box (mockup 16d)
+        holder.image.setImageResource(R.drawable.checkbox_row_select)
+        holder.image.background = null
+        holder.image.clearColorFilter()
+      } else {
+        holder.image.setImageResource(surahStatusImage)
+        holder.image.setBackgroundResource(surahStatusBackground)
+        holder.image.setColorFilter(
+            ContextCompat.getColor(this@SheikhAudioManagerActivity, surahStatusTint),
+            PorterDuff.Mode.SRC_IN
+        )
+      }
       holder.setChecked(isItemChecked(position))
     }
 

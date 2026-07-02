@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Reciter / surah row (mockup 16): text block first, the action disc
+     (download / delete / check / select-box) at the trailing end. Mirrors via
+     start/end under the activities' layoutDirection="locale". -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -11,10 +14,10 @@
       android:id="@+id/image"
       android:layout_width="40dp"
       android:layout_height="40dp"
-      android:layout_marginEnd="16dp"
+      android:layout_marginStart="16dp"
       android:scaleType="center"
-      android:layout_gravity="center_vertical"
-      android:layout_alignParentStart="true"
+      android:layout_centerVertical="true"
+      android:layout_alignParentEnd="true"
       android:src="@drawable/ic_download"
       android:background="@drawable/download_button_circle"
       android:contentDescription="@null"
@@ -23,9 +26,9 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_gravity="center_vertical"
-      android:layout_alignParentEnd="true"
-      android:layout_toEndOf="@id/image"
+      android:layout_centerVertical="true"
+      android:layout_alignParentStart="true"
+      android:layout_toStartOf="@id/image"
       android:orientation="vertical"
       >
     <TextView
@@ -33,7 +36,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
+        android:fontFamily="@font/amiri_bold"
         android:textAppearance="@style/TitleText"
+        android:textSize="17sp"
         />
     <TextView
         android:id="@+id/quantity"

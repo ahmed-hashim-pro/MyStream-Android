@@ -9,7 +9,7 @@
       app:showAsAction="ifRoom" />
   <item
       android:id="@+id/cab_delete"
-      android:icon="@drawable/ic_cancel"
+      android:icon="@drawable/ic_delete"
       android:title="@string/audio_manager_delete_selection"
       app:showAsAction="ifRoom" />
 </menu>

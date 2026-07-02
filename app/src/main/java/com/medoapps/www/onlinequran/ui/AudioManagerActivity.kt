@@ -144,21 +144,31 @@ class AudioManagerActivity : AppCompatActivity() {
       holder.name.text = qariItems[position].name
       val info = getSheikhInfoForPosition(position)
       val fullyDownloaded = info!!.downloadedSuras.size()
-      holder.quantity.text = resources.getQuantityString(
-          R.plurals.files_downloaded,
-          fullyDownloaded, fullyDownloaded
-      )
+      // EN plurals ignore quantity="zero", so special-case the empty state
+      holder.quantity.text = if (fullyDownloaded == 0) {
+        getString(R.string.audio_manager_no_downloads)
+      } else {
+        resources.getQuantityString(
+            R.plurals.files_downloaded,
+            fullyDownloaded, fullyDownloaded
+        )
+      }
       if (fullyDownloaded > 0) {
+        // solid gold disc with a dark check (mockup 16a downloaded state)
         holder.image.setBackgroundResource(R.drawable.downloaded_button_circle)
         holder.image.setImageResource(R.drawable.round_check_24)
+        holder.image.setColorFilter(
+            ContextCompat.getColor(this@AudioManagerActivity, R.color.text_on_gold),
+            PorterDuff.Mode.SRC_IN
+        )
       } else {
         holder.image.setBackgroundResource(R.drawable.download_button_circle)
         holder.image.setImageResource(R.drawable.ic_download)
+        holder.image.setColorFilter(
+            ContextCompat.getColor(this@AudioManagerActivity, R.color.gold_accent),
+            PorterDuff.Mode.SRC_IN
+        )
       }
-      holder.image.setColorFilter(
-          ContextCompat.getColor(this@AudioManagerActivity, R.color.gold_accent),
-          PorterDuff.Mode.SRC_IN
-      )
     }
 
     fun getSheikhInfoForPosition(position: Int): QariDownloadInfo? {

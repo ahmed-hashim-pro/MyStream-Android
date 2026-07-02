@@ -57,9 +57,11 @@ class BulkDownloadFragment : DialogFragment() {
 
     val suraFirstAdapter = InfixFilterArrayAdapter(
         activity,
-        android.R.layout.simple_spinner_dropdown_item, suras
+        R.layout.audio_panel_spinner_dropdown_item, suras
     )
     suraFirstInput.setAdapter(suraFirstAdapter)
+    // unified navy dropdown skin (mockup 06b/16c)
+    suraFirstInput.setDropDownBackgroundResource(R.drawable.bg_dropdown_navy)
 
     suraFirstInput.setOnForceCompleteListener { _: ForceCompleteTextView?, position: Int, _: Long ->
       val enteredFirstText = suraFirstInput.text.toString()
@@ -85,9 +87,10 @@ class BulkDownloadFragment : DialogFragment() {
 
     val suraLastAdapter = InfixFilterArrayAdapter(
         activity,
-        android.R.layout.simple_spinner_dropdown_item, suras
+        R.layout.audio_panel_spinner_dropdown_item, suras
     )
     suraLastInput.setAdapter(suraLastAdapter)
+    suraLastInput.setDropDownBackgroundResource(R.drawable.bg_dropdown_navy)
 
     suraLastInput.setOnForceCompleteListener { _: ForceCompleteTextView?, position: Int, _: Long ->
       val enteredLastText = suraLastInput.text.toString()
@@ -118,6 +121,7 @@ class BulkDownloadFragment : DialogFragment() {
       dismiss()
       onSubmit()
     }
+    builder.setNegativeButton(getString(string.cancel), null)
     return builder.create()
   }
 

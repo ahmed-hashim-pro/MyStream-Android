@@ -78,7 +78,7 @@
     <string name="invite_friends">Invite Friends</string>
     <string name="share">Share By</string>
 
-    <string name="cancel">cancel</string>
+    <string name="cancel">Cancel</string>
     <string name="Download_aya">My Stream download</string>
     <string name="aya_download_progress">Download in progress...</string>
     <string name="download_done">Download complete</string>
@@ -903,7 +903,13 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="audio_manager_subtitle">Reciters · tap to manage surahs</string>
     <string name="audio_sheikh_progress">%1$d / %2$d surahs</string>
     <string name="audio_manager_remove_audio_title">Remove Surah?</string>
-    <string name="audio_manager_remove_audio_msg">Are you sure you would like to remove %1$s?</string>
+    <string name="audio_manager_remove_audio_msg">Delete the downloaded audio for %1$s?</string>
+    <string name="audio_manager_no_downloads">No surahs downloaded yet</string>
+    <string name="audio_manager_bulk_hint">Choose a range of surahs to download for this reciter.</string>
+    <plurals name="audio_manager_selected_count">
+        <item quantity="one">%d selected</item>
+        <item quantity="other">%d selected</item>
+    </plurals>
     <plurals name="audio_manager_delete_surah_success">
         <item quantity="one">Successfully deleted the surah</item>
         <item quantity="other">Successfully deleted %1$d surahs</item>
