@@ -145,6 +145,19 @@ class AyahPlaybackFragment : AyahActionFragment() {
     (activity as? PagerActivity)?.pagerActivityComponent?.inject(this)
   }
 
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    // the sliding panel's pager destroys and recreates this page's view when
+    // tabs are switched; repopulate after the first layout (selections set on
+    // an un-laid-out view are lost to AdapterView's dataset sync)
+    view.post {
+      val wasOpen = isOpen
+      isOpen = false
+      refreshView()
+      isOpen = wasOpen
+    }
+  }
+
   private val onClickListener = View.OnClickListener { v: View ->
     if (v.id == R.id.apply) {
       apply()
@@ -266,24 +279,35 @@ class AyahPlaybackFragment : AyahActionFragment() {
   ) {
     val context: Context? = activity
     if (context != null) {
-      val ayahs: Array<CharSequence?> = arrayOfNulls(maxAyah)
-
-      for (i in 0 until maxAyah) {
-        ayahs[i] = QuranUtils.getLocalizedNumber(context, i + 1)
-      }
-      adapter.clear()
-      for (i in 0 until maxAyah) {
-        adapter.add(ayahs[i])
+      // only rebuild the list when the ayah count actually changed: a
+      // dataset change makes AdapterView re-sync to the pre-change selection
+      // on the next layout, clobbering setSelection (the panel then shows
+      // ayah 1 no matter what was picked)
+      if (adapter.count != maxAyah) {
+        val ayahs: Array<CharSequence?> = arrayOfNulls(maxAyah)
+        for (i in 0 until maxAyah) {
+          ayahs[i] = QuranUtils.getLocalizedNumber(context, i + 1)
+        }
+        adapter.clear()
+        for (i in 0 until maxAyah) {
+          adapter.add(ayahs[i])
+        }
       }
       spinner.setSelection(currentAyah - 1)
+      // re-assert after any pending dataset change is processed
+      spinner.post { spinner.setSelection(currentAyah - 1) }
     }
   }
 
   override fun onToggleDetailsPanel(isVisible: Boolean) {
+    // populate on BOTH edges. Refreshing only while hidden doesn't stick:
+    // the hidden pane never lays out, and when it finally does,
+    // AdapterView's dataset-change sync restores the ayah spinners to their
+    // pre-change position. On open the user hasn't edited yet, so a refresh
+    // is safe; refreshes while open stay guarded to preserve edits.
+    isOpen = false
+    refreshView()
     isOpen = isVisible
-    if (!isOpen) {
-      refreshView()
-    }
   }
 
   override fun refreshView() {
@@ -311,19 +335,32 @@ class AyahPlaybackFragment : AyahActionFragment() {
         decidedEnd = ending
         applyButton.setText(R.string.play_apply)
       } else {
-        // we have no last audio request, so we're not playing audio... yet
-        start = selectionStart
-        if (selectionStart == selectionEnd) {
-          val startPage = quranInfo.getPageFromSuraAyah(start.sura, start.ayah)
-          val pageBounds = quranInfo.getPageBounds(startPage)
-          ending = SuraAyah(pageBounds[2], pageBounds[3])
-          shouldEnforce = false
+        // no active request — if a repeat drill just finished (or was
+        // stopped) and the user re-opens the panel inside that range,
+        // restore it instead of making them re-pick the ayahs each round
+        val completed = context.completedAudioRequest
+        if (completed != null &&
+          !completed.start.after(selectionStart) && !selectionStart.after(completed.end)
+        ) {
+          start = completed.start
+          ending = completed.end
+          verseRepeatCount = completed.repeatInfo
+          rangeRepeatCount = completed.rangeRepeatInfo
+          shouldEnforce = completed.enforceBounds
         } else {
-          ending = selectionEnd
-          shouldEnforce = true
+          start = selectionStart
+          if (selectionStart == selectionEnd) {
+            val startPage = quranInfo.getPageFromSuraAyah(start.sura, start.ayah)
+            val pageBounds = quranInfo.getPageBounds(startPage)
+            ending = SuraAyah(pageBounds[2], pageBounds[3])
+            shouldEnforce = false
+          } else {
+            ending = selectionEnd
+            shouldEnforce = true
+          }
+          rangeRepeatCount = 0
+          verseRepeatCount = 0
         }
-        rangeRepeatCount = 0
-        verseRepeatCount = 0
         decidedStart = null
         decidedEnd = null
         applyButton.setText(R.string.play_apply_and_play)
