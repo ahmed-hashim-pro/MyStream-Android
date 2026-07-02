@@ -2,6 +2,7 @@ package com.medoapps.www.onlinequran.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -51,6 +52,8 @@ public class AppBottomSheet {
         MaterialButton btnNegative = view.findViewById(R.id.bs_btn_negative);
 
         tvTitle.setText(title);
+        // some sheets are title-less (e.g. the storage-permission gate)
+        tvTitle.setVisibility(TextUtils.isEmpty(title) ? View.GONE : View.VISIBLE);
         tvMessage.setText(message);
         btnPositive.setText(positiveText);
         btnNegative.setText(negativeText);
@@ -85,6 +88,7 @@ public class AppBottomSheet {
         MaterialButton btnNegative = view.findViewById(R.id.bs_btn_negative);
 
         tvTitle.setText(title);
+        tvTitle.setVisibility(TextUtils.isEmpty(title) ? View.GONE : View.VISIBLE);
         tvMessage.setText(message);
         btnPositive.setText(android.R.string.ok);
         btnNegative.setVisibility(View.GONE);

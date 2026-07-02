@@ -40,8 +40,9 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="14dp"
       android:max="100"
-      android:progressBackgroundTint="@color/track_on_navy"
-      android:progressTint="@color/gold_light" />
+      android:maxHeight="6dp"
+      android:minHeight="6dp"
+      android:progressDrawable="@drawable/progress_gold_on_navy" />
 
   <TextView
       android:id="@+id/dpc_status"

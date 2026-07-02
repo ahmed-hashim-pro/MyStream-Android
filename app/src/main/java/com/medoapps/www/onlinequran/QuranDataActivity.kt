@@ -373,6 +373,17 @@ class QuranDataActivity : Activity(), SimpleDownloadListener, OnRequestPermissio
         }
     )
     bsDialog?.setCancelable(false)
+    // danger glyph in a faint-red rounded frame (mockup 17 state F)
+    bsDialog?.findViewById<android.widget.ImageView>(R.id.bs_icon)?.apply {
+      setImageResource(R.drawable.round_warning_24)
+      imageTintList = android.content.res.ColorStateList.valueOf(
+          androidx.core.content.ContextCompat.getColor(
+              this@QuranDataActivity, R.color.audio_remove))
+      setBackgroundResource(R.drawable.bg_icon_danger_faint)
+      val pad = (8 * resources.displayMetrics.density).toInt()
+      setPadding(pad, pad, pad, pad)
+      visibility = android.view.View.VISIBLE
+    }
     errorDialog = bsDialog
   }
 
