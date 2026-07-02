@@ -51,6 +51,9 @@
     <dimen name="audiobar_side_inset">16dp</dimen>
     <dimen name="audiobar_controls_inset">4dp</dimen>
     <dimen name="audiobar_deck_text_size">11.5sp</dimen>
+    <!-- wide layouts (landscape/tablets): navy bleeds full width, content box
+         is capped and centered so controls keep their rhythm -->
+    <dimen name="audiobar_content_max_width">520dp</dimen>
     <dimen name="audiobar_fab_size">38dp</dimen>
     <dimen name="audiobar_avatar_size">34dp</dimen>
     <dimen name="audiobar_button_width">48dp</dimen>

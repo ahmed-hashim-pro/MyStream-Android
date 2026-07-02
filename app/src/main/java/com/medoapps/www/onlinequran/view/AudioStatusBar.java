@@ -68,6 +68,7 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
   private final int sideInset;
   private final int controlsInset;
   private final int deckTextSize;
+  private final int contentMaxWidth;
   private LinearLayout currentRow;
   private QariAdapter adapter;
   private QariAdapter deckAdapter;
@@ -145,6 +146,7 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     sideInset = resources.getDimensionPixelSize(R.dimen.audiobar_side_inset);
     controlsInset = resources.getDimensionPixelSize(R.dimen.audiobar_controls_inset);
     deckTextSize = resources.getDimensionPixelSize(R.dimen.audiobar_deck_text_size);
+    contentMaxWidth = resources.getDimensionPixelSize(R.dimen.audiobar_content_max_width);
     fabSize = Math.min(resources.getDimensionPixelSize(R.dimen.audiobar_fab_size),
         rowHeight - separatorSpacing);
     avatarSize = Math.min(resources.getDimensionPixelSize(R.dimen.audiobar_avatar_size),
@@ -275,6 +277,21 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
         haveCriticalError = true;
       }
     }
+  }
+
+  @Override
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    // wide layouts (landscape/tablets): the navy background bleeds full
+    // width but the content box is capped and centered, so the controls
+    // keep their rhythm instead of stretching edge-to-edge (mockup
+    // audiobar-device-width, wide frame). Applied before measuring the
+    // children so the very first pass lays them out inside the capped box.
+    final int width = MeasureSpec.getSize(widthMeasureSpec);
+    final int extra = Math.max(0, (width - contentMaxWidth) / 2);
+    if (getPaddingLeft() != extra || getPaddingRight() != extra) {
+      setPadding(extra, 0, extra, 0);
+    }
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
   }
 
   /** Adds a fixed-height, forced-LTR horizontal row that add* helpers fill. */

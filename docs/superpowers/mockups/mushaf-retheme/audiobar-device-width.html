@@ -62,6 +62,10 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
 /* screen = exactly 412×914dp (bezel adds 9px each side) */
 .phone{width:430px;height:932px;border-radius:44px;background:#05070c;padding:9px;flex:none;position:relative;
   box-shadow:0 34px 80px -30px rgba(0,0,0,.85),0 0 0 2px #1c2335,inset 0 0 0 2px #000}
+/* landscape / wide: screen = 914×412dp */
+.phone.wide{width:932px;height:430px}
+.phone-col.wide{width:932px;grid-column:1 / -1}
+.phone-col.wide .phone-cap .d{max-width:912px}
 .screen{width:100%;height:100%;border-radius:36px;overflow:hidden;position:relative;background:var(--bg);color:var(--text);
   display:flex;flex-direction:column}
 .notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:110px;height:24px;background:#05070c;border-radius:0 0 14px 14px;z-index:120}
@@ -112,11 +116,15 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
    inset so the ~20dp glyph edge lands on the same 16dp line.
    ============================================================ */
 .audiobar{background:linear-gradient(150deg,var(--navy-700),var(--navy-900));color:var(--on-navy);
-  flex:none;position:relative;z-index:40;display:flex;flex-direction:column}
+  flex:none;position:relative;z-index:40;display:flex;flex-direction:column;
+  /* wide layouts: the navy bleeds full width but the CONTENT box is capped
+     at 520dp and centered — controls never stretch edge-to-edge on tablets
+     or landscape (implemented as root padding in AudioStatusBar) */
+  padding-inline:max(0px, calc((100% - 520px) / 2))}
 /* faint inset guides (toggle) */
 .audiobar .guide{display:none;position:absolute;top:0;bottom:0;width:0;border-inline-start:1px dashed rgba(233,199,120,.55);z-index:5;pointer-events:none}
-.audiobar .guide.s{inset-inline-start:16px}
-.audiobar .guide.e{inset-inline-end:16px}
+.audiobar .guide.s{inset-inline-start:calc(max(0px, (100% - 520px) / 2) + 16px)}
+.audiobar .guide.e{inset-inline-end:calc(max(0px, (100% - 520px) / 2) + 16px)}
 [data-guides="on"] .audiobar .guide{display:block}
 
 /* --- stopped row: identity bar (A) --- */
@@ -250,6 +258,43 @@ h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light
             <span data-en="Day" data-ar="نهار" class="on"></span>
             <span data-en="Sepia" data-ar="ورقي"></span>
             <span data-en="Night" data-ar="ليل"></span>
+          </div>
+        </div>
+        <div class="audiobar">
+          <span class="guide s"></span><span class="guide e"></span>
+          <div class="ab-deck" title="Choose reciter">
+            <span class="mic">🎙</span>
+            <span class="nm" data-en="Minshawi Murattal (gapless)" data-ar="المنشاوي (متصل)"></span>
+            <span class="car">▾</span>
+            <span class="np"><span class="ar" data-en="Al-Jumu`ah" data-ar="الجُمُعة"></span> · <span data-en="ayah 2" data-ar="الآية ٢"></span></span>
+          </div>
+          <div class="ab-hairline"></div>
+          <div class="ab-controls">
+            <span class="ctl stop" title="Stop">⏹</span>
+            <span class="ctl" title="Previous">⏮</span>
+            <span class="play" title="Pause">⏸</span>
+            <span class="ctl fwd" title="Next">⏭</span>
+            <span class="ctl" title="Repeat"><span class="rep">🔁<i>3</i></span></span>
+            <span class="ctl" title="Audio settings">⚙</span>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ---------- WIDE (landscape / tablet) @ 914dp ---------- -->
+    <div class="phone-col wide">
+      <div class="phone-cap">
+        <div class="n" data-en="Wide layouts — content capped at 520dp" data-ar="الشاشات العريضة — المحتوى محدود بـ 520dp"></div>
+        <div class="d" data-en="Landscape phones and tablets: the navy bar still bleeds edge-to-edge, but its content box is capped at 520dp and centered — the six controls keep the same rhythm instead of stretching across 914dp. Toggle Guides to see the box." data-ar="في العرض الأفقي والأجهزة اللوحية: يبقى الشريط الكحلي ممتداً بعرض الشاشة، لكن صندوق المحتوى محدود بـ ٥٢٠dp ومتمركز — تحافظ الأزرار الستة على إيقاعها بدل التمدد عبر ٩١٤dp."></div>
+      </div>
+      <div class="phone wide"><div class="notch"></div><div class="screen">
+        <div class="sb"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div style="position:relative;flex:1;overflow:hidden">
+          <div class="page auto-paper sepia">
+            <div class="quran" style="font-size:24px;line-height:1.9;padding:10px 40px">
+              يُسَبِّحُ لِلَّهِ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ الْمَلِكِ الْقُدُّوسِ الْعَزِيزِ الْحَكِيمِ <span class="mk">1</span>
+            </div>
+            <div class="pageno">٥٥٣</div>
           </div>
         </div>
         <div class="audiobar">
