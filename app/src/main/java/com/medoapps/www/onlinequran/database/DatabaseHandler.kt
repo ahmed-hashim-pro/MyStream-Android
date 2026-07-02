@@ -30,8 +30,12 @@ class DatabaseHandler private constructor(
   private var schemaVersion = 1
   private var database: SQLiteDatabase? = null
 
-  private val defaultSearcher: Searcher
-  private val arabicSearcher: Searcher
+  // Handlers are cached in databaseMap across theme switches, so the gold match
+  // highlight is re-resolved (and the searchers rebuilt) whenever it changes.
+  private val appContext: Context = context.applicationContext
+  private var searcherHighlightColor = 0
+  private lateinit var defaultSearcher: Searcher
+  private lateinit var arabicSearcher: Searcher
 
   companion object {
     private const val COL_SURA = "sura"
@@ -80,11 +84,7 @@ class DatabaseHandler private constructor(
 
   init {
     // initialize the searchers first
-    val matchString = "<font color=\"" +
-        ContextCompat.getColor(context, R.color.translation_highlight) +
-        "\">"
-    defaultSearcher = DefaultSearcher(matchString, MATCH_END, ELLIPSES)
-    arabicSearcher = ArabicSearcher(defaultSearcher, matchString, MATCH_END, QuranFileConstants.SEARCH_EXTRA_REPLACEMENTS)
+    refreshSearchers()
 
     // if there's no Quran base directory, there are no databases
     val base = quranFileUtils.getQuranDatabaseDirectory(context)
@@ -104,6 +104,19 @@ class DatabaseHandler private constructor(
 
       schemaVersion = getSchemaVersion()
     }
+  }
+
+  /** (Re)build the searchers when the theme's highlight color changes (day/night). */
+  @Synchronized
+  private fun refreshSearchers() {
+    val color = ContextCompat.getColor(appContext, R.color.translation_highlight)
+    if (::defaultSearcher.isInitialized && color == searcherHighlightColor) return
+    searcherHighlightColor = color
+    val matchString = "<font color=\"$color\">"
+    val default = DefaultSearcher(matchString, MATCH_END, ELLIPSES)
+    defaultSearcher = default
+    arabicSearcher =
+      ArabicSearcher(default, matchString, MATCH_END, QuranFileConstants.SEARCH_EXTRA_REPLACEMENTS)
   }
 
   @Retention(AnnotationRetention.SOURCE)
@@ -335,6 +348,7 @@ class DatabaseHandler private constructor(
       searchText = searchText.replace("\"".toRegex(), "")
     }
 
+    refreshSearchers()
     val searcher: Searcher = if (isArabicDatabase) arabicSearcher else defaultSearcher
 
     val useFullTextIndex = schemaVersion > 1 && !isArabicDatabase

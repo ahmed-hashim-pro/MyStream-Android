@@ -60,11 +60,11 @@ public class SearchActivity extends AppCompatActivity
 
   private TextView messageView;
   private TextView warningView;
+  private View warningContainer;
   private Button buttonGetTranslations;
   private View emptyView;
   private TextView emptyDesc;
   private android.widget.SearchView heroSearch;
-  private boolean downloadArabicSearchDb;
   private boolean isArabicSearch;
   private String query;
   private ResultAdapter adapter;
@@ -83,20 +83,18 @@ public class SearchActivity extends AppCompatActivity
     applyNavyStatusBar();
     messageView = findViewById(R.id.search_area);
     warningView = findViewById(R.id.search_warning);
+    warningContainer = findViewById(R.id.search_warning_container);
     emptyView = findViewById(R.id.search_empty);
     emptyDesc = findViewById(R.id.empty_desc);
     buttonGetTranslations = findViewById(R.id.btnGetTranslations);
     buttonGetTranslations.setOnClickListener(v -> {
-      Intent intent;
-      if (downloadArabicSearchDb) {
-        downloadArabicSearchDb();
-        return;
-      } else {
-        intent = new Intent(getApplicationContext(), TranslationManagerActivity.class);
-      }
-      startActivity(intent);
+      startActivity(new Intent(getApplicationContext(), TranslationManagerActivity.class));
       finish();
     });
+    // The Arabic-search-DB download lives inside the warning notice (mockup 09),
+    // so it stays actionable even while translation results are listed below.
+    Button getArabicDb = findViewById(R.id.btnGetArabicSearchDb);
+    getArabicDb.setOnClickListener(v -> downloadArabicSearchDb());
 
     ImageButton back = findViewById(R.id.search_back);
     if (back != null) back.setOnClickListener(v -> finish());
@@ -131,10 +129,14 @@ public class SearchActivity extends AppCompatActivity
     View plate = heroSearch.findViewById(
         getResources().getIdentifier("android:id/search_plate", null, null));
     if (plate != null) plate.setBackgroundColor(android.graphics.Color.TRANSPARENT);
-    for (String n : new String[]{"search_close_btn", "search_go_btn", "search_button"}) {
+    for (String n : new String[]{"search_go_btn", "search_button"}) {
       ImageView ic = heroSearch.findViewById(getResources().getIdentifier("android:id/" + n, null, null));
       if (ic != null) ic.setColorFilter(gold);
     }
+    // The clear "✕" is dim white in the mockup — only the lens/actions are colored.
+    ImageView close = heroSearch.findViewById(
+        getResources().getIdentifier("android:id/search_close_btn", null, null));
+    if (close != null) close.setColorFilter(hint);
     // Lens = the mockup's emoji magnifier (multi-color); use its own colors.
     ImageView mag = heroSearch.findViewById(
         getResources().getIdentifier("android:id/search_mag_icon", null, null));
@@ -176,7 +178,7 @@ public class SearchActivity extends AppCompatActivity
 
   @Override
   public void handleDownloadSuccess() {
-    warningView.setVisibility(View.GONE);
+    warningContainer.setVisibility(View.GONE);
     buttonGetTranslations.setVisibility(View.GONE);
     handleIntent(getIntent());
   }
@@ -214,15 +216,9 @@ public class SearchActivity extends AppCompatActivity
       isArabicSearch = false;
 
       warningView.setText(getString(R.string.no_arabic_search_available));
-      warningView.setVisibility(View.VISIBLE);
-      // The notice itself triggers the download, so the action stays reachable
-      // even when translation results are shown (which hides the empty-state button).
-      warningView.setOnClickListener(v -> downloadArabicSearchDb());
-      buttonGetTranslations.setText(getString(R.string.get_arabic_search_db));
-      buttonGetTranslations.setVisibility(View.VISIBLE);
-      downloadArabicSearchDb = true;
+      warningContainer.setVisibility(View.VISIBLE);
     } else {
-      downloadArabicSearchDb = false;
+      warningContainer.setVisibility(View.GONE);
     }
 
     if (cursor == null || cursor.getCount() == 0) {
@@ -232,8 +228,9 @@ public class SearchActivity extends AppCompatActivity
       // there are no valid databases to search at all. in this case, if it's not an
       // Arabic search, show the "get translations" button.
       if (!containsArabic && query != null && query.length() > 2) {
-        buttonGetTranslations.setText(R.string.get_translations);
         buttonGetTranslations.setVisibility(View.VISIBLE);
+      } else {
+        buttonGetTranslations.setVisibility(View.GONE);
       }
       if (adapter != null) {
         adapter.swapCursor(null);

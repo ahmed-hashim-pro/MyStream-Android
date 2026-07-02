@@ -5,6 +5,7 @@
   the real search field; a navy count band; themed empty state; result cards.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="locale"
@@ -37,8 +38,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:src="@drawable/outline_arrow_back_ios_24"
-                app:tint="@color/gold_accent"
-                xmlns:app="http://schemas.android.com/apk/res-auto" />
+                app:tint="@color/gold_accent" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -81,26 +81,47 @@
     </LinearLayout>
 
     <!-- Arabic-search warning notice (shown only when the Arabic DB is missing).
-         Rounded gold-faint card with a leading gold alert glyph; the whole notice
-         is tappable to trigger the Arabic-search-DB download (wired in code) so
-         the action stays reachable even when translation results are present. -->
-    <TextView
-        android:id="@+id/search_warning"
+         Rounded gold-faint card with a leading gold warning glyph and its own
+         download button (mockup 09), so the action stays visible even when
+         translation results are shown below. -->
+    <LinearLayout
+        android:id="@+id/search_warning_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_notice_gold"
-        android:drawablePadding="12dp"
-        android:gravity="center_vertical"
+        android:orientation="vertical"
         android:padding="14dp"
-        app:drawableStartCompat="@drawable/round_add_alert_24"
-        android:drawableTint="@color/gold_accent"
-        android:textColor="?android:textColorPrimary"
-        android:textSize="14sp"
-        android:visibility="gone"
-        xmlns:app="http://schemas.android.com/apk/res-auto" />
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/search_warning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="12dp"
+            android:gravity="center_vertical"
+            app:drawableStartCompat="@drawable/round_warning_24"
+            android:textColor="?android:textColorPrimary"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btnGetArabicSearchDb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_download_all_button"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            android:text="@string/get_arabic_search_db"
+            android:textColor="@color/text_on_gold"
+            android:textStyle="bold"
+            app:icon="@drawable/outline_file_download_20"
+            app:iconGravity="textStart"
+            app:iconSize="18dp"
+            app:iconTint="@color/text_on_gold" />
+    </LinearLayout>
 
     <!-- Result count band -->
     <TextView
@@ -178,6 +199,10 @@
             android:text="@string/get_translations"
             android:textColor="@color/text_on_gold"
             android:textStyle="bold"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:icon="@drawable/outline_file_download_20"
+            app:iconGravity="textStart"
+            app:iconSize="18dp"
+            app:iconTint="@color/text_on_gold" />
     </LinearLayout>
 </LinearLayout>

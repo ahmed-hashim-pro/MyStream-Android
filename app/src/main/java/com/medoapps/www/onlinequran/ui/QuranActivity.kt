@@ -302,9 +302,11 @@ class QuranActivity : AppCompatActivity(),
     }
     byId("search_plate")?.setBackgroundColor(android.graphics.Color.TRANSPARENT)
     byId("submit_area")?.setBackgroundColor(android.graphics.Color.TRANSPARENT)
-    for (n in listOf("search_close_btn", "search_button", "search_go_btn")) {
+    for (n in listOf("search_button", "search_go_btn")) {
       (byId(n) as? android.widget.ImageView)?.setColorFilter(gold)
     }
+    // The clear "✕" is dim white in the mockup — only the lens/actions are colored.
+    (byId("search_close_btn") as? android.widget.ImageView)?.setColorFilter(hintC)
     // Lens = the mockup's 🔍 emoji (silver rim, light glass, dark handle). It is
     // intentionally multi-color, so use its own colors — do NOT apply the gold tint.
     (byId("search_mag_icon") as? android.widget.ImageView)?.apply {
