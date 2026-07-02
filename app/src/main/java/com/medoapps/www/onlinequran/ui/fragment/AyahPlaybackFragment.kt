@@ -352,7 +352,8 @@ class AyahPlaybackFragment : AyahActionFragment() {
   }
 
   companion object {
-    private val ITEM_LAYOUT = R.layout.sherlock_spinner_item
+    // on-navy selected view with the gold caret (mockup 06 From/To boxes)
+    private val ITEM_LAYOUT = R.layout.audio_panel_spinner_item
     private val ITEM_DROPDOWN_LAYOUT = R.layout.sherlock_spinner_dropdown_item
     private const val MAX_REPEATS = 25
   }

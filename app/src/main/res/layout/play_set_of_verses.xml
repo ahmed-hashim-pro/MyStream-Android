@@ -5,12 +5,17 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     >
+  <!-- white on-navy row label (mockup 06); the gold accent is the wheel's selected value -->
   <TextView
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
+      android:layout_weight="1"
       android:layout_gravity="center_vertical"
+      android:gravity="center_vertical"
       android:text="@string/play_verses_range"
-      android:textAppearance="@style/PanelLabel"
+      android:textColor="@color/text_on_navy"
+      android:textSize="13.5sp"
+      android:textStyle="bold"
       />
   <com.shawnlin.numberpicker.NumberPicker
       android:id="@+id/repeat_range_picker"

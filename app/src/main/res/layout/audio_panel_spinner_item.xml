@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Selected view of the playback-panel From/To spinners: on-navy value at the
+     box start (mockup 06); the gold caret + border live on the wrapper frame. -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="42dp"
+    android:gravity="center_vertical"
+    android:paddingStart="12dp"
+    android:paddingEnd="26dp"
+    android:singleLine="true"
+    android:ellipsize="end"
+    android:textColor="@color/text_on_navy"
+    android:textSize="13sp" />

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Small gold dropdown caret for the playback-panel From/To boxes (mockup ▼). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16dp"
+    android:height="16dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24"
+    android:tint="@color/gold_accent">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M7,10l5,5 5,-5z" />
+</vector>

@@ -427,9 +427,11 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <!-- From/To field labels on the navy playback panel (mockup .lab: small gold) -->
     <style name="PanelLabel">
         <item name="android:textColor">@color/panel_label</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <!-- ============================================================ -->

@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="12dp"
-    android:paddingRight="12dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     >
   <ScrollView
       android:layout_width="match_parent"
@@ -41,6 +41,7 @@
             android:textAppearance="@style/PanelLabel"
             />
       </LinearLayout>
+      <!-- From | To columns; gold-bordered selector boxes (mockup 06) -->
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -52,18 +53,50 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginEnd="8dp"
             android:orientation="horizontal"
             >
-          <com.medoapps.www.onlinequran.view.QuranSpinner
-              android:id="@+id/start_sura_spinner"
-              android:layout_width="wrap_content"
+          <FrameLayout
+              android:layout_width="0dp"
               android:layout_height="wrap_content"
-              />
-          <com.medoapps.www.onlinequran.view.QuranSpinner
-              android:id="@+id/start_ayah_spinner"
-              android:layout_width="wrap_content"
+              android:layout_weight="2"
+              android:layout_marginEnd="8dp"
+              android:background="@drawable/bg_panel_spinner_box">
+            <com.medoapps.www.onlinequran.view.QuranSpinner
+                android:id="@+id/start_sura_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_caret_down_gold"
+                android:importantForAccessibility="no"
+                />
+          </FrameLayout>
+          <FrameLayout
+              android:layout_width="0dp"
               android:layout_height="wrap_content"
-              />
+              android:layout_weight="1"
+              android:background="@drawable/bg_panel_spinner_box">
+            <com.medoapps.www.onlinequran.view.QuranSpinner
+                android:id="@+id/start_ayah_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_caret_down_gold"
+                android:importantForAccessibility="no"
+                />
+          </FrameLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -71,16 +104,47 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             >
-          <com.medoapps.www.onlinequran.view.QuranSpinner
-              android:id="@+id/end_sura_spinner"
-              android:layout_width="wrap_content"
+          <FrameLayout
+              android:layout_width="0dp"
               android:layout_height="wrap_content"
-              />
-          <com.medoapps.www.onlinequran.view.QuranSpinner
-              android:id="@+id/end_ayah_spinner"
-              android:layout_width="wrap_content"
+              android:layout_weight="2"
+              android:layout_marginEnd="8dp"
+              android:background="@drawable/bg_panel_spinner_box">
+            <com.medoapps.www.onlinequran.view.QuranSpinner
+                android:id="@+id/end_sura_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_caret_down_gold"
+                android:importantForAccessibility="no"
+                />
+          </FrameLayout>
+          <FrameLayout
+              android:layout_width="0dp"
               android:layout_height="wrap_content"
-              />
+              android:layout_weight="1"
+              android:background="@drawable/bg_panel_spinner_box">
+            <com.medoapps.www.onlinequran.view.QuranSpinner
+                android:id="@+id/end_ayah_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_caret_down_gold"
+                android:importantForAccessibility="no"
+                />
+          </FrameLayout>
         </LinearLayout>
       </LinearLayout>
 
@@ -91,7 +155,9 @@
           android:id="@+id/restrict_to_range"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:buttonTint="@color/checkbox_on_navy_tint"
           android:textColor="@color/text_on_navy"
+          android:textSize="13sp"
           android:text="@string/play_restrict_range"
           />
     </LinearLayout>
@@ -105,6 +171,5 @@
       android:text="@string/play_apply"
       android:layout_gravity="end|bottom"
       android:layout_marginEnd="12dp"
-      android:layout_marginRight="12dp"
       />
 </FrameLayout>
