@@ -376,8 +376,15 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
       // gold band + check on the current value. Readable in both themes.
       spinner.setPopupBackgroundResource(R.drawable.bg_dropdown_navy);
       spinner.setDropDownVerticalOffset(spinnerPadding);
-      // the collapsed item layouts draw their own gold caret
+      // the collapsed item layouts draw their own gold caret; clearing the
+      // style background does not clear its padding (a 48dp arrow region
+      // that pushes the name off the reading start), so zero it explicitly
       spinner.setBackground(null);
+      spinner.setPadding(0, 0, 0, 0);
+      // Spinner floats the selected view inside its width and does not
+      // resolve START against the forced direction; pin the absolute edge so
+      // the name block hugs the avatar chip at the reading start
+      spinner.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
 
       spinner.setOnItemSelectedListener(
           new AdapterView.OnItemSelectedListener() {
