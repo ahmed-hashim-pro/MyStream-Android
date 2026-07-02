@@ -61,6 +61,16 @@ object Constants {
   const val PREF_NIGHT_MODE_TEXT_BRIGHTNESS = "nightModeTextBrightness"
   const val PREF_NIGHT_MODE_BACKGROUND_BRIGHTNESS = "nightModeBackgroundBrightness"
   const val PREF_DEFAULT_QARI = "defaultQari"
+  // last applied playback range + repeat settings, persisted at play time so
+  // the playback panel can restore them after the drill ends (or the app
+  // restarts) instead of resetting to page defaults
+  const val PREF_LAST_PLAY_START_SURA = "lastPlayStartSura"
+  const val PREF_LAST_PLAY_START_AYAH = "lastPlayStartAyah"
+  const val PREF_LAST_PLAY_END_SURA = "lastPlayEndSura"
+  const val PREF_LAST_PLAY_END_AYAH = "lastPlayEndAyah"
+  const val PREF_LAST_PLAY_VERSE_REPEAT = "lastPlayVerseRepeat"
+  const val PREF_LAST_PLAY_RANGE_REPEAT = "lastPlayRangeRepeat"
+  const val PREF_LAST_PLAY_ENFORCE = "lastPlayEnforceBounds"
   const val PREF_SHOULD_FETCH_PAGES = "shouldFetchPages"
   const val PREF_OVERLAY_PAGE_INFO = "overlayPageInfo"
   const val PREF_DISPLAY_MARKER_POPUP = "displayMarkerPopup"

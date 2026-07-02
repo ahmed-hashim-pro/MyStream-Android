@@ -50,6 +50,9 @@ class AyahPlaybackFragment : AyahActionFragment() {
 
   private var lastSeenAudioRequest: AudioRequest? = null
   private var isOpen: Boolean = false
+  // one populate is allowed after the panel opens or its view is recreated;
+  // afterwards refreshes are skipped while open so user edits survive
+  private var allowOpenRefresh: Boolean = false
 
   @Inject
   lateinit var quranInfo: QuranInfo
@@ -120,8 +123,8 @@ class AyahPlaybackFragment : AyahActionFragment() {
     }
     startAyahAdapter = initializeAyahSpinner(context, startAyahSpinner)
     endingAyahAdapter = initializeAyahSpinner(context, endingAyahSpinner)
-    initializeSuraSpinner(context, startSuraSpinner, startAyahAdapter)
-    initializeSuraSpinner(context, endingSuraSpinner, endingAyahAdapter)
+    initializeSuraSpinner(context, startSuraSpinner, startAyahSpinner, startAyahAdapter)
+    initializeSuraSpinner(context, endingSuraSpinner, endingAyahSpinner, endingAyahAdapter)
 
     val repeatOptions = context.resources.getStringArray(R.array.repeatValues)
     val rangeAdapter = ArrayAdapter<CharSequence>(context, ITEM_LAYOUT, repeatOptions)
@@ -151,10 +154,8 @@ class AyahPlaybackFragment : AyahActionFragment() {
     // tabs are switched; repopulate after the first layout (selections set on
     // an un-laid-out view are lost to AdapterView's dataset sync)
     view.post {
-      val wasOpen = isOpen
-      isOpen = false
+      allowOpenRefresh = true
       refreshView()
-      isOpen = wasOpen
     }
   }
 
@@ -230,6 +231,7 @@ class AyahPlaybackFragment : AyahActionFragment() {
   private fun initializeSuraSpinner(
     context: Context,
     spinner: QuranSpinner,
+    ayahSpinner: QuranSpinner,
     ayahAdapter: ArrayAdapter<CharSequence>?
   ) {
     val suras = context.resources.getStringArray(R.array.sura_names)
@@ -251,6 +253,15 @@ class AyahPlaybackFragment : AyahActionFragment() {
         ayahAdapter!!.clear()
         for (i in 0 until ayahCount) {
           ayahAdapter.add(ayahs[i])
+        }
+        // this listener also fires for the spinner's INITIAL dispatch and for
+        // programmatic selections, and the rebuild above resets the ayah
+        // spinner to the first ayah — re-apply the ayah refreshView wanted
+        // (carried on the spinner's tag) when it fits the new sura
+        val desired = ayahSpinner.tag as? Int
+        if (desired != null && desired in 0 until ayahCount) {
+          ayahSpinner.setSelection(desired)
+          ayahSpinner.post { ayahSpinner.setSelection(desired) }
         }
       }
 
@@ -293,6 +304,9 @@ class AyahPlaybackFragment : AyahActionFragment() {
           adapter.add(ayahs[i])
         }
       }
+      // remember the desired position so the sura spinner's listener can
+      // re-apply it after its own rebuild (it fires on initial dispatch too)
+      spinner.tag = currentAyah - 1
       spinner.setSelection(currentAyah - 1)
       // re-assert after any pending dataset change is processed
       spinner.post { spinner.setSelection(currentAyah - 1) }
@@ -300,14 +314,13 @@ class AyahPlaybackFragment : AyahActionFragment() {
   }
 
   override fun onToggleDetailsPanel(isVisible: Boolean) {
-    // populate on BOTH edges. Refreshing only while hidden doesn't stick:
-    // the hidden pane never lays out, and when it finally does,
-    // AdapterView's dataset-change sync restores the ayah spinners to their
-    // pre-change position. On open the user hasn't edited yet, so a refresh
-    // is safe; refreshes while open stay guarded to preserve edits.
-    isOpen = false
-    refreshView()
     isOpen = isVisible
+    // allow one populate for this open (the selection often arrives a beat
+    // AFTER the panel opens — that refresh must not be discarded, it is the
+    // only one carrying real data); later refreshes while open are skipped
+    // so user edits survive
+    allowOpenRefresh = true
+    refreshView()
   }
 
   override fun refreshView() {
@@ -316,7 +329,10 @@ class AyahPlaybackFragment : AyahActionFragment() {
     val selectionStart = start
 
     var shouldReset = true
-    if (context is PagerActivity && selectionStart != null && selectionEnd != null && !isOpen) {
+    if (context is PagerActivity && selectionStart != null && selectionEnd != null &&
+      (!isOpen || allowOpenRefresh)
+    ) {
+      allowOpenRefresh = false
       val lastRequest = context.lastAudioRequest
       val start: SuraAyah
       val ending: SuraAyah
@@ -335,18 +351,26 @@ class AyahPlaybackFragment : AyahActionFragment() {
         decidedEnd = ending
         applyButton.setText(R.string.play_apply)
       } else {
-        // no active request — if a repeat drill just finished (or was
-        // stopped) and the user re-opens the panel inside that range,
-        // restore it instead of making them re-pick the ayahs each round
-        val completed = context.completedAudioRequest
-        if (completed != null &&
-          !completed.start.after(selectionStart) && !selectionStart.after(completed.end)
+        // no active request — if a repeat drill ended (or the app restarted)
+        // and the user re-opens the panel inside the last played range,
+        // restore it instead of making them re-pick the ayahs each round.
+        // Persisted at play time (QuranSettings), so it survives missed stop
+        // broadcasts and app restarts.
+        val settings = QuranSettings.getInstance(context)
+        val lastStart = SuraAyah(
+          settings.lastPlaybackStartSura, settings.lastPlaybackStartAyah
+        )
+        val lastEnd = SuraAyah(
+          settings.lastPlaybackEndSura, settings.lastPlaybackEndAyah
+        )
+        if (settings.hasLastPlaybackRange() &&
+          !lastStart.after(selectionStart) && !selectionStart.after(lastEnd)
         ) {
-          start = completed.start
-          ending = completed.end
-          verseRepeatCount = completed.repeatInfo
-          rangeRepeatCount = completed.rangeRepeatInfo
-          shouldEnforce = completed.enforceBounds
+          start = lastStart
+          ending = lastEnd
+          verseRepeatCount = settings.lastPlaybackVerseRepeat
+          rangeRepeatCount = settings.lastPlaybackRangeRepeat
+          shouldEnforce = settings.lastPlaybackEnforceBounds
         } else {
           start = selectionStart
           if (selectionStart == selectionEnd) {

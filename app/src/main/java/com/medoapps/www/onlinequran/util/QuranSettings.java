@@ -93,6 +93,56 @@ public class QuranSettings {
         .apply();
   }
 
+  /**
+   * Persists the applied playback range + repeat settings at play time, so
+   * the playback panel can restore them after the drill ends — or after the
+   * app restarts — instead of resetting to page defaults.
+   */
+  public void saveLastPlaybackRange(int startSura, int startAyah, int endSura, int endAyah,
+                                    int verseRepeat, int rangeRepeat, boolean enforceBounds) {
+    prefs.edit()
+        .putInt(Constants.PREF_LAST_PLAY_START_SURA, startSura)
+        .putInt(Constants.PREF_LAST_PLAY_START_AYAH, startAyah)
+        .putInt(Constants.PREF_LAST_PLAY_END_SURA, endSura)
+        .putInt(Constants.PREF_LAST_PLAY_END_AYAH, endAyah)
+        .putInt(Constants.PREF_LAST_PLAY_VERSE_REPEAT, verseRepeat)
+        .putInt(Constants.PREF_LAST_PLAY_RANGE_REPEAT, rangeRepeat)
+        .putBoolean(Constants.PREF_LAST_PLAY_ENFORCE, enforceBounds)
+        .apply();
+  }
+
+  public boolean hasLastPlaybackRange() {
+    return prefs.contains(Constants.PREF_LAST_PLAY_START_SURA);
+  }
+
+  public int getLastPlaybackStartSura() {
+    return prefs.getInt(Constants.PREF_LAST_PLAY_START_SURA, 1);
+  }
+
+  public int getLastPlaybackStartAyah() {
+    return prefs.getInt(Constants.PREF_LAST_PLAY_START_AYAH, 1);
+  }
+
+  public int getLastPlaybackEndSura() {
+    return prefs.getInt(Constants.PREF_LAST_PLAY_END_SURA, 1);
+  }
+
+  public int getLastPlaybackEndAyah() {
+    return prefs.getInt(Constants.PREF_LAST_PLAY_END_AYAH, 1);
+  }
+
+  public int getLastPlaybackVerseRepeat() {
+    return prefs.getInt(Constants.PREF_LAST_PLAY_VERSE_REPEAT, 0);
+  }
+
+  public int getLastPlaybackRangeRepeat() {
+    return prefs.getInt(Constants.PREF_LAST_PLAY_RANGE_REPEAT, 0);
+  }
+
+  public boolean getLastPlaybackEnforceBounds() {
+    return prefs.getBoolean(Constants.PREF_LAST_PLAY_ENFORCE, false);
+  }
+
   public boolean useNewBackground() {
     return prefs.getBoolean(Constants.PREF_USE_NEW_BACKGROUND, true);
   }

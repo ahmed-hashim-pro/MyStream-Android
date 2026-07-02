@@ -172,7 +172,6 @@ public class PagerActivity extends AppCompatActivity implements
       "LAST_READING_MODE_IS_TRANSLATION";
   private static final String LAST_ACTIONBAR_STATE = "LAST_ACTIONBAR_STATE";
   private static final String LAST_AUDIO_REQUEST = "LAST_AUDIO_REQUEST";
-  private static final String COMPLETED_AUDIO_REQUEST = "COMPLETED_AUDIO_REQUEST";
   private static final String STATE_AUTO_PLAY_CONSUMED = "autoPlayConsumed";
 
   public static final String EXTRA_JUMP_TO_TRANSLATION = "jumpToTranslation";
@@ -201,9 +200,6 @@ public class PagerActivity extends AppCompatActivity implements
   private Dialog promptDialog = null;
   private AyahToolBar ayahToolBar;
   private AudioRequest lastAudioRequest;
-  // last range that played to the end (or was stopped) — the playback panel
-  // restores it so repeat drills don't have to be re-picked every round
-  private AudioRequest completedAudioRequest;
   private boolean isDualPages = false;
   private View toolBarArea;
   private Toolbar toolbar;
@@ -342,7 +338,6 @@ public class PagerActivity extends AppCompatActivity implements
       boolean lastWasDualPages = savedInstanceState.getBoolean(LAST_WAS_DUAL_PAGES, isDualPages);
       shouldAdjustPageNumber = (lastWasDualPages != isDualPages);
       this.lastAudioRequest = savedInstanceState.getParcelable(LAST_AUDIO_REQUEST);
-      this.completedAudioRequest = savedInstanceState.getParcelable(COMPLETED_AUDIO_REQUEST);
       // Don't re-trigger the Home read+listen auto-start after a recreate.
       autoPlayConsumed = savedInstanceState.getBoolean(STATE_AUTO_PLAY_CONSUMED, false);
     } else {
@@ -1132,9 +1127,6 @@ public class PagerActivity extends AppCompatActivity implements
     if (lastAudioRequest != null) {
       state.putParcelable(LAST_AUDIO_REQUEST, lastAudioRequest);
     }
-    if (completedAudioRequest != null) {
-      state.putParcelable(COMPLETED_AUDIO_REQUEST, completedAudioRequest);
-    }
     super.onSaveInstanceState(state);
   }
 
@@ -1494,9 +1486,6 @@ public class PagerActivity extends AppCompatActivity implements
         } else if (state == AudioService.AudioUpdateIntent.STOPPED) {
           audioStatusBar.switchMode(AudioStatusBar.STOPPED_MODE);
           audioStatusBar.setNowPlayingInfo("");
-          if (lastAudioRequest != null) {
-            completedAudioRequest = lastAudioRequest;
-          }
           lastAudioRequest = null;
         }
       }
@@ -1783,12 +1772,23 @@ public class PagerActivity extends AppCompatActivity implements
     if (request != null) {
       intent.putExtra(AudioService.EXTRA_PLAY_INFO, request);
       lastAudioRequest = request;
+      // persist at play time (not at stop) so the playback panel can restore
+      // the range even if the stop broadcast is missed or the app restarts
+      persistPlaybackRange(request);
       audioStatusBar.setRepeatCount(request.getRepeatInfo());
       audioStatusBar.switchMode(AudioStatusBar.LOADING_MODE);
     }
 
     Timber.d("starting service for audio playback");
     startService(intent);
+  }
+
+  private void persistPlaybackRange(AudioRequest request) {
+    quranSettings.saveLastPlaybackRange(
+        request.getStart().sura, request.getStart().ayah,
+        request.getEnd().sura, request.getEnd().ayah,
+        request.getRepeatInfo(), request.getRangeRepeatInfo(),
+        request.getEnforceBounds());
   }
 
   @Override
@@ -1832,6 +1832,7 @@ public class PagerActivity extends AppCompatActivity implements
       startService(i);
 
       lastAudioRequest = updatedAudioRequest;
+      persistPlaybackRange(updatedAudioRequest);
       audioStatusBar.setRepeatCount(verseRepeat);
       return true;
     } else {
@@ -1856,6 +1857,7 @@ public class PagerActivity extends AppCompatActivity implements
       i.putExtra(AudioService.EXTRA_PLAY_INFO, updatedAudioRequest);
       startService(i);
       lastAudioRequest = updatedAudioRequest;
+      persistPlaybackRange(updatedAudioRequest);
     }
   }
 
@@ -1863,9 +1865,6 @@ public class PagerActivity extends AppCompatActivity implements
   public void onStopPressed() {
     startService(audioUtils.getAudioIntent(this, AudioService.ACTION_STOP));
     audioStatusBar.switchMode(AudioStatusBar.STOPPED_MODE);
-    if (lastAudioRequest != null) {
-      completedAudioRequest = lastAudioRequest;
-    }
     lastAudioRequest = null;
   }
 
@@ -1919,10 +1918,6 @@ public class PagerActivity extends AppCompatActivity implements
 
   public AudioRequest getLastAudioRequest() {
     return lastAudioRequest;
-  }
-
-  public AudioRequest getCompletedAudioRequest() {
-    return completedAudioRequest;
   }
 
   public void endAyahMode() {
