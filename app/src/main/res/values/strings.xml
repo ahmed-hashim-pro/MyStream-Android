@@ -866,6 +866,14 @@ Press the button below to set the time for this , then you can start the app </s
         <item quantity="one">Deleted one item</item>
         <item quantity="other">Deleted %d items</item>
     </plurals>
+    <plurals name="bookmarks_count">
+        <item quantity="one">%s bookmark</item>
+        <item quantity="other">%s bookmarks</item>
+    </plurals>
+    <plurals name="tag_bookmarks_title">
+        <item quantity="one">Categorize %s bookmark</item>
+        <item quantity="other">Categorize %s bookmarks</item>
+    </plurals>
     <string name="undo">Undo</string>
 
     <string name="recent_pages">Recent pages</string>

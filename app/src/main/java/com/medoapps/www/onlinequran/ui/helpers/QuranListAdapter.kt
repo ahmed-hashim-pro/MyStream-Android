@@ -242,11 +242,26 @@ class QuranListAdapter @JvmOverloads constructor(
       holder.view.setBackgroundResource(R.drawable.bookmark_header_background)
     }
     holder.title.text = item.text
+    // Tag-group bands lead with a gold tag glyph (mockup 11). Other headers —
+    // and rows, since bindRow() reuses this — must clear it (holders recycle).
+    if (item.isHeader && item.isBookmarkHeader && item.tagId >= 0) {
+      holder.title.setCompoundDrawablesRelativeWithIntrinsicBounds(
+        R.drawable.ic_tag_gold, 0, 0, 0
+      )
+      holder.title.compoundDrawablePadding =
+        (7 * context.resources.displayMetrics.density).toInt()
+    } else {
+      holder.title.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
+    }
     when {
-      // Tag-group band shows the count of bookmarks in the group on the trailing end.
+      // Tag-group band shows a labeled bookmark count on the trailing end
+      // ("2 bookmarks"/"مرجعيتان" — mockup 11), with localized digits.
       item.isBookmarkHeader && item.headerCount > 0 -> {
         holder.pageNumber.visibility = View.VISIBLE
-        holder.pageNumber.text = QuranUtils.getLocalizedNumber(context, item.headerCount)
+        holder.pageNumber.text = context.resources.getQuantityString(
+          R.plurals.bookmarks_count, item.headerCount,
+          QuranUtils.getLocalizedNumber(context, item.headerCount)
+        )
       }
       item.page == 0 -> holder.pageNumber.visibility = View.GONE
       else -> {

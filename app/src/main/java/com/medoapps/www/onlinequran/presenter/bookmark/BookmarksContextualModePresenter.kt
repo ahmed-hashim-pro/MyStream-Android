@@ -4,6 +4,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.core.content.ContextCompat
 import com.medoapps.www.onlinequran.R
 
 import com.medoapps.www.onlinequran.presenter.Presenter
@@ -54,7 +55,15 @@ class BookmarksContextualModePresenter @Inject constructor() : Presenter<Bookmar
 
   private inner class ModeCallback : ActionMode.Callback {
     override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-      activity?.menuInflater?.inflate(R.menu.bookmark_contextual_menu, menu)
+      activity?.let { act ->
+        act.menuInflater.inflate(R.menu.bookmark_contextual_menu, menu)
+        // CAB glyphs are gold on the fixed-navy bar (mockup 11); the bundled
+        // action PNGs are baked white, so tint every item.
+        val gold = ContextCompat.getColor(act, R.color.gold_accent)
+        for (i in 0 until menu.size()) {
+          menu.getItem(i).icon?.mutate()?.setTint(gold)
+        }
+      }
       return true
     }
 

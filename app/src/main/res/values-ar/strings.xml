@@ -589,6 +589,23 @@
         <item quantity="two">تم حذف عنصران</item>
         <item quantity="few">تم حذف %d عناصر</item>
         <item quantity="many">تم حذف %d عنصر</item>
+        <item quantity="other">تم حذف %d عنصر</item>
+    </plurals>
+    <plurals name="bookmarks_count">
+        <item quantity="zero">لا مرجعيات</item>
+        <item quantity="one">مرجعية واحدة</item>
+        <item quantity="two">مرجعيتان</item>
+        <item quantity="few">%s مرجعيات</item>
+        <item quantity="many">%s مرجعية</item>
+        <item quantity="other">%s مرجعية</item>
+    </plurals>
+    <plurals name="tag_bookmarks_title">
+        <item quantity="zero">تصنيف المرجعيات</item>
+        <item quantity="one">تصنيف مرجعية واحدة</item>
+        <item quantity="two">تصنيف مرجعيتين</item>
+        <item quantity="few">تصنيف %s مرجعيات</item>
+        <item quantity="many">تصنيف %s مرجعية</item>
+        <item quantity="other">تصنيف %s مرجعية</item>
     </plurals>
     <string name="undo">تراجع</string>
     <string name="notification_channel_download">تحميل ملفات القرآن</string>

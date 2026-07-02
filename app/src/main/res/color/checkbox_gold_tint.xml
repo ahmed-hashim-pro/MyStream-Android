@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Checklist checkboxes on day/night surfaces: gold only when checked, muted
+     outline otherwise (mockup .cbx) — so unchecked rows don't read "active". -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_checked="true" android:color="@color/gold_accent" />
+    <item android:color="@color/text_secondary" />
+</selector>

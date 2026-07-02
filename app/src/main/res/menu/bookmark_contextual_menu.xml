@@ -10,7 +10,7 @@
           android:title="@string/edit_tag"
           app:showAsAction="ifRoom" />
     <item android:id="@+id/cab_delete"
-          android:icon="@drawable/ic_cancel"
+          android:icon="@drawable/ic_delete"
           android:title="@string/delete_tag"
           app:showAsAction="ifRoom" />
     <item android:id="@+id/cab_new_tag"

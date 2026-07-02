@@ -215,7 +215,9 @@ public class BookmarksFragment extends Fragment implements QuranListAdapter.Qura
         // shaped background), so tint it navy and gild the Undo action.
         snackbar.setBackgroundTint(ContextCompat.getColor(activity, R.color.navy_700));
         snackbar.setTextColor(ContextCompat.getColor(activity, R.color.text_on_navy));
-        snackbar.setActionTextColor(ContextCompat.getColor(activity, R.color.gold_accent));
+        // Bright gold-light UNDO — gold_accent is borderline contrast on navy
+        // in the light theme (mockup: --gold-light).
+        snackbar.setActionTextColor(ContextCompat.getColor(activity, R.color.gold_light));
         snackbar.show();
         return true;
       } else if (itemId == R.id.cab_new_tag) {

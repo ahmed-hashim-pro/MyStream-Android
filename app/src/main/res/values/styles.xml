@@ -99,17 +99,35 @@
 
     <!-- Gold-accented dialog surfaces for the Mushaf (jump / tag / download dialogs).
          Wired via alertDialogTheme + materialAlertDialogTheme on QuranToolBar so bare
-         AlertDialog.Builder dialogs pick up gold buttons/inputs/cursors. -->
+         AlertDialog.Builder dialogs pick up gold buttons/inputs/cursors.
+         Footer buttons follow the mockup convention everywhere: filled-gold
+         positive, ghost (gold text) negative/neutral. -->
     <style name="ThemeOverlay.MyStream.Dialog" parent="ThemeOverlay.Material3.Dialog">
         <item name="colorPrimary">@color/gold_accent</item>
         <item name="colorAccent">@color/gold_accent</item>
         <item name="colorControlActivated">@color/gold_accent</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.MyStream.DialogButton.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.MyStream.DialogButton.Ghost</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.MyStream.DialogButton.Ghost</item>
     </style>
 
     <style name="ThemeOverlay.MyStream.MaterialDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="colorPrimary">@color/gold_accent</item>
         <item name="colorAccent">@color/gold_accent</item>
         <item name="colorControlActivated">@color/gold_accent</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.MyStream.DialogButton.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.MyStream.DialogButton.Ghost</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.MyStream.DialogButton.Ghost</item>
+    </style>
+
+    <!-- Dialog footer buttons (mockup .btn.gold / .btn.ghost). -->
+    <style name="Widget.MyStream.DialogButton.Positive" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/gold_accent</item>
+        <item name="android:textColor">@color/text_on_gold</item>
+    </style>
+
+    <style name="Widget.MyStream.DialogButton.Ghost" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/gold_accent</item>
     </style>
 
     <!-- Navy popup/overflow menu for the Mushaf toolbars (index, reader, audio manager). -->

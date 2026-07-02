@@ -22,14 +22,18 @@ import androidx.fragment.app.DialogFragment
 import com.quran.data.model.bookmark.Tag
 import com.medoapps.www.onlinequran.QuranApplication
 import com.medoapps.www.onlinequran.R.color
+import com.medoapps.www.onlinequran.R.drawable
 import com.medoapps.www.onlinequran.R.id
 import com.medoapps.www.onlinequran.R.layout
+import com.medoapps.www.onlinequran.R.plurals
 import com.medoapps.www.onlinequran.R.string
 import com.medoapps.www.onlinequran.presenter.bookmark.TagBookmarkPresenter
+import com.medoapps.www.onlinequran.util.QuranUtils
 import javax.inject.Inject
 
 open class TagBookmarkDialog : DialogFragment() {
   private var adapter: TagsAdapter? = null
+  private var bookmarkCount = 1
 
   @Inject
   lateinit var tagBookmarkPresenter: TagBookmarkPresenter
@@ -49,6 +53,7 @@ open class TagBookmarkDialog : DialogFragment() {
     if (args != null) {
       val bookmarkIds = args.getLongArray(EXTRA_BOOKMARK_IDS)
       if (bookmarkIds != null) {
+        bookmarkCount = bookmarkIds.size
         tagBookmarkPresenter.setBookmarksMode(bookmarkIds)
       }
     }
@@ -64,6 +69,11 @@ open class TagBookmarkDialog : DialogFragment() {
       // hairline separators on the navy sheet (mockup: white @ 8%)
       listview.divider = ColorDrawable(0x14FFFFFF)
       listview.dividerHeight = 1
+    } else {
+      // dialog checklist: no dividers between tag rows — only the New-Category
+      // row carries a top hairline (mockup 11 frame 3)
+      listview.divider = null
+      listview.dividerHeight = 0
     }
     listview.onItemClickListener =
       OnItemClickListener { _: AdapterView<*>?, view: View, position: Int, _: Long ->
@@ -91,6 +101,21 @@ open class TagBookmarkDialog : DialogFragment() {
 
   override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     val builder = Builder(requireActivity())
+    // Micro-title confirming how many bookmarks get categorized (mockup 11):
+    // 11sp bold uppercase muted label above the checklist.
+    val title = TextView(requireContext())
+    title.text = resources.getQuantityString(
+      plurals.tag_bookmarks_title, bookmarkCount,
+      QuranUtils.getLocalizedNumber(requireContext(), bookmarkCount)
+    )
+    title.setTextColor(ContextCompat.getColor(requireContext(), color.text_secondary))
+    title.textSize = 11f
+    title.setTypeface(title.typeface, android.graphics.Typeface.BOLD)
+    title.isAllCaps = true
+    title.letterSpacing = 0.06f
+    val pad = (20 * resources.displayMetrics.density).toInt()
+    title.setPaddingRelative(pad, pad, pad, 0)
+    builder.setCustomTitle(title)
     builder.setView(createTagsListView(onNavy = false))
     builder.setPositiveButton(string.dialog_ok) { _: DialogInterface?, _: Int -> }
     builder.setNegativeButton(string.cancel) { _: DialogInterface?, _: Int -> dismiss() }
@@ -170,7 +195,8 @@ open class TagBookmarkDialog : DialogFragment() {
       }
 
       val (id, name) = getItem(position)
-      holder = view!!.tag as ViewHolder
+      val rowView = view!!
+      holder = rowView.tag as ViewHolder
       val context = parent.context
       if (id == -1L) {
         holder.apply {
@@ -182,6 +208,12 @@ open class TagBookmarkDialog : DialogFragment() {
           tagName.setTextColor(ContextCompat.getColor(context, gold))
           addImage.imageTintList =
             ContextCompat.getColorStateList(context, gold)
+          if (!onNavy) {
+            // dialog mode (mockup 11): dashed gold frame around the ＋ and a
+            // top hairline separating this row from the checklist
+            addImage.setBackgroundResource(drawable.bg_new_tag_dash)
+            rowView.setBackgroundResource(drawable.bg_row_top_hairline)
+          }
         }
       } else {
         holder.apply {
@@ -196,11 +228,13 @@ open class TagBookmarkDialog : DialogFragment() {
           if (onNavy) {
             checkBox.buttonTintList =
               ContextCompat.getColorStateList(context, color.checkbox_on_navy_tint)
+          } else {
+            rowView.background = null
           }
           checkBox.setOnClickListener { tagBookmarkPresenter.toggleTag(id) }
         }
       }
-      return view
+      return rowView
     }
   }
 

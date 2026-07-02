@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Index/tag band title: gold when the band is selected (multi-select CAB,
+     mockup 11 frame 2), the normal header ink otherwise. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_activated="true" android:color="@color/gold_accent" />
+    <item android:color="@color/header_text_color" />
+</selector>

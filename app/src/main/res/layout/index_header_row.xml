@@ -15,7 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:fontFamily="@font/cairo_extrabold"
-        android:textColor="@color/header_text_color"
+        android:gravity="center_vertical"
+        android:textColor="@color/header_title_selectable"
         android:textSize="13sp"
         tools:text="Juz' 1"/>
 
