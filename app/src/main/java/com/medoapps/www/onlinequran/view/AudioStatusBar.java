@@ -168,8 +168,9 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
       currentQari = updatedIndex;
     }
 
+    // Pill-styled collapsed name + the unified navy dropdown rows (mockup 18/06b).
     adapter = new QariAdapter(this.context, qariList,
-        R.layout.sherlock_spinner_item, R.layout.sherlock_spinner_dropdown_item);
+        R.layout.audiobar_spinner_item, R.layout.audio_panel_spinner_dropdown_item);
     showStoppedMode();
   }
 
@@ -330,10 +331,13 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     if (spinner == null) {
       spinner = new QuranSpinner(context, null,
           R.attr.actionDropDownStyle);
-      // Navy dropdown so the (near-white) reciter names are readable; without this
-      // the popup inherits the light activity theme = white-on-white.
-      spinner.setPopupBackgroundResource(R.drawable.bg_popup_navy);
+      // Unified navy dropdown skin (mockup 06b): navy card, gold-semi border,
+      // gold band + check on the current value. Readable in both themes.
+      spinner.setPopupBackgroundResource(R.drawable.bg_dropdown_navy);
       spinner.setDropDownVerticalOffset(spinnerPadding);
+      // Rounded on-navy pill around the reciter name (mockup 18 variant A);
+      // also removes the platform caret — the item layout draws a gold one.
+      spinner.setBackgroundResource(R.drawable.bg_audiobar_qari_pill);
       spinner.setAdapter(adapter);
 
       spinner.setOnItemSelectedListener(
@@ -372,6 +376,9 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     } else {
       params.rightMargin = spinnerPadding;
     }
+    // slim the pill inside the 48dp bar (mockup padding 7x11)
+    params.topMargin = spinnerPadding;
+    params.bottomMargin = spinnerPadding;
     addView(spinner, params);
   }
 
@@ -564,9 +571,10 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
 
   private void addButton(@NonNull ImageView button, int imageId, boolean withWeight) {
     button.setImageResource(imageId);
-    // Gold-accent the primary play/pause control to match the My Stream design;
-    // other controls keep their default (white-on-navy) tint.
-    if (imageId == R.drawable.ic_play || imageId == R.drawable.ic_pause) {
+    // Gold-accent the primary play/pause control and the affirmative Accept
+    // check (mockup 18 variant D); other controls keep white-on-navy.
+    if (imageId == R.drawable.ic_play || imageId == R.drawable.ic_pause
+        || imageId == R.drawable.ic_accept) {
       button.setColorFilter(
           androidx.core.content.ContextCompat.getColor(context, R.color.gold_accent),
           android.graphics.PorterDuff.Mode.SRC_IN);

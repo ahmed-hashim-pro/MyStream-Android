@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Reciter picker pill on the navy audio bar (mockup 18 variant A):
+     10% white fill, 18% white hairline, radius 10. Fixed-navy surface. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#1AFFFFFF" />
+    <stroke
+        android:width="1dp"
+        android:color="#2EFFFFFF" />
+    <corners android:radius="10dp" />
+</shape>
