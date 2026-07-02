@@ -1698,8 +1698,12 @@ public class PagerActivity extends AppCompatActivity implements
     int startSura = quranDisplayData.safelyGetSuraOnPage(page);
     int startAyah = quranInfo.getFirstAyahOnPage(page);
     List<Integer> startingSuraList = quranInfo.getListOfSurahWithStartingOnPage(page);
-    if (startingSuraList.size() == 0 ||
-        (startingSuraList.size() == 1 && startingSuraList.get(0) == startSura)) {
+    // a drill remembered for this page always gets the chooser, so pressing
+    // play doesn't silently fall back to page defaults and lose the repeats
+    final boolean offerLastRange = lastPlaybackRangeIntersectsPage(page);
+    if (!offerLastRange &&
+        (startingSuraList.size() == 0 ||
+        (startingSuraList.size() == 1 && startingSuraList.get(0) == startSura))) {
       playFromAyah(page, startSura, startAyah);
     } else {
       // The multi-sura chooser is interactive; don't carry the one-shot stream flag
@@ -2084,36 +2088,80 @@ public class PagerActivity extends AppCompatActivity implements
     }
   }
 
+  /** The page range of the drill remembered by the playback panel, if any. */
+  private boolean lastPlaybackRangeIntersectsPage(int page) {
+    if (!quranSettings.hasLastPlaybackRange()) {
+      return false;
+    }
+    final int startPage = quranInfo.getPageFromSuraAyah(
+        quranSettings.getLastPlaybackStartSura(), quranSettings.getLastPlaybackStartAyah());
+    final int endPage = quranInfo.getPageFromSuraAyah(
+        quranSettings.getLastPlaybackEndSura(), quranSettings.getLastPlaybackEndAyah());
+    return page >= startPage && page <= endPage;
+  }
+
+  private String lastPlaybackRangeSummary(SuraAyah start, SuraAyah end) {
+    final String startText = quranDisplayData.getSuraName(this, start.sura, false) +
+        ' ' + QuranUtils.getLocalizedNumber(this, start.ayah);
+    final String range = start.sura == end.sura
+        ? startText + '–' + QuranUtils.getLocalizedNumber(this, end.ayah)
+        : startText + " – " + quranDisplayData.getSuraName(this, end.sura, false) +
+            ' ' + QuranUtils.getLocalizedNumber(this, end.ayah);
+    final boolean hasRepeats = quranSettings.getLastPlaybackVerseRepeat() != 0
+        || quranSettings.getLastPlaybackRangeRepeat() != 0;
+    return hasRepeats
+        ? range + " · " + getString(R.string.playback_prompt_repeat_suffix)
+        : range;
+  }
+
   private void promptForMultipleChoicePlay(int page, int startSura, int startAyah,
                                            List<Integer> startingSuraList) {
-    // navy playback sheet (mockup playback-sheet-redesign): sura rows carry a
-    // "from the start of the surah" sublabel; an optional page-start row
-    // leads with the page number
+    // navy playback sheet (mockup playback-sheet-redesign): an optional
+    // "repeat last range" row restores the remembered drill, sura rows carry
+    // a "from the start of the surah" sublabel, and an optional page-start
+    // row leads with the page number
     final List<AppBottomSheet.PlaybackStartOption> options = new ArrayList<>();
+    final List<Runnable> actions = new ArrayList<>();
+
+    if (lastPlaybackRangeIntersectsPage(page)) {
+      final SuraAyah rangeStart = new SuraAyah(
+          quranSettings.getLastPlaybackStartSura(), quranSettings.getLastPlaybackStartAyah());
+      final SuraAyah rangeEnd = new SuraAyah(
+          quranSettings.getLastPlaybackEndSura(), quranSettings.getLastPlaybackEndAyah());
+      final int verseRepeat = quranSettings.getLastPlaybackVerseRepeat();
+      final int rangeRepeat = quranSettings.getLastPlaybackRangeRepeat();
+      final boolean enforce = quranSettings.getLastPlaybackEnforceBounds();
+      options.add(new AppBottomSheet.PlaybackStartOption(
+          R.drawable.ic_repeat,
+          getString(R.string.playback_prompt_last_range),
+          lastPlaybackRangeSummary(rangeStart, rangeEnd)));
+      actions.add(() -> playFromAyah(rangeStart, rangeEnd,
+          quranInfo.getPageFromSuraAyah(rangeStart.sura, rangeStart.ayah),
+          verseRepeat, rangeRepeat, enforce));
+    }
+
+    if (startingSuraList.isEmpty() || startSura != startingSuraList.get(0)) {
+      options.add(new AppBottomSheet.PlaybackStartOption(
+          R.drawable.ic_play,
+          getString(R.string.starting_page_label),
+          getString(R.string.playback_prompt_page_sub,
+              QuranUtils.getLocalizedNumber(this, page))));
+      actions.add(() -> playFromAyah(page, startSura, startAyah));
+    }
+
     for (Integer sura : startingSuraList) {
       options.add(new AppBottomSheet.PlaybackStartOption(
           R.drawable.ic_transcript,
           quranDisplayData.getSuraName(this, sura, true),
           getString(R.string.playback_prompt_sura_sub)));
-    }
-    if (startSura != startingSuraList.get(0)) {
-      options.add(0, new AppBottomSheet.PlaybackStartOption(
-          R.drawable.ic_play,
-          getString(R.string.starting_page_label),
-          getString(R.string.playback_prompt_page_sub,
-              QuranUtils.getLocalizedNumber(this, page))));
-      startingSuraList.add(0, startSura);
+      actions.add(() -> playFromAyah(page, sura, 1));
     }
 
     promptDialog = AppBottomSheet.showPlaybackStartOptions(this,
         getString(R.string.playback_prompt_reciter, audioStatusBar.getAudioInfo().getName()),
         options,
         i -> {
-          if (i == 0) {
-            playFromAyah(page, startSura, startAyah);
-          } else {
-            playFromAyah(page, startingSuraList.get(i), 1);
-          }
+          actions.get(i).run();
           promptDialog = null;
         });
   }

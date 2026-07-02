@@ -864,6 +864,8 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="playback_prompt_reciter">Recited by %1$s</string>
     <string name="playback_prompt_page_sub">Page %1$s</string>
     <string name="playback_prompt_sura_sub">From the start of the surah</string>
+    <string name="playback_prompt_last_range">Repeat the last range</string>
+    <string name="playback_prompt_repeat_suffix">with repeat</string>
 
     <!-- long press -->
     <string name="ayah_copied_popup">Ayah Copied</string>

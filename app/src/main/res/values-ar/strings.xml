@@ -541,6 +541,8 @@
     <string name="playback_prompt_reciter">بصوت %1$s</string>
     <string name="playback_prompt_page_sub">صفحة %1$s</string>
     <string name="playback_prompt_sura_sub">من بداية السورة</string>
+    <string name="playback_prompt_last_range">إعادة المقطع الأخير</string>
+    <string name="playback_prompt_repeat_suffix">مع التكرار</string>
 
     <!-- long press -->
     <string name="ayah_copied_popup">تم نسخ الآية</string>
