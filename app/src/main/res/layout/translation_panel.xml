@@ -103,7 +103,7 @@
         android:paddingHorizontal="22dp"
         android:background="@drawable/bg_button_gold"
         android:textAllCaps="false"
-        android:textColor="#1a1305"
+        android:textColor="@color/text_on_gold"
         android:textSize="13sp"
         android:textStyle="bold"
         android:text="@string/get_translations"

@@ -432,18 +432,8 @@
     </style>
 
     <style name="PageTypeDescription">
-        <item name="android:textColor">#AAAAAA</item>
+        <item name="android:textColor">@color/hint_on_navy</item>
         <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="SearchResult">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="SearchResult.Location">
-        <item name="android:textColor">#AAAAAA</item>
-        <item name="android:textSize">14sp</item>
     </style>
 
     <!-- From/To field labels on the navy playback panel (mockup .lab: small gold) -->

@@ -64,7 +64,10 @@ class BookmarksWidgetListProvider(private val context: Context) : RemoteViewsFac
     remoteView.setImageViewResource(R.id.widget_favorite_icon, item.imageResource)
     if (item.imageFilterColor == null) {
       // If a color filter isn't set, then sometimes the color filter of bookmarks can crossover into each other
-      remoteView.setInt(R.id.widget_favorite_icon, "setColorFilter", Color.WHITE)
+      remoteView.setInt(
+        R.id.widget_favorite_icon, "setColorFilter",
+        androidx.core.content.ContextCompat.getColor(context, R.color.gold_light)
+      )
     } else {
       remoteView.setInt(R.id.widget_favorite_icon, "setColorFilter", item.imageFilterColor)
     }

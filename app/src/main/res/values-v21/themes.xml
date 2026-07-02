@@ -3,6 +3,6 @@
   <style name="QuranToolBar.Overlay">
     <item name="windowActionBarOverlay">true</item>
     <item name="android:windowTranslucentStatus">true</item>
-    <item name="android:navigationBarColor">@color/transparent_actionbar_color</item>
+    <item name="android:navigationBarColor">@color/reader_nav_scrim</item>
   </style>
 </resources>

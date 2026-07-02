@@ -26,8 +26,6 @@ import androidx.preference.ListPreference;
  * We remove the `CheckedTextView`'s title during runtime and use one of the
  * `TextView`s instead to represent the title.
  *
- * Also, we extend from `QuranListPreference` in order not to duplicate code for
- * setting dialog title color.
  */
 public class DataListPreference extends ListPreference {
   private CharSequence[] mDescriptions;

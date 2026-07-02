@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/translation_verse_text_color">
+    android:background="@color/navy_900">
 
   <LinearLayout
       android:layout_width="match_parent"
@@ -18,7 +18,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/translation_verse_text_color"
+        android:background="@color/navy_700"
         android:src="@drawable/icon" />
 
     <ImageButton
@@ -26,7 +26,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/translation_verse_text_color"
+        android:background="@color/navy_700"
         android:src="@drawable/ic_ab_search" />
 
     <ImageButton
@@ -34,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/translation_verse_text_color"
+        android:background="@color/navy_700"
         android:src="@drawable/ic_goto_quran" />
 
     <ImageButton
@@ -42,7 +42,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/translation_verse_text_color"
+        android:background="@color/navy_700"
         android:src="@drawable/ic_baseline_arrow_upright_24" />
 
   </LinearLayout>
@@ -51,7 +51,7 @@
       android:id="@+id/list_view_widget"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="@color/transparent_actionbar_color" />
+      android:background="@color/navy_900" />
 
 
   <!-- Empty view is shown if list items are empty -->
@@ -61,7 +61,7 @@
       android:layout_height="wrap_content"
       android:gravity="center"
       android:text="@string/bookmarks_list_empty"
-      android:textColor="#ffffff"
+      android:textColor="@color/text_on_navy"
       android:textSize="20sp"
       android:layout_marginHorizontal="8dp"
       android:visibility="gone" />

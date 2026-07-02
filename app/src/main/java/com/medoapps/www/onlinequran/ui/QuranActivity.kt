@@ -136,10 +136,9 @@ class QuranActivity : AppCompatActivity(),
 
     setContentView(R.layout.quran_index)
 
-    // Match status bar and nav bar to the toolbar background
-    val headerColor = ContextCompat.getColor(this, R.color.mushaf_header_background)
-    window.statusBarColor = headerColor
-    window.navigationBarColor = headerColor
+    // HeroController owns the (navy) status bar; the nav bar matches the
+    // list surface so there is no seam above the gesture bar in dark mode.
+    window.navigationBarColor = ContextCompat.getColor(this, R.color.background_main)
     val isNightMode = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
     val insetsController = WindowInsetsControllerCompat(window, window.decorView)
     insetsController.isAppearanceLightStatusBars = !isNightMode

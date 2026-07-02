@@ -99,9 +99,6 @@
     <color name="slide_screen_1_text_inactive">#52B8DA</color>
 
     <!-- Quran player (dark) -->
-    <color name="quran_player_toolbar_top">#1E1E1E</color>
-    <color name="quran_player_toolbar_bottom">#121212</color>
-    <color name="quran_player_background">#121212</color>
 
     <!-- Quran list text (dark) -->
     <color name="title_color">#FFFFFFFF</color>
@@ -114,7 +111,6 @@
     <color name="header_text_color">@color/gold_accent</color>
 
     <!-- Mushaf header (dark) -->
-    <color name="mushaf_header_background">#1E1E1E</color>
     <color name="mushaf_tab_selected">#FFFFFFFF</color>
     <color name="mushaf_tab_unselected">#99FFFFFF</color>
     <color name="mushaf_tab_indicator">#D4A44C</color>
@@ -126,7 +122,6 @@
     <color name="rewayahSpinnerBAckground">#282828</color>
     <color name="BottomSheetDialog">#1E1E1E</color>
     <color name="softBlue">#CDF6F8</color>
-    <color name="exoplayer_background">#121212</color>
 
     <item name="reversedWhite" type="color">#FFFFFF</item>
     <item name="rewardVideoBackground" type="color">#121212</item>

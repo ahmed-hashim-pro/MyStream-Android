@@ -186,7 +186,6 @@
     </integer-array>
 
     <!-- Mushaf header (light) -->
-    <color name="mushaf_header_background">#FFF8F0</color>
     <color name="mushaf_tab_selected">#FFFFFFFF</color>
     <color name="mushaf_tab_unselected">#99FFFFFF</color>
     <color name="mushaf_tab_indicator">#B8860B</color>
@@ -209,7 +208,8 @@
     <color name="title_color">#1E1B16</color>
     <color name="sura_number_color">#B8860B</color>
     <color name="sura_details_color">#7F7667</color>
-    <color name="transparent_actionbar_color">#AA000000</color>
+    <!-- immersive-reader nav-bar scrim (QuranToolBar.Overlay v21/v28) -->
+    <color name="reader_nav_scrim">#AA000000</color>
     <color name="panel_background_color">@color/navy_700</color>
     <color name="translation_hdr_color">#FF777777</color>
     <color name="translation_sura_header">#FFF1ECD8</color>
@@ -247,7 +247,7 @@
     <color name="audio_remove">@color/md_theme_light_error</color>
     <color name="audio_remove_faint">#1FBA1A1A</color>
     <color name="snackbar_background_color">@color/download_button_background</color>
-    <color name="overlay_panel">#DD000000</color>
+    <color name="overlay_panel">#DD172033</color>
     <color name="navbar_night_color">#FF000000</color>
     <color name="toast_background_color">#E6EEEEEE</color>
     <color name="toast_text_color">#FF000000</color>
@@ -255,12 +255,8 @@
     <color name="toast_text_color_night">#FFFFFFFF</color>
 
     <!-- Quran player -->
-    <color name="quran_player_toolbar_top">#FFFFFF</color>
-    <color name="quran_player_toolbar_bottom">#FFF8F0</color>
-    <color name="quran_player_background">#FFF8F0</color>
 
     <!-- Media / Exoplayer -->
-    <color name="exoplayer_background">#FFF8F0</color>
     <color name="BottomSheetDialog">#FFFFFF</color>
     <color name="rewayahSpinnerBAckground">#FFFFFF</color>
     <color name="softBlue">#CDF6F8</color>
