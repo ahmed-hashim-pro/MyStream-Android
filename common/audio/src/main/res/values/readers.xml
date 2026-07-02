@@ -73,4 +73,7 @@
   <string name="qari_aloosi_gapless">Abdulrahman Aloosi (gapless)</string>
   <string name="qari_alzain_ahmad_gapless">Alzain Mohammad Ahmad (gapless)</string>
   <string name="qari_muhammad_rashad_shereef_gapless">Muhammad Rashad Al-Shereef (gapless)</string>
+  <!-- plain variants for entries whose recording now only exists per-ayah -->
+  <string name="qari_ajamy">Ahmed ibn Ali al-Ajamy</string>
+  <string name="qari_yasser_salama">Yasser Salama</string>
 </resources>
