@@ -165,6 +165,80 @@ public class AppBottomSheet {
         return dialog;
     }
 
+    /** One option row of the playback start sheet. */
+    public static class PlaybackStartOption {
+        public final int iconResId;
+        public final CharSequence title;
+        public final CharSequence subtitle;
+
+        public PlaybackStartOption(int iconResId, CharSequence title, CharSequence subtitle) {
+            this.iconResId = iconResId;
+            this.title = title;
+            this.subtitle = subtitle;
+        }
+    }
+
+    /**
+     * "Start playback from:" prompt (mockup playback-sheet-redesign): fixed
+     * navy sheet with the reciter in the header and icon+sublabel rows.
+     */
+    public static BottomSheetDialog showPlaybackStartOptions(Context context,
+                                                             CharSequence reciterLine,
+                                                             java.util.List<PlaybackStartOption> options,
+                                                             OnItemClickListener onItemClick) {
+        BottomSheetDialog dialog = createStyledDialog(context);
+        if (dialog == null) return null;
+
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.bottom_sheet_playback, null);
+        TextView reciter = view.findViewById(R.id.ps_reciter);
+        android.widget.LinearLayout rows = view.findViewById(R.id.ps_rows);
+        MaterialButton btnCancel = view.findViewById(R.id.ps_cancel);
+
+        reciter.setText(reciterLine);
+        reciter.setVisibility(TextUtils.isEmpty(reciterLine) ? View.GONE : View.VISIBLE);
+
+        final int hairline = 0x1AFFFFFF;
+        for (int i = 0; i < options.size(); i++) {
+            if (i > 0) {
+                View divider = new View(context);
+                divider.setBackgroundColor(hairline);
+                android.widget.LinearLayout.LayoutParams lp =
+                        new android.widget.LinearLayout.LayoutParams(
+                                android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 1);
+                int inset = (int) (16 * context.getResources().getDisplayMetrics().density);
+                lp.setMarginStart(inset);
+                lp.setMarginEnd(inset);
+                rows.addView(divider, lp);
+            }
+            PlaybackStartOption option = options.get(i);
+            View row = inflater.inflate(R.layout.bottom_sheet_playback_row, rows, false);
+            ((ImageView) row.findViewById(R.id.ps_row_icon)).setImageResource(option.iconResId);
+            ((TextView) row.findViewById(R.id.ps_row_title)).setText(option.title);
+            TextView sub = row.findViewById(R.id.ps_row_sub);
+            sub.setText(option.subtitle);
+            sub.setVisibility(TextUtils.isEmpty(option.subtitle) ? View.GONE : View.VISIBLE);
+            final int position = i;
+            row.setOnClickListener(v -> {
+                dialog.dismiss();
+                if (onItemClick != null) onItemClick.onItemClick(position);
+            });
+            rows.addView(row);
+        }
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.setContentView(view);
+        // the layout draws its own navy 28dp-radius surface; the default
+        // Material sheet background would leave white corners behind it
+        View sheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
+        if (sheet != null) {
+            sheet.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+        }
+        dialog.show();
+        return dialog;
+    }
+
     /**
      * Custom dialog with icon, title, message, and two buttons.
      */

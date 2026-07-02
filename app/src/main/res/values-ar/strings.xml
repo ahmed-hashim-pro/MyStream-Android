@@ -538,6 +538,9 @@
 
     <string name="playback_prompt_title">بدء التشغيل من:</string>
     <string name="starting_page_label">أول الصفحة</string>
+    <string name="playback_prompt_reciter">بصوت %1$s</string>
+    <string name="playback_prompt_page_sub">صفحة %1$s</string>
+    <string name="playback_prompt_sura_sub">من بداية السورة</string>
 
     <!-- long press -->
     <string name="ayah_copied_popup">تم نسخ الآية</string>

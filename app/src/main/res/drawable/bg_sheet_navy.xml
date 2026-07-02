@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fixed-navy bottom sheet surface (playback start prompt): same gradient as
+     the audio bar chrome, 28dp top radius to match the house sheet shape. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:angle="255"
+        android:startColor="@color/navy_700"
+        android:endColor="@color/navy_900" />
+    <corners
+        android:topLeftRadius="28dp"
+        android:topRightRadius="28dp" />
+</shape>

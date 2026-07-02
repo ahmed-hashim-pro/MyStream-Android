@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playback start sheet — redesign @ 412dp · My Stream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* MY STREAM — MUSHAF RE-THEME · DESIGN TOKENS (mirror app colors.xml) */
+:root{
+  --gold:#B8860B; --gold-2:#d9b24a; --gold-light:#E9C778;
+  --gold-faint:rgba(184,134,11,.15); --gold-semi:rgba(184,134,11,.40);
+  --navy-900:#172033; --navy-700:#1F2A44;
+  --on-navy:#FFFFFF; --on-navy-dim:rgba(255,255,255,.62);
+  --bg:#FFF8F0; --surface:#FFFFFF; --text:#1C1B1F; --text2:#49454E;
+  --line:#EFE6D2; --shadow:0 16px 38px -18px rgba(23,32,51,.40);
+  --paper:#FFFFFF; --paper-ink:#1d1a12;
+}
+[data-theme="dark"]{
+  --gold:#D4A44C; --gold-2:#caa24f; --gold-light:#E9C778;
+  --gold-faint:rgba(212,164,76,.15); --gold-semi:rgba(212,164,76,.40);
+  --bg:#121212; --surface:#1E1E1E; --text:#FFFFFF; --text2:#B3B3B3;
+  --line:rgba(255,255,255,.12); --shadow:0 18px 44px -18px rgba(0,0,0,.75);
+  --paper:#15171C; --paper-ink:#d7d2c4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:'Cairo','Plus Jakarta Sans',system-ui,sans-serif;color:#e8eaf0;min-height:100vh;
+  padding:26px 22px 70px;
+  background:radial-gradient(1100px 520px at 12% -8%,#20304f 0,transparent 60%),
+             radial-gradient(900px 480px at 100% 0,#11182a 0,transparent 55%),#0c111d;}
+[dir="ltr"] body{font-family:'Plus Jakarta Sans','Cairo',system-ui,sans-serif}
+.wrap{max-width:1320px;margin:0 auto}
+h1.title{font-size:23px;font-weight:800;margin:0 0 3px;display:flex;align-items:center;gap:10px;color:#fff}
+h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 12px var(--gold-light)}
+.sub{color:#9fb0d0;font-size:13.5px;margin:0 0 18px;max-width:980px;line-height:1.55}
+.sub b{color:#e7ecf7}
+.controls{position:sticky;top:0;z-index:200;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 -22px 24px;
+  padding:14px 22px;background:rgba(9,13,22,.82);backdrop-filter:blur(10px);border-bottom:1px solid #1c2335}
+.seg{display:inline-flex;background:#161d2e;border:1px solid #273350;border-radius:12px;padding:4px;gap:3px}
+.seg .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#5f6f8e;padding:0 6px;align-self:center;font-weight:800}
+.seg button{font:inherit;font-size:12.5px;font-weight:700;color:#9fb0d0;background:transparent;border:0;padding:7px 15px;border-radius:9px;cursor:pointer}
+.seg button.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305}
+
+/* device-width phones: screen = exactly 412×914dp */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:40px 26px;justify-items:center}
+.phone-col{display:flex;flex-direction:column;align-items:center;gap:12px;width:430px}
+.phone-cap{text-align:center}
+.phone-cap .n{font-size:12.5px;font-weight:800;color:#e7ecf7}
+.phone-cap .d{font-size:11px;color:#7e8db0;margin-top:2px;line-height:1.35;max-width:410px}
+.phone{width:430px;height:932px;border-radius:44px;background:#05070c;padding:9px;flex:none;position:relative;
+  box-shadow:0 34px 80px -30px rgba(0,0,0,.85),0 0 0 2px #1c2335,inset 0 0 0 2px #000}
+.screen{width:100%;height:100%;border-radius:36px;overflow:hidden;position:relative;background:var(--bg);color:var(--text);
+  display:flex;flex-direction:column}
+.notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:110px;height:24px;background:#05070c;border-radius:0 0 14px 14px;z-index:120}
+.sb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:12px;font-weight:700;z-index:80;
+  background:var(--navy-700);color:var(--on-navy)}
+.sb .r{display:flex;gap:5px;align-items:center}
+.sb-dots:after{content:"●●●";letter-spacing:1px;font-size:7px}
+.bar{background:linear-gradient(150deg,var(--navy-700),var(--navy-900));color:var(--on-navy);position:relative;
+  padding:6px 14px 14px;flex:none}
+.bar .nav{display:flex;align-items:center;gap:10px;min-height:44px}
+.bar .ico{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--gold)}
+.bar .bk{font-size:22px;color:var(--gold)}
+[dir="rtl"] .bar .bk{transform:scaleX(-1)}
+.bar .ttl{flex:1;min-width:0}
+.bar .ttl .t{font-size:18px;font-weight:800}
+.bar .ttl .s{font-size:12px;color:var(--on-navy-dim);margin-top:1px}
+.ar{font-family:'Amiri',serif}
+
+.page{position:absolute;inset:0;background:var(--paper);color:var(--paper-ink);display:flex;flex-direction:column}
+.page.sepia{--paper:#F6ECCD;--paper-ink:#4a3b22}
+.page .quran{flex:1;overflow:hidden;padding:20px 26px;font-family:'Amiri',serif;direction:rtl;
+  font-size:29px;line-height:2.15;text-align:justify;text-align-last:center;color:var(--paper-ink)}
+.page .quran .mk{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;margin:0 2px;
+  font-size:13px;color:var(--gold);font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;vertical-align:middle;position:relative}
+.page .quran .mk:before{content:"۝";position:absolute;font-family:'Amiri',serif;font-size:34px;color:var(--gold-semi)}
+.page .pageno{text-align:center;font-size:12px;font-weight:700;opacity:.6;padding:8px 0 14px}
+.scrim{position:absolute;inset:0;background:rgba(8,11,20,.52);z-index:55}
+
+/* ============================================================
+   PLAYBACK START SHEET — fixed navy chrome (audio system surface),
+   28dp top radius, one shared 16dp content inset.
+   ============================================================ */
+.psheet{position:absolute;left:0;right:0;bottom:0;z-index:60;
+  background:linear-gradient(165deg,var(--navy-700),var(--navy-900));color:var(--on-navy);
+  border-radius:28px 28px 0 0;box-shadow:0 -18px 40px -16px rgba(0,0,0,.6);overflow:hidden}
+.psheet:before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(300px 150px at 85% -30%,rgba(212,164,76,.22),transparent 70%)}
+.psheet .grab{width:42px;height:5px;border-radius:5px;background:rgba(255,255,255,.28);margin:10px auto 2px}
+.psheet .head{display:flex;align-items:center;gap:12px;padding:10px 16px 12px}
+.psheet .head .glyph{width:42px;height:42px;border-radius:50%;flex:none;
+  background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305;
+  display:flex;align-items:center;justify-content:center;font-size:16px}
+.psheet .head .tx{flex:1;min-width:0}
+.psheet .head .t{font-size:15px;font-weight:800}
+.psheet .head .s{font-size:11.5px;color:var(--on-navy-dim);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.psheet .rows{padding:0}
+.psheet .row{display:flex;align-items:center;gap:13px;padding:11px 16px;min-height:58px;cursor:pointer;position:relative}
+.psheet .row:hover{background:rgba(255,255,255,.05)}
+.psheet .row+.row:before{content:"";position:absolute;top:0;inset-inline:16px;height:1px;background:rgba(255,255,255,.10)}
+.psheet .row .chip{width:38px;height:38px;border-radius:11px;background:rgba(212,164,76,.16);color:var(--gold-light);
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+.psheet .row .tx{flex:1;min-width:0}
+.psheet .row .t{font-size:13.5px;font-weight:800;color:var(--on-navy)}
+.psheet .row .t .ar{font-size:15px}
+.psheet .row .s{font-size:11px;color:var(--on-navy-dim);margin-top:1px}
+.psheet .row .go{color:var(--gold);font-size:15px;flex:none;opacity:.85}
+[dir="ltr"] .psheet .row .go{transform:scaleX(1)}
+[dir="rtl"] .psheet .row .go{transform:scaleX(-1)}
+.psheet .cancel{display:flex;margin:10px 16px 16px;justify-content:center;align-items:center;
+  border:1.5px solid var(--gold-semi);border-radius:14px;color:var(--gold-light);
+  font-size:13px;font-weight:800;padding:12px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="title"><span class="dot"></span> Playback start sheet — redesign @ 412dp</h1>
+  <p class="sub">The "start playback from:" prompt, rebuilt on the fixed navy chrome like the rest of the audio system —
+     so it no longer flash-bangs night readers. Gold play-badge header carries the <b>reciter context</b> ("recited by …"),
+     each option becomes a real row: icon chip + label + <b>sublabel</b> (page number / "from the start of the surah"),
+     hairlines and content sit on the shared <b>16dp inset</b>. Cancel is the house ghost button. Frames: single-sura page
+     and multi-sura page. Theme flips the paper behind; the sheet itself is fixed navy.</p>
+  <div class="controls">
+    <div class="seg"><span class="lbl">Theme</span>
+      <button data-theme-btn="light" class="on">☀︎ Light</button>
+      <button data-theme-btn="dark">☾ Dark</button>
+    </div>
+    <div class="seg"><span class="lbl">Language</span>
+      <button data-lang-btn="en">EN</button>
+      <button data-lang-btn="ar" class="on">العربية</button>
+    </div>
+  </div>
+  <main class="grid">
+
+    <!-- ---------- frame 1: page with one sura ---------- -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Two options — page start · surah start" data-ar="خياران — أول الصفحة · أول السورة"></div>
+        <div class="d" data-en="Reciter subline in the header; page number and 'from the start of the surah' sublabels make the choice concrete." data-ar="اسم القارئ في الترويسة؛ رقم الصفحة و«من بداية السورة» يجعلان الخيار واضحاً."></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t"><span class="ar">سُورَةُ الوَاقِعَة</span></div>
+              <div class="s"><span data-en="Page 534 · Juz' 27" data-ar="صفحة ٥٣٤ · الجزء ٢٧"></span></div>
+            </div>
+            <div class="acts"><span class="ico">🌐</span></div>
+          </div>
+        </div>
+        <div style="position:relative;flex:1;overflow:hidden">
+          <div class="page auto-paper sepia">
+            <div class="quran">
+              إِذَا وَقَعَتِ الْوَاقِعَةُ <span class="mk">1</span> لَيْسَ لِوَقْعَتِهَا كَاذِبَةٌ <span class="mk">2</span>
+              خَافِضَةٌ رَافِعَةٌ <span class="mk">3</span> إِذَا رُجَّتِ الْأَرْضُ رَجًّا <span class="mk">4</span>
+            </div>
+            <div class="pageno">٥٣٤</div>
+          </div>
+          <div class="scrim"></div>
+          <div class="psheet">
+            <div class="grab"></div>
+            <div class="head">
+              <span class="glyph">▶</span>
+              <div class="tx">
+                <div class="t" data-en="Start playback from:" data-ar="بدء التشغيل من:"></div>
+                <div class="s" data-en="Recited by Abdurrahman As-Sudais" data-ar="بصوت عبد الرحمن السديس"></div>
+              </div>
+            </div>
+            <div class="rows">
+              <div class="row">
+                <span class="chip">⏵</span>
+                <div class="tx">
+                  <div class="t" data-en="Start of the page" data-ar="أول الصفحة"></div>
+                  <div class="s" data-en="Page 534" data-ar="صفحة ٥٣٤"></div>
+                </div>
+                <span class="go">‹</span>
+              </div>
+              <div class="row">
+                <span class="chip">۝</span>
+                <div class="tx">
+                  <div class="t"><span class="ar">سُورَةُ الوَاقِعَة</span></div>
+                  <div class="s" data-en="From the start of the surah" data-ar="من بداية السورة"></div>
+                </div>
+                <span class="go">‹</span>
+              </div>
+            </div>
+            <div class="cancel" data-en="Cancel" data-ar="إلغاء"></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ---------- frame 2: page with two suras ---------- -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Three options — multi-surah page" data-ar="ثلاثة خيارات — صفحة بسورتين"></div>
+        <div class="d" data-en="Rows scale naturally when the page holds more than one surah." data-ar="الصفوف تتوسع طبيعياً حين تضم الصفحة أكثر من سورة."></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t"><span class="ar">سُورَةُ الفَلَق</span></div>
+              <div class="s"><span data-en="Page 604 · Juz' 30" data-ar="صفحة ٦٠٤ · الجزء ٣٠"></span></div>
+            </div>
+            <div class="acts"><span class="ico">🌐</span></div>
+          </div>
+        </div>
+        <div style="position:relative;flex:1;overflow:hidden">
+          <div class="page auto-paper sepia">
+            <div class="quran">
+              قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ <span class="mk">1</span> مِنْ شَرِّ مَا خَلَقَ <span class="mk">2</span>
+              قُلْ أَعُوذُ بِرَبِّ النَّاسِ <span class="mk">1</span> مَلِكِ النَّاسِ <span class="mk">2</span>
+            </div>
+            <div class="pageno">٦٠٤</div>
+          </div>
+          <div class="scrim"></div>
+          <div class="psheet">
+            <div class="grab"></div>
+            <div class="head">
+              <span class="glyph">▶</span>
+              <div class="tx">
+                <div class="t" data-en="Start playback from:" data-ar="بدء التشغيل من:"></div>
+                <div class="s" data-en="Recited by Minshawi Murattal" data-ar="بصوت محمد صديق المنشاوي"></div>
+              </div>
+            </div>
+            <div class="rows">
+              <div class="row">
+                <span class="chip">⏵</span>
+                <div class="tx">
+                  <div class="t" data-en="Start of the page" data-ar="أول الصفحة"></div>
+                  <div class="s" data-en="Page 604" data-ar="صفحة ٦٠٤"></div>
+                </div>
+                <span class="go">‹</span>
+              </div>
+              <div class="row">
+                <span class="chip">۝</span>
+                <div class="tx">
+                  <div class="t"><span class="ar">سُورَةُ الفَلَق</span></div>
+                  <div class="s" data-en="From the start of the surah" data-ar="من بداية السورة"></div>
+                </div>
+                <span class="go">‹</span>
+              </div>
+              <div class="row">
+                <span class="chip">۝</span>
+                <div class="tx">
+                  <div class="t"><span class="ar">سُورَةُ النَّاس</span></div>
+                  <div class="s" data-en="From the start of the surah" data-ar="من بداية السورة"></div>
+                </div>
+                <span class="go">‹</span>
+              </div>
+            </div>
+            <div class="cancel" data-en="Cancel" data-ar="إلغاء"></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </main>
+</div>
+<script>
+const root = document.documentElement;
+function setTheme(t){
+  root.setAttribute('data-theme', t);
+  document.querySelectorAll('[data-theme-btn]').forEach(b =>
+    b.classList.toggle('on', b.getAttribute('data-theme-btn') === t));
+  const want = t === 'dark' ? 'night' : 'sepia';
+  document.querySelectorAll('.page.auto-paper').forEach(p => {
+    p.classList.toggle('sepia', want === 'sepia');
+    if (want === 'night') { p.style.setProperty('--paper', '#15171C'); p.style.setProperty('--paper-ink', '#d7d2c4'); }
+    else { p.style.removeProperty('--paper'); p.style.removeProperty('--paper-ink'); }
+  });
+}
+function setLang(l){
+  root.setAttribute('data-lang', l);
+  root.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+  root.setAttribute('lang', l);
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const v = l === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+    if (v !== null) el.textContent = v;
+  });
+  document.querySelectorAll('[data-lang-btn]').forEach(b =>
+    b.classList.toggle('on', b.getAttribute('data-lang-btn') === l));
+}
+document.querySelectorAll('[data-theme-btn]').forEach(b =>
+  b.addEventListener('click', () => setTheme(b.getAttribute('data-theme-btn'))));
+document.querySelectorAll('[data-lang-btn]').forEach(b =>
+  b.addEventListener('click', () => setLang(b.getAttribute('data-lang-btn'))));
+setTheme('light'); setLang('ar');
+</script>
+</body>
+</html>

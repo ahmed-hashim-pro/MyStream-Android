@@ -2086,29 +2086,35 @@ public class PagerActivity extends AppCompatActivity implements
 
   private void promptForMultipleChoicePlay(int page, int startSura, int startAyah,
                                            List<Integer> startingSuraList) {
-    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.select_dialog_item);
-    for (Integer integer : startingSuraList) {
-      String suraName = quranDisplayData.getSuraName(this, integer, false);
-      adapter.add(suraName);
+    // navy playback sheet (mockup playback-sheet-redesign): sura rows carry a
+    // "from the start of the surah" sublabel; an optional page-start row
+    // leads with the page number
+    final List<AppBottomSheet.PlaybackStartOption> options = new ArrayList<>();
+    for (Integer sura : startingSuraList) {
+      options.add(new AppBottomSheet.PlaybackStartOption(
+          R.drawable.ic_transcript,
+          quranDisplayData.getSuraName(this, sura, true),
+          getString(R.string.playback_prompt_sura_sub)));
     }
     if (startSura != startingSuraList.get(0)) {
-      adapter.insert(getString(R.string.starting_page_label), 0);
+      options.add(0, new AppBottomSheet.PlaybackStartOption(
+          R.drawable.ic_play,
+          getString(R.string.starting_page_label),
+          getString(R.string.playback_prompt_page_sub,
+              QuranUtils.getLocalizedNumber(this, page))));
       startingSuraList.add(0, startSura);
     }
 
-    promptDialog = AppBottomSheet.showListWithAdapter(this,
-        getString(R.string.playback_prompt_title),
-        adapter,
-        (parent, view, i, id) -> {
+    promptDialog = AppBottomSheet.showPlaybackStartOptions(this,
+        getString(R.string.playback_prompt_reciter, audioStatusBar.getAudioInfo().getName()),
+        options,
+        i -> {
           if (i == 0) {
             playFromAyah(page, startSura, startAyah);
           } else {
             playFromAyah(page, startingSuraList.get(i), 1);
           }
-          if (promptDialog != null) {
-            promptDialog.dismiss();
-            promptDialog = null;
-          }
+          promptDialog = null;
         });
   }
 
