@@ -9,7 +9,7 @@
     <div class="phone-col">
       <div class="phone-cap">
         <div class="n" data-en="Audio Bar · Stopped" data-ar="شريط الصوت · متوقّف"></div>
-        <div class="d" data-en="48dp docked bar — gold Play + reciter (Qari) picker ▾ + Mic (when recitation on)" data-ar="شريط ٤٨dp — تشغيل ذهبي + اختيار القارئ ▾ + ميكروفون (عند تفعيل التسميع)"></div>
+        <div class="d" data-en="Now-playing identity row — gold-framed reciter chip, name + status (tap = reciter dropdown), gold Play FAB" data-ar="صف هوية القارئ — شارة ذهبية، الاسم وسطر الحالة (اللمس يفتح قائمة القرّاء)، وزر تشغيل ذهبي دائري"></div>
       </div>
       <div class="phone"><div class="notch"></div><div class="screen">
         <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
@@ -42,16 +42,14 @@
           </div>
         </div>
 
-        <!-- STOPPED: Play(gold) · | · Qari spinner ▾ · | · Mic -->
-        <div class="audiobar" style="gap:0;padding:6px 8px">
-          <span class="ctl" title="Play" style="flex:none;width:42px;text-align:center;color:var(--gold);font-size:22px">▶</span>
-          <span style="width:1px;align-self:stretch;background:rgba(255,255,255,.22);margin:8px 7px"></span>
-          <div title="Choose reciter (Qari)" style="flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:7px 11px">
-            <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;font-weight:700" data-en="Mishary Alafasy" data-ar="مشاري العفاسي"></span>
-            <span style="color:var(--gold);flex:none">▾</span>
+        <!-- STOPPED (chosen design A): reciter avatar chip · name+status (tap = dropdown) · gold Play FAB -->
+        <div class="audiobar">
+          <span class="av">🎙</span>
+          <div class="meta" title="Choose reciter (Qari)">
+            <div class="t"><span data-en="Mishary Alafasy" data-ar="مشاري العفاسي"></span> <span style="color:var(--gold);font-size:10px">▾</span></div>
+            <div class="s"><span data-en="Ready to recite · tap to change" data-ar="جاهز للتلاوة · المس للتغيير"></span></div>
           </div>
-          <span style="width:1px;align-self:stretch;background:rgba(255,255,255,.22);margin:8px 7px"></span>
-          <span class="ctl" title="Recite (mic)" style="flex:none;width:42px;text-align:center;font-size:19px">🎙</span>
+          <span class="play">▶</span>
         </div>
       </div></div>
     </div>
@@ -60,7 +58,7 @@
     <div class="phone-col">
       <div class="phone-cap">
         <div class="n" data-en="Audio Bar · Playing" data-ar="شريط الصوت · يُشغّل"></div>
-        <div class="d" data-en="Six equal controls — Stop, Prev, Play/Pause (gold), Next, Repeat ×N, Settings. No scrubber/time." data-ar="ستة أزرار متساوية — إيقاف، السابق، تشغيل/إيقاف (ذهبي)، التالي، تكرار ×ن، الإعدادات. بلا شريط تمرير أو وقت"></div>
+        <div class="d" data-en="Two decks — reciter + current ayah pinned on top; Stop, Prev, gold Pause FAB, Next, Repeat ×N, Settings below. No scrubber/time." data-ar="طابقان — القارئ والآية الحالية مثبّتان أعلى؛ إيقاف، السابق، إيقاف مؤقت ذهبي، التالي، تكرار ×ن، الإعدادات أسفل. بلا شريط تمرير أو وقت"></div>
       </div>
       <div class="phone"><div class="notch"></div><div class="screen">
         <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
@@ -92,14 +90,23 @@
           </div>
         </div>
 
-        <!-- PLAYING: Stop · Prev · Play/Pause(gold) · Next · Repeat(count) · Settings -->
-        <div class="audiobar" style="gap:0;padding:4px 4px">
-          <span class="ctl" title="Stop" style="flex:1;text-align:center;font-size:20px">⏹</span>
-          <span class="ctl" title="Previous" style="flex:1;text-align:center;font-size:20px">⏮</span>
-          <span title="Pause" style="flex:1;text-align:center;font-size:22px;color:var(--gold)">⏸</span>
-          <span class="ctl fwd" title="Next" style="flex:1;text-align:center;font-size:20px">⏭</span>
-          <span class="ctl" title="Repeat — tap cycles 1 · 2 · 3 · ∞" style="flex:1;text-align:center;font-size:19px"><span style="position:relative;display:inline-block">🔁<span style="position:absolute;top:-4px;inset-inline-end:-6px;font-size:9px;font-weight:800;color:var(--gold-light)">3</span></span></span>
-          <span class="ctl" title="Audio settings" style="flex:1;text-align:center;font-size:19px">⚙</span>
+        <!-- PLAYING (chosen design B): reciter deck on top · six controls below -->
+        <div class="audiobar" style="flex-direction:column;align-items:stretch;gap:0;padding:0">
+          <div style="display:flex;align-items:center;gap:7px;padding:7px 14px 6px;border-bottom:1px solid rgba(255,255,255,.10)" title="Choose reciter (Qari)">
+            <span style="font-size:12px;color:var(--gold-light)">🎙</span>
+            <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px;font-weight:800" data-en="Mishary Alafasy" data-ar="مشاري العفاسي"></span>
+            <span style="color:var(--gold);font-size:9px">▾</span>
+            <span class="grow"></span>
+            <span style="font-size:10px;color:var(--gold-light);font-weight:700"><span class="ar">الفاتحة</span> · <span data-en="ayah 2" data-ar="الآية ٢"></span></span>
+          </div>
+          <div style="display:flex;align-items:center;padding:4px 6px 6px">
+            <span class="ctl" title="Stop" style="flex:1;text-align:center;font-size:19px;color:var(--on-navy-dim)">⏹</span>
+            <span class="ctl" title="Previous" style="flex:1;text-align:center;font-size:19px">⏮</span>
+            <span class="play" title="Pause" style="width:38px;height:38px;font-size:15px;margin:0 4px">⏸</span>
+            <span class="ctl fwd" title="Next" style="flex:1;text-align:center;font-size:19px">⏭</span>
+            <span class="ctl" title="Repeat — tap cycles 1 · 2 · 3 · ∞" style="flex:1;text-align:center;font-size:18px"><span style="position:relative;display:inline-block">🔁<span style="position:absolute;top:-4px;inset-inline-end:-6px;font-size:9px;font-weight:800;color:var(--gold-light)">3</span></span></span>
+            <span class="ctl" title="Audio settings" style="flex:1;text-align:center;font-size:18px">⚙</span>
+          </div>
         </div>
       </div></div>
     </div>
