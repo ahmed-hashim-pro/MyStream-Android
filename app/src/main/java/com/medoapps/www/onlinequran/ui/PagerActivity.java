@@ -1772,23 +1772,12 @@ public class PagerActivity extends AppCompatActivity implements
     if (request != null) {
       intent.putExtra(AudioService.EXTRA_PLAY_INFO, request);
       lastAudioRequest = request;
-      // persist at play time (not at stop) so the playback panel can restore
-      // the range even if the stop broadcast is missed or the app restarts
-      persistPlaybackRange(request);
       audioStatusBar.setRepeatCount(request.getRepeatInfo());
       audioStatusBar.switchMode(AudioStatusBar.LOADING_MODE);
     }
 
     Timber.d("starting service for audio playback");
     startService(intent);
-  }
-
-  private void persistPlaybackRange(AudioRequest request) {
-    quranSettings.saveLastPlaybackRange(
-        request.getStart().sura, request.getStart().ayah,
-        request.getEnd().sura, request.getEnd().ayah,
-        request.getRepeatInfo(), request.getRangeRepeatInfo(),
-        request.getEnforceBounds());
   }
 
   @Override
@@ -1832,7 +1821,6 @@ public class PagerActivity extends AppCompatActivity implements
       startService(i);
 
       lastAudioRequest = updatedAudioRequest;
-      persistPlaybackRange(updatedAudioRequest);
       audioStatusBar.setRepeatCount(verseRepeat);
       return true;
     } else {
@@ -1857,7 +1845,6 @@ public class PagerActivity extends AppCompatActivity implements
       i.putExtra(AudioService.EXTRA_PLAY_INFO, updatedAudioRequest);
       startService(i);
       lastAudioRequest = updatedAudioRequest;
-      persistPlaybackRange(updatedAudioRequest);
     }
   }
 

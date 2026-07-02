@@ -203,6 +203,15 @@ class AyahPlaybackFragment : AyahActionFragment() {
       val enforceRange = restrictToRange.isChecked
       var updatedRange = false
 
+      // the panel remembers what was configured IN the panel: persist the
+      // applied range + repeats here (and only here) so casual play-from-here
+      // requests can never clobber the remembered drill with page defaults
+      QuranSettings.getInstance(context).saveLastPlaybackRange(
+        currentStart.sura, currentStart.ayah,
+        currentEnding.sura, currentEnding.ayah,
+        verseRepeat, rangeRepeat, enforceRange
+      )
+
       if (currentStart != decidedStart || currentEnding != decidedEnd) {
         // different range or not playing, so make a new request
         updatedRange = true
