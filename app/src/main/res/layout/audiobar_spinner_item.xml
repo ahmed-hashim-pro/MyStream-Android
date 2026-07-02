@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Compact collapsed reciter name for the PLAYING deck (mockup 18 B):
      bold white 11.5sp with the gold caret at the end. -->
+<!-- wrap_content so the gold caret hugs the name instead of drifting to the
+     spinner-box edge; the spinner pins the wrapped block to the reading start -->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:drawableEnd="@drawable/ic_caret_down_gold"
     android:drawablePadding="6dp"
@@ -13,5 +15,5 @@
     android:paddingEnd="6dp"
     android:singleLine="true"
     android:textColor="@color/text_on_navy"
-    android:textSize="11.5sp"
+    android:textSize="@dimen/audiobar_deck_text_size"
     android:textStyle="bold" />

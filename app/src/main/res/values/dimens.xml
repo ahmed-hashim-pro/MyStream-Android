@@ -44,7 +44,13 @@
 
     <!-- Audio bar -->
     <dimen name="audiobar_height">48dp</dimen>
-    <dimen name="audiobar_deck_height">30dp</dimen>
+    <dimen name="audiobar_deck_height">34dp</dimen>
+    <!-- shared 16dp content inset: deck text + filled shapes sit on it; the
+         borderless 48dp control boxes get 4dp so their ~20dp glyph edges land
+         on the same optical line (mockup audiobar-device-width.html) -->
+    <dimen name="audiobar_side_inset">16dp</dimen>
+    <dimen name="audiobar_controls_inset">4dp</dimen>
+    <dimen name="audiobar_deck_text_size">11.5sp</dimen>
     <dimen name="audiobar_fab_size">38dp</dimen>
     <dimen name="audiobar_avatar_size">34dp</dimen>
     <dimen name="audiobar_button_width">48dp</dimen>

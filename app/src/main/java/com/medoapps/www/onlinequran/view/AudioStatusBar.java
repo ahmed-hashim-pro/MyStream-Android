@@ -63,6 +63,11 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
   private final int deckHeight;
   private final int fabSize;
   private final int avatarSize;
+  // shared 16dp content inset + 4dp optical inset for borderless control boxes
+  // (mockup audiobar-device-width.html)
+  private final int sideInset;
+  private final int controlsInset;
+  private final int deckTextSize;
   private LinearLayout currentRow;
   private QariAdapter adapter;
   private QariAdapter deckAdapter;
@@ -137,6 +142,9 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
         .getDimensionPixelSize(R.dimen.audiobar_spinner_padding);
     rowHeight = resources.getDimensionPixelSize(R.dimen.audiobar_height);
     deckHeight = resources.getDimensionPixelSize(R.dimen.audiobar_deck_height);
+    sideInset = resources.getDimensionPixelSize(R.dimen.audiobar_side_inset);
+    controlsInset = resources.getDimensionPixelSize(R.dimen.audiobar_controls_inset);
+    deckTextSize = resources.getDimensionPixelSize(R.dimen.audiobar_deck_text_size);
     fabSize = Math.min(resources.getDimensionPixelSize(R.dimen.audiobar_fab_size),
         rowHeight - separatorSpacing);
     avatarSize = Math.min(resources.getDimensionPixelSize(R.dimen.audiobar_avatar_size),
@@ -271,8 +279,19 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
 
   /** Adds a fixed-height, forced-LTR horizontal row that add* helpers fill. */
   private LinearLayout newRow(int height) {
+    return newRow(height, controlsInset);
+  }
+
+  /**
+   * Row with an explicit horizontal inset: {@code sideInset} (16dp) for rows
+   * whose text/filled shapes define the bar's content edge, {@code
+   * controlsInset} (4dp) for rows of borderless 48dp buttons so their glyph
+   * edges land on the same optical line.
+   */
+  private LinearLayout newRow(int height, int horizontalPadding) {
     LinearLayout row = new LeftToRightLinearLayout(context);
     row.setOrientation(LinearLayout.HORIZONTAL);
+    row.setPadding(horizontalPadding, 0, horizontalPadding, 0);
     addView(row, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
     currentRow = row;
     return row;
@@ -289,7 +308,8 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
   private void showStoppedMode() {
     currentMode = STOPPED_MODE;
     removeAllViews();
-    newRow(rowHeight);
+    // filled shapes (chip, FAB) sit exactly on the 16dp content line
+    newRow(rowHeight, sideInset);
 
     // mockup 18 A: reciter chip · name + status (tap = picker) · gold Play FAB
     if (isRtl) {
@@ -449,10 +469,10 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     final int pad = avatarSize / 5;
     avatar.setPadding(pad, pad, pad, pad);
     avatar.setBackgroundResource(R.drawable.bg_audiobar_avatar);
+    // the row's 16dp padding is the outer inset; the spinner's own margins
+    // provide the inner gap
     LayoutParams params = new LayoutParams(avatarSize, avatarSize);
     params.gravity = Gravity.CENTER_VERTICAL;
-    params.leftMargin = spinnerPadding / 2;
-    params.rightMargin = spinnerPadding / 2;
     currentRow.addView(avatar, params);
   }
 
@@ -468,10 +488,10 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     fab.setOnClickListener(onClickListener);
     fab.setOnLongClickListener(onLongClickListener);
     fab.setTag(imageId);
+    // outer inset comes from the row padding (16dp stopped, spacers when
+    // it sits mid-row in the controls deck)
     LayoutParams params = new LayoutParams(fabSize, fabSize);
     params.gravity = Gravity.CENTER_VERTICAL;
-    params.leftMargin = spinnerPadding / 2;
-    params.rightMargin = spinnerPadding / 2;
     currentRow.addView(fab, params);
   }
 
@@ -486,8 +506,6 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     final int size = deckHeight - separatorSpacing;
     LayoutParams params = new LayoutParams(size, size);
     params.gravity = Gravity.CENTER_VERTICAL;
-    params.leftMargin = spinnerPadding / 2;
-    params.rightMargin = 0;
     currentRow.addView(mic, params);
   }
 
@@ -496,15 +514,13 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     nowPlayingText = new TextView(context);
     nowPlayingText.setTextColor(
         androidx.core.content.ContextCompat.getColor(context, R.color.gold_light));
-    nowPlayingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textFontSize);
+    nowPlayingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, deckTextSize);
     nowPlayingText.setTypeface(null, android.graphics.Typeface.BOLD);
     nowPlayingText.setGravity(Gravity.CENTER_VERTICAL);
     nowPlayingText.setSingleLine(true);
     nowPlayingText.setText(nowPlayingInfo);
     LayoutParams params = new LayoutParams(
         ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-    params.leftMargin = spinnerPadding / 2;
-    params.rightMargin = spinnerPadding / 2;
     currentRow.addView(nowPlayingText, params);
   }
 
@@ -674,8 +690,6 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
   private void showPlayingMode(boolean isPaused) {
     removeAllViews();
 
-    final boolean withWeight = !isDualPageMode;
-
     int button;
     if (isPaused) {
       button = R.drawable.ic_play;
@@ -685,8 +699,9 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
       currentMode = PLAYING_MODE;
     }
 
-    // deck: reciter (tap = picker) + current sura·ayah readout (mockup 18 B)
-    newRow(deckHeight);
+    // deck: reciter (tap = picker) + current sura·ayah readout, text on the
+    // 16dp content line (mockup 18 B / audiobar-device-width)
+    newRow(deckHeight, sideInset);
     if (isRtl) {
       addNowPlayingText();
       addSpinner(deckAdapter);
@@ -699,20 +714,29 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
 
     View hairline = new View(context);
     hairline.setBackgroundColor(0x1AFFFFFF);
-    addView(hairline, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-        Math.max(1, separatorWidth)));
+    final LayoutParams hairlineParams = new LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT, Math.max(1, separatorWidth));
+    hairlineParams.leftMargin = sideInset;
+    hairlineParams.rightMargin = sideInset;
+    addView(hairline, hairlineParams);
 
-    // controls: Stop · Prev · gold Play/Pause FAB · Next · Repeat ×N · Settings
-    newRow(rowHeight);
-    addButton(R.drawable.ic_stop, withWeight);
-    addButton(R.drawable.ic_previous, withWeight);
+    // controls: Stop · Prev · gold Play/Pause FAB · Next · Repeat ×N ·
+    // Settings — fixed boxes spread edge-to-edge inside the 4dp box, so the
+    // outer glyphs align optically with the deck text above (no half-cell
+    // drift at device width)
+    newRow(rowHeight, controlsInset);
+    addButton(R.drawable.ic_stop, false);
+    addSpacer();
+    addButton(R.drawable.ic_previous, false);
+    addSpacer();
     addPlayFab(button);
-    addButton(R.drawable.ic_next, withWeight);
-
-    addButton(repeatButton, R.drawable.ic_repeat, withWeight);
+    addSpacer();
+    addButton(R.drawable.ic_next, false);
+    addSpacer();
+    addButton(repeatButton, R.drawable.ic_repeat, false);
     updateRepeatButtonText();
-
-    addButton(R.drawable.ic_action_settings, withWeight);
+    addSpacer();
+    addButton(R.drawable.ic_action_settings, false);
   }
 
   private void addButton(int imageId, boolean withWeight) {

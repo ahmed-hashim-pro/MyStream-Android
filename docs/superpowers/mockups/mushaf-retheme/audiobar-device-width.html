@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audio bar at device width (412dp) · My Stream</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   MY STREAM — MUSHAF RE-THEME · DESIGN TOKENS
+   Values mirror app res/values/colors.xml + values-night/colors.xml
+   ============================================================ */
+:root{
+  --gold:#B8860B; --gold-2:#d9b24a; --gold-light:#E9C778;
+  --gold-faint:rgba(184,134,11,.15); --gold-semi:rgba(184,134,11,.40);
+  --navy-900:#172033; --navy-700:#1F2A44; --navy-500:#2C3A5E;
+  --on-navy:#FFFFFF; --on-navy-dim:rgba(255,255,255,.62);
+  --bg:#FFF8F0; --surface:#FFFFFF; --card:#FFFFFF;
+  --text:#1C1B1F; --text2:#49454E; --muted:#cdbfa9;
+  --line:#EFE6D2; --line-soft:rgba(28,27,31,.08);
+  --shadow:0 16px 38px -18px rgba(23,32,51,.40);
+  --paper:#FFFFFF; --paper-ink:#1d1a12; --paper-edge:rgba(0,0,0,.06);
+}
+[data-theme="dark"]{
+  --gold:#D4A44C; --gold-2:#caa24f; --gold-light:#E9C778;
+  --gold-faint:rgba(212,164,76,.15); --gold-semi:rgba(212,164,76,.40);
+  --bg:#121212; --surface:#1E1E1E; --card:#282828;
+  --text:#FFFFFF; --text2:#B3B3B3; --muted:#4a443a;
+  --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.07);
+  --shadow:0 18px 44px -18px rgba(0,0,0,.75);
+  --paper:#161310; --paper-ink:#e9e0cf; --paper-edge:rgba(255,255,255,.06);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans','Cairo',system-ui,sans-serif;color:#e8eaf0;min-height:100vh;
+  padding:26px 22px 70px;
+  background:radial-gradient(1100px 520px at 12% -8%,#20304f 0,transparent 60%),
+             radial-gradient(900px 480px at 100% 0,#11182a 0,transparent 55%),#0c111d;}
+[dir="rtl"] body{font-family:'Cairo','Plus Jakarta Sans',system-ui,sans-serif}
+.wrap{max-width:1320px;margin:0 auto}
+h1.title{font-size:23px;font-weight:800;letter-spacing:-.02em;margin:0 0 3px;display:flex;align-items:center;gap:10px;color:#fff}
+h1.title .dot{width:9px;height:9px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 12px var(--gold-light)}
+.sub{color:#9fb0d0;font-size:13.5px;margin:0 0 18px;max-width:980px;line-height:1.55}
+.sub b{color:#e7ecf7}
+.controls{position:sticky;top:0;z-index:200;display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 -22px 24px;
+  padding:14px 22px;background:rgba(9,13,22,.82);backdrop-filter:blur(10px);border-bottom:1px solid #1c2335}
+.seg{display:inline-flex;background:#161d2e;border:1px solid #273350;border-radius:12px;padding:4px;gap:3px}
+.seg .lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:#5f6f8e;padding:0 6px;align-self:center;font-weight:800}
+.seg button{font:inherit;font-size:12.5px;font-weight:700;color:#9fb0d0;background:transparent;border:0;padding:7px 15px;border-radius:9px;cursor:pointer;transition:.15s}
+.seg button.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305;box-shadow:0 4px 14px -6px var(--gold)}
+.hint{color:#7e8db0;font-size:12px;margin-inline-start:auto}.hint b{color:#cdd6ea}
+
+/* ---------- device-width phones: 412×914dp = Medium Phone API 35 ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:40px 26px;justify-items:center}
+.phone-col{display:flex;flex-direction:column;align-items:center;gap:12px;width:430px}
+.phone-cap{text-align:center}
+.phone-cap .n{font-size:12.5px;font-weight:800;letter-spacing:.03em;color:#e7ecf7}
+.phone-cap .d{font-size:11px;color:#7e8db0;margin-top:2px;line-height:1.35;max-width:410px}
+/* screen = exactly 412×914dp (bezel adds 9px each side) */
+.phone{width:430px;height:932px;border-radius:44px;background:#05070c;padding:9px;flex:none;position:relative;
+  box-shadow:0 34px 80px -30px rgba(0,0,0,.85),0 0 0 2px #1c2335,inset 0 0 0 2px #000}
+.screen{width:100%;height:100%;border-radius:36px;overflow:hidden;position:relative;background:var(--bg);color:var(--text);
+  display:flex;flex-direction:column}
+.notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:110px;height:24px;background:#05070c;border-radius:0 0 14px 14px;z-index:120}
+
+.sb{height:32px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:12px;font-weight:700;z-index:80}
+.sb .r{display:flex;gap:5px;align-items:center}
+.sb.on-navy{background:var(--navy-700);color:var(--on-navy)}
+.sb-dots:after{content:"●●●";letter-spacing:1px;font-size:7px}
+
+.bar{background:linear-gradient(150deg,var(--navy-700),var(--navy-900));color:var(--on-navy);position:relative;
+  padding:6px 14px 14px;flex:none;box-shadow:0 6px 18px -12px rgba(0,0,0,.6)}
+.bar:before{content:"";position:absolute;inset:0;
+  background:radial-gradient(260px 140px at 88% -20%,rgba(212,164,76,.30),transparent 70%);pointer-events:none}
+.bar .nav{display:flex;align-items:center;gap:10px;position:relative;min-height:44px}
+.bar .ico{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--gold);flex:none}
+.bar .bk{font-size:22px;color:var(--gold)}
+.bar .ttl{flex:1;min-width:0}
+.bar .ttl .t{font-size:18px;font-weight:800;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .ttl .s{font-size:12px;color:var(--on-navy-dim);margin-top:1px}
+[dir="rtl"] .bar .bk{transform:scaleX(-1)}
+.bar .acts{display:flex;gap:2px;align-items:center}
+.ar{font-family:'Amiri',serif}
+
+/* ---------- READING PAGE (paper) ---------- */
+.page{position:absolute;inset:0;background:var(--paper);color:var(--paper-ink);display:flex;flex-direction:column}
+.page.sepia{--paper:#F6ECCD;--paper-ink:#4a3b22;--paper-edge:rgba(74,59,34,.10)}
+.page.night{--paper:#15171C;--paper-ink:#d7d2c4;--paper-edge:rgba(255,255,255,.06)}
+.page .surah-band{text-align:center;font-family:'Amiri',serif;font-size:18px;font-weight:700;color:var(--gold);
+  padding:16px 0 12px;margin:16px 20px 8px;border:1.5px solid var(--gold-semi);border-radius:12px;background:var(--gold-faint)}
+.page .quran{flex:1;overflow:hidden;padding:8px 26px;font-family:'Amiri',serif;direction:rtl;
+  font-size:29px;line-height:2.15;text-align:justify;text-align-last:center;color:var(--paper-ink)}
+.page .quran .mk{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;margin:0 2px;
+  font-size:13px;color:var(--gold);font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;vertical-align:middle;position:relative}
+.page .quran .mk:before{content:"۝";position:absolute;font-family:'Amiri',serif;font-size:34px;color:var(--gold-semi)}
+.page .pageno{text-align:center;font-size:12px;font-weight:700;color:var(--paper-ink);opacity:.6;padding:8px 0 14px}
+
+/* floating reading-mode pill (context above the bar) */
+.mode-pill{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:4px;padding:5px;
+  background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);z-index:45}
+.mode-pill span{font-size:12.5px;font-weight:700;color:var(--text2);padding:7px 16px;border-radius:18px}
+.mode-pill span.on{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1305}
+
+/* ============================================================
+   AUDIO BAR @ 412dp — the alignment system
+   One shared 16dp content inset. Deck text and filled shapes
+   (avatar chip, FAB) align to it exactly; borderless control
+   glyphs align OPTICALLY: their 48dp touch boxes get a 4dp row
+   inset so the ~20dp glyph edge lands on the same 16dp line.
+   ============================================================ */
+.audiobar{background:linear-gradient(150deg,var(--navy-700),var(--navy-900));color:var(--on-navy);
+  flex:none;position:relative;z-index:40;display:flex;flex-direction:column}
+/* faint inset guides (toggle) */
+.audiobar .guide{display:none;position:absolute;top:0;bottom:0;width:0;border-inline-start:1px dashed rgba(233,199,120,.55);z-index:5;pointer-events:none}
+.audiobar .guide.s{inset-inline-start:16px}
+.audiobar .guide.e{inset-inline-end:16px}
+[data-guides="on"] .audiobar .guide{display:block}
+
+/* --- stopped row: identity bar (A) --- */
+.ab-stopped{display:flex;align-items:center;gap:10px;padding:8px 16px;min-height:56px}
+.ab-stopped .av{width:38px;height:38px;border-radius:11px;background:rgba(212,164,76,.2);
+  display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--gold-light);flex:none}
+.ab-stopped .meta{flex:1;min-width:0}
+.ab-stopped .meta .t{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ab-stopped .meta .t .car{color:var(--gold);font-size:10px}
+.ab-stopped .meta .s{font-size:11px;color:var(--on-navy-dim);margin-top:1px}
+.play{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-2));
+  color:#1a1305;display:flex;align-items:center;justify-content:center;font-size:17px;flex:none}
+
+/* --- playing: deck + controls (B) --- */
+.ab-deck{display:flex;align-items:center;gap:8px;padding:8px 16px 7px;min-height:34px}
+.ab-deck .mic{font-size:13px;color:var(--gold-light);flex:none}
+.ab-deck .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;font-weight:800}
+.ab-deck .car{color:var(--gold);font-size:9px;flex:none}
+.ab-deck .np{margin-inline-start:auto;font-size:11.5px;color:var(--gold-light);font-weight:700;flex:none}
+.ab-hairline{height:1px;background:rgba(255,255,255,.10);margin:0 16px}
+/* transport controls do NOT mirror in RTL (Android media convention —
+   matches AudioStatusBar's forced-LTR rows) */
+.ab-controls{display:flex;align-items:center;justify-content:space-between;padding:5px 4px 7px;min-height:52px;direction:ltr}
+.ab-controls .ctl{width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--on-navy)}
+.ab-controls .ctl.stop{color:var(--on-navy-dim)}
+.ab-controls .play{width:44px;height:44px;font-size:17px}
+.rep{position:relative;display:inline-block}
+.rep i{position:absolute;top:-5px;inset-inline-end:-7px;font-size:9px;font-weight:800;font-style:normal;color:var(--gold-light)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="title"><span class="dot"></span> Audio bar at device width — 412dp redesign</h1>
+  <p class="sub">The chosen A (stopped) / B (playing) bar, re-proportioned on the <b>real emulator canvas (412×914dp)</b> instead of the
+     312px option frames. The fix is an <b>alignment system</b>: one shared <b>16dp content inset</b> for every row of the bar.
+     Deck text and filled shapes (avatar chip, gold FAB) sit exactly on it; the borderless control icons align <b>optically</b> —
+     their 48dp touch boxes are inset 4dp so the glyph edge lands on the same 16dp line, and the six controls distribute
+     <b>edge-to-edge</b> inside that box (no more half-cell drift). Toggle <b>Guides</b> to see the inset lines.</p>
+  <div class="controls">
+    <div class="seg"><span class="lbl">Theme</span>
+      <button data-theme-btn="light" class="on">☀︎ Light</button>
+      <button data-theme-btn="dark">☾ Dark</button>
+    </div>
+    <div class="seg"><span class="lbl">Language</span>
+      <button data-lang-btn="en" class="on">EN</button>
+      <button data-lang-btn="ar">العربية</button>
+    </div>
+    <div class="seg"><span class="lbl">Guides</span>
+      <button data-guides-btn="off" class="on">Off</button>
+      <button data-guides-btn="on">16dp</button>
+    </div>
+    <span class="hint">chosen design × real width · <b>tap a toggle</b> to flip both frames</span>
+  </div>
+  <main class="grid">
+
+    <!-- ---------- STOPPED (A) @ 412dp ---------- -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Stopped — identity bar @ 412dp" data-ar="متوقّف — شريط الهوية @ 412dp"></div>
+        <div class="d" data-en="Avatar chip and name block start on the 16dp line; the gold Play FAB ends on it. Same row height (56dp)." data-ar="شارة القارئ وكتلة الاسم تبدآن على خط ١٦dp؛ وزر التشغيل الذهبي ينتهي عليه. ارتفاع الصف نفسه (٥٦dp)."></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t"><span class="ar">سُورَةُ الجُمُعَةِ</span></div>
+              <div class="s"><span data-en="Page 553 · Juz' 28" data-ar="صفحة ٥٥٣ · الجزء ٢٨"></span></div>
+            </div>
+            <div class="acts"><span class="ico">🌐</span><span class="ico">☆</span><span class="ico">⋮</span></div>
+          </div>
+        </div>
+        <div style="position:relative;flex:1;overflow:hidden">
+          <div class="page auto-paper sepia">
+            <div class="surah-band">سُورَةُ الجُمُعَة</div>
+            <div class="quran">
+              يُسَبِّحُ لِلَّهِ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ الْمَلِكِ الْقُدُّوسِ الْعَزِيزِ الْحَكِيمِ <span class="mk">1</span>
+              هُوَ الَّذِي بَعَثَ فِي الْأُمِّيِّينَ رَسُولًا مِنْهُمْ يَتْلُو عَلَيْهِمْ آيَاتِهِ وَيُزَكِّيهِمْ <span class="mk">2</span>
+            </div>
+            <div class="pageno">٥٥٣</div>
+          </div>
+          <div class="mode-pill">
+            <span data-en="Day" data-ar="نهار" class="on"></span>
+            <span data-en="Sepia" data-ar="ورقي"></span>
+            <span data-en="Night" data-ar="ليل"></span>
+          </div>
+        </div>
+        <div class="audiobar">
+          <span class="guide s"></span><span class="guide e"></span>
+          <div class="ab-stopped" title="Choose reciter">
+            <span class="av">🎙</span>
+            <div class="meta">
+              <div class="t"><span data-en="Abdullah Basfar (gapless)" data-ar="عبد الله بصفر (متصل)"></span> <span class="car">▾</span></div>
+              <div class="s"><span data-en="Ready to recite · tap to change" data-ar="جاهز للتلاوة · المس للتغيير"></span></div>
+            </div>
+            <span class="play">▶</span>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- ---------- PLAYING (B) @ 412dp ---------- -->
+    <div class="phone-col">
+      <div class="phone-cap">
+        <div class="n" data-en="Playing — two-deck @ 412dp" data-ar="يُشغّل — طابقان @ 412dp"></div>
+        <div class="d" data-en="Deck text and ayah readout sit on the 16dp lines; hairline is inset to match; the six controls spread edge-to-edge inside the same box, outer glyphs optically on the line." data-ar="نص الطابق وقراءة الآية على خطّي ١٦dp؛ والخط الفاصل بنفس الإزاحة؛ وأزرار التحكم الستة تتوزع من حافة لحافة داخل الصندوق نفسه."></div>
+      </div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="sb on-navy"><span>9:41</span><span class="r"><span>5G</span><span class="sb-dots"></span><span>100</span></span></div>
+        <div class="bar">
+          <div class="nav">
+            <span class="bk">‹</span>
+            <div class="ttl">
+              <div class="t"><span class="ar">سُورَةُ الجُمُعَةِ</span></div>
+              <div class="s"><span data-en="Page 553 · Juz' 28" data-ar="صفحة ٥٥٣ · الجزء ٢٨"></span></div>
+            </div>
+            <div class="acts"><span class="ico">🌐</span><span class="ico">☆</span><span class="ico">⋮</span></div>
+          </div>
+        </div>
+        <div style="position:relative;flex:1;overflow:hidden">
+          <div class="page auto-paper sepia">
+            <div class="surah-band">سُورَةُ الجُمُعَة</div>
+            <div class="quran">
+              <span style="background:var(--gold-faint);border-radius:6px">يُسَبِّحُ لِلَّهِ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ الْمَلِكِ الْقُدُّوسِ الْعَزِيزِ الْحَكِيمِ</span> <span class="mk">1</span>
+              هُوَ الَّذِي بَعَثَ فِي الْأُمِّيِّينَ رَسُولًا مِنْهُمْ يَتْلُو عَلَيْهِمْ آيَاتِهِ وَيُزَكِّيهِمْ <span class="mk">2</span>
+            </div>
+            <div class="pageno">٥٥٣</div>
+          </div>
+          <div class="mode-pill">
+            <span data-en="Day" data-ar="نهار" class="on"></span>
+            <span data-en="Sepia" data-ar="ورقي"></span>
+            <span data-en="Night" data-ar="ليل"></span>
+          </div>
+        </div>
+        <div class="audiobar">
+          <span class="guide s"></span><span class="guide e"></span>
+          <div class="ab-deck" title="Choose reciter">
+            <span class="mic">🎙</span>
+            <span class="nm" data-en="Minshawi Murattal (gapless)" data-ar="المنشاوي (متصل)"></span>
+            <span class="car">▾</span>
+            <span class="np"><span class="ar" data-en="Al-Jumu`ah" data-ar="الجُمُعة"></span> · <span data-en="ayah 2" data-ar="الآية ٢"></span></span>
+          </div>
+          <div class="ab-hairline"></div>
+          <div class="ab-controls">
+            <span class="ctl stop" title="Stop">⏹</span>
+            <span class="ctl" title="Previous">⏮</span>
+            <span class="play" title="Pause">⏸</span>
+            <span class="ctl fwd" title="Next">⏭</span>
+            <span class="ctl" title="Repeat"><span class="rep">🔁<i>3</i></span></span>
+            <span class="ctl" title="Audio settings">⚙</span>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </main>
+</div>
+<script>
+const root = document.documentElement;
+function syncPaper(t){
+  const want = t === 'dark' ? 'night' : 'sepia';
+  document.querySelectorAll('.page.auto-paper').forEach(p => {
+    p.classList.toggle('night', want === 'night');
+    p.classList.toggle('sepia', want === 'sepia');
+  });
+}
+function setTheme(t){
+  root.setAttribute('data-theme', t);
+  document.querySelectorAll('[data-theme-btn]').forEach(b =>
+    b.classList.toggle('on', b.getAttribute('data-theme-btn') === t));
+  syncPaper(t);
+}
+function setLang(l){
+  root.setAttribute('data-lang', l);
+  root.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+  root.setAttribute('lang', l);
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const v = l === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+    if (v !== null) el.textContent = v;
+  });
+  document.querySelectorAll('[data-lang-btn]').forEach(b =>
+    b.classList.toggle('on', b.getAttribute('data-lang-btn') === l));
+}
+function setGuides(g){
+  root.setAttribute('data-guides', g);
+  document.querySelectorAll('[data-guides-btn]').forEach(b =>
+    b.classList.toggle('on', b.getAttribute('data-guides-btn') === g));
+}
+document.querySelectorAll('[data-theme-btn]').forEach(b =>
+  b.addEventListener('click', () => setTheme(b.getAttribute('data-theme-btn'))));
+document.querySelectorAll('[data-lang-btn]').forEach(b =>
+  b.addEventListener('click', () => setLang(b.getAttribute('data-lang-btn'))));
+document.querySelectorAll('[data-guides-btn]').forEach(b =>
+  b.addEventListener('click', () => setGuides(b.getAttribute('data-guides-btn'))));
+setTheme('light'); setLang('en'); setGuides('off');
+</script>
+</body>
+</html>
