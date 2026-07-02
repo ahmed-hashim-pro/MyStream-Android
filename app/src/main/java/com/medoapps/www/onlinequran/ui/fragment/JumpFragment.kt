@@ -66,9 +66,10 @@ class JumpFragment : DialogFragment() {
           QuranUtils.getLocalizedNumber(activity, index + 1) + ". " + sura
         }
 
+    // Navy dropdown rows matching the unified reader dropdown skin (mockup 06b/10).
     val suraAdapter = InfixFilterArrayAdapter(
         activity,
-        android.R.layout.simple_spinner_dropdown_item, suras
+        R.layout.audio_panel_spinner_dropdown_item, suras
     )
     suraInput.setAdapter(suraAdapter)
 

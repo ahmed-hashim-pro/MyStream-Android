@@ -1,11 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Outlined input box: transparent fill (shows the dialog surface, both themes)
-     + gold hairline, rounded. For the quick-jump dialog fields. -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="@android:color/transparent" />
-    <stroke
-        android:width="1.5dp"
-        android:color="@color/gold_accent" />
-    <corners android:radius="10dp" />
-</shape>
+<!-- Quick-jump input box (mockup .inp): resting = hairline border on the page
+     fill; focused = gold border with a faint gold halo ring (mockup .inp.focus). -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/gold_accent_faint" />
+                    <corners android:radius="12dp" />
+                </shape>
+            </item>
+            <item
+                android:bottom="3dp"
+                android:left="3dp"
+                android:right="3dp"
+                android:top="3dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/background_main" />
+                    <stroke
+                        android:width="1.5dp"
+                        android:color="@color/gold_accent" />
+                    <corners android:radius="10dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/background_main" />
+            <stroke
+                android:width="1.5dp"
+                android:color="@color/row_divider_hairline" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+</selector>

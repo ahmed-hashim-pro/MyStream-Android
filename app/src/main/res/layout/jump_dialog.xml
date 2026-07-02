@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   Quick-jump dialog — navy+gold language (matches
-  docs/.../mushaf-retheme/parts/10-jump.html): gold caption labels, rounded
-  gold-outlined input boxes, muted helper lines, and a single filled-gold OK
-  button. Inner field ids (page_number / sura_spinner / ayah_spinner) are kept
-  so JumpFragment's wiring is unchanged.
+  docs/.../mushaf-retheme/parts/10-jump.html): muted caption labels, rounded
+  input boxes (hairline resting / gold focused), gold in-field affordances,
+  muted helper lines, and a single filled-gold OK button. Inner field ids
+  (page_number / sura_spinner / ayah_spinner) are kept so JumpFragment's
+  wiring is unchanged.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -21,26 +22,42 @@
   <TextView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:letterSpacing="0.04"
       android:text="@string/gotoPage"
-      android:textAllCaps="true"
-      android:textColor="@color/gold_accent"
+      android:textColor="@color/text_secondary"
       android:textSize="11sp"
       android:textStyle="bold"/>
 
-  <EditText
-      android:id="@+id/page_number"
+  <FrameLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="6dp"
-      android:background="@drawable/bg_input_box_gold"
-      android:imeOptions="actionGo|flagNoExtractUi"
-      android:inputType="number"
-      android:maxLength="3"
-      android:paddingStart="14dp"
-      android:paddingEnd="14dp"
-      android:paddingTop="12dp"
-      android:paddingBottom="12dp"/>
+      android:layout_marginTop="6dp">
+
+    <EditText
+        android:id="@+id/page_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_input_box_gold"
+        android:imeOptions="actionGo|flagNoExtractUi"
+        android:inputType="number"
+        android:maxLength="3"
+        android:paddingStart="14dp"
+        android:paddingEnd="64dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:textStyle="bold"/>
+
+    <!-- Gold "⏎ Go" affordance advertising the keyboard Go action (mockup 10). -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="14dp"
+        android:importantForAccessibility="no"
+        android:text="@string/jump_go_affordance"
+        android:textColor="@color/gold_accent"
+        android:textSize="10sp"
+        android:textStyle="bold"/>
+  </FrameLayout>
 
   <TextView
       android:layout_width="match_parent"
@@ -55,10 +72,8 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="14dp"
-      android:letterSpacing="0.04"
       android:text="@string/menu_jump"
-      android:textAllCaps="true"
-      android:textColor="@color/gold_accent"
+      android:textColor="@color/text_secondary"
       android:textSize="11sp"
       android:textStyle="bold"/>
 
@@ -81,9 +96,11 @@
         android:paddingEnd="10dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
+        android:popupBackground="@drawable/bg_dropdown_navy"
         android:selectAllOnFocus="true"
+        app:drawableStartCompat="@drawable/ic_search_mono_24"
         app:drawableEndCompat="@drawable/outline_expand_more_24"
-        android:drawableTint="@color/gold_accent"/>
+        app:drawableTint="@color/gold_accent"/>
 
     <EditText
         android:id="@+id/ayah_spinner"
@@ -99,7 +116,8 @@
         android:paddingEnd="10dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
-        android:selectAllOnFocus="true"/>
+        android:selectAllOnFocus="true"
+        android:textStyle="bold"/>
   </LinearLayout>
 
   <TextView

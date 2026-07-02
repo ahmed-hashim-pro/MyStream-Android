@@ -317,6 +317,7 @@
     <string name="gotoPage">أدخل رقم الصفحة</string>
     <string name="jump_page_hint">حتى ٣ أرقام · يملأ السورة والآية تلقائياً · ينتقل ويظلّل الآية</string>
     <string name="jump_sura_hint">اكتب اسم السورة أو رقمها للبحث (دون تشكيل) · يُحدّث رقم الصفحة أعلاه</string>
+    <string name="jump_go_affordance">⏎ انتقال</string>
 <!--    <string name="cancel">إلغاء</string>-->
 
     <string name="help_title">الأسئلة المتداولة</string>
