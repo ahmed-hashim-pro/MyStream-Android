@@ -497,6 +497,8 @@
     <!-- translation database stuff -->
     <string name="remove_dlg_title">امسح التفسير/الترجمة؟</string>
     <string name="translation_selected">عنصر واحد محدد</string>
+    <string name="audiobar_ready_hint">جاهز للتلاوة · المس للتغيير</string>
+    <string name="audiobar_now_playing">%1$s · الآية %2$s</string>
     <string name="remove_dlg_msg">هل ترغب في حذف %1$s؟</string>
     <string name="error_getting_translation_list">لم يتم تحميل الملف المطلوب، من فضلك أعد المحاولة</string>
     <string name="search_data">بيانات البحث</string>

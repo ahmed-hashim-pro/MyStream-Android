@@ -44,6 +44,9 @@
 
     <!-- Audio bar -->
     <dimen name="audiobar_height">48dp</dimen>
+    <dimen name="audiobar_deck_height">30dp</dimen>
+    <dimen name="audiobar_fab_size">38dp</dimen>
+    <dimen name="audiobar_avatar_size">34dp</dimen>
     <dimen name="audiobar_button_width">48dp</dimen>
     <dimen name="audiobar_separator_width">1dp</dimen>
     <dimen name="audiobar_separator_padding">8dp</dimen>

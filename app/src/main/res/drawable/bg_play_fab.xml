@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Round gold-gradient Play/Pause FAB on the audio bar (mockup 18 .play). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <gradient
+        android:angle="315"
+        android:endColor="@color/gold_light"
+        android:startColor="@color/gold_accent" />
+</shape>

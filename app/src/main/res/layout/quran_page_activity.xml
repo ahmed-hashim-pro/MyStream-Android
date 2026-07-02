@@ -148,10 +148,13 @@
         android:focusable="true" />
   </LinearLayout>
 
+  <!-- height varies by mode: one row stopped/downloading, deck + controls
+       while playing (mockup 18 A/B) -->
   <com.medoapps.www.onlinequran.view.AudioStatusBar
       android:id="@+id/audio_area"
       android:layout_width="match_parent"
-      android:layout_height="@dimen/audiobar_height"
+      android:layout_height="wrap_content"
+      android:minHeight="@dimen/audiobar_height"
       android:layout_alignParentBottom="true"
       android:visibility="gone"
       android:itemBackground="?attr/selectableItemBackgroundBorderless"

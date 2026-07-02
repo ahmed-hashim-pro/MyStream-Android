@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Collapsed reciter name inside the audio-bar pill (mockup 18 variant A):
-     bold white 12.5sp with the gold caret at the end. -->
+<!-- Compact collapsed reciter name for the PLAYING deck (mockup 18 B):
+     bold white 11.5sp with the gold caret at the end. -->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     android:layout_width="match_parent"
@@ -9,9 +9,9 @@
     android:drawablePadding="6dp"
     android:ellipsize="end"
     android:gravity="center_vertical"
-    android:paddingStart="11dp"
-    android:paddingEnd="9dp"
+    android:paddingStart="2dp"
+    android:paddingEnd="6dp"
     android:singleLine="true"
     android:textColor="@color/text_on_navy"
-    android:textSize="12.5sp"
+    android:textSize="11.5sp"
     android:textStyle="bold" />

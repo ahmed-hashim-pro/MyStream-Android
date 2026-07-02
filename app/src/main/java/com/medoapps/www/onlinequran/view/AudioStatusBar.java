@@ -57,7 +57,17 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
   private final int textFontSize;
   private final int textFullFontSize;
   private final int spinnerPadding;
+  // chosen footer design (mockup 18): vertical root stacking one row (stopped/
+  // download/prompt) or reciter-deck + controls-row (playing)
+  private final int rowHeight;
+  private final int deckHeight;
+  private final int fabSize;
+  private final int avatarSize;
+  private LinearLayout currentRow;
   private QariAdapter adapter;
+  private QariAdapter deckAdapter;
+  private TextView nowPlayingText;
+  private CharSequence nowPlayingInfo = "";
 
   private int currentQari;
   private int currentRepeat = 0;
@@ -124,7 +134,14 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
         R.dimen.audiobar_text_full_font_size);
     spinnerPadding = resources
         .getDimensionPixelSize(R.dimen.audiobar_spinner_padding);
-    setOrientation(LinearLayout.HORIZONTAL);
+    rowHeight = resources.getDimensionPixelSize(R.dimen.audiobar_height);
+    deckHeight = resources.getDimensionPixelSize(R.dimen.audiobar_deck_height);
+    fabSize = Math.min(resources.getDimensionPixelSize(R.dimen.audiobar_fab_size),
+        rowHeight - separatorSpacing);
+    avatarSize = Math.min(resources.getDimensionPixelSize(R.dimen.audiobar_avatar_size),
+        rowHeight - separatorSpacing);
+    // rows stack vertically; each mode adds its own horizontal row(s)
+    setOrientation(LinearLayout.VERTICAL);
 
     // only flip the layout when the language is rtl and we're on api 17+
     isRtl = QuranSettings.getInstance(this.context).isArabicNames() || QuranUtils.isRtl();
@@ -168,8 +185,11 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
       currentQari = updatedIndex;
     }
 
-    // Pill-styled collapsed name + the unified navy dropdown rows (mockup 18/06b).
+    // Two collapsed looks over the same navy dropdown rows (mockup 18/06b):
+    // full = name + status subline (stopped), deck = compact name (playing).
     adapter = new QariAdapter(this.context, qariList,
+        R.layout.audiobar_spinner_item_full, R.layout.audio_panel_spinner_dropdown_item);
+    deckAdapter = new QariAdapter(this.context, qariList,
         R.layout.audiobar_spinner_item, R.layout.audio_panel_spinner_dropdown_item);
     showStoppedMode();
   }
@@ -248,24 +268,41 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     }
   }
 
+  /** Adds a fixed-height, forced-LTR horizontal row that add* helpers fill. */
+  private LinearLayout newRow(int height) {
+    LinearLayout row = new LeftToRightLinearLayout(context);
+    row.setOrientation(LinearLayout.HORIZONTAL);
+    addView(row, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+    currentRow = row;
+    return row;
+  }
+
+  /** Current sura·ayah readout shown on the playing deck (mockup 18 B). */
+  public void setNowPlayingInfo(CharSequence info) {
+    nowPlayingInfo = info == null ? "" : info;
+    if (nowPlayingText != null) {
+      nowPlayingText.setText(nowPlayingInfo);
+    }
+  }
+
   private void showStoppedMode() {
     currentMode = STOPPED_MODE;
     removeAllViews();
+    newRow(rowHeight);
 
+    // mockup 18 A: reciter chip · name + status (tap = picker) · gold Play FAB
     if (isRtl) {
       if (isRecitationEnabled) {
         addButton(R.drawable.ic_mic, false);
-        addSeparator();
       }
-      addSpinner();
-      addSeparator();
-      addButton(R.drawable.ic_play, false);
+      addPlayFab(R.drawable.ic_play);
+      addSpinner(adapter);
+      addAvatarChip();
     } else {
-      addButton(R.drawable.ic_play, false);
-      addSeparator();
-      addSpinner();
+      addAvatarChip();
+      addSpinner(adapter);
+      addPlayFab(R.drawable.ic_play);
       if (isRecitationEnabled) {
-        addSeparator();
         addButton(R.drawable.ic_mic, false);
       }
     }
@@ -314,20 +351,24 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
 
     private View getViewInternal(int position, View convertView,
         ViewGroup parent, @LayoutRes int resource) {
-      TextView textView;
+      final View view;
       if (convertView == null) {
-        textView = (TextView) inflater.inflate(resource, parent, false);
+        view = inflater.inflate(resource, parent, false);
       } else {
-        textView = (TextView) convertView;
+        view = convertView;
       }
 
+      // the full (two-line) collapsed layout has a ViewGroup root; the name
+      // TextView is @android:id/text1 in every variant
+      final TextView textView = view instanceof TextView
+          ? (TextView) view : view.findViewById(android.R.id.text1);
       QariItem item = getItem(position);
       textView.setText(item.getName());
-      return textView;
+      return view;
     }
   }
 
-  private void addSpinner() {
+  private void addSpinner(QariAdapter target) {
     if (spinner == null) {
       spinner = new QuranSpinner(context, null,
           R.attr.actionDropDownStyle);
@@ -335,10 +376,8 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
       // gold band + check on the current value. Readable in both themes.
       spinner.setPopupBackgroundResource(R.drawable.bg_dropdown_navy);
       spinner.setDropDownVerticalOffset(spinnerPadding);
-      // Rounded on-navy pill around the reciter name (mockup 18 variant A);
-      // also removes the platform caret — the item layout draws a gold one.
-      spinner.setBackgroundResource(R.drawable.bg_audiobar_qari_pill);
-      spinner.setAdapter(adapter);
+      // the collapsed item layouts draw their own gold caret
+      spinner.setBackground(null);
 
       spinner.setOnItemSelectedListener(
           new AdapterView.OnItemSelectedListener() {
@@ -356,36 +395,100 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
             }
           });
     }
+    // the spinner instance is reused across modes/rows
+    if (spinner.getParent() instanceof ViewGroup) {
+      ((ViewGroup) spinner.getParent()).removeView(spinner);
+    }
+    if (spinner.getAdapter() != target) {
+      spinner.setAdapter(target);
+    }
     spinner.setSelection(currentQari);
 
-    // in RTL, because this is currently an LTR LinearLayout, this shows
-    // the spinner and then the play button, so we can't match parent. this
-    // is less efficient than the LTR version. this should be fixed by making
-    // the parent a vanilla LinearLayout and setting the direction.
-    final LayoutParams params;
-    if (isRtl || isRecitationEnabled) {
-      params = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
-      params.weight = 1;
-    } else {
-      params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-    }
-
+    final LayoutParams params = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT);
+    params.weight = 1;
     if (isRtl) {
       ViewCompat.setLayoutDirection(spinner, ViewCompat.LAYOUT_DIRECTION_RTL);
-      params.leftMargin = spinnerPadding;
-    } else {
-      params.rightMargin = spinnerPadding;
     }
-    // slim the pill inside the 48dp bar (mockup padding 7x11)
-    params.topMargin = spinnerPadding;
-    params.bottomMargin = spinnerPadding;
-    addView(spinner, params);
+    params.leftMargin = separatorSpacing;
+    params.rightMargin = separatorSpacing;
+    currentRow.addView(spinner, params);
+  }
+
+  /** Gold-framed reciter identity chip at the reading start (mockup 18 .av). */
+  private void addAvatarChip() {
+    ImageView avatar = new ImageView(context);
+    avatar.setImageResource(R.drawable.ic_mic);
+    avatar.setColorFilter(
+        androidx.core.content.ContextCompat.getColor(context, R.color.gold_light),
+        android.graphics.PorterDuff.Mode.SRC_IN);
+    avatar.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+    final int pad = avatarSize / 5;
+    avatar.setPadding(pad, pad, pad, pad);
+    avatar.setBackgroundResource(R.drawable.bg_audiobar_avatar);
+    LayoutParams params = new LayoutParams(avatarSize, avatarSize);
+    params.gravity = Gravity.CENTER_VERTICAL;
+    params.leftMargin = spinnerPadding / 2;
+    params.rightMargin = spinnerPadding / 2;
+    currentRow.addView(avatar, params);
+  }
+
+  /** Round gold-gradient Play/Pause FAB (mockup 18 .play). */
+  private void addPlayFab(int imageId) {
+    ImageView fab = new ImageView(context);
+    fab.setImageResource(imageId);
+    fab.setColorFilter(
+        androidx.core.content.ContextCompat.getColor(context, R.color.text_on_gold),
+        android.graphics.PorterDuff.Mode.SRC_IN);
+    fab.setScaleType(ImageView.ScaleType.CENTER);
+    fab.setBackgroundResource(R.drawable.bg_play_fab);
+    fab.setOnClickListener(onClickListener);
+    fab.setOnLongClickListener(onLongClickListener);
+    fab.setTag(imageId);
+    LayoutParams params = new LayoutParams(fabSize, fabSize);
+    params.gravity = Gravity.CENTER_VERTICAL;
+    params.leftMargin = spinnerPadding / 2;
+    params.rightMargin = spinnerPadding / 2;
+    currentRow.addView(fab, params);
+  }
+
+  /** Small gold mic glyph leading the playing deck (mockup 18 B). */
+  private void addDeckMic() {
+    ImageView mic = new ImageView(context);
+    mic.setImageResource(R.drawable.ic_mic);
+    mic.setColorFilter(
+        androidx.core.content.ContextCompat.getColor(context, R.color.gold_light),
+        android.graphics.PorterDuff.Mode.SRC_IN);
+    mic.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+    final int size = deckHeight - separatorSpacing;
+    LayoutParams params = new LayoutParams(size, size);
+    params.gravity = Gravity.CENTER_VERTICAL;
+    params.leftMargin = spinnerPadding / 2;
+    params.rightMargin = 0;
+    currentRow.addView(mic, params);
+  }
+
+  /** Gold-light "Surah · ayah N" readout on the playing deck (mockup 18 B). */
+  private void addNowPlayingText() {
+    nowPlayingText = new TextView(context);
+    nowPlayingText.setTextColor(
+        androidx.core.content.ContextCompat.getColor(context, R.color.gold_light));
+    nowPlayingText.setTextSize(TypedValue.COMPLEX_UNIT_PX, textFontSize);
+    nowPlayingText.setTypeface(null, android.graphics.Typeface.BOLD);
+    nowPlayingText.setGravity(Gravity.CENTER_VERTICAL);
+    nowPlayingText.setSingleLine(true);
+    nowPlayingText.setText(nowPlayingInfo);
+    LayoutParams params = new LayoutParams(
+        ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    params.leftMargin = spinnerPadding / 2;
+    params.rightMargin = spinnerPadding / 2;
+    currentRow.addView(nowPlayingText, params);
   }
 
   private void showPromptForDownloadMode() {
     currentMode = PROMPT_DOWNLOAD_MODE;
 
     removeAllViews();
+    newRow(rowHeight);
 
     if (isRtl) {
       addButton(R.drawable.ic_cancel, false);
@@ -411,13 +514,14 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     LayoutParams params = new LayoutParams(0,
         LayoutParams.MATCH_PARENT);
     params.weight = 1;
-    addView(mPromptText, params);
+    currentRow.addView(mPromptText, params);
   }
 
   private void showProgress(int mode) {
     currentMode = mode;
 
     removeAllViews();
+    newRow(rowHeight);
 
     final int text = mode == DOWNLOADING_MODE ? R.string.downloading_title : R.string.index_loading;
     if (isRtl) {
@@ -436,7 +540,7 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     ll.setOrientation(LinearLayout.VERTICAL);
 
     progressBar = (ProgressBar) LayoutInflater.from(context)
-        .inflate(R.layout.download_progress_bar, this, false);
+        .inflate(R.layout.download_progress_bar, currentRow, false);
     progressBar.setIndeterminate(true);
     progressBar.setVisibility(View.VISIBLE);
 
@@ -461,12 +565,13 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     } else {
       lp.rightMargin = spinnerPadding;
     }
-    addView(ll, lp);
+    currentRow.addView(ll, lp);
   }
 
   private void showRecitationListeningMode() {
     currentMode = RECITATION_LISTENING_MODE;
     removeAllViews();
+    newRow(rowHeight);
 
     ImageView recitationButton = new ImageView(context);
     recitationButton.setImageTintList(ColorStateList.valueOf(Color.CYAN));
@@ -493,6 +598,7 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
   private void showRecitationStoppedMode() {
     currentMode = RECITATION_STOPPED_MODE;
     removeAllViews();
+    newRow(rowHeight);
 
     if (isRtl) {
       addButton(R.drawable.ic_mic, false);
@@ -518,6 +624,7 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
   private void showRecitationPlayingMode() {
     currentMode = RECITATION_PLAYING_MODE;
     removeAllViews();
+    newRow(rowHeight);
 
     if (isRtl) {
       addButton(R.drawable.ic_mic, false);
@@ -554,9 +661,28 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
       currentMode = PLAYING_MODE;
     }
 
+    // deck: reciter (tap = picker) + current sura·ayah readout (mockup 18 B)
+    newRow(deckHeight);
+    if (isRtl) {
+      addNowPlayingText();
+      addSpinner(deckAdapter);
+      addDeckMic();
+    } else {
+      addDeckMic();
+      addSpinner(deckAdapter);
+      addNowPlayingText();
+    }
+
+    View hairline = new View(context);
+    hairline.setBackgroundColor(0x1AFFFFFF);
+    addView(hairline, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+        Math.max(1, separatorWidth)));
+
+    // controls: Stop · Prev · gold Play/Pause FAB · Next · Repeat ×N · Settings
+    newRow(rowHeight);
     addButton(R.drawable.ic_stop, withWeight);
     addButton(R.drawable.ic_previous, withWeight);
-    addButton(button, withWeight);
+    addPlayFab(button);
     addButton(R.drawable.ic_next, withWeight);
 
     addButton(repeatButton, R.drawable.ic_repeat, withWeight);
@@ -570,6 +696,10 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
   }
 
   private void addButton(@NonNull ImageView button, int imageId, boolean withWeight) {
+    if (button.getParent() instanceof ViewGroup) {
+      // reused instances (e.g. the repeat button) must leave their old row
+      ((ViewGroup) button.getParent()).removeView(button);
+    }
     button.setImageResource(imageId);
     // Gold-accent the primary play/pause control and the affirmative Accept
     // check (mockup 18 variant D); other controls keep white-on-navy.
@@ -591,7 +721,7 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     if (withWeight) {
       params.weight = 1;
     }
-    addView(button, params);
+    currentRow.addView(button, params);
   }
 
   private void addSeparator() {
@@ -604,14 +734,14 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
     final int right = isRtl ? 0 : separatorSpacing;
     final int left = isRtl ? separatorSpacing : 0;
     paddingParams.setMargins(left, 0, right, 0);
-    addView(separator, paddingParams);
+    currentRow.addView(separator, paddingParams);
   }
 
   private void addSpacer() {
     Space spacer = new Space(context);
     LinearLayout.LayoutParams params = new LayoutParams(0, LayoutParams.MATCH_PARENT);
     params.weight = 1;
-    addView(spacer, params);
+    currentRow.addView(spacer, params);
   }
 
   private void incrementRepeat() {

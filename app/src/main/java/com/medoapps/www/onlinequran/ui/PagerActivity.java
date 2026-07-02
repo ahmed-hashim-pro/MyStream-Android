@@ -690,6 +690,10 @@ public class PagerActivity extends AppCompatActivity implements
     if (suraAyah != null) {
       // continue to snap back to the page when the playback ayah changes
       ensurePage(suraAyah.sura, suraAyah.ayah);
+      // reciter-deck readout on the audio bar: "Surah · ayah N" (mockup 18 B)
+      audioStatusBar.setNowPlayingInfo(getString(R.string.audiobar_now_playing,
+          quranDisplayData.getSuraName(this, suraAyah.sura, false),
+          QuranUtils.getLocalizedNumber(this, suraAyah.ayah)));
     }
   }
 
@@ -1481,6 +1485,7 @@ public class PagerActivity extends AppCompatActivity implements
           audioStatusBar.switchMode(AudioStatusBar.PAUSED_MODE);
         } else if (state == AudioService.AudioUpdateIntent.STOPPED) {
           audioStatusBar.switchMode(AudioStatusBar.STOPPED_MODE);
+          audioStatusBar.setNowPlayingInfo("");
           lastAudioRequest = null;
         }
       }
