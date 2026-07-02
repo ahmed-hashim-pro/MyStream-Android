@@ -70,6 +70,7 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
   private CharSequence nowPlayingInfo = "";
 
   private int currentQari;
+  private boolean userTouchedSpinner;
   private int currentRepeat = 0;
   @DrawableRes private int itemBackground;
   private final boolean isRtl;
@@ -386,14 +387,28 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
       // the name block hugs the avatar chip at the reading start
       spinner.setGravity(isRtl ? Gravity.RIGHT : Gravity.LEFT);
 
+      // Persist only user-driven picks. Mode switches re-set the adapter and
+      // re-attach the spinner, and those fire selection callbacks too; the
+      // old position-changed check let them clobber the saved reciter. The
+      // saved value is the qari id (stable), not the sorted-list position.
+      spinner.setOnTouchListener((v, event) -> {
+        userTouchedSpinner = true;
+        return false;
+      });
       spinner.setOnItemSelectedListener(
           new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-              if (position != currentQari) {
-                sharedPreferences.edit().
-                    putInt(Constants.PREF_DEFAULT_QARI, adapter.getItem(position).getId()).apply();
-                currentQari = position;
+              currentQari = position;
+              if (!userTouchedSpinner) {
+                return;
+              }
+              userTouchedSpinner = false;
+              final int selectedId = adapter.getItem(position).getId();
+              if (sharedPreferences.getInt(Constants.PREF_DEFAULT_QARI, 0) != selectedId) {
+                sharedPreferences.edit()
+                    .putInt(Constants.PREF_DEFAULT_QARI, selectedId)
+                    .apply();
               }
             }
 
@@ -402,7 +417,9 @@ public class AudioStatusBar extends LeftToRightLinearLayout {
             }
           });
     }
-    // the spinner instance is reused across modes/rows
+    // the spinner instance is reused across modes/rows; a stale touch must
+    // not make the re-selection callback below look user-driven
+    userTouchedSpinner = false;
     if (spinner.getParent() instanceof ViewGroup) {
       ((ViewGroup) spinner.getParent()).removeView(spinner);
     }
