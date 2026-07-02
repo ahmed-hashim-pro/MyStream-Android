@@ -5,14 +5,21 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
-import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
-import android.graphics.drawable.Drawable;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,10 +50,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import android.app.Dialog;
+import com.medoapps.www.onlinequran.ui.helpers.PreferenceScreenChrome;
 import com.medoapps.www.onlinequran.util.AppBottomSheet;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceGroup;
+import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -87,6 +96,19 @@ public class QuranAdvancedSettingsFragment extends PreferenceFragmentCompat {
 
     final Preference logsPref = findPreference(Constants.PREF_LOGS);
     if (BuildConfig.DEBUG || "beta".equals(BuildConfig.BUILD_TYPE)) {
+      // inline gold "Debug · Beta" badge after the title (mockup 13b)
+      SpannableStringBuilder logsTitle =
+          new SpannableStringBuilder(logsPref.getTitle()).append("  ");
+      int badgeStart = logsTitle.length();
+      logsTitle.append(getString(R.string.prefs_debug_beta_badge));
+      int gold = ContextCompat.getColor(requireContext(), R.color.gold_accent);
+      logsTitle.setSpan(new ForegroundColorSpan(gold),
+          badgeStart, logsTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+      logsTitle.setSpan(new StyleSpan(Typeface.BOLD),
+          badgeStart, logsTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+      logsTitle.setSpan(new RelativeSizeSpan(0.7f),
+          badgeStart, logsTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+      logsPref.setTitle(logsTitle);
       logsPref.setOnPreferenceClickListener(preference -> {
         if (logsSubscription == null) {
           logsSubscription = Observable.fromIterable(Timber.forest())
@@ -265,27 +287,38 @@ public class QuranAdvancedSettingsFragment extends PreferenceFragmentCompat {
   }
 
   private void tintPreferenceIcons(PreferenceGroup group) {
-    int tintColor = ContextCompat.getColor(requireContext(), R.color.gold_accent);
-    ColorStateList tintList = ColorStateList.valueOf(tintColor);
-    for (int i = 0; i < group.getPreferenceCount(); i++) {
-      Preference preference = group.getPreference(i);
-      Drawable icon = preference.getIcon();
-      if (icon != null) {
-        icon.setTintList(tintList);
-        preference.setIcon(icon);
-      }
-      if (preference instanceof PreferenceGroup) {
-        tintPreferenceIcons((PreferenceGroup) preference);
-      }
-    }
+    // gold chip-framed icons on every row (mockup .prow .ic)
+    PreferenceScreenChrome.chipIcons(requireContext(), group);
+  }
+
+  @NonNull
+  @Override
+  public RecyclerView onCreateRecyclerView(
+      @NonNull LayoutInflater inflater, @NonNull ViewGroup parent, Bundle savedInstanceState) {
+    // section cards + side padding (mockup 12/13 .card grouping)
+    RecyclerView recyclerView = super.onCreateRecyclerView(inflater, parent, savedInstanceState);
+    PreferenceScreenChrome.style(recyclerView);
+    return recyclerView;
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    // the cards draw their own hairlines; drop the default list dividers
+    setDivider(null);
   }
 
   private void removeAdvancePreference(Preference preference) {
     // these null checks are to fix a crash due to an NPE on 4.4.4
     if (preference != null) {
-      PreferenceGroup group = findPreference(Constants.PREF_ADVANCED_QURAN_SETTINGS);
-      if (group != null) {
-        group.removePreference(preference);
+      PreferenceGroup parent = preference.getParent();
+      if (parent != null) {
+        parent.removePreference(preference);
+        // drop the emptied section header too (e.g. Diagnostics on release,
+        // Storage on single-storage devices)
+        if (parent.getPreferenceCount() == 0 && parent.getParent() != null) {
+          parent.getParent().removePreference(parent);
+        }
       }
     }
   }

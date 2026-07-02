@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings row icon tint: gold, dimmed when the row is dependency-disabled
+     (mockup opacity .45; the alpha attr needs API 23+, older renders full gold). -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:alpha="0.45"
+        android:color="@color/gold_accent"
+        android:state_enabled="false" />
+    <item android:color="@color/gold_accent" />
+</selector>

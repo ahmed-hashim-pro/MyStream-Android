@@ -5,6 +5,10 @@ import android.content.Context;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.preference.PreferenceViewHolder;
 
 import com.medoapps.www.onlinequran.R;
 import com.medoapps.www.onlinequran.util.QuranSettings;
@@ -31,19 +35,43 @@ public class DataListPreference extends ListPreference {
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   public DataListPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
     super(context, attrs, defStyleAttr, defStyleRes);
+    setWidgetLayoutResource(R.layout.preference_widget_value);
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
   public DataListPreference(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
+    setWidgetLayoutResource(R.layout.preference_widget_value);
   }
 
   public DataListPreference(Context context, AttributeSet attrs) {
     super(context, attrs);
+    setWidgetLayoutResource(R.layout.preference_widget_value);
   }
 
   public DataListPreference(Context context) {
     super(context);
+    setWidgetLayoutResource(R.layout.preference_widget_value);
+  }
+
+  @Override
+  public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
+    super.onBindViewHolder(holder);
+    // trailing gold current-storage label (mockup .prow .val) — entries are
+    // "label\nmount-point size", show the label line only
+    TextView value = (TextView) holder.findViewById(R.id.pref_current_value);
+    if (value != null) {
+      CharSequence entry = getEntry();
+      String label = entry == null ? "" : entry.toString();
+      int newline = label.indexOf('\n');
+      value.setText(newline > 0 ? label.substring(0, newline) : label);
+    }
+  }
+
+  @Override
+  public void setValue(String value) {
+    super.setValue(value);
+    notifyChanged();
   }
 
   public void setLabelsAndSummaries(Context context, int appSize,

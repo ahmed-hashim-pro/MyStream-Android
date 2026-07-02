@@ -679,15 +679,16 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="prefs_highlight_bookmarks_title">Highlight bookmarks</string>
     <string name="prefs_highlight_bookmarks_summary">Highlight bookmarked ayahs while reading</string>
     <string name="prefs_translation_text_title">Translation text size</string>
+    <string name="prefs_translation_text_summary">Tafsir &amp; translation font size</string>
     <string name="prefs_translations">Translations</string>
     <string name="prefs_translations_summary">Download and manage translations</string>
-    <string name="prefs_ayah_before_translation_title">Ayah before translation</string>
-    <string name="prefs_ayah_before_translation_summary">Show ayah in Arabic above the translation</string>
+    <string name="prefs_ayah_before_translation_title">Show ayah with tafsir</string>
+    <string name="prefs_ayah_before_translation_summary">Choose to show the ayah alongside its tafsir</string>
     <string name="prefs_category_download">Download Options</string>
     <string name="prefs_streaming_title">Streaming</string>
-    <string name="prefs_streaming_summary">Stream audio instead of downloading</string>
+    <string name="prefs_streaming_summary">Play audio online (files won’t be downloaded to the device)</string>
     <string name="prefs_download_amount_title">Download amount</string>
-    <string name="prefs_download_amount_summary">Preferred download amount for non-gapless audio</string>
+    <string name="prefs_download_amount_summary">How much to download for offline recitations</string>
     <string name="prefs_audio_manager" translatable="false">@string/audio_manager</string>
     <string name="prefs_audio_manager_summary">Manage and download Quranic audio</string>
     <string name="downloaded_translations">Downloaded</string>
@@ -712,6 +713,11 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="prefs_dual_page_mode_disabled">In landscape, only one page will appear.</string>
     <string name="prefs_category_advanced">Advanced Options</string>
     <string name="prefs_category_advanced_summary">Import/export bookmarks, set Quran data directory, etc.</string>
+    <string name="prefs_category_bookmarks_tags">Bookmarks &amp; Tags</string>
+    <string name="prefs_category_storage">Storage</string>
+    <string name="prefs_category_diagnostics">Diagnostics</string>
+    <string name="prefs_requires_dual_page">Requires Dual page mode</string>
+    <string name="prefs_debug_beta_badge">Debug · Beta</string>
     <string name="prefs_import_title">Import</string>
     <string name="prefs_import_summary">Import bookmarks and categories</string>
     <string name="prefs_export_title">Export</string>

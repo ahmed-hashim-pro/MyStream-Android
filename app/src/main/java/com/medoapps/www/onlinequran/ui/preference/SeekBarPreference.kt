@@ -41,12 +41,20 @@ open class SeekBarPreference(
     previewText = holder.findViewById(R.id.pref_preview) as TextView
     previewBox = holder.findViewById(R.id.preview_square)
     previewText.visibility = getPreviewVisibility()
+    // reset shared per-row state — the same layout is recycled across the
+    // text-size / text-brightness / background-brightness subclasses
+    previewBox.visibility = View.GONE
+    val labelVisibility = getSizeLabelsVisibility()
+    holder.findViewById(R.id.size_label_small)?.visibility = labelVisibility
+    holder.findViewById(R.id.size_label_large)?.visibility = labelVisibility
     seekBar.setOnSeekBarChangeListener(this)
     value = if (shouldDisableView) getPersistedInt(default) else 0
     seekBar.apply {
       max = maxValue
       progress = value
     }
+    // setting progress only notifies on change; sync explicitly for recycled rows
+    onProgressChanged(seekBar, value, false)
   }
 
   override fun onSetInitialValue(defaultValue: Any?) {
@@ -77,6 +85,9 @@ open class SeekBarPreference(
    * Visibility of the preview view under the seek bar
    */
   protected open fun getPreviewVisibility(): Int = View.GONE
+
+  /** Visibility of the A−/A+ labels flanking the slider (text-size row only). */
+  protected open fun getSizeLabelsVisibility(): Int = View.GONE
 
   companion object {
     private const val ANDROID_NS = "http://schemas.android.com/apk/res/android"

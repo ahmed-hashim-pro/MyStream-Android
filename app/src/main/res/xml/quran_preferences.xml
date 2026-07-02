@@ -84,7 +84,7 @@
       android:title="@string/prefs_category_reading"
       app:iconSpaceReserved="false">
 
-    <Preference
+    <com.medoapps.www.onlinequran.ui.preference.GoldValuePreference
         android:icon="@drawable/ic_pref_description"
         android:key="@string/prefs_page_type"
         android:summary="@string/prefs_page_type_summary"
@@ -157,7 +157,8 @@
         android:icon="@drawable/ic_pref_translate"
         android:key="@string/prefs_translation_manager_key"
         android:summary="@string/prefs_translations_summary"
-        android:title="@string/prefs_translations"/>
+        android:title="@string/prefs_translations"
+        android:widgetLayout="@layout/preference_widget_chevron"/>
 
     <SwitchPreferenceCompat
         android:defaultValue="true"
@@ -173,6 +174,7 @@
         android:key="@string/prefs_translation_text_size"
         android:max="40"
         android:persistent="true"
+        android:summary="@string/prefs_translation_text_summary"
         android:title="@string/prefs_translation_text_title"/>
   </PreferenceCategory>
 
@@ -189,7 +191,7 @@
         android:summary="@string/prefs_streaming_summary"
         android:title="@string/prefs_streaming_title"/>
 
-    <ListPreference
+    <com.medoapps.www.onlinequran.ui.preference.GoldValueListPreference
         android:defaultValue="1"
         android:dialogTitle="@string/prefs_download_amount_title"
         android:entries="@array/download_amount_preference"
@@ -203,7 +205,8 @@
         android:icon="@drawable/ic_pref_headphones"
         android:key="@string/prefs_audio_manager_key"
         android:summary="@string/prefs_audio_manager_summary"
-        android:title="@string/prefs_audio_manager"/>
+        android:title="@string/prefs_audio_manager"
+        android:widgetLayout="@layout/preference_widget_chevron"/>
   </PreferenceCategory>
 
   <PreferenceCategory
@@ -215,6 +218,7 @@
         android:icon="@drawable/ic_pref_advanced"
         android:key="key_prefs_advanced"
         android:summary="@string/prefs_category_advanced_summary"
-        android:title="@string/prefs_category_advanced"/>
+        android:title="@string/prefs_category_advanced"
+        android:widgetLayout="@layout/preference_widget_chevron"/>
   </PreferenceCategory>
 </PreferenceScreen>

@@ -4,38 +4,59 @@
                   android:key="@string/prefs_advanced_path"
                   android:title="@string/prefs_category_advanced"
     >
-  <Preference
-      android:icon="@drawable/ic_pref_import"
-      android:key="@string/prefs_import"
-      android:summary="@string/prefs_import_summary"
-      android:title="@string/prefs_import_title"
-      app:iconSpaceReserved="true"/>
+  <PreferenceCategory
+      android:key="prefs_category_bookmarks_tags_key"
+      android:title="@string/prefs_category_bookmarks_tags"
+      app:iconSpaceReserved="false">
 
-  <Preference
-      android:icon="@drawable/ic_pref_export"
-      android:key="@string/prefs_export"
-      android:summary="@string/prefs_export_summary"
-      android:title="@string/prefs_export_title"
-      app:iconSpaceReserved="true"/>
+    <Preference
+        android:icon="@drawable/ic_pref_import"
+        android:key="@string/prefs_import"
+        android:summary="@string/prefs_import_summary"
+        android:title="@string/prefs_import_title"
+        android:widgetLayout="@layout/preference_widget_chevron"
+        app:iconSpaceReserved="true"/>
 
-  <Preference
-      android:icon="@drawable/ic_pref_csv"
-      android:key="@string/prefs_export_csv"
-      android:summary="@string/prefs_export_csv_summary"
-      android:title="@string/prefs_export_csv_title"
-      app:iconSpaceReserved="true"/>
+    <Preference
+        android:icon="@drawable/ic_pref_export"
+        android:key="@string/prefs_export"
+        android:summary="@string/prefs_export_summary"
+        android:title="@string/prefs_export_title"
+        android:widgetLayout="@layout/preference_widget_chevron"
+        app:iconSpaceReserved="true"/>
 
-  <com.medoapps.www.onlinequran.ui.preference.DataListPreference
-      android:icon="@drawable/ic_pref_folder"
-      android:key="@string/prefs_app_location"
-      android:summary="@string/prefs_app_location_summary"
-      android:title="@string/prefs_app_location_title"
-      app:iconSpaceReserved="true"/>
+    <Preference
+        android:icon="@drawable/ic_pref_csv"
+        android:key="@string/prefs_export_csv"
+        android:summary="@string/prefs_export_csv_summary"
+        android:title="@string/prefs_export_csv_title"
+        android:widgetLayout="@layout/preference_widget_chevron"
+        app:iconSpaceReserved="true"/>
+  </PreferenceCategory>
 
-  <Preference
-      android:icon="@drawable/ic_pref_bug_report"
-      android:key="@string/prefs_send_logs"
-      android:summary="@string/prefs_send_logs_summary"
-      android:title="@string/prefs_send_logs_title"
-      app:iconSpaceReserved="true"/>
+  <PreferenceCategory
+      android:key="prefs_category_storage_key"
+      android:title="@string/prefs_category_storage"
+      app:iconSpaceReserved="false">
+
+    <com.medoapps.www.onlinequran.ui.preference.DataListPreference
+        android:icon="@drawable/ic_pref_folder"
+        android:key="@string/prefs_app_location"
+        android:summary="@string/prefs_app_location_summary"
+        android:title="@string/prefs_app_location_title"
+        app:iconSpaceReserved="true"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+      android:key="prefs_category_diagnostics_key"
+      android:title="@string/prefs_category_diagnostics"
+      app:iconSpaceReserved="false">
+
+    <Preference
+        android:icon="@drawable/ic_pref_bug_report"
+        android:key="@string/prefs_send_logs"
+        android:summary="@string/prefs_send_logs_summary"
+        android:title="@string/prefs_send_logs_title"
+        app:iconSpaceReserved="true"/>
+  </PreferenceCategory>
 </PreferenceScreen>

@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Settings switch track: solid gold when ON, faint gold when OFF (never the
-     default Material grey pill). -->
+     default Material grey pill); dimmed when dependency-disabled. -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:alpha="0.38"
+        android:color="@color/gold_accent"
+        android:state_checked="true"
+        android:state_enabled="false" />
+    <item
+        android:alpha="0.5"
+        android:color="@color/gold_accent_faint"
+        android:state_enabled="false" />
     <item android:state_checked="true" android:color="@color/gold_accent" />
     <item android:color="@color/gold_accent_faint" />
 </selector>

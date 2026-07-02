@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 38dp gold-faint rounded chip behind every settings row icon (mockup .prow .ic).
+     Sized here so it can anchor a LayerDrawable's intrinsic bounds. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/gold_accent_faint" />
+    <stroke
+        android:width="1dp"
+        android:color="@color/gold_accent_semi" />
+    <corners android:radius="11dp" />
+    <size
+        android:width="38dp"
+        android:height="38dp" />
+</shape>

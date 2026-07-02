@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Settings switch thumb: white on the gold track when ON, gold dot when OFF. -->
+<!-- Settings switch thumb: white on the gold track when ON, gold dot when OFF;
+     dimmed when the row is dependency-disabled (mockup opacity .45). -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:alpha="0.45"
+        android:color="@android:color/white"
+        android:state_checked="true"
+        android:state_enabled="false" />
+    <item
+        android:alpha="0.45"
+        android:color="@color/gold_accent"
+        android:state_enabled="false" />
     <item android:state_checked="true" android:color="@android:color/white" />
     <item android:color="@color/gold_accent" />
 </selector>

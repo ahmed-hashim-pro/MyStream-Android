@@ -401,6 +401,7 @@
     <string name="prefs_highlight_bookmarks_title">تعليم المرجعيات</string>
     <string name="prefs_highlight_bookmarks_summary">علم الآيات التي وضعت في المرجعيات</string>
     <string name="prefs_translation_text_title">خط التفسير والترجمة</string>
+    <string name="prefs_translation_text_summary">حجم خط التفسير والترجمة</string>
     <string name="prefs_translations">التفسير والترجمة</string>
     <string name="prefs_translations_summary">حمّل واختر التفاسير والتراجم</string>
     <string name="prefs_ayah_before_translation_title">عرض اﻵية مع التفسير</string>
@@ -569,9 +570,16 @@
     <string name="about_madani_images">صور صفحات القرآن الموجودة بالتطبيق مصدرها مجمع الملك فهد لطباعة المصحف الشريف بالمدينة المنورة</string>
     <string name="about_naskh_images">صور صفحات القرآن الموجودة بتطبيق النسخ مأخوذه بتصريح من SHL Info Systems</string>
     <string name="prefs_category_advanced">خيارات متقدمة</string>
+    <string name="prefs_category_bookmarks_tags">المرجعيات والتصنيفات</string>
+    <string name="prefs_category_storage">التخزين</string>
+    <string name="prefs_category_diagnostics">التشخيص</string>
+    <string name="prefs_requires_dual_page">يتطلب وضع الصفحتين المتجاورتين</string>
+    <string name="prefs_debug_beta_badge">تطوير · تجريبي</string>
     <string name="prefs_category_advanced_summary">استيراد وتصدير المرجعيات وإعدادات أخرى</string>
     <string name="prefs_export_title">تصدير</string>
     <string name="prefs_export_summary">تصدير نسخة من المرجعيات و التصنيفات.</string>
+    <string name="prefs_export_csv_title">تصدير CSV</string>
+    <string name="prefs_export_csv_summary">تصدير نسخة من المرجعيات والتصنيفات بصيغة CSV</string>
     <string name="prefs_page_type_title">نوع طباعة المصحف (تجريبي )</string>
     <string name="prefs_page_type_summary">اختر نوع الصفحات</string>
 
