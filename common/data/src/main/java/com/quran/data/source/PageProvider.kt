@@ -22,6 +22,14 @@ interface PageProvider {
 
   fun ayahInfoDbHasGlyphData(): Boolean = false
 
+  // whether the page images carry meaningful colors (ex tajweed rule colors)
+  // that night mode filters must preserve instead of channel-inverting
+  fun imagesColored(): Boolean = false
+
+  // whether individual page images can be fetched from getImagesBaseUrl() —
+  // some page sets are only published as zips
+  fun supportsPerPageDownloads(): Boolean = true
+
   @StringRes fun getPreviewTitle(): Int
   @StringRes fun getPreviewDescription(): Int
 

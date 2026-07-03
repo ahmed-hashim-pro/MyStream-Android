@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.quran.data.core.QuranInfo;
 import com.quran.data.model.SuraAyah;
 import com.quran.data.model.selection.AyahSelection;
+import com.quran.data.source.PageProvider;
 import com.medoapps.www.onlinequran.common.LocalTranslation;
 import com.medoapps.www.onlinequran.common.QuranAyahInfo;
 import com.medoapps.www.onlinequran.data.QuranDisplayData;
@@ -97,6 +98,7 @@ public class TabletFragment extends Fragment
   @Inject Set<ImageDrawHelper> imageDrawHelpers;
   @Inject ReadingEventPresenter readingEventPresenter;
   @Inject PageViewFactoryProvider pageProviderFactoryProvider;
+  @Inject PageProvider pageProvider;
 
   @Nullable PageViewFactory pageViewFactory = null;
 
@@ -132,8 +134,12 @@ public class TabletFragment extends Fragment
     if (mode == Mode.ARABIC) {
       mainView.init(TabletView.QURAN_PAGE, TabletView.QURAN_PAGE, pageViewFactory, pageNumber, pageNumber - 1);
       if (mainView.getLeftPage() instanceof QuranImagePageLayout) {
-        leftImageView = ((QuranImagePageLayout) mainView.getLeftPage()).getImageView();
-        rightImageView = ((QuranImagePageLayout) mainView.getRightPage()).getImageView();
+        final QuranImagePageLayout leftPage = (QuranImagePageLayout) mainView.getLeftPage();
+        final QuranImagePageLayout rightPage = (QuranImagePageLayout) mainView.getRightPage();
+        leftPage.setArePagesColored(pageProvider.imagesColored());
+        rightPage.setArePagesColored(pageProvider.imagesColored());
+        leftImageView = leftPage.getImageView();
+        rightImageView = rightPage.getImageView();
       }
       mainView.setPageController(this, pageNumber, pageNumber - 1);
     } else if (mode == Mode.TRANSLATION) {
@@ -167,15 +173,17 @@ public class TabletFragment extends Fragment
       splitTranslationView =
           ((QuranTranslationPageLayout) mainView.getLeftPage()).getTranslationView();
       if (mainView.getRightPage() instanceof QuranImagePageLayout) {
-        splitImageView =
-            ((QuranImagePageLayout) mainView.getRightPage()).getImageView();
+        final QuranImagePageLayout quranPage = (QuranImagePageLayout) mainView.getRightPage();
+        quranPage.setArePagesColored(pageProvider.imagesColored());
+        splitImageView = quranPage.getImageView();
       } else {
         splitImageView = null;
       }
     } else {
       if (mainView.getLeftPage() instanceof QuranImagePageLayout) {
-        splitImageView =
-            ((QuranImagePageLayout) mainView.getLeftPage()).getImageView();
+        final QuranImagePageLayout quranPage = (QuranImagePageLayout) mainView.getLeftPage();
+        quranPage.setArePagesColored(pageProvider.imagesColored());
+        splitImageView = quranPage.getImageView();
       } else {
         splitImageView = null;
       }

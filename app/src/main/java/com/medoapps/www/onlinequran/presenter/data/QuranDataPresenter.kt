@@ -115,7 +115,8 @@ class QuranDataPresenter @Inject internal constructor(
 
   fun imagesVersion() = quranPageProvider.getImageVersion()
 
-  fun canProceedWithoutDownload() = quranPageProvider.getPageContentType() == PageContentType.IMAGE
+  fun canProceedWithoutDownload() = quranPageProvider.getPageContentType() == PageContentType.IMAGE &&
+      quranPageProvider.supportsPerPageDownloads()
 
   fun fallbackToImageType() {
     val fallbackType = quranPageProvider.getFallbackPageType()
@@ -229,6 +230,7 @@ class QuranDataPresenter @Inject internal constructor(
             .setRequiredNetworkType(CONNECTED)
             .build()
         val missingPageDownloadTask = OneTimeWorkRequestBuilder<MissingPageDownloadWorker>()
+            .setInputData(checkTasksInputData)
             .setConstraints(missingPageTaskConstraints)
             .build()
 

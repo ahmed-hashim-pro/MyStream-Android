@@ -39,6 +39,7 @@ import com.medoapps.www.onlinequran.util.QuranScreenInfo;
 import com.medoapps.www.onlinequran.util.QuranSettings;
 import com.medoapps.www.onlinequran.view.HighlightingImageView;
 import com.medoapps.www.onlinequran.view.QuranImagePageLayout;
+import com.quran.data.source.PageProvider;
 import com.quran.page.common.data.AyahCoordinates;
 import com.quran.page.common.data.PageCoordinates;
 import com.quran.page.common.draw.ImageDrawHelper;
@@ -66,6 +67,7 @@ public class QuranPageFragment extends Fragment implements PageController,
   @Inject QuranScreenInfo quranScreenInfo;
   @Inject Set<ImageDrawHelper> imageDrawHelpers;
   @Inject ReadingEventPresenter readingEventPresenter;
+  @Inject PageProvider pageProvider;
 
   private HighlightingImageView imageView;
   private QuranImagePageLayout quranPageLayout;
@@ -97,6 +99,7 @@ public class QuranPageFragment extends Fragment implements PageController,
                            Bundle savedInstanceState) {
     final Context context = requireContext();
     quranPageLayout = new QuranImagePageLayout(context);
+    quranPageLayout.setArePagesColored(pageProvider.imagesColored());
     quranPageLayout.setPageController(this, pageNumber);
     imageView = quranPageLayout.getImageView();
     return quranPageLayout;

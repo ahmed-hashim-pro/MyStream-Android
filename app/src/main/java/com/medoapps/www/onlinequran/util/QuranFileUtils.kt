@@ -165,9 +165,11 @@ class QuranFileUtils @Inject constructor(
               return false
             }
           }
-        } else if (fileList.size < totalPages) {
+        } else if (fileList.count { !it.startsWith(".") } < totalPages) {
           // ideally, we should loop for each page and ensure
           // all pages are there, but this will do for now.
+          // dot files (.nomedia, .vN version markers) must not count
+          // towards the page total or they mask missing pages.
           Timber.d("haveAllImages: found %d files instead of 604.", fileList.size)
           return false
         }
@@ -345,7 +347,7 @@ class QuranFileUtils @Inject constructor(
     }
     return if (isRetry) Response(
         Response.ERROR_DOWNLOADING_ERROR
-    ) else getImageFromWeb(okHttpClient, context, filename, widthParam, true)
+    ) else getImageFromWeb(okHttpClient, context, widthParam = widthParam, filename = filename, isRetry = true)
   }
 
   private fun decodeBitmapStream(`is`: InputStream): Bitmap? {

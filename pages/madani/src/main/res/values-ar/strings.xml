@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="madani_title">مصحف المدينة</string>
+  <string name="madani_description">الرسم المدني التقليدي.</string>
+  <string name="tajweed_title">مصحف التجويد الملوّن</string>
+  <string name="tajweed_description">أحكام التجويد مميّزة بالألوان.</string>
+</resources>

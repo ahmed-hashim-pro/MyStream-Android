@@ -67,6 +67,7 @@ public class HighlightingImageView extends AppCompatImageView {
   private final SortedMap<HighlightType, Set<AyahHighlight>> currentHighlights = new TreeMap<>();
 
   private boolean isNightMode;
+  private boolean isColoredPages;
   private boolean isColorFilterOn;
   private int nightModeTextBrightness = Constants.DEFAULT_NIGHT_MODE_TEXT_BRIGHTNESS;
 
@@ -203,8 +204,10 @@ public class HighlightingImageView extends AppCompatImageView {
     }
   }
 
-  public void setNightMode(boolean isNightMode, int textBrightness, int backgroundBrightness) {
+  public void setNightMode(
+      boolean isNightMode, int textBrightness, int backgroundBrightness, boolean coloredPages) {
     this.isNightMode = isNightMode;
+    this.isColoredPages = coloredPages;
     if (isNightMode) {
       // avoid damaging the looks of the Quran page
       nightModeTextBrightness = (int) (50 * Math.log1p(backgroundBrightness) + textBrightness);
@@ -359,12 +362,28 @@ public class HighlightingImageView extends AppCompatImageView {
 
   public void adjustNightMode() {
     if (isNightMode && !isColorFilterOn) {
-      float[] matrix = {
-          -1, 0, 0, 0, nightModeTextBrightness,
-          0, -1, 0, 0, nightModeTextBrightness,
-          0, 0, -1, 0, nightModeTextBrightness,
-          0, 0, 0, 1, 0
-      };
+      final float[] matrix;
+      if (isColoredPages) {
+        // invert combined with a 180 degree hue rotation - flips luminance
+        // (black glyphs become bright on the dark page) while tajweed rule
+        // colors keep roughly their original hue instead of turning cyan.
+        // the 3x3 block scales with brightness so lowering the text
+        // brightness dims colored inks instead of clamping them to black
+        final float s = nightModeTextBrightness / 255f;
+        matrix = new float[]{
+            0.574f * s, -1.430f * s, -0.144f * s, 0, nightModeTextBrightness,
+            -0.426f * s, -0.430f * s, -0.144f * s, 0, nightModeTextBrightness,
+            -0.426f * s, -1.430f * s, 0.856f * s, 0, nightModeTextBrightness,
+            0, 0, 0, 1, 0
+        };
+      } else {
+        matrix = new float[]{
+            -1, 0, 0, 0, nightModeTextBrightness,
+            0, -1, 0, 0, nightModeTextBrightness,
+            0, 0, -1, 0, nightModeTextBrightness,
+            0, 0, 0, 1, 0
+        };
+      }
       setColorFilter(new ColorMatrixColorFilter(matrix));
       isColorFilterOn = true;
     } else if (!isNightMode) {

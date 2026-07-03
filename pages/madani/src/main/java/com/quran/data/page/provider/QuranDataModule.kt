@@ -3,6 +3,7 @@ package com.quran.data.page.provider
 import com.quran.common.upgrade.LocalDataUpgrade
 import com.quran.common.upgrade.PreferencesUpgrade
 import com.quran.data.page.provider.madani.MadaniPageProvider
+import com.quran.data.page.provider.tajweed.TajweedPageProvider
 import com.quran.data.pageinfo.mapper.AyahMapper
 import com.quran.data.pageinfo.mapper.IdentityAyahMapper
 import com.quran.data.source.PageProvider
@@ -29,6 +30,14 @@ object QuranDataModule {
   @StringKey("madani")
   fun provideMadaniPageSet(): PageProvider {
     return MadaniPageProvider()
+  }
+
+  @JvmStatic
+  @Provides
+  @IntoMap
+  @StringKey("tajweed")
+  fun provideTajweedPageSet(): PageProvider {
+    return TajweedPageProvider()
   }
 
   @JvmStatic

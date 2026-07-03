@@ -19,6 +19,9 @@ open class QuranImagePageLayout(context: Context) : QuranPageLayout(context) {
 
   private lateinit var imageView: HighlightingImageView
 
+  // set by fragments from PageProvider.imagesColored() before updateView runs
+  var arePagesColored: Boolean = false
+
   init {
     this.initialize()
   }
@@ -33,7 +36,7 @@ open class QuranImagePageLayout(context: Context) : QuranPageLayout(context) {
 
   override fun updateView(quranSettings: QuranSettings) {
     super.updateView(quranSettings)
-    imageView.setNightMode(quranSettings.isNightMode, quranSettings.nightModeTextBrightness, quranSettings.nightModeBackgroundBrightness)
+    imageView.setNightMode(quranSettings.isNightMode, quranSettings.nightModeTextBrightness, quranSettings.nightModeBackgroundBrightness, arePagesColored)
   }
 
   override fun setPageController(controller: PageController?, pageNumber: Int) {
