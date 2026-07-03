@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Toolbar "last page" action rendered as the 📖 emoji (matches the Android/Noto UX). -->
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Toolbar "last page" action. A gold-tinted book vector (not the 📖 emoji):
+     as a text glyph the emoji's reported advance width changed between layout
+     passes, so gravity=center re-positioned it when the overflow menu forced a
+     relayout — a visible shift. A vector draws at a fixed offset in the item's
+     stable bounds, and matches the toolbar's other gold action icons. -->
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="48dp"
-    android:layout_height="match_parent"
+    android:layout_height="?attr/actionBarSize"
     android:background="?android:attr/selectableItemBackgroundBorderless"
     android:clickable="true"
     android:contentDescription="@string/menu_jump_last_page"
     android:focusable="true"
-    android:gravity="center"
-    android:text="📖"
-    android:textSize="20sp" />
+    android:scaleType="center"
+    android:src="@drawable/ic_pref_book"
+    app:tint="@color/gold_accent" />
