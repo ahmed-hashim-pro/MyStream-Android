@@ -337,63 +337,74 @@ class AyahPlaybackFragment : AyahActionFragment() {
     val selectionEnd = end
     val selectionStart = start
 
-    var shouldReset = true
     if (context is PagerActivity && selectionStart != null && selectionEnd != null &&
       (!isOpen || allowOpenRefresh)
     ) {
       allowOpenRefresh = false
       val lastRequest = context.lastAudioRequest
+      val settings = QuranSettings.getInstance(context)
+
+      // The remembered drill can win the panel — but only when it genuinely
+      // applies to the current context, so a fresh pick (or a swipe to
+      // another page) is never overridden:
+      //   * following playback (no manual selection): the panel represents the
+      //     repeat config for what's playing, so surface the drill if it
+      //     covers this PAGE (this is the "casually playing, show my drill"
+      //     case).
+      //   * manual selection: the user is choosing a range; respect it, and
+      //     only restore the drill when the picked ayah falls INSIDE it.
+      val drillStart = SuraAyah(settings.lastPlaybackStartSura, settings.lastPlaybackStartAyah)
+      val drillEnd = SuraAyah(settings.lastPlaybackEndSura, settings.lastPlaybackEndAyah)
+      val drillApplies = settings.hasLastPlaybackRange() && if (startedFromManualSelection) {
+        !drillStart.after(selectionStart) && !selectionStart.after(drillEnd)
+      } else {
+        val selectionPage = quranInfo.getPageFromSuraAyah(selectionStart.sura, selectionStart.ayah)
+        selectionPage >= quranInfo.getPageFromSuraAyah(drillStart.sura, drillStart.ayah) &&
+          selectionPage <= quranInfo.getPageFromSuraAyah(drillEnd.sura, drillEnd.ayah)
+      }
+
       val start: SuraAyah
       val ending: SuraAyah
-      if (lastRequest != null) {
-        // audio playback request is available
+      if (drillApplies) {
+        start = drillStart
+        ending = drillEnd
+        verseRepeatCount = settings.lastPlaybackVerseRepeat
+        rangeRepeatCount = settings.lastPlaybackRangeRepeat
+        shouldEnforce = settings.lastPlaybackEnforceBounds
+        // if the drill is exactly what's playing, Apply just tweaks it;
+        // otherwise Apply (re)starts the drill, replacing casual playback —
+        // so the label matches the action ("… and play")
+        val playingDrill = lastRequest != null &&
+          lastRequest.start == start && lastRequest.end == ending
+        decidedStart = if (playingDrill) start else null
+        decidedEnd = if (playingDrill) ending else null
+        applyButton.setText(
+          if (playingDrill) R.string.play_apply else R.string.play_apply_and_play
+        )
+      } else if (lastRequest != null) {
+        // casual playback with no drill on this page — reflect what's playing
         start = lastRequest.start
         ending = lastRequest.end
-        if (lastRequest != lastSeenAudioRequest) {
-          verseRepeatCount = lastRequest.repeatInfo
-          rangeRepeatCount = lastRequest.rangeRepeatInfo
-          shouldEnforce = lastRequest.enforceBounds
-        } else {
-          shouldReset = false
-        }
+        verseRepeatCount = lastRequest.repeatInfo
+        rangeRepeatCount = lastRequest.rangeRepeatInfo
+        shouldEnforce = lastRequest.enforceBounds
         decidedStart = start
         decidedEnd = ending
         applyButton.setText(R.string.play_apply)
       } else {
-        // no active request — if a repeat drill ended (or the app restarted)
-        // and the user re-opens the panel inside the last played range,
-        // restore it instead of making them re-pick the ayahs each round.
-        // Persisted at play time (QuranSettings), so it survives missed stop
-        // broadcasts and app restarts.
-        val settings = QuranSettings.getInstance(context)
-        val lastStart = SuraAyah(
-          settings.lastPlaybackStartSura, settings.lastPlaybackStartAyah
-        )
-        val lastEnd = SuraAyah(
-          settings.lastPlaybackEndSura, settings.lastPlaybackEndAyah
-        )
-        if (settings.hasLastPlaybackRange() &&
-          !lastStart.after(selectionStart) && !selectionStart.after(lastEnd)
-        ) {
-          start = lastStart
-          ending = lastEnd
-          verseRepeatCount = settings.lastPlaybackVerseRepeat
-          rangeRepeatCount = settings.lastPlaybackRangeRepeat
-          shouldEnforce = settings.lastPlaybackEnforceBounds
+        // nothing playing, no drill — page default from the selection
+        start = selectionStart
+        if (selectionStart == selectionEnd) {
+          val startPage = quranInfo.getPageFromSuraAyah(start.sura, start.ayah)
+          val pageBounds = quranInfo.getPageBounds(startPage)
+          ending = SuraAyah(pageBounds[2], pageBounds[3])
+          shouldEnforce = false
         } else {
-          start = selectionStart
-          if (selectionStart == selectionEnd) {
-            val startPage = quranInfo.getPageFromSuraAyah(start.sura, start.ayah)
-            val pageBounds = quranInfo.getPageBounds(startPage)
-            ending = SuraAyah(pageBounds[2], pageBounds[3])
-            shouldEnforce = false
-          } else {
-            ending = selectionEnd
-            shouldEnforce = true
-          }
-          rangeRepeatCount = 0
-          verseRepeatCount = 0
+          ending = selectionEnd
+          shouldEnforce = true
         }
+        rangeRepeatCount = 0
+        verseRepeatCount = 0
         decidedStart = null
         decidedEnd = null
         applyButton.setText(R.string.play_apply_and_play)
@@ -413,11 +424,9 @@ class AyahPlaybackFragment : AyahActionFragment() {
       )
       startSuraSpinner.setSelection(start.sura - 1)
       endingSuraSpinner.setSelection(ending.sura - 1)
-      if (shouldReset) {
-        restrictToRange.isChecked = shouldEnforce
-        repeatRangePicker.value = rangeRepeatCount + 1
-        repeatVersePicker.value = verseRepeatCount + 1
-      }
+      restrictToRange.isChecked = shouldEnforce
+      repeatRangePicker.value = rangeRepeatCount + 1
+      repeatVersePicker.value = verseRepeatCount + 1
     }
   }
 

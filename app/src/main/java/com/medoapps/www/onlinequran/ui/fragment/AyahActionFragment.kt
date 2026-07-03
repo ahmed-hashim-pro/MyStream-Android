@@ -27,6 +27,10 @@ abstract class AyahActionFragment : Fragment() {
 
   protected var start: SuraAyah? = null
   protected var end: SuraAyah? = null
+  // true when start/end came from a deliberate ayah selection; false when they
+  // merely track the currently-playing ayah. Subclasses use this to tell a
+  // fresh user pick apart from passive playback-following.
+  protected var startedFromManualSelection: Boolean = false
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -37,9 +41,11 @@ abstract class AyahActionFragment : Fragment() {
         if (selectedAyah !is AyahSelection.None) {
           start = selectedAyah.startSuraAyah()
           end = selectedAyah.endSuraAyah()
+          startedFromManualSelection = true
         } else if (playbackAyah != null) {
           start = playbackAyah
           end = playbackAyah
+          startedFromManualSelection = false
         }
         refreshView()
       }
