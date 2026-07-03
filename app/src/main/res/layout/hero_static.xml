@@ -72,6 +72,44 @@
             android:iconifiedByDefault="true"
             android:queryBackground="@android:color/transparent"
             android:visibility="gone" />
+
+        <!-- Compact inline title + subtitle beside the back button (variant D,
+             HeroController.compact()) — for detail screens whose mockup shows a
+             single-row toolbar header (settings), not the tall identity band. -->
+        <LinearLayout
+            android:id="@+id/heroInline"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_toStartOf="@+id/heroActions"
+            android:layout_toEndOf="@+id/heroBack"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/heroInlineTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/text_on_navy"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                tools:text="الإعدادات" />
+
+            <TextView
+                android:id="@+id/heroInlineSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/hint_on_navy"
+                android:textSize="11sp"
+                android:visibility="gone"
+                tools:text="القراءة · الصوت · المتقدمة" />
+        </LinearLayout>
     </RelativeLayout>
 
     <!-- Row 2: identity (avatar + title + subtitle) + optional action pill. Hidden when unused. -->

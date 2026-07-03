@@ -18,6 +18,7 @@ class QuranPreferenceActivity : AppCompatActivity() {
     window.navigationBarColor = ContextCompat.getColor(this, R.color.background_main)
     HeroController.attach(this)
       .back()
+      .compact()
       .title(R.string.menu_settings)
       .subtitle(getString(R.string.prefs_settings_subtitle))
       .apply()

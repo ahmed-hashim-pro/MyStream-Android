@@ -56,9 +56,14 @@ public final class HeroController {
     private final TextView collapsedTitle;// collapsing variant only (may be null)
     private final AppBarLayout appbar;    // collapsing variant only (may be null)
     private final View heroRoot;          // static hero container (may be null)
+    private final View inline;            // static compact inline block (may be null)
+    private final TextView inlineTitle;   // static compact inline (may be null)
+    private final TextView inlineSubtitle;// static compact inline (may be null)
 
     private CharSequence titleText;
+    private CharSequence subtitleText;
     private boolean centered = false;
+    private boolean compact = false;
     private boolean searchOpen = false;
 
     private HeroController(View root, Activity activity) {
@@ -78,6 +83,9 @@ public final class HeroController {
         collapsedTitle = root.findViewById(R.id.heroCollapsedTitle);
         appbar         = root.findViewById(R.id.appbar);
         heroRoot       = root.findViewById(R.id.heroRoot);
+        inline         = root.findViewById(R.id.heroInline);
+        inlineTitle    = root.findViewById(R.id.heroInlineTitle);
+        inlineSubtitle = root.findViewById(R.id.heroInlineSubtitle);
     }
 
     /** For Activities — searches the whole content view; status bar is themed navy. */
@@ -118,11 +126,19 @@ public final class HeroController {
         return this;
     }
 
+    /**
+     * Render title + subtitle inline beside the back button on the toolbar row
+     * (variant D), instead of the tall identity band below it. For detail
+     * screens whose mockup shows a single-row header (settings).
+     */
+    public HeroController compact() {
+        compact = true;
+        return this;
+    }
+
     public HeroController subtitle(@Nullable CharSequence text) {
-        if (subtitle != null && text != null && text.length() > 0) {
-            subtitle.setText(text);
-            subtitle.setVisibility(View.VISIBLE);
-        }
+        // stored and routed to the identity or inline subtitle view in apply()
+        subtitleText = text;
         return this;
     }
 
@@ -200,7 +216,22 @@ public final class HeroController {
             if (wic != null) wic.setAppearanceLightStatusBars(false);
         }
 
-        if (centered && centerTitle != null) {
+        if (compact && inline != null) {
+            // Variant D: title + subtitle inline beside the back button, on the
+            // single toolbar row — no tall identity band below (mockup 12/13).
+            if (inlineTitle != null) inlineTitle.setText(titleText);
+            if (inlineSubtitle != null && subtitleText != null && subtitleText.length() > 0) {
+                inlineSubtitle.setText(subtitleText);
+                inlineSubtitle.setVisibility(View.VISIBLE);
+            }
+            inline.setVisibility(View.VISIBLE);
+            if (expanded != null) expanded.setVisibility(View.GONE);
+            if (heroRoot != null) {
+                heroRoot.setPaddingRelative(
+                        heroRoot.getPaddingStart(), heroRoot.getPaddingTop(),
+                        heroRoot.getPaddingEnd(), 0);
+            }
+        } else if (centered && centerTitle != null) {
             // Variant B: a compact single-row bar (just back + centered title) — a title+back
             // page doesn't need the tall hero body, so drop the empty navy band below the title.
             centerTitle.setText(titleText);
@@ -212,8 +243,12 @@ public final class HeroController {
                         heroRoot.getPaddingEnd(), 0);
             }
         } else {
-            // Variant A/C: title in the identity row.
+            // Variant A/C: title in the identity row, with an optional subtitle.
             if (title != null) title.setText(titleText);
+            if (subtitle != null && subtitleText != null && subtitleText.length() > 0) {
+                subtitle.setText(subtitleText);
+                subtitle.setVisibility(View.VISIBLE);
+            }
             if (expanded != null) expanded.setVisibility(View.VISIBLE);
             if (collapsedTitle != null) collapsedTitle.setText(titleText);
         }

@@ -33,6 +33,7 @@ class QuranAdvancedPreferenceActivity : AppCompatActivity() {
     window.navigationBarColor = ContextCompat.getColor(this, R.color.background_main)
     HeroController.attach(this)
       .back()
+      .compact()
       .title(R.string.prefs_category_advanced)
       .subtitle(getString(R.string.advanced_subtitle))
       .apply()
