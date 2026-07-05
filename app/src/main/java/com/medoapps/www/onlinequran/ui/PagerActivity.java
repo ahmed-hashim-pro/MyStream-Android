@@ -62,7 +62,6 @@ import com.quran.data.model.selection.SelectionIndicator;
 import com.quran.data.model.selection.SelectionIndicatorKt;
 import com.quran.data.page.provider.di.QuranPageExtrasComponent;
 import com.quran.data.page.provider.di.QuranPageExtrasComponentProvider;
-import com.medoapps.www.onlinequran.BuildConfig;
 import com.medoapps.www.onlinequran.HelpActivity;
 import com.medoapps.www.onlinequran.QuranApplication;
 import com.medoapps.www.onlinequran.QuranPreferenceActivity;
@@ -426,7 +425,7 @@ public class PagerActivity extends AppCompatActivity implements
         pageProviderFactoryProvider.providePageViewFactory(quranSettings.getPageType())
     );
     ayahToolBar = findViewById(R.id.ayah_toolbar);
-    ayahToolBar.setFlavor(BuildConfig.FLAVOR);
+    ayahToolBar.setPageType(quranSettings.getPageType());
     ayahToolBar.setLongPressLambda(charSequence -> {
       ToastCompat.makeText(PagerActivity.this, charSequence, Toast.LENGTH_SHORT).show();
       return null;

@@ -42,15 +42,19 @@ class PartialPageCheckingWorker(private val context: Context,
       val tabletPagesDirectory = quranFileUtils.getQuranImagesDirectory(context, tabletWidth)!!
 
       // compute the partial page sets
+      // (requestedPageType equals quranSettings.pageType here, but the
+      //  latter is the non-null one)
+      val pageType = quranSettings.pageType
       val partialPages =
-        quranPartialPageChecker.checkPages(pagesDirectory, numberOfPages, width)
+        quranPartialPageChecker.checkPages(pagesDirectory, numberOfPages, width, pageType)
           .map { PartialPage(width, it) }
       Timber.d("Found %d partial images for width %s", partialPages.size, width)
 
       val tabletPartialPages = if (width == tabletWidth) {
         emptyList()
       } else {
-        quranPartialPageChecker.checkPages(tabletPagesDirectory, numberOfPages, tabletWidth)
+        quranPartialPageChecker.checkPages(
+            tabletPagesDirectory, numberOfPages, tabletWidth, pageType)
             .map { PartialPage(tabletWidth, it) }
       }
       Timber.d("Found %d partial images for tablet width %s", tabletPartialPages.size, tabletWidth)

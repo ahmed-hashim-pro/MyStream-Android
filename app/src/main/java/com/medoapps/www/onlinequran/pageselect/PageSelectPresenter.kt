@@ -1,11 +1,13 @@
 package com.medoapps.www.onlinequran.pageselect
 
 import android.content.Context
+import androidx.preference.PreferenceManager
 import com.quran.data.core.QuranInfo
 import com.quran.data.dao.BookmarksDao
 import com.quran.data.source.PageProvider
 import com.medoapps.www.onlinequran.model.bookmark.BookmarkModel
 import com.medoapps.www.onlinequran.presenter.Presenter
+import com.medoapps.www.onlinequran.ui.PagerActivity
 import com.medoapps.www.onlinequran.util.ImageUtil
 import com.medoapps.www.onlinequran.util.QuranFileUtils
 import com.medoapps.www.onlinequran.util.UrlUtil
@@ -115,7 +117,14 @@ constructor(
   suspend fun migrateBookmarksData(sourcePageType: String, destinationPageType: String) {
     val source = pageTypes[sourcePageType]?.getDataSource()
     val destination = pageTypes[destinationPageType]?.getDataSource()
-    if (source != null && destination != null && source.numberOfPages != destination.numberOfPages) {
+    // compare layouts, not page counts: new madani also has 604 pages yet
+    // breaks 25 of them differently from madani, and qaloon/warsh differ
+    // from it on page 592 - only layout-identical sets (madani/tajweed)
+    // can skip the migration
+    if (source != null && destination != null &&
+      (!source.suraForPageArray.contentEquals(destination.suraForPageArray) ||
+        !source.ayahForPageArray.contentEquals(destination.ayahForPageArray))
+    ) {
       val sourcePageSuraStart = source.suraForPageArray
       val sourcePageAyahStart = source.ayahForPageArray
       val destinationQuranInfo = QuranInfo(destination)
@@ -158,6 +167,20 @@ constructor(
         bookmarksDao.removeRecentPages()
         bookmarksDao.replaceRecentPages(updatedRecentPages)
         bookmarkModel.notifyRecentPagesUpdated(updatedRecentPages.first().page)
+      }
+
+      // and the home continue-reading card, which reads its own prefs
+      val prefs = PreferenceManager.getDefaultSharedPreferences(appContext)
+      val homeLastRead = prefs.getInt(PagerActivity.HOME_LAST_READ_PAGE, 0)
+      if (homeLastRead in 1..sourcePageSuraStart.size) {
+        val (sura, ayah) = suraAyahFromPage(homeLastRead)
+        prefs.edit()
+          .putInt(
+            PagerActivity.HOME_LAST_READ_PAGE,
+            destinationQuranInfo.getPageFromSuraAyah(sura, ayah)
+          )
+          .putInt(PagerActivity.HOME_LAST_READ_TOTAL, destination.numberOfPages)
+          .apply()
       }
     }
   }

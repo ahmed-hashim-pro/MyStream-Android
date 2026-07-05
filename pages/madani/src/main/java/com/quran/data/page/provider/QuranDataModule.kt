@@ -4,8 +4,11 @@ import com.quran.common.upgrade.LocalDataUpgrade
 import com.quran.common.upgrade.PreferencesUpgrade
 import com.quran.data.page.provider.madani.MadaniPageProvider
 import com.quran.data.page.provider.naskh.NaskhPageProvider
+import com.quran.data.page.provider.newmadani.NewMadaniPageProvider
+import com.quran.data.page.provider.qaloon.QaloonPageProvider
 import com.quran.data.page.provider.shemerly.ShemerlyPageProvider
 import com.quran.data.page.provider.tajweed.TajweedPageProvider
+import com.quran.data.page.provider.warsh.WarshPageProvider
 import com.quran.data.pageinfo.mapper.AyahMapper
 import com.quran.data.pageinfo.mapper.IdentityAyahMapper
 import com.quran.data.source.PageProvider
@@ -56,6 +59,30 @@ object QuranDataModule {
   @StringKey("shemerly")
   fun provideShemerlyPageSet(): PageProvider {
     return ShemerlyPageProvider()
+  }
+
+  @JvmStatic
+  @Provides
+  @IntoMap
+  @StringKey("new_madani")
+  fun provideNewMadaniPageSet(): PageProvider {
+    return NewMadaniPageProvider()
+  }
+
+  @JvmStatic
+  @Provides
+  @IntoMap
+  @StringKey("qaloon")
+  fun provideQaloonPageSet(): PageProvider {
+    return QaloonPageProvider()
+  }
+
+  @JvmStatic
+  @Provides
+  @IntoMap
+  @StringKey("warsh")
+  fun provideWarshPageSet(): PageProvider {
+    return WarshPageProvider()
   }
 
   @JvmStatic

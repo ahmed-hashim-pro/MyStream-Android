@@ -8,4 +8,10 @@
   <string name="naskh_description">Clear naskh script, 612 pages.</string>
   <string name="shemerly_title">Shemerly Mushaf</string>
   <string name="shemerly_description">The classic Egyptian Shemerly print, 521 pages.</string>
+  <string name="new_madani_title">Madani Mushaf (new print)</string>
+  <string name="new_madani_description">The newer Madinah edition with crisper script.</string>
+  <string name="qaloon_title">Qaloon Mushaf</string>
+  <string name="qaloon_description">The Qaloon narration print. Audio and translations follow the Hafs narration.</string>
+  <string name="warsh_title">Warsh Mushaf</string>
+  <string name="warsh_description">The Warsh narration print in Maghribi script. Audio and translations follow the Hafs narration.</string>
 </resources>

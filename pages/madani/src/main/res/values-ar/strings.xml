@@ -8,4 +8,10 @@
   <string name="naskh_description">خط نسخ واضح، ٦١٢ صفحة.</string>
   <string name="shemerly_title">المصحف الشمرلي</string>
   <string name="shemerly_description">الطبعة المصرية الشمرلي المعروفة، ٥٢١ صفحة.</string>
+  <string name="new_madani_title">مصحف المدينة (الطبعة الحديثة)</string>
+  <string name="new_madani_description">طبعة المدينة المنوّرة الأحدث بخط أوضح.</string>
+  <string name="qaloon_title">مصحف قالون</string>
+  <string name="qaloon_description">طبعة برواية قالون عن نافع. التلاوة والترجمات تتبع رواية حفص.</string>
+  <string name="warsh_title">مصحف ورش</string>
+  <string name="warsh_description">طبعة برواية ورش عن نافع بالخط المغربي. التلاوة والترجمات تتبع رواية حفص.</string>
 </resources>

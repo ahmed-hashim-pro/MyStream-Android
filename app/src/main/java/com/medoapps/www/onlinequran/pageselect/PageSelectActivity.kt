@@ -11,8 +11,10 @@ import com.medoapps.www.onlinequran.QuranDataActivity
 import com.medoapps.www.onlinequran.ui.helpers.QuranDisplayHelper
 import com.medoapps.www.onlinequran.util.QuranSettings
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class PageSelectActivity : AppCompatActivity() {
@@ -74,13 +76,18 @@ class PageSelectActivity : AppCompatActivity() {
     if (pageType != type) {
       isProcessing = true
       scope.launch {
-        // migrate the bookmarks
-        presenter.migrateBookmarksData(pageType, type)
+        // the migration and the page type write must land together even if
+        // the activity is destroyed mid-switch (back press, rotation) -
+        // otherwise bookmarks end up mapped to a set we never switched to
+        withContext(NonCancellable) {
+          // migrate the bookmarks
+          presenter.migrateBookmarksData(pageType, type)
 
-        // we need to re-check the pages now
-        quranSettings.removeDidDownloadPages()
-        // and we can set up our new page type
-        quranSettings.pageType = type
+          // we need to re-check the pages now
+          quranSettings.removeDidDownloadPages()
+          // and we can set up our new page type
+          quranSettings.pageType = type
+        }
 
         // go back to Quran Data Activity
         val intent = Intent(this@PageSelectActivity, QuranDataActivity::class.java).apply {

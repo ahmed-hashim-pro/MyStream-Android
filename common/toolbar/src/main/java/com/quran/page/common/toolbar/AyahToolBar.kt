@@ -44,7 +44,13 @@ class AyahToolBar @JvmOverloads constructor(
   var isShowing = false
     private set
 
-  var flavor: String = ""
+  // the menu is first drawn from init, before the activity can set this -
+  // force a re-draw so the riwaya share suppression re-evaluates
+  var pageType: String = ""
+    set(value) {
+      field = value
+      resetMenu(force = true)
+    }
   var longPressLambda: ((CharSequence) -> Unit) = {}
   var isRecitationEnabled = false
   private var isBookmarked = false
@@ -138,9 +144,10 @@ class AyahToolBar @JvmOverloads constructor(
       return
     }
 
-    // disable sharing for warsh and qaloon
+    // disable sharing for the warsh and qaloon page sets: the shareable
+    // text database is the Hafs reading, which differs from these prints
     val menuItem = menu.findItem(R.id.cab_share_ayah)
-    if (menuItem != null && flavor == "qaloon") {
+    if (menuItem != null && (pageType == "qaloon" || pageType == "warsh")) {
       menuItem.isVisible = false
     }
 
