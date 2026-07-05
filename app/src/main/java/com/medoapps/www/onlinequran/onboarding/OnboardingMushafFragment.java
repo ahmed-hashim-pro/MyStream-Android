@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.medoapps.www.onlinequran.R;
@@ -69,7 +69,22 @@ public class OnboardingMushafFragment extends Fragment {
     private LinearLayout dotsLayout;
     private TextView nameView, metaView, chipView;
     private PrintAdapter adapter;
-    private int selectedIndex = 0;
+
+    // the shelf loops like a carousel: the adapter repeats the prints many
+    // times and starts in the middle, so both directions wrap seamlessly
+    private static final int LOOP_COUNT = PRINTS.length * 1000;
+    private static final int LOOP_START = (LOOP_COUNT / 2) - ((LOOP_COUNT / 2) % PRINTS.length);
+
+    /** Absolute adapter position of the selected card; print = position % PRINTS.length. */
+    private int selectedIndex = LOOP_START;
+
+    private static int printIndex(int position) {
+        return position % PRINTS.length;
+    }
+
+    private Print selectedPrint() {
+        return PRINTS[printIndex(selectedIndex)];
+    }
 
     private final Map<String, Bitmap> previewCache = new HashMap<>();
 
@@ -91,10 +106,10 @@ public class OnboardingMushafFragment extends Fragment {
         dotsLayout = v.findViewById(R.id.onb_print_dots);
         carousel = v.findViewById(R.id.onb_print_carousel);
 
-        selectedIndex = indexOfKey(host.getOnboardingState().pageType);
+        selectedIndex = LOOP_START + indexOfKey(host.getOnboardingState().pageType);
         // commit the initially shown card so the displayed selection is always
         // the one that gets applied, even if the user never touches the shelf
-        host.getOnboardingState().pageType = PRINTS[selectedIndex].key;
+        host.getOnboardingState().pageType = selectedPrint().key;
 
         adapter = new PrintAdapter();
         LinearLayoutManager layoutManager =
@@ -105,7 +120,9 @@ public class OnboardingMushafFragment extends Fragment {
         // pooled holders in with stale scale/alpha from their side-card days
         carousel.setItemAnimator(null);
 
-        PagerSnapHelper snapHelper = new PagerSnapHelper();
+        // LinearSnapHelper gives the carousel feel: a fling glides over several
+        // cards and settles on the nearest, instead of one sticky page per swipe
+        LinearSnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(carousel);
 
         // resolved here: the fragment is guaranteed attached in onCreateView,
@@ -166,7 +183,7 @@ public class OnboardingMushafFragment extends Fragment {
     private void setSelected(int position) {
         final int previous = selectedIndex;
         selectedIndex = position;
-        host.getOnboardingState().pageType = PRINTS[position].key;
+        host.getOnboardingState().pageType = PRINTS[printIndex(position)].key;
         // adapter mutation is unsupported inside a scroll callback - rebind on
         // the next frame; the details/dots don't touch the adapter and can stay live
         carousel.post(() -> {
@@ -174,11 +191,11 @@ public class OnboardingMushafFragment extends Fragment {
             adapter.notifyItemChanged(position);
         });
         bindDetails();
-        highlightDot(position);
+        highlightDot(printIndex(position));
     }
 
     private void bindDetails() {
-        Print print = PRINTS[selectedIndex];
+        Print print = selectedPrint();
         nameView.setText(print.titleRes);
         String size = getString(R.string.onb_print_size,
                 NumberFormat.getInstance().format(print.sizeMb));
@@ -214,7 +231,7 @@ public class OnboardingMushafFragment extends Fragment {
             dot.setPadding(pad, 0, pad, 0);
             dotsLayout.addView(dot);
         }
-        highlightDot(selectedIndex);
+        highlightDot(printIndex(selectedIndex));
     }
 
     private void highlightDot(int position) {
@@ -260,7 +277,7 @@ public class OnboardingMushafFragment extends Fragment {
             holder.itemView.setScaleX(1f);
             holder.itemView.setScaleY(1f);
             holder.itemView.setAlpha(1f);
-            Print print = PRINTS[position];
+            Print print = PRINTS[printIndex(position)];
             holder.name.setText(print.titleRes);
             holder.image.setImageBitmap(previewFor(print.key));
             boolean selected = position == selectedIndex;
@@ -272,7 +289,7 @@ public class OnboardingMushafFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return PRINTS.length;
+            return LOOP_COUNT;
         }
 
         private void centerOn(int position) {
