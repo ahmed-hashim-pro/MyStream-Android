@@ -1,5 +1,6 @@
 package com.medoapps.www.onlinequran.pageselect
 
+import android.content.Context
 import com.quran.data.core.QuranInfo
 import com.quran.data.dao.BookmarksDao
 import com.quran.data.source.PageProvider
@@ -9,16 +10,19 @@ import com.medoapps.www.onlinequran.util.ImageUtil
 import com.medoapps.www.onlinequran.util.QuranFileUtils
 import com.medoapps.www.onlinequran.util.UrlUtil
 import dagger.Reusable
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import timber.log.Timber
 import java.io.File
+import java.io.IOException
 import javax.inject.Inject
 
 @Reusable
 class PageSelectPresenter @Inject
 constructor(
+  private val appContext: Context,
   private val imageUtil: ImageUtil,
   private val quranFileUtils: QuranFileUtils,
   private val mainThreadScheduler: Scheduler,
@@ -54,9 +58,15 @@ constructor(
           downloadingSet.add(it.key)
           val url = "$baseUrl/${it.key}.png"
           compositeDisposable.add(
-            imageUtil.downloadImage(url, previewImage)
-              .onErrorResumeWith(
-                imageUtil.downloadImage(urlUtil.fallbackUrl(url), previewImage)
+            // some page sets have no snip on the server - those ship in assets
+            Maybe.fromCallable<File> {
+              if (copySnipFromAssets(it.key, previewImage)) previewImage else null
+            }
+              .switchIfEmpty(
+                imageUtil.downloadImage(url, previewImage)
+                  .onErrorResumeWith(
+                    imageUtil.downloadImage(urlUtil.fallbackUrl(url), previewImage)
+                  )
               )
               .subscribeOn(Schedulers.io())
               .observeOn(mainThreadScheduler)
@@ -75,6 +85,21 @@ constructor(
         )
       }
       currentView?.onUpdatedData(data)
+    }
+  }
+
+  private fun copySnipFromAssets(key: String, destination: File): Boolean {
+    // stage to a temp file so an interrupted copy can't leave a truncated
+    // snip that previewImage.exists() would then treat as valid forever
+    val stagingFile = File(destination.path + ".tmp")
+    return try {
+      appContext.assets.open("pagetypes/$key.png").use { input ->
+        stagingFile.outputStream().use { output -> input.copyTo(output) }
+      }
+      stagingFile.renameTo(destination)
+    } catch (ioException: IOException) {
+      stagingFile.delete()
+      false
     }
   }
 

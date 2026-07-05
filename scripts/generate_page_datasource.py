@@ -1,0 +1,144 @@
+#!/usr/bin/env python3
+"""Generate a QuranDataSource subclass from a print's ayahinfo database.
+
+Usage: generate_page_datasource.py <ayahinfo.db> <ClassName> <totalPages> "<comment>"
+
+The layout arrays (pageForSura, suraForPage, ayahForPage, pageForJuz,
+juzDisplayPageArrayOverride, quarterStartByPage) are derived from the glyphs
+table; the Hafs constants (ayah counts, makki flags, quarters) are inherited
+from MadaniDataSource. Running this against madani's own ayahinfo_1260.db
+reproduces MadaniDataSource's hand-written literals exactly - including its
+juz display overrides {121: 6, 201: 10} - which is the correctness check for
+the generation rules below.
+
+Cover pages (pages with no glyphs, as in the naskh print):
+- leading covers map to (1, 1) and get a juz display override of 1 so the
+  header never shows "juz 0"
+- a trailing cover's stub is one-past-the-end (114, 7): repeating the last
+  content page's first ayah instead would make QuranInfo.getPageFromSuraAyah
+  send every ayah of the final suras to the cover page
+
+The juz display override marks pages where a juz begins in the bottom third
+(its start line > 2/3 of the page's line count): the page header then keeps
+showing the previous juz, matching the madani convention.
+"""
+import re
+import sqlite3
+import sys
+from pathlib import Path
+
+MADANI_KT = Path(__file__).resolve().parent.parent / (
+    "common/data/src/main/java/com/quran/data/pageinfo/common/MadaniDataSource.kt")
+LAST_SURA_SENTINEL = (114, 7)
+
+
+def parse_quarters():
+    src = MADANI_KT.read_text()
+    pairs = re.findall(r"SuraAyah\((\d+),\s*(\d+)\)", src.split("quartersArray")[1])
+    quarters = [(int(s), int(a)) for s, a in pairs]
+    assert len(quarters) == 240, len(quarters)
+    return quarters
+
+
+def generate(dbpath, total_pages):
+    quarters = parse_quarters()
+    con = sqlite3.connect(dbpath)
+    cur = con.cursor()
+
+    first = {}
+    for page, sura, ayah in cur.execute(
+            "SELECT page_number, sura_number, ayah_number FROM glyphs"):
+        if page not in first or (sura, ayah) < first[page]:
+            first[page] = (sura, ayah)
+
+    page_of_ayah = {}
+    for sura, ayah, page in cur.execute(
+            "SELECT sura_number, ayah_number, MIN(page_number) FROM glyphs GROUP BY 1, 2"):
+        page_of_ayah[(sura, ayah)] = page
+
+    min_content = min(first)
+    sura_for_page, ayah_for_page = [], []
+    for p in range(1, total_pages + 1):
+        if p in first:
+            entry = first[p]
+        elif p < min_content:
+            entry = (1, 1)  # leading cover art
+        else:
+            entry = LAST_SURA_SENTINEL  # trailing cover art
+        sura_for_page.append(entry[0])
+        ayah_for_page.append(entry[1])
+
+    page_for_sura = [page_of_ayah[(s, 1)] for s in range(1, 115)]
+    juz_starts = [quarters[8 * j] for j in range(30)]
+    page_for_juz = [page_of_ayah[js] for js in juz_starts]
+
+    juz_override = {p: 1 for p in range(1, min_content)}
+    for j in range(1, 30):
+        start = juz_starts[j]
+        page = page_of_ayah[start]
+        line = cur.execute(
+            "SELECT MIN(line_number) FROM glyphs WHERE sura_number=? AND ayah_number=?"
+            " AND page_number=?", (*start, page)).fetchone()[0]
+        max_line = cur.execute(
+            "SELECT MAX(line_number) FROM glyphs WHERE page_number=?", (page,)).fetchone()[0]
+        if line > max_line * 2 / 3:
+            juz_override[page] = j
+
+    quarter_start_by_page = [-1] * total_pages
+    for qi in range(239, 0, -1):
+        quarter_start_by_page[page_of_ayah[quarters[qi]] - 1] = qi
+
+    con.close()
+    return {
+        "pageForSuraArray": page_for_sura,
+        "suraForPageArray": sura_for_page,
+        "ayahForPageArray": ayah_for_page,
+        "pageForJuzArray": page_for_juz,
+        "juzDisplayPageArrayOverride": juz_override,
+        "quarterStartByPage": quarter_start_by_page,
+    }
+
+
+def format_array(arr, indent="      "):
+    lines, current = [], ""
+    for value in arr:
+        candidate = f"{current}{value}, "
+        if len(candidate) > 86:
+            lines.append(current.rstrip())
+            current = f"{value}, "
+        else:
+            current = candidate
+    lines.append(current.rstrip().rstrip(","))
+    return ("\n" + indent).join(lines)
+
+
+def main():
+    dbpath, name, total_pages, comment = sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4]
+    g = generate(dbpath, total_pages)
+    override = "mapOf(" + ", ".join(
+        f"{k} to {v}" for k, v in sorted(g["juzDisplayPageArrayOverride"].items())) + ")"
+    arrays = "\n\n".join(
+        f"  override val {key} = intArrayOf(\n      {format_array(g[key])})"
+        for key in ["pageForSuraArray", "suraForPageArray", "ayahForPageArray",
+                    "pageForJuzArray", "quarterStartByPage"])
+    out = MADANI_KT.parent / f"{name}.kt"
+    out.write_text(f"""package com.quran.data.pageinfo.common
+
+/**
+ * {comment}
+ * Generated by scripts/generate_page_datasource.py from the print's
+ * ayahinfo database; Hafs constants come from [MadaniDataSource].
+ */
+class {name} : MadaniDataSource() {{
+  override val numberOfPages = {total_pages}
+
+{arrays}
+
+  override val juzDisplayPageArrayOverride = {override}
+}}
+""")
+    print(f"wrote {out}")
+
+
+if __name__ == "__main__":
+    main()

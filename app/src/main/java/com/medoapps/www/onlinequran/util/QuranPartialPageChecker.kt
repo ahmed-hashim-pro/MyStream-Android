@@ -66,6 +66,9 @@ class QuranPartialPageChecker @Inject constructor() {
           // for warsh, 2 for everything
           when (width) {
             "_1024", "_1260" -> 5
+            // shemerly (1200): its densest page ends 4 sampled rows above
+            // the bottom, so anything below 5 would flag a complete page
+            "_1200" -> 6
             "_1280" -> 7
             "_1920" -> 9
             else -> 4

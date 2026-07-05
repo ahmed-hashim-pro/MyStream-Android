@@ -23,7 +23,8 @@ class QuranInfo @Inject constructor(quranDataSource: QuranDataSource) {
   val quarters = quranDataSource.quartersArray
 
   val numberOfPages = quranDataSource.numberOfPages
-  val numberOfPagesDual = numberOfPages / 2
+  // ceiling so odd-count page sets (ex shemerly's 521) keep their last page
+  val numberOfPagesDual = (numberOfPages + 1) / 2
 
   fun getStartingPageForJuz(juz: Int): Int {
     return juzPageStart[juz - 1]
@@ -81,9 +82,11 @@ class QuranInfo @Inject constructor(quranDataSource: QuranDataSource) {
     val bounds = IntArray(4)
     bounds[0] = pageSuraStart[page - 1]
     bounds[1] = pageAyahStart[page - 1]
-    if (page == numberOfPages) {
+    // the last sura always fits on one page, so every page from its start
+    // onward (including any trailing cover pages) ends at its last ayah
+    if (page >= suraPageStart[LAST_SURA - 1]) {
       bounds[2] = LAST_SURA
-      bounds[3] = 6
+      bounds[3] = suraNumAyahs[LAST_SURA - 1]
     } else {
       val nextPageSura = pageSuraStart[page]
       val nextPageAyah = pageAyahStart[page]
@@ -174,7 +177,8 @@ class QuranInfo @Inject constructor(quranDataSource: QuranDataSource) {
     isDualPagesVisible: Boolean
   ): Int {
     return if (isDualPagesVisible) {
-      (numberOfPagesDual - position) * 2
+      // clamp for odd-count page sets, whose first position holds one page
+      ((numberOfPagesDual - position) * 2).coerceAtMost(numberOfPages)
     } else {
       numberOfPages - position
     }

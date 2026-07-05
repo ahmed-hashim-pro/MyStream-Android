@@ -4,4 +4,8 @@
   <string name="madani_description">The classic Madani script.</string>
   <string name="tajweed_title">Tajweed Mushaf</string>
   <string name="tajweed_description">Tajweed rules highlighted in color.</string>
+  <string name="naskh_title">Naskh Mushaf</string>
+  <string name="naskh_description">Clear naskh script, 612 pages.</string>
+  <string name="shemerly_title">Shemerly Mushaf</string>
+  <string name="shemerly_description">The classic Egyptian Shemerly print, 521 pages.</string>
 </resources>

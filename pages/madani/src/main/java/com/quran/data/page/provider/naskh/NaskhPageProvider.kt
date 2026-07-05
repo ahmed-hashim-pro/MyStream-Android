@@ -1,26 +1,26 @@
-package com.quran.data.page.provider.tajweed
+package com.quran.data.page.provider.naskh
 
-import com.quran.data.pageinfo.common.MadaniDataSource
+import com.quran.data.pageinfo.common.NaskhDataSource
 import com.quran.data.pageinfo.common.size.FixedPageSizeCalculator
 import com.quran.data.source.DisplaySize
 import com.quran.data.source.PageProvider
 import com.quran.data.source.PageSizeCalculator
 import com.medoapps.www.onlinequran.pages.madani.R
 
-class TajweedPageProvider : PageProvider {
+class NaskhPageProvider : PageProvider {
   companion object {
-    private val baseUrl = "https://android.quran.com/data/tajweed"
-    // same 604 page madani layout, only the glyph colors differ
-    private val dataSource by lazy { MadaniDataSource() }
+    private val baseUrl = "https://android.quran.com/data/naskh"
+    // 612 page SHL naskh layout, Hafs riwaya
+    private val dataSource by lazy { NaskhDataSource() }
   }
 
   override fun getDataSource() = dataSource
 
-  // tajweed pages are only published at width 1280
+  // naskh pages are only published at width 1280
   override fun getPageSizeCalculator(displaySize: DisplaySize): PageSizeCalculator =
       FixedPageSizeCalculator("1280")
 
-  override fun getImageVersion() = 7
+  override fun getImageVersion() = 3
 
   override fun getImagesBaseUrl() = "$baseUrl/"
 
@@ -35,24 +35,19 @@ class TajweedPageProvider : PageProvider {
   override fun getDatabaseDirectoryName() = "databases"
 
   // the images zip ships databases/ayahinfo_1280.db, which lands under the
-  // tajweed images directory - use it instead of re-downloading
-  override fun getAyahInfoDirectoryName() = "tajweed/databases"
+  // naskh images directory - use it instead of re-downloading
+  override fun getAyahInfoDirectoryName() = "naskh/databases"
 
   // translation and audio databases are shared with the madani page set
   override fun getDatabasesBaseUrl() = "https://android.quran.com/data/databases/"
 
   override fun getAudioDatabasesBaseUrl() = getDatabasesBaseUrl() + "audio/"
 
-  override fun getImagesDirectoryName() = "tajweed"
-
-  override fun imagesColored() = true
-
-  // the CDN only publishes tajweed pages as a zip, no per-page files
-  override fun supportsPerPageDownloads() = false
+  override fun getImagesDirectoryName() = "naskh"
 
   override fun getFallbackPageType() = "madani"
 
-  override fun getPreviewTitle() = R.string.tajweed_title
+  override fun getPreviewTitle() = R.string.naskh_title
 
-  override fun getPreviewDescription() = R.string.tajweed_description
+  override fun getPreviewDescription() = R.string.naskh_description
 }

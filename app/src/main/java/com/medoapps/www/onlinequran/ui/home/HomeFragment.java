@@ -420,7 +420,8 @@ public class HomeFragment extends Fragment {
             binding.continueSubtitle.setText(R.string.home_continue_subtitle);
             binding.continueTitle.setText(getString(R.string.home_continue_page,
                     getString(R.string.quran_page), localeNum(page)));
-            binding.continueProgress.setMax(604);
+            binding.continueProgress.setMax(
+                    prefs.getInt(PagerActivity.HOME_LAST_READ_TOTAL, 604));
             binding.continueProgress.setProgress(page);
         } else {
             binding.continueSubtitle.setText(R.string.home_start_reading);

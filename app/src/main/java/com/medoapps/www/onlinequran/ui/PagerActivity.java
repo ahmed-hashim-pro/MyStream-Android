@@ -168,6 +168,8 @@ public class PagerActivity extends AppCompatActivity implements
   private static final String LAST_READ_PAGE = "LAST_READ_PAGE";
   /** Persistent last-read page for the home "continue reading" card. */
   public static final String HOME_LAST_READ_PAGE = "home_last_read_page";
+  /** Total pages of the page set the last-read page belongs to. */
+  public static final String HOME_LAST_READ_TOTAL = "home_last_read_total";
   private static final String LAST_READING_MODE_IS_TRANSLATION =
       "LAST_READING_MODE_IS_TRANSLATION";
   private static final String LAST_ACTIONBAR_STATE = "LAST_ACTIONBAR_STATE";
@@ -1077,6 +1079,7 @@ public class PagerActivity extends AppCompatActivity implements
       PreferenceManager.getDefaultSharedPreferences(this)
           .edit()
           .putInt(HOME_LAST_READ_PAGE, getCurrentPage())
+          .putInt(HOME_LAST_READ_TOTAL, quranInfo.getNumberOfPages())
           .apply();
     }
     foregroundDisposable.clear();
@@ -1688,7 +1691,8 @@ public class PagerActivity extends AppCompatActivity implements
     int position = viewPager.getCurrentItem();
     int page = numberOfPages - position;
     if (isDualPageVisible()) {
-      page = ((numberOfPagesDual - position) * 2) - 1;
+      // first page of the spread; getPageFromPosition clamps odd-count sets
+      page = quranInfo.getPageFromPosition(position, true) - 1;
     }
 
     // log the event

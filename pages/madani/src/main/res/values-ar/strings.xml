@@ -4,4 +4,8 @@
   <string name="madani_description">الرسم المدني التقليدي.</string>
   <string name="tajweed_title">مصحف التجويد الملوّن</string>
   <string name="tajweed_description">أحكام التجويد مميّزة بالألوان.</string>
+  <string name="naskh_title">مصحف النسخ</string>
+  <string name="naskh_description">خط نسخ واضح، ٦١٢ صفحة.</string>
+  <string name="shemerly_title">المصحف الشمرلي</string>
+  <string name="shemerly_description">الطبعة المصرية الشمرلي المعروفة، ٥٢١ صفحة.</string>
 </resources>
