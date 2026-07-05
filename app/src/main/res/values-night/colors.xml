@@ -192,5 +192,6 @@
     <color name="onb_accent_end">#C9982F</color>
     <color name="onb_on_accent">#1A1205</color>
     <color name="onb_dot_inactive">#39435C</color>
+    <color name="onb_chip_bg">#2AE7C884</color>
 
 </resources>

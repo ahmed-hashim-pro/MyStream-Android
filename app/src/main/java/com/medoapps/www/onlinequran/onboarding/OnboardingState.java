@@ -11,6 +11,7 @@ public class OnboardingState {
     public boolean athanEnabled;
     public boolean bubbleEnabled;
     public int themeMode; // an AppCompatDelegate.MODE_NIGHT_* value
+    public String pageType; // mushaf print key, e.g. "madani"
     private final Map<Reminder, Boolean> reminders = new EnumMap<>(Reminder.class);
 
     private OnboardingState() {
@@ -27,6 +28,7 @@ public class OnboardingState {
         // overlay permission on the Ready step, so this is safe — it just surfaces that grant.
         s.bubbleEnabled = true;
         s.themeMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+        s.pageType = "madani";
         return s;
     }
 

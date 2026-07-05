@@ -340,5 +340,6 @@
     <color name="onb_accent_end">#B8860B</color>
     <color name="onb_on_accent">#FFFFFF</color>
     <color name="onb_dot_inactive">#CDBF9E</color>
+    <color name="onb_chip_bg">#2AB8860B</color>
 
 </resources>

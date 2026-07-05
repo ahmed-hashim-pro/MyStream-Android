@@ -850,6 +850,14 @@
     <string name="onb_skip">تخطٍّ</string>
     <string name="onb_next">التالي</string>
     <string name="onb_continue">متابعة</string>
+    <!-- Onboarding: mushaf print step -->
+    <string name="onb_print_pick_title">اختر مصحفك</string>
+    <string name="onb_print_pick_sub">طبعة المصحف التي ستقرأ بها — وتُحمَّل مرة واحدة بعد الترحيب</string>
+    <string name="onb_print_size">‏%1$s م.ب</string>
+    <string name="onb_print_chip_default">الاختيار الافتراضي</string>
+    <string name="onb_print_chip_colored">ملوّن بأحكام التجويد</string>
+    <string name="onb_print_chip_riwaya">طبعة رواية</string>
+    <string name="onb_print_footnote">يمكنك تغيير الطبعة في أي وقت من إعدادات المصحف</string>
     <string name="onb_enter_app">دخول التطبيق</string>
 
     <string name="onb_intro_tagline">قرآن وإذاعة ومواقيت الصلاة — أونلاين وبدون إنترنت</string>

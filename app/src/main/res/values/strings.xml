@@ -1178,6 +1178,14 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="onb_skip">Skip</string>
     <string name="onb_next">Next</string>
     <string name="onb_continue">Continue</string>
+    <!-- Onboarding: mushaf print step -->
+    <string name="onb_print_pick_title">Choose your mushaf</string>
+    <string name="onb_print_pick_sub">The print you\'ll read with — downloaded once after setup</string>
+    <string name="onb_print_size">%1$s MB</string>
+    <string name="onb_print_chip_default">Default choice</string>
+    <string name="onb_print_chip_colored">Color-coded tajweed</string>
+    <string name="onb_print_chip_riwaya">Narration print</string>
+    <string name="onb_print_footnote">You can change the print anytime from mushaf settings</string>
     <string name="onb_enter_app">Enter app</string>
 
     <string name="onb_intro_tagline">Quran, Radio &amp; Prayer times — online and offline</string>

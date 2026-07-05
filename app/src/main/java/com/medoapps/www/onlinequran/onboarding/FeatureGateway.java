@@ -21,6 +21,12 @@ public interface FeatureGateway {
 
     void setThemeMode(int nightMode);
 
+    /**
+     * Select the mushaf print (page set) the reader uses. On a fresh install nothing is
+     * downloaded yet, so this simply aims the first pages download at the chosen print.
+     */
+    void setPageType(String pageType);
+
     // --- reads used to seed initial toggle positions ---
 
     boolean isAthanEnabled();
@@ -30,4 +36,6 @@ public interface FeatureGateway {
     boolean isReminderEnabled(Reminder reminder);
 
     int currentThemeMode();
+
+    String currentPageType();
 }

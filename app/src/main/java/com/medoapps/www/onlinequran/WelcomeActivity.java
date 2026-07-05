@@ -25,6 +25,7 @@ import com.medoapps.www.onlinequran.onboarding.AndroidFeatureGateway;
 import com.medoapps.www.onlinequran.onboarding.OnboardingFeatureController;
 import com.medoapps.www.onlinequran.onboarding.OnboardingHost;
 import com.medoapps.www.onlinequran.onboarding.OnboardingIntroFragment;
+import com.medoapps.www.onlinequran.onboarding.OnboardingMushafFragment;
 import com.medoapps.www.onlinequran.onboarding.OnboardingPermissionsFragment;
 import com.medoapps.www.onlinequran.onboarding.OnboardingPersonalizeFragment;
 import com.medoapps.www.onlinequran.onboarding.OnboardingState;
@@ -70,6 +71,11 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
         onboardingState = OnboardingState.defaults();
         onboardingState.athanEnabled = gateway.isAthanEnabled();
         onboardingState.themeMode = gateway.currentThemeMode();
+        // keep the "madani" default when the pref has never been written
+        String currentPageType = gateway.currentPageType();
+        if (currentPageType != null) {
+            onboardingState.pageType = currentPageType;
+        }
         for (com.medoapps.www.onlinequran.onboarding.Reminder r
                 : com.medoapps.www.onlinequran.onboarding.Reminder.values()) {
             onboardingState.setReminderEnabled(r, gateway.isReminderEnabled(r));
@@ -183,11 +189,12 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
 
     private void buildDots() {
         dotsLayout.removeAllViews();
+        int dotPad = Math.round(6 * getResources().getDisplayMetrics().density);
         for (int i = 0; i < DOT_COUNT; i++) {
             TextView dot = new TextView(this);
             dot.setText(Html.fromHtml("&#8226;"));
             dot.setTextSize(28);
-            dot.setPadding(6, 0, 6, 0);
+            dot.setPadding(dotPad, 0, dotPad, 0);
             dot.setTextColor(getResources().getColor(R.color.onb_dot_inactive));
             dotsLayout.addView(dot);
         }
@@ -225,9 +232,9 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
         }
     }
 
-    /** 8 steps: intro, 5 tour pillars, personalize, ready. */
+    /** 9 steps: intro, 5 tour pillars, mushaf print, personalize, ready. */
     private static class OnboardingPagerAdapter extends FragmentStateAdapter {
-        static final int PAGE_COUNT = 8;
+        static final int PAGE_COUNT = 9;
 
         OnboardingPagerAdapter(FragmentActivity activity) {
             super(activity);
@@ -261,6 +268,8 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
                             R.drawable.ic_onb_tools, R.string.onb_tools_title, R.string.onb_tools_desc, false,
                             OnboardingTourFragment.ANIM_VECTOR, R.drawable.avd_onb_tools);
                 case 6:
+                    return new OnboardingMushafFragment();
+                case 7:
                     return new OnboardingPersonalizeFragment();
                 default:
                     return new OnboardingPermissionsFragment();

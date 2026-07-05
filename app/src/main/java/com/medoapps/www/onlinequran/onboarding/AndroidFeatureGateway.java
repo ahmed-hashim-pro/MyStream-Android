@@ -121,6 +121,27 @@ public class AndroidFeatureGateway implements FeatureGateway {
     }
 
     @Override
+    public void setPageType(String pageType) {
+        com.medoapps.www.onlinequran.util.QuranSettings settings =
+                com.medoapps.www.onlinequran.util.QuranSettings.getInstance(context);
+        // getPageType() is null on a fresh install (the pref is only backfilled
+        // by the lazy DI provider, which onboarding never touches) - compare
+        // null-safely and never write a null type
+        if (pageType != null && !pageType.equals(settings.getPageType())) {
+            // Mirrors the page-select switch, minus bookmark migration: onboarding
+            // runs before any bookmarks (or pages) exist. Clearing the downloaded-pages
+            // flag makes the data activity check/download the newly chosen set.
+            settings.removeDidDownloadPages();
+            settings.setPageType(pageType);
+        }
+    }
+
+    @Override
+    public String currentPageType() {
+        return com.medoapps.www.onlinequran.util.QuranSettings.getInstance(context).getPageType();
+    }
+
+    @Override
     public void setThemeMode(int nightMode) {
         SettingSaved.currentThemeMode = nightMode;
         new SettingSaved(context).SaveData();
