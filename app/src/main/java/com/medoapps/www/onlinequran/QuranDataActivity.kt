@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.WorkManager
 import com.medoapps.www.onlinequran.R
+import com.medoapps.www.onlinequran.data.QuranDataProvider
 import com.quran.common.upgrade.PreferencesUpgrade
 import com.quran.data.model.QuranDataStatus
 import com.medoapps.www.onlinequran.presenter.data.QuranDataPresenter
@@ -343,7 +344,35 @@ class QuranDataActivity : Activity(), SimpleDownloadListener, OnRequestPermissio
           .cancelUniqueWork(WorkerConstants.CLEANUP_PREFIX + pageType)
     }
     quranSettings.removeShouldFetchPages()
+    maybeDownloadArabicSearchDb()
     runListView()
+  }
+
+  /**
+   * Non-madani page sets don't bundle the arabic search database - only the
+   * madani zip lands it in the shared databases directory - so ayah search
+   * used to stay broken until the default print was downloaded. Fetch it
+   * together with whichever page set was just downloaded instead.
+   */
+  private fun maybeDownloadArabicSearchDb() {
+    Thread {
+      if (!quranFileUtils.hasArabicSearchDatabase()) {
+        val url = quranFileUtils.arabicSearchDatabaseUrl
+        val intent = ServiceIntentHelper.getDownloadIntent(
+            this, url,
+            quranFileUtils.getQuranDatabaseDirectory(this),
+            getString(R.string.search_data),
+            SEARCH_DB_DOWNLOAD_KEY,
+            QuranDownloadService.DOWNLOAD_TYPE_ARABIC_SEARCH_DB
+        )
+        val extension = if (url.endsWith(".zip")) ".zip" else ""
+        intent.putExtra(
+            QuranDownloadService.EXTRA_OUTPUT_FILE_NAME,
+            QuranDataProvider.QURAN_ARABIC_DATABASE + extension
+        )
+        startService(intent)
+      }
+    }.start()
   }
 
   override fun handleDownloadFailure(errId: Int) {
@@ -690,6 +719,7 @@ class QuranDataActivity : Activity(), SimpleDownloadListener, OnRequestPermissio
 
   companion object {
     const val PAGES_DOWNLOAD_KEY = "PAGES_DOWNLOAD_KEY"
+    private const val SEARCH_DB_DOWNLOAD_KEY = "SEARCH_DB_DOWNLOAD_KEY"
     private const val REQUEST_WRITE_TO_SDCARD_PERMISSIONS = 1
     private const val QURAN_DIRECTORY_MARKER_FILE = "q4a"
     private const val QURAN_HIDDEN_DIRECTORY_MARKER_FILE = ".q4a"

@@ -102,6 +102,11 @@
          AlertDialog.Builder dialogs pick up gold buttons/inputs/cursors.
          Footer buttons follow the mockup convention everywhere: filled-gold
          positive, ghost (gold text) negative/neutral. -->
+    <!-- The language chooser brings its whole UI as a custom view; pin it to the
+         plain AppCompat alert overlay so activity-level Material3 dialog themes
+         (e.g. Settings') can't squeeze the window or restyle the panel. -->
+    <style name="ThemeOverlay.MyStream.LangDialog" parent="ThemeOverlay.AppCompat.Dialog.Alert" />
+
     <style name="ThemeOverlay.MyStream.Dialog" parent="ThemeOverlay.Material3.Dialog">
         <item name="colorPrimary">@color/gold_accent</item>
         <item name="colorAccent">@color/gold_accent</item>

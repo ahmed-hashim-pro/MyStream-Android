@@ -90,7 +90,10 @@ public final class AppLanguage {
                 .setText(firstRun ? R.string.onb_language_title : R.string.settings_language);
 
         final androidx.appcompat.app.AlertDialog dialog =
-                new androidx.appcompat.app.AlertDialog.Builder(activity)
+                // pinned overlay: the Settings screen swaps alertDialogTheme for a
+                // Material3 one that collapses this custom-view dialog's window
+                new androidx.appcompat.app.AlertDialog.Builder(
+                        activity, R.style.ThemeOverlay_MyStream_LangDialog)
                         .setView(view)
                         .setCancelable(!firstRun)
                         .create();
