@@ -126,8 +126,8 @@ public class OnboardingMushafFragment extends Fragment {
         snapHelper.attachToRecyclerView(carousel);
 
         // resolved here: the fragment is guaranteed attached in onCreateView,
-        // while the posted lambda may run after detach
-        final int cardWidth = Math.round(196 * getResources().getDisplayMetrics().density);
+        // while the posted lambda may run after detach (222dp = item card width)
+        final int cardWidth = Math.round(222 * getResources().getDisplayMetrics().density);
 
         // center the snapped card: symmetric padding of (width - card) / 2.
         // The scroll listener is only registered AFTER the padding + initial
@@ -208,16 +208,22 @@ public class OnboardingMushafFragment extends Fragment {
         }
     }
 
-    /** Side cards shrink and fade with distance from the center, like the mockup. */
+    /** The selected card clearly dominates: side cards drop to ~65% and fade hard. */
     private void applyCarouselTransforms() {
         float center = carousel.getWidth() / 2f;
         for (int i = 0; i < carousel.getChildCount(); i++) {
             View child = carousel.getChildAt(i);
             float childCenter = (child.getLeft() + child.getRight()) / 2f;
-            float distance = Math.min(1f, Math.abs(childCenter - center) / center);
-            child.setScaleX(1f - 0.08f * distance);
-            child.setScaleY(1f - 0.08f * distance);
-            child.setAlpha(1f - 0.45f * distance);
+            float offset = childCenter - center;
+            float distance = Math.min(1f, Math.abs(offset) / center);
+            float scale = 1f - 0.35f * distance;
+            child.setScaleX(scale);
+            child.setScaleY(scale);
+            child.setAlpha(1f - 0.55f * distance);
+            // scaling shrinks the card inside its layout slot, leaving a hole
+            // next to the centered card - slide it inward by the width it lost
+            float inward = child.getWidth() * (1f - scale) / 2f;
+            child.setTranslationX(offset > 0 ? -inward : (offset < 0 ? inward : 0f));
         }
     }
 
@@ -272,11 +278,12 @@ public class OnboardingMushafFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull Holder holder, int position) {
-            // pooled holders keep the scale/alpha from wherever they last sat
-            // on the shelf; reset and let the scroll transform re-apply
+            // pooled holders keep the scale/alpha/shift from wherever they last
+            // sat on the shelf; reset and let the scroll transform re-apply
             holder.itemView.setScaleX(1f);
             holder.itemView.setScaleY(1f);
             holder.itemView.setAlpha(1f);
+            holder.itemView.setTranslationX(0f);
             Print print = PRINTS[printIndex(position)];
             holder.name.setText(print.titleRes);
             holder.image.setImageBitmap(previewFor(print.key));
