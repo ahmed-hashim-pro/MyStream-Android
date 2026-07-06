@@ -62,6 +62,7 @@ import com.medoapps.www.onlinequran.util.AudioUtils
 import com.medoapps.www.onlinequran.util.QuranSettings
 import com.medoapps.www.onlinequran.util.QuranUtils
 import com.medoapps.www.onlinequran.view.SlidingTabLayout
+import com.quran.data.source.PageProvider
 import com.quran.mobile.di.ExtraScreenProvider
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
@@ -123,6 +124,8 @@ class QuranActivity : AppCompatActivity(),
   lateinit var quranIndexEventLogger: QuranIndexEventLogger
   @Inject
   lateinit var extraScreens: Set<@JvmSuppressWildcards ExtraScreenProvider>
+  @Inject
+  lateinit var pageTypes: Map<@JvmSuppressWildcards String, @JvmSuppressWildcards PageProvider>
 
   public override fun onCreate(savedInstanceState: Bundle?) {
     val quranApp = application as QuranApplication
@@ -154,7 +157,7 @@ class QuranActivity : AppCompatActivity(),
     supportActionBar?.setDisplayShowTitleEnabled(false)
     com.medoapps.www.onlinequran.HeroController.attach(this)
         .title(R.string.nav_label_mushaf)
-        .subtitle(getString(R.string.home_quran_section))
+        .subtitle(activePrintTitle())
         .apply()
 
     val pager = findViewById<ViewPager>(R.id.index_pager)
@@ -201,6 +204,8 @@ class QuranActivity : AppCompatActivity(),
   public override fun onResume() {
     compositeDisposable.add(latestPageObservable.subscribe())
     bindContinueReadingCard()
+    // the print may have changed in settings while this activity sat below it
+    findViewById<TextView>(R.id.heroSubtitle)?.text = activePrintTitle()
     super.onResume()
     val isRtl = isRtl()
     if (isRtl != this.isRtl) {
@@ -226,6 +231,12 @@ class QuranActivity : AppCompatActivity(),
     searchDebounce.removeCallbacksAndMessages(null)
     isPaused = true
     super.onPause()
+  }
+
+  /** Hero subtitle = the active mushaf print, so the index always says which mushaf is open. */
+  private fun activePrintTitle(): String {
+    val provider = pageTypes[settings.pageType] ?: return getString(R.string.home_quran_section)
+    return getString(provider.getPreviewTitle())
   }
 
   private fun isRtl(): Boolean {

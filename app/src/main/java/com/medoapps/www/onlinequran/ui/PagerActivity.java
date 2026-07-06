@@ -62,6 +62,7 @@ import com.quran.data.model.selection.SelectionIndicator;
 import com.quran.data.model.selection.SelectionIndicatorKt;
 import com.quran.data.page.provider.di.QuranPageExtrasComponent;
 import com.quran.data.page.provider.di.QuranPageExtrasComponentProvider;
+import com.quran.data.source.PageProvider;
 import com.medoapps.www.onlinequran.HelpActivity;
 import com.medoapps.www.onlinequran.QuranApplication;
 import com.medoapps.www.onlinequran.QuranPreferenceActivity;
@@ -131,6 +132,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -262,6 +264,7 @@ public class PagerActivity extends AppCompatActivity implements
   @Inject PageViewFactoryProvider pageProviderFactoryProvider;
   @Inject Set<AyahActionFragmentProvider> additionalAyahPanels;
   @Inject PagerActivityRecitationPresenter pagerActivityRecitationPresenter;
+  @Inject Map<String, PageProvider> pageTypes;
 
   private AudioEventPresenterBridge audioEventPresenterBridge;
   private ReadingEventPresenterBridge readingEventPresenterBridge;
@@ -1395,6 +1398,13 @@ public class PagerActivity extends AppCompatActivity implements
       actionBar.setDisplayShowTitleEnabled(true);
       actionBar.setTitle(sura);
       String desc = quranDisplayData.getPageSubtitle(this, page);
+      // trail the active print's name so the reader always says which mushaf this is —
+      // unless translation text is on screen, which the page-image print doesn't describe
+      // (this method is also the toolbar fallback while the translations list loads)
+      PageProvider activeProvider = pageTypes.get(quranSettings.getPageType());
+      if (activeProvider != null && !showingTranslation) {
+        desc = desc + " · " + getString(activeProvider.getPreviewTitle());
+      }
       actionBar.setSubtitle(desc);
       // Amiri's tall diacritics + font padding clipped the subtitle inside the
       // toolbar; drop the extra padding so surah name + "Page N · Juz M" both show.
@@ -1406,10 +1416,19 @@ public class PagerActivity extends AppCompatActivity implements
     if (toolbar == null) {
       return;
     }
+    CharSequence subtitle = toolbar.getSubtitle();
     for (int i = 0; i < toolbar.getChildCount(); i++) {
       View child = toolbar.getChildAt(i);
       if (child instanceof TextView) {
-        ((TextView) child).setIncludeFontPadding(false);
+        TextView textView = (TextView) child;
+        textView.setIncludeFontPadding(false);
+        // Toolbar hardcodes END ellipsis; on narrow screens that chops the trailing
+        // print name — and «مصحف المدينة» is a prefix of the new-print title, so the
+        // two Madani prints would read identically. Middle ellipsis keeps the page
+        // numbers at one end and the print's distinguishing tail at the other.
+        if (subtitle != null && TextUtils.equals(textView.getText(), subtitle)) {
+          textView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+        }
       }
     }
   }
