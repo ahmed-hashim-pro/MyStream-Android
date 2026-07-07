@@ -2,6 +2,7 @@ package com.quran.data.page.provider
 
 import com.quran.common.upgrade.LocalDataUpgrade
 import com.quran.common.upgrade.PreferencesUpgrade
+import com.quran.data.page.provider.jalala.JalalaPageProvider
 import com.quran.data.page.provider.madani.MadaniPageProvider
 import com.quran.data.page.provider.naskh.NaskhPageProvider
 import com.quran.data.page.provider.newmadani.NewMadaniPageProvider
@@ -83,6 +84,14 @@ object QuranDataModule {
   @StringKey("warsh")
   fun provideWarshPageSet(): PageProvider {
     return WarshPageProvider()
+  }
+
+  @JvmStatic
+  @Provides
+  @IntoMap
+  @StringKey("jalala")
+  fun provideJalalaPageSet(): PageProvider {
+    return JalalaPageProvider()
   }
 
   @JvmStatic

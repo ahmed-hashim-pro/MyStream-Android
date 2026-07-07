@@ -14,4 +14,6 @@
   <string name="qaloon_description">The Qaloon narration print. Audio and translations follow the Hafs narration.</string>
   <string name="warsh_title">Warsh Mushaf</string>
   <string name="warsh_description">The Warsh narration print in Maghribi script. Audio and translations follow the Hafs narration.</string>
+  <string name="jalala_title">Name of Allah in Red</string>
+  <string name="jalala_description">The Madani print with the name of Allah in red and an ornamental border.</string>
 </resources>
