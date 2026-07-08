@@ -1,4 +1,4 @@
-package com.quran.data.page.provider.jalala
+package com.quran.data.page.provider.allahred
 
 import com.quran.data.pageinfo.common.MadaniDataSource
 import com.quran.data.pageinfo.common.size.FixedPageSizeCalculator
@@ -8,29 +8,28 @@ import com.quran.data.source.PageSizeCalculator
 import com.medoapps.www.onlinequran.pages.madani.R
 
 /**
- * "Names of Allah in red" mushaf (مصحف تلوين لفظ الجلالة).
+ * "Name of Allah in red" mushaf (لفظ الجلالة بالأحمر).
  *
- * This is the published red-لفظ-الجلالة edition, the standard King Fahd Madinah
- * 604-page plate with الله/ربّ/هو printed red. The publisher's ornamental frame is
- * cropped off to the writing area (smaller download, more text on screen), so the
- * cropped page IS the King Fahd plate: it reuses [MadaniDataSource] (same 604-page
- * layout) and the ayahinfo boxes are the King Fahd boxes scaled straight onto the
- * cropped page — so tap-to-ayah, the recitation highlight and audio follow-along
- * all work unchanged.
+ * The published red-لفظ-الجلالة edition (اسم الله باللون الأحمر): the standard King
+ * Fahd Madinah 604-page plate with الله/ربّ/هو printed red inside an ornamental
+ * border. Each page is warped onto the King Fahd (madani) grid, so a single uniform
+ * madani ayahinfo aligns every page — it reuses [MadaniDataSource] and tap-to-ayah,
+ * the recitation highlight and audio follow-along all work unchanged.
  *
  * The scanned white paper is removed (color-to-alpha) so the pages are transparent
  * glyphs on alpha, like the madani set: the reader's own day/sepia/night paper shows
  * through, and [imagesColored] routes night mode through the hue-preserving invert so
- * the red لفظ الجلالة, gold ayah markers and the colored frame keep their hue.
+ * the red لفظ الجلالة, gold ayah markers and the colored frame keep their hue. The
+ * ornamental frame is dropped on inner pages but kept on the illuminated openings.
  *
- * Images + the scaled ayahinfo ship as one zip on our own bucket (see [baseUrl]).
+ * Images + the ayahinfo ship as one zip on our own bucket (see [baseUrl]).
  */
-class JalalaPageProvider : PageProvider {
+class AllahRedPageProvider : PageProvider {
   companion object {
     // Served from our own S3 bucket (eu-central-1). Layout under this base:
     //   <baseUrl>/zips/images_1000.zip   (width_1000/page001..604.png + databases/ayahinfo_1000.db)
     //   <baseUrl>/width_1000/pageNNN.png  (per-page fallback, optional)
-    private const val baseUrl = "https://geohashim-quran.s3.eu-central-1.amazonaws.com/jalala"
+    private const val baseUrl = "https://geohashim-quran.s3.eu-central-1.amazonaws.com/allah_red"
 
     // same 604-page layout as madani (this is the King Fahd plate underneath)
     private val dataSource by lazy { MadaniDataSource() }
@@ -38,7 +37,7 @@ class JalalaPageProvider : PageProvider {
 
   override fun getDataSource() = dataSource
 
-  // published at a single width; the no-border page is 1000px wide
+  // published at a single width; the warped page is 1000px wide
   override fun getPageSizeCalculator(displaySize: DisplaySize): PageSizeCalculator =
       FixedPageSizeCalculator("1000")
 
@@ -66,21 +65,21 @@ class JalalaPageProvider : PageProvider {
 
   override fun getDatabaseDirectoryName() = "databases"
 
-  // the images zip ships databases/ayahinfo_1000.db, which lands under the
-  // jalala images directory - use it instead of re-downloading
-  override fun getAyahInfoDirectoryName() = "jalala/databases"
+  // the images zip ships databases/ayahinfo_1000.db, which lands under this print's
+  // images directory - use it instead of re-downloading
+  override fun getAyahInfoDirectoryName() = "allah_red/databases"
 
   // translation and audio databases are shared with the madani page set
   override fun getDatabasesBaseUrl() = "https://android.quran.com/data/databases/"
 
   override fun getAudioDatabasesBaseUrl() = getDatabasesBaseUrl() + "audio/"
 
-  // distinct directory so the framed pages never collide with madani's ""
-  override fun getImagesDirectoryName() = "jalala"
+  // distinct directory so these pages never collide with madani's ""
+  override fun getImagesDirectoryName() = "allah_red"
 
   override fun getFallbackPageType() = "madani"
 
-  override fun getPreviewTitle() = R.string.jalala_title
+  override fun getPreviewTitle() = R.string.allah_red_title
 
-  override fun getPreviewDescription() = R.string.jalala_description
+  override fun getPreviewDescription() = R.string.allah_red_description
 }

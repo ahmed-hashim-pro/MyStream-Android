@@ -14,6 +14,6 @@
   <string name="qaloon_description">طبعة برواية قالون عن نافع. التلاوة والترجمات تتبع رواية حفص.</string>
   <string name="warsh_title">مصحف ورش</string>
   <string name="warsh_description">طبعة برواية ورش عن نافع بالخط المغربي. التلاوة والترجمات تتبع رواية حفص.</string>
-  <string name="jalala_title">تلوين لفظ الجلالة</string>
-  <string name="jalala_description">مصحف المدينة مع تلوين لفظ الجلالة بالأحمر وإطار مزخرف.</string>
+  <string name="allah_red_title">لفظ الجلالة بالأحمر</string>
+  <string name="allah_red_description">مصحف المدينة مع تلوين لفظ الجلالة بالأحمر وإطار مزخرف.</string>
 </resources>
