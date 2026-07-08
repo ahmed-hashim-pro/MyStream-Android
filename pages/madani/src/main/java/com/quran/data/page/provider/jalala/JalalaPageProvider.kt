@@ -10,20 +10,26 @@ import com.medoapps.www.onlinequran.pages.madani.R
 /**
  * "Names of Allah in red" mushaf (مصحف تلوين لفظ الجلالة).
  *
- * This is the published red-لفظ-الجلالة edition, which is the standard King Fahd
- * Madinah 604-page plate with الله/ربّ/هو printed red and an ornamental frame added.
- * Because the calligraphy sits in the exact King Fahd positions, it reuses
- * [MadaniDataSource] (same 604-page layout) and the ayahinfo boxes are the King Fahd
- * boxes re-projected into the framed image — so tap-to-ayah, the recitation highlight
- * and audio follow-along all work unchanged.
+ * This is the published red-لفظ-الجلالة edition, the standard King Fahd Madinah
+ * 604-page plate with الله/ربّ/هو printed red. The publisher's ornamental frame is
+ * cropped off to the writing area (smaller download, more text on screen), so the
+ * cropped page IS the King Fahd plate: it reuses [MadaniDataSource] (same 604-page
+ * layout) and the ayahinfo boxes are the King Fahd boxes scaled straight onto the
+ * cropped page — so tap-to-ayah, the recitation highlight and audio follow-along
+ * all work unchanged.
  *
- * Images + the re-projected ayahinfo ship as one zip on our own bucket (see [baseUrl]).
+ * The scanned white paper is removed (color-to-alpha) so the pages are transparent
+ * glyphs on alpha, like the madani set: the reader's own day/sepia/night paper shows
+ * through, and [imagesColored] routes night mode through the hue-preserving invert so
+ * the red لفظ الجلالة, gold ayah markers and the colored frame keep their hue.
+ *
+ * Images + the scaled ayahinfo ship as one zip on our own bucket (see [baseUrl]).
  */
 class JalalaPageProvider : PageProvider {
   companion object {
     // Served from our own S3 bucket (eu-central-1). Layout under this base:
-    //   <baseUrl>/zips/images_1280.zip   (width_1280/page001..604.png + databases/ayahinfo_1280.db)
-    //   <baseUrl>/width_1280/pageNNN.png  (per-page fallback, optional)
+    //   <baseUrl>/zips/images_1000.zip   (width_1000/page001..604.png + databases/ayahinfo_1000.db)
+    //   <baseUrl>/width_1000/pageNNN.png  (per-page fallback, optional)
     private const val baseUrl = "https://geohashim-quran.s3.eu-central-1.amazonaws.com/jalala"
 
     // same 604-page layout as madani (this is the King Fahd plate underneath)
@@ -32,9 +38,9 @@ class JalalaPageProvider : PageProvider {
 
   override fun getDataSource() = dataSource
 
-  // published at a single width; the framed page is 1280px wide
+  // published at a single width; the no-border page is 1000px wide
   override fun getPageSizeCalculator(displaySize: DisplaySize): PageSizeCalculator =
-      FixedPageSizeCalculator("1280")
+      FixedPageSizeCalculator("1000")
 
   // no .vN marker files ship with this set; version 1 always passes isVersion()
   override fun getImageVersion() = 1
@@ -42,6 +48,11 @@ class JalalaPageProvider : PageProvider {
   // colored pages (red لفظ الجلالة + colored border): use the hue-preserving
   // night path instead of the channel invert, exactly like tajweed/qaloon/warsh
   override fun imagesColored() = true
+
+  // the bucket only publishes the full zip, no per-page files — so declining the
+  // download falls back to madani (getFallbackPageType) and missing-page recovery
+  // re-fetches the zip instead of 404-ing per-page URLs (matches tajweed)
+  override fun supportsPerPageDownloads() = false
 
   override fun getImagesBaseUrl() = "$baseUrl/"
 
@@ -55,7 +66,7 @@ class JalalaPageProvider : PageProvider {
 
   override fun getDatabaseDirectoryName() = "databases"
 
-  // the images zip ships databases/ayahinfo_1600.db, which lands under the
+  // the images zip ships databases/ayahinfo_1000.db, which lands under the
   // jalala images directory - use it instead of re-downloading
   override fun getAyahInfoDirectoryName() = "jalala/databases"
 

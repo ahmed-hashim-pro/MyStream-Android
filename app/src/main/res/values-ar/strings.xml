@@ -857,6 +857,7 @@
     <string name="onb_print_chip_default">الاختيار الافتراضي</string>
     <string name="onb_print_chip_colored">ملوّن بأحكام التجويد</string>
     <string name="onb_print_chip_riwaya">طبعة رواية</string>
+    <string name="onb_print_chip_jalala">لفظ الجلالة بالأحمر</string>
     <string name="onb_print_footnote">يمكنك تغيير الطبعة في أي وقت من إعدادات المصحف</string>
     <string name="onb_enter_app">دخول التطبيق</string>
 
