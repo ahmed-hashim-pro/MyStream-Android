@@ -28,7 +28,9 @@ public class OnboardingState {
         // overlay permission on the Ready step, so this is safe — it just surfaces that grant.
         s.bubbleEnabled = true;
         s.themeMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-        s.pageType = "madani";
+        // Default print for new installs: the "Madinah Colored" set (red لفظ الجلالة).
+        // The onboarding picker centers/pre-selects this; users can still switch.
+        s.pageType = "madina_colored";
         return s;
     }
 

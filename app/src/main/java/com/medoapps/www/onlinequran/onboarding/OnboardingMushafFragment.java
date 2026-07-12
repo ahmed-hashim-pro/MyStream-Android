@@ -62,8 +62,8 @@ public class OnboardingMushafFragment extends Fragment {
                     101, R.string.onb_print_chip_riwaya),
             new Print("warsh", R.string.warsh_title, R.string.warsh_description,
                     225, R.string.onb_print_chip_riwaya),
-            new Print("allah_red", R.string.allah_red_title, R.string.allah_red_description,
-                    290, R.string.onb_print_chip_allah_red),
+            new Print("madina_colored", R.string.madina_colored_title, R.string.madina_colored_description,
+                    290, R.string.onb_print_chip_madina_colored),
     };
 
     private OnboardingHost host;

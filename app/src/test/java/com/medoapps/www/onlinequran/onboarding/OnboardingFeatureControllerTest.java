@@ -22,8 +22,10 @@ public class OnboardingFeatureControllerTest {
         final Set<Reminder> enabled = EnumSet.noneOf(Reminder.class);
         final Set<Reminder> disabled = EnumSet.noneOf(Reminder.class);
         final List<Integer> themeModes = new ArrayList<>();
+        String pageTypeSet = null;
 
         @Override public void setAthanEnabled(boolean enabled) { athanSet = enabled; }
+        @Override public void setPageType(String pageType) { pageTypeSet = pageType; }
         @Override public void setBubbleEnabled(boolean enabled) { bubbleSet = enabled; }
         @Override public void enableReminder(Reminder r) { this.enabled.add(r); }
         @Override public void disableReminder(Reminder r) { this.disabled.add(r); }
@@ -32,6 +34,7 @@ public class OnboardingFeatureControllerTest {
         @Override public boolean isBubbleEnabled() { return false; }
         @Override public boolean isReminderEnabled(Reminder r) { return false; }
         @Override public int currentThemeMode() { return AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM; }
+        @Override public String currentPageType() { return null; }
     }
 
     @Test

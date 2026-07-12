@@ -1185,7 +1185,7 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="onb_print_chip_default">Default choice</string>
     <string name="onb_print_chip_colored">Color-coded tajweed</string>
     <string name="onb_print_chip_riwaya">Narration print</string>
-    <string name="onb_print_chip_allah_red">Name of Allah in red</string>
+    <string name="onb_print_chip_madina_colored">Name of Allah in red</string>
     <string name="onb_print_footnote">You can change the print anytime from mushaf settings</string>
     <string name="onb_enter_app">Enter app</string>
 
