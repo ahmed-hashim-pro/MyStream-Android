@@ -61,6 +61,15 @@ public class ZipUtils {
               currentEntryFile.delete();
             }
 
+            // Ensure the entry's parent directory exists. Some zips (e.g. our
+            // single-width colored print sets) omit explicit directory entries,
+            // so a nested file like "databases/ayahinfo_1000.db" would otherwise
+            // fail to open when its parent folder hasn't been pre-created.
+            File parent = currentEntryFile.getParentFile();
+            if (parent != null && !parent.exists()) {
+              parent.mkdirs();
+            }
+
             try ( InputStream is = zip.getInputStream(entry);  FileOutputStream ostream = new FileOutputStream(currentEntryFile)) {
               int size;
               byte[] buf = new byte[BUFFER_SIZE];
