@@ -49,7 +49,7 @@ public class OnboardingMushafFragment extends Fragment {
 
     private static final Print[] PRINTS = {
             new Print("madani", R.string.madani_title, R.string.madani_description,
-                    77, R.string.onb_print_chip_default),
+                    77, 0),
             new Print("new_madani", R.string.new_madani_title, R.string.new_madani_description,
                     96, 0),
             new Print("tajweed", R.string.tajweed_title, R.string.tajweed_description,
@@ -63,7 +63,7 @@ public class OnboardingMushafFragment extends Fragment {
             new Print("warsh", R.string.warsh_title, R.string.warsh_description,
                     225, R.string.onb_print_chip_riwaya),
             new Print("madina_colored", R.string.madina_colored_title, R.string.madina_colored_description,
-                    290, R.string.onb_print_chip_madina_colored),
+                    290, R.string.onb_print_chip_default),
     };
 
     private OnboardingHost host;
