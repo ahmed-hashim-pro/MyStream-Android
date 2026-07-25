@@ -332,6 +332,23 @@
   }
   .note b { color: var(--ink); }
 
+  /* --- the mix: same parts, tightened so the whole stack clears the fold --- */
+  .mixframe .feat { padding: 11px 14px; margin-bottom: 12px; }
+  .mixframe .row { padding: 8px 12px; }
+  .mixframe .grp { margin-bottom: 7px; }
+  .mixframe .gap { height: 13px; }
+  .mixframe .mini .sq { width: 44px; height: 44px; flex: 0 0 44px; }
+  /* the seam that makes the hybrid legible: rows carry state, tiles don't */
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; margin: 18px 0 0; padding: 0; list-style: none; }
+  .legend li { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-soft); }
+  .legend i {
+    width: 9px; height: 9px; border-radius: 2px; flex: 0 0 auto; font-style: normal;
+  }
+  .legend .fa { background: #B8860B; }
+  .legend .fb { background: #5D8FC0; }
+  .legend .fc { background: #6FAF6A; }
+  .legend b { color: var(--ink); font-weight: 700; }
+
   @media (prefers-reduced-motion: no-preference) {
     .rail { scroll-behavior: smooth; }
   }
@@ -374,8 +391,9 @@
     <p class="standfirst">
       Today it is twelve equal tiles in a flat grid — Zakat Calculator carries the same visual
       weight as Prayer Times, nothing is grouped, and a <code>SearchView</code> already exists in
-      <code>OtherCategoryFragment</code> but is never shown. Three directions below, all built from
-      the app's own navy-and-gold tokens. Every frame is drawn at the real <b>412dp</b> device width.
+      <code>OtherCategoryFragment</code> but is never shown. <b>The mix</b> is the screen to build;
+      the three directions it draws from follow underneath, since they're what justify each choice.
+      All of it uses the app's own navy-and-gold tokens, drawn at the real <b>412dp</b> device width.
     </p>
   </header>
 
@@ -434,11 +452,220 @@
     </div>
   </section>
 
+  <!-- ============================ THE MIX ============================ -->
+  <section>
+    <div class="sec-head">
+      <h2>The mix</h2>
+      <span class="tag pick">build this</span>
+    </div>
+    <p class="lede">
+      One screen that takes the single strongest idea from each direction and drops what each was
+      paying for. The organising rule is simple and visible: <b>if a tool has live state it gets a
+      row; if it doesn't, it gets a tile.</b> That is why the two shapes coexist here instead of
+      looking like indecision.
+    </p>
+
+    <ul class="legend">
+      <li><i class="fc"></i><span>from <b>C</b> — the next-prayer card, and the 4-across density</span></li>
+      <li><i class="fa"></i><span>from <b>A</b> — stateful rows for the four daily tools</span></li>
+      <li><i class="fb"></i><span>from <b>B</b> — named groups, tiles for everything stateless</span></li>
+    </ul>
+
+    <ul class="tradeoffs">
+      <li class="yes"><div><span class="k">Kept</span>Answers before it asks · state where state exists · the familiar grid survives · all 13 tools above the fold</div></li>
+      <li class="no"><div><span class="k">Dropped</span>C's pinned row — it needs new storage plus an edit mode, and the context card already covers the “what now” job</div></li>
+    </ul>
+
+    <div class="rail">
+      <!-- MIX · AR light -->
+      <figure>
+        <div class="ph lt ar mixframe">
+          <div class="screen">
+            <div class="sb"><span>١١:٣٣</span><span>▮ ▲ ⌁</span></div>
+            <div class="hero">
+              <div class="hero-top">
+                <div class="avatar"></div><h3>المزيد</h3>
+                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-trophy"/></svg>
+                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-gear"/></svg>
+              </div>
+              <div class="search"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#i-search"/></svg>ابحث في الأدوات…</div>
+            </div>
+            <div class="body">
+              <div class="feat">
+                <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-clock"/></svg></div>
+                <div class="fx"><b>الفجر</b><s>القاهرة · بعد ٤١ دقيقة</s></div>
+                <div class="big">٤:١٢</div>
+              </div>
+
+              <p class="grp">يومي</p>
+              <div class="rows">
+                <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-sunmoon"/></svg></div><div class="rtxt"><b>أذكار الصباح والمساء</b><s>لم تُقرأ اليوم</s></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#i-chev"/></svg></div>
+                <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-beads"/></svg></div><div class="rtxt"><b>المسبحة الرقمية</b></div><span class="state">٣٣</span></div>
+                <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-chart"/></svg></div><div class="rtxt"><b>سجل القراءة</b></div><span class="state">١٢ يومًا</span></div>
+                <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-tv"/></svg></div><div class="rtxt"><b>البث المرئي المباشر</b><s>مكة · المدينة</s></div><span class="state">مباشر</span></div>
+              </div>
+
+              <div class="gap"></div>
+              <p class="grp">اقرأ واستمع</p>
+              <div class="g4">
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-hands"/></svg></div><span>الأدعية</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-star"/></svg></div><span>أسماء الله</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-shield"/></svg></div><span>حصن المسلم</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-book"/></svg></div><span>حديث اليوم</span></div>
+              </div>
+
+              <div class="gap"></div>
+              <p class="grp">أدوات</p>
+              <div class="g4">
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-compass"/></svg></div><span>القبلة</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-coins"/></svg></div><span>الزكاة</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-moon"/></svg></div><span>الصيام</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-calendar"/></svg></div><span>المناسبات</span></div>
+              </div>
+            </div>
+            <div class="nav">
+              <div class="nv on"><div class="pillbg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-dots"/></svg></div><span>أخرى</span></div>
+              <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-book"/></svg><span>المصحف</span></div>
+              <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-radio"/></svg><span>راديو</span></div>
+              <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-head"/></svg><span>القرآن</span></div>
+              <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-home"/></svg><span>الرئيسية</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption>Mix · AR · light</figcaption>
+      </figure>
+
+      <!-- MIX · AR dark -->
+      <figure>
+        <div class="ph dk ar mixframe">
+          <div class="screen">
+            <div class="sb"><span>١١:٣٣</span><span>▮ ▲ ⌁</span></div>
+            <div class="hero">
+              <div class="hero-top">
+                <div class="avatar"></div><h3>المزيد</h3>
+                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-trophy"/></svg>
+                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-gear"/></svg>
+              </div>
+              <div class="search"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#i-search"/></svg>ابحث في الأدوات…</div>
+            </div>
+            <div class="body">
+              <div class="feat">
+                <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-clock"/></svg></div>
+                <div class="fx"><b>الفجر</b><s>القاهرة · بعد ٤١ دقيقة</s></div>
+                <div class="big">٤:١٢</div>
+              </div>
+
+              <p class="grp">يومي</p>
+              <div class="rows">
+                <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-sunmoon"/></svg></div><div class="rtxt"><b>أذكار الصباح والمساء</b><s>لم تُقرأ اليوم</s></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#i-chev"/></svg></div>
+                <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-beads"/></svg></div><div class="rtxt"><b>المسبحة الرقمية</b></div><span class="state">٣٣</span></div>
+                <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-chart"/></svg></div><div class="rtxt"><b>سجل القراءة</b></div><span class="state">١٢ يومًا</span></div>
+                <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-tv"/></svg></div><div class="rtxt"><b>البث المرئي المباشر</b><s>مكة · المدينة</s></div><span class="state">مباشر</span></div>
+              </div>
+
+              <div class="gap"></div>
+              <p class="grp">اقرأ واستمع</p>
+              <div class="g4">
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-hands"/></svg></div><span>الأدعية</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-star"/></svg></div><span>أسماء الله</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-shield"/></svg></div><span>حصن المسلم</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-book"/></svg></div><span>حديث اليوم</span></div>
+              </div>
+
+              <div class="gap"></div>
+              <p class="grp">أدوات</p>
+              <div class="g4">
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-compass"/></svg></div><span>القبلة</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-coins"/></svg></div><span>الزكاة</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-moon"/></svg></div><span>الصيام</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-calendar"/></svg></div><span>المناسبات</span></div>
+              </div>
+            </div>
+            <div class="nav">
+              <div class="nv on"><div class="pillbg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-dots"/></svg></div><span>أخرى</span></div>
+              <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-book"/></svg><span>المصحف</span></div>
+              <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-radio"/></svg><span>راديو</span></div>
+              <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-head"/></svg><span>القرآن</span></div>
+              <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-home"/></svg><span>الرئيسية</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption>Mix · AR · dark</figcaption>
+      </figure>
+
+      <!-- MIX · EN light -->
+      <figure>
+        <div class="ph lt mixframe">
+          <div class="screen">
+            <div class="sb"><span>11:33</span><span>▮ ▲ ⌁</span></div>
+            <div class="hero">
+              <div class="hero-top">
+                <div class="avatar"></div><h3>More</h3>
+                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-trophy"/></svg>
+                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-gear"/></svg>
+              </div>
+              <div class="search"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#i-search"/></svg>Search tools…</div>
+            </div>
+            <div class="body">
+              <div class="feat">
+                <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-clock"/></svg></div>
+                <div class="fx"><b>Fajr</b><s>Cairo · in 41 minutes</s></div>
+                <div class="big">4:12</div>
+              </div>
+
+              <p class="grp">Daily</p>
+              <div class="rows">
+                <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-sunmoon"/></svg></div><div class="rtxt"><b>Morning &amp; Evening Athkar</b><s>Not read today</s></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#i-chev"/></svg></div>
+                <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-beads"/></svg></div><div class="rtxt"><b>Digital Tasbih</b></div><span class="state">33</span></div>
+                <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-chart"/></svg></div><div class="rtxt"><b>Reading Progress</b></div><span class="state">12 days</span></div>
+                <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-tv"/></svg></div><div class="rtxt"><b>Live Streaming</b><s>Makkah · Madinah</s></div><span class="state">LIVE</span></div>
+              </div>
+
+              <div class="gap"></div>
+              <p class="grp">Read &amp; Listen</p>
+              <div class="g4">
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-hands"/></svg></div><span>Duas</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-star"/></svg></div><span>Names</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-shield"/></svg></div><span>Hisn</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-book"/></svg></div><span>Hadith</span></div>
+              </div>
+
+              <div class="gap"></div>
+              <p class="grp">Tools</p>
+              <div class="g4">
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-compass"/></svg></div><span>Qibla</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-coins"/></svg></div><span>Zakat</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-moon"/></svg></div><span>Fasting</span></div>
+                <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-calendar"/></svg></div><span>Events</span></div>
+              </div>
+            </div>
+            <div class="nav">
+              <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-home"/></svg><span>Home</span></div>
+              <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-head"/></svg><span>Quran</span></div>
+              <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-radio"/></svg><span>Radio</span></div>
+              <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-book"/></svg><span>Mushaf</span></div>
+              <div class="nv on"><div class="pillbg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-dots"/></svg></div><span>More</span></div>
+            </div>
+          </div>
+        </div>
+        <figcaption>Mix · EN · light</figcaption>
+      </figure>
+    </div>
+
+    <p class="note">
+      <b>Two calls worth naming.</b> <i>Live Streaming</i> moved up into the rows because it has the
+      one piece of state a user acts on — whether Makkah is on air right now — even though it isn't
+      a “daily” tool in the ordinary sense; the group is really <i>things that change</i>.
+      And the four stateless tiles went to 4-across rather than B's 3-across, which is what buys
+      the room for the context card without pushing <i>Tools</i> below the fold.
+    </p>
+  </section>
+
   <!-- ============================ A ============================ -->
   <section>
     <div class="sec-head">
       <h2>A · Grouped rows</h2>
-      <span class="tag pick">recommended</span>
+      <span class="tag alt">source · rows + state</span>
     </div>
     <p class="lede">
       Three named groups, compact 52dp rows, and a right-hand slot that can carry live state.
@@ -613,7 +840,7 @@
   <section>
     <div class="sec-head">
       <h2>B · Sectioned grid</h2>
-      <span class="tag alt">lowest risk</span>
+      <span class="tag alt">source · groups + tiles</span>
     </div>
     <p class="lede">
       The same grid users already know, but grouped and tightened: 92dp tiles instead of 132dp,
@@ -782,7 +1009,7 @@
   <section>
     <div class="sec-head">
       <h2>C · Context first</h2>
-      <span class="tag alt">boldest</span>
+      <span class="tag alt">source · context card + density</span>
     </div>
     <p class="lede">
       Opens with what the user actually came for — the next prayer, drawn from the location and
@@ -985,12 +1212,15 @@
     </div>
 
     <p class="note">
-      <b>My pick is A.</b> The page's job is finding one of thirteen-and-growing tools, and rows
-      are the only one of these three that can carry live state — next prayer, athkar read or not,
-      reading streak — which turns a drawer into something worth opening. <b>B</b> is the safe
-      choice if you'd rather not spend users' muscle memory. <b>C</b> is the most striking but
-      duplicates the home screen's prayer card and needs pin storage plus an edit mode before it
-      can ship. Nothing here is built yet — say which one and I'll write the spec.
+      <b>Build order for the mix.</b> The context card and the group headers are the cheap half —
+      the prayer data is already in <code>PrayerSettings</code> after the auto-location work, and
+      grouping is two new strings per language in <code>OtherCategoryListLanguageClass</code>.
+      The row/tile split is the real work: <code>OtherCategoryFragment</code> currently drives one
+      uniform <code>GridLayoutManager</code>, so it needs a two-view-type adapter and a
+      <code>SpanSizeLookup</code> that gives rows the full span and tiles a quarter each.
+      Surfacing the existing <code>SearchView</code> and moving the athkar bubble's rest position
+      are independent of the layout and could land first.
+      Nothing here is built yet — say go and I'll write the spec.
     </p>
   </section>
 
