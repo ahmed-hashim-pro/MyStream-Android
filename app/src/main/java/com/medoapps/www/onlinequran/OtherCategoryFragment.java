@@ -79,10 +79,13 @@ public class OtherCategoryFragment extends Fragment implements MoreAdapter.Liste
     }
 
     private void setupHero(View root) {
-        // apply() is the terminal call — title()/avatar() only stage values.
+        // apply() is the terminal call — title() only stages the value.
+        // compact() = variant D, a single toolbar row. Without it the controller
+        // falls through to the tall identity band, which is built for detail
+        // screens and leaves a two-tier header with dead space on a nav root.
         // No back arrow: this is a bottom-nav root, not a detail screen.
         hero = HeroController.attach(root, getActivity())
-                .avatar(R.mipmap.ic_launcher_new_transparent9)
+                .compact()
                 .title(R.string.more_tab_header)
                 .action(R.drawable.outline_emoji_events_24, () -> {
                     if (getActivity() instanceof MainActivity) {
@@ -93,6 +96,17 @@ public class OtherCategoryFragment extends Fragment implements MoreAdapter.Liste
                         () -> startActivity(new Intent(getContext(), Settings.class)))
                 .search(query -> viewModel.onQueryChanged(query));
         hero.apply();
+
+        // The iconified SearchView collapses to a lens at the start of the toolbar,
+        // which is exactly where compact()'s inline title begins — the title lands
+        // on top of it. This screen has repeatedly regressed that way, so inset the
+        // title past the lens instead of editing hero_static (shared by 11 screens).
+        View inline = root.findViewById(R.id.heroInline);
+        if (inline != null && inline.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) inline.getLayoutParams();
+            lp.setMarginStart(getResources().getDimensionPixelSize(R.dimen.more_hero_title_inset));
+            inline.setLayoutParams(lp);
+        }
     }
 
     private void setupList(View root) {

@@ -129,4 +129,6 @@
     <dimen name="more_hairline">1dp</dimen>
     <!-- clears MainActivity's floating bottom nav, which overlays this fragment -->
     <dimen name="more_list_bottom_pad">104dp</dimen>
+    <!-- clears the iconified search lens so the compact title cannot sit on it -->
+    <dimen name="more_hero_title_inset">56dp</dimen>
 </resources>
