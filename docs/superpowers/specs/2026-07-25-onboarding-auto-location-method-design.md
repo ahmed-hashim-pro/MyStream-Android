@@ -79,21 +79,27 @@ public final class PrayerLocaleDefaults {
 
 **Offline fallback** (`forCoordinates`) — coarse bounding boxes used only when reverse
 geocoding yields no country code. **Evaluated top-to-bottom in exactly the order below; first
-match wins.** The order matters: the Saudi and Egyptian boxes overlap around lng 34–36, and
-listing Saudi first is what makes that overlap resolve correctly.
+match wins.** Order is load-bearing: the boxes overlap, and the narrower Gulf box must be
+tested before the wide Saudi one or Dubai (lng 55.3) would be swallowed by it.
 
-| Box (lat / lng) | Result |
-|---|---|
-| 16..32 / 34..56 | `UMM_AL_QURA` |
-| 22..30 / 47..60 | `DUBAI` |
-| 5..38 / 60..92 | `KARACHI` + `HANAFI` |
-| 20..38 / −18..36 | `EGYPTIAN` |
-| −11..8 / 94..142 | `SINGAPORE` |
-| 15..72 / −170..−50 | `NORTH_AMERICA` |
-| *(no match)* | `MUSLIM_WORLD_LEAGUE` |
+| # | Box (lat / lng) | Result |
+|---|---|---|
+| 1 | 22..27 / 50..60 | `DUBAI` |
+| 2 | 16..32 / 34..56 | `UMM_AL_QURA` |
+| 3 | 5..38 / 60..92 | `KARACHI` + `HANAFI` |
+| 4 | 20..38 / −18..36 | `EGYPTIAN` |
+| 5 | −11..8 / 94..142 | `SINGAPORE` |
+| 6 | 15..72 / −170..−50 | `NORTH_AMERICA` |
+| — | *(no match)* | `MUSLIM_WORLD_LEAGUE` |
+
+Worked check: Makkah (21.4/39.8)→2, Dubai (25.2/55.3)→1, Cairo (30.0/31.2)→4,
+Karachi (24.9/67.0)→3, Jakarta (−6.2/106.8)→5, Toronto (43.7/−79.4)→6, London→default.
 
 These are intentionally coarse — they exist so a first run with no network still beats a blind
-`UMM_AL_QURA`, not to be authoritative. The geocoded country always wins when available.
+`UMM_AL_QURA`, not to be authoritative. The geocoded country always wins when available. Known
+limitation: Turkey resolves to `MWL`+`SHAFI` on this path (the country path correctly gives
+`HANAFI`), and Dammam falls in the Gulf box rather than Saudi. Both are acceptable for a
+network-less fallback.
 
 ### 2. `athan/PrayerSettings.java` — two new prefs
 
