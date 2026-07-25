@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>More page — FROZEN mockup · My Stream</title>
+<style>
+  /* =====================================================================
+     FROZEN MOCKUP — More page ("The mix")
+     Canvas: 411 x 891 dp (compact window size class), 1dp = 1px here.
+     Self-contained: no external CSS, fonts, images or scripts.
+     Colours below are the app's own tokens, copied from
+     app/src/main/res/values/colors.xml and values-night/colors.xml.
+     This file is the contract. Implementation matches THIS, not the
+     earlier exploration doc in docs/superpowers/mockups/more-page/.
+     ===================================================================== */
+
+  :root {
+    --page:#F2EFE7; --panel:#FFFFFF; --rule:#DDD5C2;
+    --ink:#23201A; --ink-soft:#5F5847; --ink-faint:#8B8371; --accent:#8B6508;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --page:#14161D; --panel:#1B1E27; --rule:#2C303B;
+            --ink:#ECE4D2; --ink-soft:#B7AE97; --ink-faint:#857D6B; --accent:#D4A44C; }
+  }
+  :root[data-theme="dark"] {
+    --page:#14161D; --panel:#1B1E27; --rule:#2C303B;
+    --ink:#ECE4D2; --ink-soft:#B7AE97; --ink-faint:#857D6B; --accent:#D4A44C;
+  }
+  :root[data-theme="light"] {
+    --page:#F2EFE7; --panel:#FFFFFF; --rule:#DDD5C2;
+    --ink:#23201A; --ink-soft:#5F5847; --ink-faint:#8B8371; --accent:#8B6508;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin:0; background:var(--page); color:var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:1460px; margin:0 auto; padding:32px 24px 72px; }
+  h1 { font-size:26px; margin:0 0 6px; font-weight:800; letter-spacing:-.02em; }
+  .sub { margin:0 0 4px; color:var(--ink-soft); font-size:14.5px; max-width:78ch; }
+  .frozen {
+    display:inline-block; margin:14px 0 0; padding:5px 11px; border-radius:3px;
+    background:var(--accent); color:#1A1508; font-size:10.5px; font-weight:800;
+    letter-spacing:.13em; text-transform:uppercase;
+  }
+  .rail { display:flex; gap:28px; overflow-x:auto; padding:26px 2px 8px; }
+  figure { margin:0; flex:0 0 auto; }
+  figcaption {
+    font-size:11px; letter-spacing:.1em; text-transform:uppercase; font-weight:700;
+    color:var(--ink-faint); margin-top:11px; text-align:center;
+  }
+
+  /* ---------- device: exactly 411 x 891 dp ---------- */
+  .ph {
+    width:411px; height:891px; position:relative; overflow:hidden;
+    display:flex; flex-direction:column; border-radius:26px;
+    border:7px solid #0C0E14; box-shadow:0 14px 34px rgba(0,0,0,.26);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .ph.ar { direction:rtl;
+    font-family:"SF Arabic","Geeza Pro","Noto Naskh Arabic","Segoe UI",Tahoma,sans-serif; }
+
+  /* app light theme tokens */
+  .ph.lt {
+    --navy:#1F2A44; --gold:#B8860B; --gold-lo:#E9C778;
+    --bg1:#FFF8EF; --bg2:#F1E0C0;
+    --card:rgba(255,255,255,.72); --stroke:#E6CF9F;
+    --tx1:#5B4A22; --tx2:#7A6A45; --chip:rgba(184,134,11,.11);
+  }
+  /* app dark theme tokens */
+  .ph.dk {
+    --navy:#16203A; --gold:#D4A44C; --gold-lo:#E9C778;
+    --bg1:#1F2A44; --bg2:#0B0F1C;
+    --card:rgba(255,255,255,.055); --stroke:rgba(255,255,255,.13);
+    --tx1:#ECE4D2; --tx2:#B7AE97; --chip:rgba(212,164,76,.14);
+  }
+  .screen { flex:1; min-height:0; display:flex; flex-direction:column;
+            background:linear-gradient(180deg,var(--bg1),var(--bg2)); }
+
+  .sb { height:26px; flex:0 0 26px; background:var(--navy); color:rgba(255,255,255,.9);
+        display:flex; align-items:center; justify-content:space-between;
+        padding:0 14px; font-size:10.5px; font-variant-numeric:tabular-nums; }
+
+  .hero { background:var(--navy); color:#fff; padding:10px 16px 16px;
+          border-bottom-left-radius:18px; border-bottom-right-radius:18px; }
+  .hero-top { display:flex; align-items:center; gap:12px; }
+  .hero h3 { margin:0; font-size:19px; font-weight:700; flex:1; }
+  .ico { width:22px; height:22px; color:var(--gold-lo); flex:0 0 auto; }
+  .avatar { width:30px; height:30px; border-radius:50%; flex:0 0 auto;
+    background:conic-gradient(from 210deg,#6FAF6A,#E0C05A,#C4744A,#5D8FC0,#6FAF6A);
+    border:1.5px solid rgba(255,255,255,.4); }
+  .search { margin-top:12px; height:40px; border-radius:10px;
+    background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.14);
+    display:flex; align-items:center; gap:9px; padding:0 12px;
+    color:rgba(255,255,255,.62); font-size:13.5px; }
+  .search .ico { width:16px; height:16px; color:rgba(255,255,255,.62); }
+
+  .body { flex:1; min-height:0; overflow:hidden; padding:14px 14px 0; }
+
+  .grp { font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+         color:var(--gold); margin:0 4px 8px; display:flex; align-items:center; gap:8px; }
+  .grp::after { content:""; height:1px; flex:1; background:var(--stroke); opacity:.75; }
+  .gap { height:16px; }
+
+  /* context card */
+  .feat { background:var(--navy); border-radius:16px; padding:13px 15px; color:#fff;
+          display:flex; align-items:center; gap:13px; margin-bottom:14px; }
+  .ring { width:46px; height:46px; flex:0 0 46px; border-radius:50%;
+          border:2px solid var(--gold-lo); color:var(--gold-lo);
+          display:flex; align-items:center; justify-content:center; }
+  .ring svg { width:22px; height:22px; }
+  .fx { flex:1; min-width:0; }
+  .fx b { display:block; font-size:15px; font-weight:700; }
+  .fx s { display:block; font-size:11.5px; color:rgba(255,255,255,.66); text-decoration:none; }
+  .big { font-size:21px; font-weight:800; color:var(--gold-lo); font-variant-numeric:tabular-nums; }
+
+  /* stateful rows */
+  .rows { background:var(--card); border:1px solid var(--stroke);
+          border-radius:14px; overflow:hidden; }
+  .row { display:flex; align-items:center; gap:12px; padding:10px 12px;
+         border-bottom:1px solid var(--stroke); min-height:56px; }
+  .row:last-child { border-bottom:0; }
+  .sq { width:36px; height:36px; flex:0 0 36px; border-radius:10px;
+        background:var(--chip); color:var(--gold);
+        display:flex; align-items:center; justify-content:center; }
+  .sq svg { width:20px; height:20px; }
+  .rtxt { flex:1; min-width:0; }
+  .rtxt b { display:block; font-size:14.5px; font-weight:600; color:var(--tx1); }
+  .rtxt s { display:block; font-size:11.5px; color:var(--tx2); text-decoration:none; }
+  .chev { width:15px; height:15px; color:var(--tx2); opacity:.55; flex:0 0 auto; }
+  .ph.ar .chev { transform:scaleX(-1); }
+  .state { font-size:11.5px; font-weight:700; color:var(--gold);
+           font-variant-numeric:tabular-nums; white-space:nowrap; }
+
+  /* stateless tiles, 4 across */
+  .g4 { display:grid; grid-template-columns:repeat(4,1fr); gap:10px 6px; }
+  .mini { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .mini .sq { width:52px; height:52px; flex:0 0 52px; border-radius:16px;
+              border:1px solid var(--stroke); }
+  .mini .sq svg { width:24px; height:24px; }
+  .mini span { font-size:11px; color:var(--tx1); text-align:center;
+               line-height:1.25; font-weight:600; }
+
+  .nav { flex:0 0 56px; margin:8px 10px 10px; border-radius:16px;
+         background:var(--card); border:1px solid var(--stroke);
+         display:flex; align-items:center; justify-content:space-around; padding:0 6px; }
+  .nv { display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--tx2); }
+  .nv svg { width:20px; height:20px; }
+  .nv span { font-size:9.5px; font-weight:600; }
+  .nv.on { color:var(--gold); }
+  .nv.on .pillbg { background:var(--chip); border-radius:999px; padding:3px 14px;
+                   display:flex; align-items:center; justify-content:center; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <g id="i-clock"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></g>
+  <g id="i-tv"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M8 3.5 12 7l4-3.5"/><path d="m11 11 3.2 2-3.2 2z"/></g>
+  <g id="i-compass"><circle cx="12" cy="12" r="9"/><path d="m15.2 8.8-1.9 4.5-4.5 1.9 1.9-4.5z"/></g>
+  <g id="i-sunmoon"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"/></g>
+  <g id="i-beads"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="4.5" r="1.7" fill="currentColor" stroke="none"/><circle cx="19.5" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="19.5" r="1.7" fill="currentColor" stroke="none"/><circle cx="4.5" cy="12" r="1.7" fill="currentColor" stroke="none"/></g>
+  <g id="i-chart"><path d="M4 19h16"/><path d="M7 19v-6M12 19V6M17 19v-9"/></g>
+  <g id="i-hands"><path d="M7 13V6.5a1.5 1.5 0 0 1 3 0V12"/><path d="M10 12V5.2a1.5 1.5 0 0 1 3 0V12"/><path d="M13 12V6.5a1.5 1.5 0 0 1 3 0V15c0 3.3-2 5.5-4.8 5.5S6 18.3 6 15v-2"/></g>
+  <g id="i-star"><path d="m12 3.6 2.5 5.3 5.6.8-4.1 4.1 1 5.8-5-2.8-5 2.8 1-5.8L3.9 9.7l5.6-.8z"/></g>
+  <g id="i-coins"><ellipse cx="12" cy="7" rx="7" ry="3"/><path d="M5 7v5c0 1.7 3.1 3 7 3s7-1.3 7-3V7"/><path d="M5 12v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/></g>
+  <g id="i-moon"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></g>
+  <g id="i-book"><path d="M4 5.5A2 2 0 0 1 6 4h5v15H6a2 2 0 0 0-2 1.5z"/><path d="M20 5.5A2 2 0 0 0 18 4h-5v15h5a2 2 0 0 1 2 1.5z"/></g>
+  <g id="i-calendar"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3.5v3M16 3.5v3"/></g>
+  <g id="i-shield"><path d="M12 3.5 5 6.3v5.2c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9V6.3z"/></g>
+  <g id="i-search"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></g>
+  <g id="i-chev"><path d="m9 5 7 7-7 7"/></g>
+  <g id="i-gear"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M4.5 7.5l2 1.2M17.5 15.3l2 1.2M4.5 16.5l2-1.2M17.5 8.7l2-1.2"/></g>
+  <g id="i-trophy"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 5.5H5.5V7A2.5 2.5 0 0 0 8 9.5M16 5.5h2.5V7A2.5 2.5 0 0 1 16 9.5"/><path d="M12 13v3M9 20h6l-.7-4h-4.6z"/></g>
+  <g id="i-home"><path d="M4 11 12 4l8 7"/><path d="M6.5 9.8V20h11V9.8"/></g>
+  <g id="i-radio"><rect x="3" y="8" width="18" height="11" rx="2"/><path d="m17 3.5-9 4"/><circle cx="8.5" cy="13.5" r="2.6"/><path d="M16 12h2M16 15h2"/></g>
+  <g id="i-head"><path d="M4.5 14v-2a7.5 7.5 0 0 1 15 0v2"/><rect x="3" y="13.5" width="3.6" height="6" rx="1.6"/><rect x="17.4" y="13.5" width="3.6" height="6" rx="1.6"/></g>
+  <g id="i-dots"><circle cx="6" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="18" cy="12" r="1.7" fill="currentColor" stroke="none"/></g>
+</defs></svg>
+
+<div class="wrap">
+  <h1>More page — frozen mockup</h1>
+  <p class="sub">
+    “The mix”: a context card, stateful rows for tools that have state, and 4-across tiles for
+    tools that don't. Canvas is exactly <b>411 × 891 dp</b> — the compact window size class.
+    Implementation matches this file; the earlier multi-option exploration doc is superseded.
+  </p>
+  <p class="sub">
+    Reflects all seven resolved questions: <b>collapsing</b> hero (search collapses with it — the
+    frames below show the expanded state), Live Streaming demoted to a tile, Hadith of the Day
+    promoted to a row so each group lands on a clean multiple of four, no long-press in v1.
+  </p>
+  <span class="frozen">frozen · 2026-07-26 · decisions Q1–Q7 applied</span>
+
+  <div class="rail">
+
+    <!-- ================= AR · LIGHT ================= -->
+    <figure>
+      <div class="ph lt ar">
+        <div class="screen">
+          <div class="sb"><span>١١:٣٣</span><span>▮ ▲ ⌁</span></div>
+          <div class="hero">
+            <div class="hero-top">
+              <div class="avatar"></div><h3>المزيد</h3>
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-trophy"/></svg>
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-gear"/></svg>
+            </div>
+            <div class="search"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#i-search"/></svg>ابحث في الأدوات…</div>
+          </div>
+          <div class="body">
+            <div class="feat">
+              <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-clock"/></svg></div>
+              <div class="fx"><b>الفجر</b><s>القاهرة · بعد ٤١ دقيقة</s></div>
+              <div class="big">٤:١٢</div>
+            </div>
+
+            <p class="grp">يومي</p>
+            <div class="rows">
+              <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-sunmoon"/></svg></div><div class="rtxt"><b>أذكار الصباح والمساء</b><s>لم تُقرأ اليوم</s></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#i-chev"/></svg></div>
+              <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-beads"/></svg></div><div class="rtxt"><b>المسبحة الرقمية</b></div><span class="state">٣٣</span></div>
+              <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-chart"/></svg></div><div class="rtxt"><b>سجل القراءة</b></div><span class="state">١٢ يومًا</span></div>
+              <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-book"/></svg></div><div class="rtxt"><b>حديث اليوم</b><s>رياض الصالحين</s></div><span class="state">جديد</span></div>
+            </div>
+
+            <div class="gap"></div>
+            <p class="grp">اقرأ واستمع</p>
+            <div class="g4">
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-hands"/></svg></div><span>الأدعية</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-star"/></svg></div><span>أسماء الله</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-shield"/></svg></div><span>حصن المسلم</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-tv"/></svg></div><span>البث المباشر</span></div>
+            </div>
+
+            <div class="gap"></div>
+            <p class="grp">أدوات</p>
+            <div class="g4">
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-compass"/></svg></div><span>القبلة</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-coins"/></svg></div><span>الزكاة</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-moon"/></svg></div><span>الصيام</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-calendar"/></svg></div><span>المناسبات</span></div>
+            </div>
+          </div>
+          <div class="nav">
+            <div class="nv on"><div class="pillbg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-dots"/></svg></div><span>أخرى</span></div>
+            <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-book"/></svg><span>المصحف</span></div>
+            <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-radio"/></svg><span>راديو</span></div>
+            <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-head"/></svg><span>القرآن</span></div>
+            <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-home"/></svg><span>الرئيسية</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption>AR · light · 411×891</figcaption>
+    </figure>
+
+    <!-- ================= AR · DARK ================= -->
+    <figure>
+      <div class="ph dk ar">
+        <div class="screen">
+          <div class="sb"><span>١١:٣٣</span><span>▮ ▲ ⌁</span></div>
+          <div class="hero">
+            <div class="hero-top">
+              <div class="avatar"></div><h3>المزيد</h3>
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-trophy"/></svg>
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-gear"/></svg>
+            </div>
+            <div class="search"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#i-search"/></svg>ابحث في الأدوات…</div>
+          </div>
+          <div class="body">
+            <div class="feat">
+              <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-clock"/></svg></div>
+              <div class="fx"><b>الفجر</b><s>القاهرة · بعد ٤١ دقيقة</s></div>
+              <div class="big">٤:١٢</div>
+            </div>
+
+            <p class="grp">يومي</p>
+            <div class="rows">
+              <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-sunmoon"/></svg></div><div class="rtxt"><b>أذكار الصباح والمساء</b><s>لم تُقرأ اليوم</s></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#i-chev"/></svg></div>
+              <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-beads"/></svg></div><div class="rtxt"><b>المسبحة الرقمية</b></div><span class="state">٣٣</span></div>
+              <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-chart"/></svg></div><div class="rtxt"><b>سجل القراءة</b></div><span class="state">١٢ يومًا</span></div>
+              <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-book"/></svg></div><div class="rtxt"><b>حديث اليوم</b><s>رياض الصالحين</s></div><span class="state">جديد</span></div>
+            </div>
+
+            <div class="gap"></div>
+            <p class="grp">اقرأ واستمع</p>
+            <div class="g4">
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-hands"/></svg></div><span>الأدعية</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-star"/></svg></div><span>أسماء الله</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-shield"/></svg></div><span>حصن المسلم</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-tv"/></svg></div><span>البث المباشر</span></div>
+            </div>
+
+            <div class="gap"></div>
+            <p class="grp">أدوات</p>
+            <div class="g4">
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-compass"/></svg></div><span>القبلة</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-coins"/></svg></div><span>الزكاة</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-moon"/></svg></div><span>الصيام</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-calendar"/></svg></div><span>المناسبات</span></div>
+            </div>
+          </div>
+          <div class="nav">
+            <div class="nv on"><div class="pillbg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-dots"/></svg></div><span>أخرى</span></div>
+            <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-book"/></svg><span>المصحف</span></div>
+            <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-radio"/></svg><span>راديو</span></div>
+            <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-head"/></svg><span>القرآن</span></div>
+            <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-home"/></svg><span>الرئيسية</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption>AR · dark · 411×891</figcaption>
+    </figure>
+
+    <!-- ================= EN · LIGHT ================= -->
+    <figure>
+      <div class="ph lt">
+        <div class="screen">
+          <div class="sb"><span>11:33</span><span>▮ ▲ ⌁</span></div>
+          <div class="hero">
+            <div class="hero-top">
+              <div class="avatar"></div><h3>More</h3>
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-trophy"/></svg>
+              <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-gear"/></svg>
+            </div>
+            <div class="search"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#i-search"/></svg>Search tools…</div>
+          </div>
+          <div class="body">
+            <div class="feat">
+              <div class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-clock"/></svg></div>
+              <div class="fx"><b>Fajr</b><s>Cairo · in 41 minutes</s></div>
+              <div class="big">4:12</div>
+            </div>
+
+            <p class="grp">Daily</p>
+            <div class="rows">
+              <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-sunmoon"/></svg></div><div class="rtxt"><b>Morning &amp; Evening Athkar</b><s>Not read today</s></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#i-chev"/></svg></div>
+              <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-beads"/></svg></div><div class="rtxt"><b>Digital Tasbih</b></div><span class="state">33</span></div>
+              <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-chart"/></svg></div><div class="rtxt"><b>Reading Progress</b></div><span class="state">12 days</span></div>
+              <div class="row"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-book"/></svg></div><div class="rtxt"><b>Hadith of the Day</b><s>Riyad as-Salihin</s></div><span class="state">NEW</span></div>
+            </div>
+
+            <div class="gap"></div>
+            <p class="grp">Read &amp; Listen</p>
+            <div class="g4">
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-hands"/></svg></div><span>Duas</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-star"/></svg></div><span>Names</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-shield"/></svg></div><span>Hisn</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-tv"/></svg></div><span>Live</span></div>
+            </div>
+
+            <div class="gap"></div>
+            <p class="grp">Tools</p>
+            <div class="g4">
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-compass"/></svg></div><span>Qibla</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-coins"/></svg></div><span>Zakat</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-moon"/></svg></div><span>Fasting</span></div>
+              <div class="mini"><div class="sq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-calendar"/></svg></div><span>Events</span></div>
+            </div>
+          </div>
+          <div class="nav">
+            <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-home"/></svg><span>Home</span></div>
+            <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-head"/></svg><span>Quran</span></div>
+            <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-radio"/></svg><span>Radio</span></div>
+            <div class="nv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-book"/></svg><span>Mushaf</span></div>
+            <div class="nv on"><div class="pillbg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><use href="#i-dots"/></svg></div><span>More</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption>EN · light · 411×891</figcaption>
+    </figure>
+
+  </div>
+</div>
+</body>
+</html>
