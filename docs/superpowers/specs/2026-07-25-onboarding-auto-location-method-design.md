@@ -123,10 +123,22 @@ public static void apply(Context c, double lat, double lng, String city, String 
 ```
 
 1. `PrayerSettings.setLocation(c, lat, lng, city)` (unchanged existing contract)
-2. If `isAutoMethodEnabled(c)` and the resolved country ≠ `getAutoMethodCountry(c)`:
-   resolve via `PrayerLocaleDefaults` (country first, coordinates as fallback), then
-   `setCalculationMethod` + `setMadhab` + `setAutoMethodCountry`
+2. If `isAutoMethodEnabled(c)`, ask `PrayerLocaleDefaults.resolve(storedKey, countryCode, lat, lng)`
+   what to write; when it returns non-null, `setCalculationMethod` + `setMadhab` +
+   `setAutoMethodCountry`
 3. `AthanScheduler.rescheduleAll(c)`
+
+The applier is deliberately nothing but read/write glue — the whole decision lives in the pure
+class so it is unit-testable without Robolectric.
+
+**The two key namespaces (learned the hard way).** `auto_method_country` holds either a geocoded
+ISO country or a coordinate-derived key, and the two MUST stay distinguishable — hence the
+`coord:` prefix on the latter. An un-namespaced coordinate key alternates with the country key
+for the same place (Amman: `JO`→EGYPTIAN online vs the Saudi box→UMM_AL_QURA offline; Antalya:
+`TR`→MWL+HANAFI vs the Egyptian box→EGYPTIAN+SHAFI), and every alternation rewrites the
+settings — flipping prayer times, and in Turkey's case swinging Asr by roughly an hour, purely
+with connectivity. `resolve()` therefore also refuses to let a network-less fix downgrade an
+already-known country: the boxes serve a cold start only.
 
 This is why the refactor reaches all three screens: auto-update-on-travel only works if the
 existing screens' fixes go through the same funnel.
@@ -147,13 +159,24 @@ existing screens' fixes go through the same funnel.
     `getLastLocation()`, then `Geocoder` off the main thread for city + country code.
   - The `LOC` row's subtitle becomes the detected city once resolved.
   - A `MaterialSwitch` for auto-update sits directly beneath the location row, bound to
-    `OnboardingState.autoMethodEnabled`.
+    `OnboardingState.autoMethodEnabled` **and written straight to the pref on toggle**. The
+    state-only write is not enough: the fetch happens on this very page and `LocationApplier`
+    reads the pref, so a user who switches auto-update off and then grants location would
+    still get a method applied — and the seeded `auto_method_country` would make it permanent.
+  - `WelcomeActivity` seeds `autoMethodEnabled` from the gateway alongside the other toggles,
+    so a re-run reflects a user who previously turned it off.
 
 ### 5. `AthanSettingsActivity`
 
 - Same auto-update `MaterialSwitch`, in the existing location section next to the
   auto/manual mode control.
 - Its existing `PrayerSettings.setLocation(...)` call site routes through `LocationApplier`.
+- After a fix, the method spinner and madhab radio are re-synced from the stored settings.
+  Without that they keep showing the pre-fix pick while the prefs say otherwise, and the user
+  cannot re-select the value on screen (the listeners no-op when it already matches). Both
+  listeners short-circuit on an unchanged value, so the re-sync cannot loop or reschedule.
+- `CityResult` carries the geocoded country so a manually searched city picks its real method
+  instead of falling back to the coarse boxes (Nominatim supplies none, so that path stays `""`).
 
 ### 6. `PrayerTimesActivity`
 
