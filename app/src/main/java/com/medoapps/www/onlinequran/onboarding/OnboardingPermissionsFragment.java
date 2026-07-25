@@ -4,6 +4,9 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,12 +28,21 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.location.CurrentLocationRequest;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.medoapps.www.onlinequran.R;
 import com.medoapps.www.onlinequran.athan.AthanScheduler;
+import com.medoapps.www.onlinequran.athan.LocationApplier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Final onboarding page: a per-feature permission gate. Each feature the user kept on lists its
@@ -55,6 +68,13 @@ public class OnboardingPermissionsFragment extends Fragment {
     private Button enterApp;
     private final List<PermRow> rows = new ArrayList<>();
 
+    private FusedLocationProviderClient fusedLocationClient;
+    private CancellationTokenSource cancellationTokenSource;
+    private ExecutorService executor;
+    /** One fetch per granted state — refresh() runs on every resume and toggle. */
+    private boolean locationFetchStarted;
+    private TextView locationDetail; // the LOC row's subtitle, retitled to the city
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -66,6 +86,9 @@ public class OnboardingPermissionsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         runtimeLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestMultiplePermissions(), result -> refresh());
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
+        cancellationTokenSource = new CancellationTokenSource();
+        executor = Executors.newSingleThreadExecutor();
     }
 
     @Nullable
@@ -81,6 +104,7 @@ public class OnboardingPermissionsFragment extends Fragment {
 
         addRow((LinearLayout) athanRows, NOTIF, R.string.onb_perm_notif_name, R.string.onb_perm_notif_why);
         addRow((LinearLayout) athanRows, LOC, R.string.onb_perm_loc_name, R.string.onb_perm_loc_why);
+        addAutoUpdateRow((LinearLayout) athanRows);
         addRow((LinearLayout) athanRows, EXACT, R.string.onb_perm_exact_name, R.string.onb_perm_exact_why);
         addRow((LinearLayout) athanRows, BATT, R.string.onb_perm_batt_name, R.string.onb_perm_batt_why);
         addRow((LinearLayout) bubbleRows, OVERLAY, R.string.onb_perm_overlay_name, R.string.onb_perm_overlay_why);
@@ -121,6 +145,123 @@ public class OnboardingPermissionsFragment extends Fragment {
         boolean ready = athanOk && bubbleOk;
         enterApp.setEnabled(ready);
         enterApp.setAlpha(ready ? 1f : 0.5f);
+
+        // Permission granted is not the same as location known: fetch the fix here so a
+        // user who never opens Prayer Times still gets their own times, not Makkah's.
+        if (isGranted(LOC) && !locationFetchStarted) {
+            locationFetchStarted = true;
+            if (locationDetail != null) {
+                locationDetail.setText(R.string.onb_perm_loc_detecting);
+            }
+            fetchLocation();
+        }
+    }
+
+    // -------------------------------------------------------------- location
+
+    /**
+     * Prefer a real current fix over the often-stale cached one; accept a recent cached
+     * fix (≤5 min) immediately, otherwise wait up to 10 s, then fall back to the last
+     * known location — a stale fix still beats the engine's Makkah fallback.
+     */
+    private void fetchLocation() {
+        if (!isGranted(LOC)) return;
+        int priority = hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                ? Priority.PRIORITY_HIGH_ACCURACY
+                : Priority.PRIORITY_BALANCED_POWER_ACCURACY;
+
+        CurrentLocationRequest request = new CurrentLocationRequest.Builder()
+                .setPriority(priority)
+                .setMaxUpdateAgeMillis(5 * 60 * 1000)
+                .setDurationMillis(10 * 1000)
+                .build();
+
+        fusedLocationClient.getCurrentLocation(request, cancellationTokenSource.getToken())
+                .addOnSuccessListener(location -> {
+                    if (location != null) {
+                        onLocationFix(location);
+                    } else {
+                        fallbackToLastLocation();
+                    }
+                })
+                .addOnFailureListener(e -> fallbackToLastLocation());
+    }
+
+    private void fallbackToLastLocation() {
+        if (!isGranted(LOC)) return;
+        fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+            if (location != null) {
+                onLocationFix(location);
+            } else if (isAdded() && locationDetail != null) {
+                // nothing to show: put the original rationale back
+                locationDetail.setText(R.string.onb_perm_loc_why);
+            }
+        });
+    }
+
+    /**
+     * Reverse-geocode off the main thread, then hand the fix to {@link LocationApplier}.
+     * The write uses the application context so it completes even if the user has already
+     * swiped past this page.
+     */
+    private void onLocationFix(Location location) {
+        final double lat = location.getLatitude();
+        final double lng = location.getLongitude();
+        final Context appContext = requireContext().getApplicationContext();
+        executor.execute(() -> {
+            String city = "";
+            String country = "";
+            try {
+                Geocoder geocoder = new Geocoder(appContext, Locale.getDefault());
+                List<Address> result = geocoder.getFromLocation(lat, lng, 1);
+                if (result != null && !result.isEmpty()) {
+                    Address address = result.get(0);
+                    if (address.getCountryCode() != null) {
+                        country = address.getCountryCode();
+                    }
+                    if (address.getLocality() != null) {
+                        city = address.getLocality();
+                    } else if (address.getSubAdminArea() != null) {
+                        city = address.getSubAdminArea();
+                    } else if (address.getAdminArea() != null) {
+                        city = address.getAdminArea();
+                    }
+                }
+            } catch (Exception ignored) {
+                // Reverse geocoding needs network and is best-effort only; LocationApplier
+                // falls back to coarse coordinates when the country comes back empty.
+            }
+            LocationApplier.apply(appContext, lat, lng, city, country);
+
+            final String label = city.isEmpty()
+                    ? String.format(Locale.US, "%.3f, %.3f", lat, lng)
+                    : city;
+            final View view = getView();
+            if (view != null) {
+                view.post(() -> {
+                    if (isAdded() && locationDetail != null) {
+                        locationDetail.setText(label);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        // the fetch may outlive the page; stop it rather than leak a callback into a dead view
+        if (cancellationTokenSource != null) {
+            cancellationTokenSource.cancel();
+        }
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (executor != null) {
+            executor.shutdownNow();
+        }
+        super.onDestroy();
     }
 
     private boolean isGranted(String key) {
@@ -254,7 +395,49 @@ public class OnboardingPermissionsFragment extends Fragment {
         row.addView(grantBtn);
 
         parent.addView(row);
-        rows.add(new PermRow(key, granted, grantBtn));
+        rows.add(new PermRow(key, granted, grantBtn, why));
+        // keep a handle on the location row's subtitle so the detected city can replace it
+        if (LOC.equals(key)) {
+            locationDetail = why;
+        }
+    }
+
+    /**
+     * The auto-update switch, built programmatically so it can sit immediately under
+     * the LOC row (the rows themselves are added in code, so XML can't position it).
+     */
+    private void addAutoUpdateRow(LinearLayout parent) {
+        Context c = requireContext();
+        LinearLayout row = new LinearLayout(c);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setPadding(0, dp(4), 0, dp(4));
+
+        LinearLayout textCol = new LinearLayout(c);
+        textCol.setOrientation(LinearLayout.VERTICAL);
+        textCol.setLayoutParams(new LinearLayout.LayoutParams(0,
+                ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+
+        TextView name = new TextView(c);
+        name.setText(R.string.onb_perm_loc_auto_update);
+        name.setTextColor(getResources().getColor(R.color.onb_text_primary));
+        name.setTextSize(14);
+        textCol.addView(name);
+
+        TextView why = new TextView(c);
+        why.setText(R.string.onb_perm_loc_auto_update_why);
+        why.setTextColor(getResources().getColor(R.color.onb_text_secondary));
+        why.setTextSize(11);
+        textCol.addView(why);
+        row.addView(textCol);
+
+        MaterialSwitch toggle = new MaterialSwitch(c);
+        toggle.setChecked(host.getOnboardingState().autoMethodEnabled);
+        toggle.setOnCheckedChangeListener((CompoundButton b, boolean checked) ->
+                host.getOnboardingState().autoMethodEnabled = checked);
+        row.addView(toggle);
+
+        parent.addView(row);
     }
 
     private int dp(int value) {
@@ -265,10 +448,12 @@ public class OnboardingPermissionsFragment extends Fragment {
         final String key;
         final TextView granted;
         final TextView grant;
-        PermRow(String key, TextView granted, TextView grant) {
+        final TextView why;
+        PermRow(String key, TextView granted, TextView grant, TextView why) {
             this.key = key;
             this.granted = granted;
             this.grant = grant;
+            this.why = why;
         }
     }
 }

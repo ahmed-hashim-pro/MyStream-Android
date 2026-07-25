@@ -1248,6 +1248,9 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="onb_perm_notif_why">Athan &amp; daily reminders</string>
     <string name="onb_perm_loc_name">Location</string>
     <string name="onb_perm_loc_why">Calculate prayer times for your place</string>
+    <string name="onb_perm_loc_auto_update">Auto-update from my location</string>
+    <string name="onb_perm_loc_auto_update_why">Keep prayer times and the calculation method correct when you travel</string>
+    <string name="onb_perm_loc_detecting">Detecting your location…</string>
     <string name="onb_perm_exact_name">Exact alarms</string>
     <string name="onb_perm_exact_why">Athan exactly on time</string>
     <string name="onb_perm_batt_name">Unrestricted battery</string>

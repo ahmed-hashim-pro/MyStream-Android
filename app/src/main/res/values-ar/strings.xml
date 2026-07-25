@@ -920,6 +920,9 @@
     <string name="onb_perm_notif_why">الأذان والتذكيرات اليومية</string>
     <string name="onb_perm_loc_name">الموقع</string>
     <string name="onb_perm_loc_why">حساب مواقيت الصلاة لمكانك</string>
+    <string name="onb_perm_loc_auto_update">التحديث التلقائي حسب موقعي</string>
+    <string name="onb_perm_loc_auto_update_why">تحديث مواقيت الصلاة وطريقة الحساب تلقائيًا عند السفر</string>
+    <string name="onb_perm_loc_detecting">جارٍ تحديد موقعك…</string>
     <string name="onb_perm_exact_name">المنبهات الدقيقة</string>
     <string name="onb_perm_exact_why">الأذان في وقته تماماً</string>
     <string name="onb_perm_batt_name">بطارية بلا قيود</string>
