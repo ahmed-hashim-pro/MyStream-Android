@@ -117,4 +117,63 @@ public final class PrayerLocaleDefaults {
         String previous = lastApplied == null ? "" : lastApplied.trim();
         return !resolved.trim().equalsIgnoreCase(previous);
     }
+
+    /**
+     * Marks a remembered key as coming from the coarse coordinate boxes rather than a real
+     * geocoded country. Both kinds share one pref, so they must stay distinguishable: an
+     * un-namespaced coordinate key would alternate with the country key for the same place
+     * (e.g. "JO" online vs "UMM_AL_QURA" offline in Amman) and every alternation would
+     * rewrite the method, flipping the user's prayer times with network availability.
+     */
+    public static final String COORD_PREFIX = "coord:";
+
+    /** What the auto-pick should write, plus the key to remember it by. */
+    public static final class Resolution {
+        public final Defaults defaults;
+        public final String key;
+
+        Resolution(Defaults defaults, String key) {
+            this.defaults = defaults;
+            this.key = key;
+        }
+    }
+
+    /** True when a real geocoded country has already been recorded. */
+    public static boolean isCountryKey(String storedKey) {
+        return storedKey != null
+                && !storedKey.trim().isEmpty()
+                && !storedKey.trim().startsWith(COORD_PREFIX);
+    }
+
+    /**
+     * Decide what the automatic pick should write for a fix, or {@code null} to leave the
+     * settings alone.
+     *
+     * A geocoded country is strictly better information than a coarse box, so once one has
+     * been recorded a network-less fix must never downgrade it — that guard is what keeps
+     * the method from flapping as connectivity comes and goes. The boxes only serve a cold
+     * start, before any country is known.
+     *
+     * @param storedKey   the key last applied ({@code ""} when nothing has been)
+     * @param countryCode ISO-3166 alpha-2 from reverse geocoding; null/empty when offline
+     */
+    public static Resolution resolve(String storedKey, String countryCode,
+                                     double lat, double lng) {
+        final boolean geocoded = countryCode != null && !countryCode.trim().isEmpty();
+
+        final Defaults defaults;
+        final String key;
+        if (geocoded) {
+            defaults = forCountry(countryCode);
+            key = countryCode.trim().toUpperCase(Locale.US);
+        } else {
+            if (isCountryKey(storedKey)) {
+                return null;
+            }
+            defaults = forCoordinates(lat, lng);
+            key = COORD_PREFIX + defaults.method;
+        }
+
+        return shouldReapply(storedKey, key) ? new Resolution(defaults, key) : null;
+    }
 }

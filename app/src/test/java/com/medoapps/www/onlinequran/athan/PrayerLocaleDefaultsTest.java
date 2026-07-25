@@ -2,6 +2,8 @@ package com.medoapps.www.onlinequran.athan;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -91,5 +93,100 @@ public class PrayerLocaleDefaultsTest {
         assertFalse(PrayerLocaleDefaults.shouldReapply("EG", null));
         assertFalse(PrayerLocaleDefaults.shouldReapply("EG", ""));
         assertFalse(PrayerLocaleDefaults.shouldReapply("EG", "  "));
+    }
+
+    /**
+     * Regression: the country path and the coordinate path disagree in real places, so if
+     * both wrote a bare key into the same pref the stored value would alternate with network
+     * availability and the method would flap. These are the concrete disagreements that made
+     * the flap possible — LocationApplier namespaces the coordinate key to prevent it.
+     */
+    @Test
+    public void countryAndCoordinatePathsDisagreeInRealPlaces() {
+        // Amman: country JO -> EGYPTIAN, but the coarse Saudi box claims UMM_AL_QURA
+        assertEquals("EGYPTIAN", PrayerLocaleDefaults.forCountry("JO").method);
+        assertEquals("UMM_AL_QURA", PrayerLocaleDefaults.forCoordinates(31.95, 35.93).method);
+
+        // Antalya: country TR -> MWL + HANAFI, coordinates fall in the Egyptian box + SHAFI
+        assertEquals("MUSLIM_WORLD_LEAGUE", PrayerLocaleDefaults.forCountry("TR").method);
+        assertEquals("HANAFI", PrayerLocaleDefaults.forCountry("TR").madhab);
+        assertEquals("EGYPTIAN", PrayerLocaleDefaults.forCoordinates(36.9, 30.7).method);
+        assertEquals("SHAFI", PrayerLocaleDefaults.forCoordinates(36.9, 30.7).madhab);
+    }
+
+    // ------------------------------------------------------------- resolve()
+
+    @Test
+    public void resolve_appliesOnFirstGeocodedFix() {
+        PrayerLocaleDefaults.Resolution r = PrayerLocaleDefaults.resolve("", "EG", 30.04, 31.24);
+        assertNotNull(r);
+        assertEquals("EGYPTIAN", r.defaults.method);
+        assertEquals("SHAFI", r.defaults.madhab);
+        assertEquals("EG", r.key);
+    }
+
+    @Test
+    public void resolve_appliesWhenTheCountryChanges() {
+        PrayerLocaleDefaults.Resolution r = PrayerLocaleDefaults.resolve("EG", "PK", 24.86, 67.01);
+        assertNotNull(r);
+        assertEquals("KARACHI", r.defaults.method);
+        assertEquals("HANAFI", r.defaults.madhab);
+        assertEquals("PK", r.key);
+    }
+
+    @Test
+    public void resolve_doesNothingWhenTheCountryIsUnchanged() {
+        assertNull(PrayerLocaleDefaults.resolve("EG", "EG", 30.04, 31.24));
+        assertNull(PrayerLocaleDefaults.resolve("EG", "eg", 30.04, 31.24));
+    }
+
+    /** Cold start with no network: the coarse boxes are better than nothing. */
+    @Test
+    public void resolve_usesCoordinatesWhenNothingIsKnownYet() {
+        PrayerLocaleDefaults.Resolution r = PrayerLocaleDefaults.resolve("", null, 24.86, 67.01);
+        assertNotNull(r);
+        assertEquals("KARACHI", r.defaults.method);
+        assertEquals(PrayerLocaleDefaults.COORD_PREFIX + "KARACHI", r.key);
+    }
+
+    /**
+     * THE FLAP REGRESSION. In Amman the country path says EGYPTIAN and the coarse box says
+     * UMM_AL_QURA. Once a real country is known, a network-less fix must be ignored entirely
+     * - otherwise the key alternates with connectivity and the method (and in Turkey's case
+     * the madhab, worth ~an hour of Asr) flips back and forth forever.
+     */
+    @Test
+    public void resolve_offlineFixNeverDowngradesAKnownCountry() {
+        assertNull(PrayerLocaleDefaults.resolve("JO", null, 31.95, 35.93));
+        assertNull(PrayerLocaleDefaults.resolve("JO", "", 31.95, 35.93));
+        assertNull(PrayerLocaleDefaults.resolve("JO", "   ", 31.95, 35.93));
+        // Antalya: the flap would swing the madhab, not just the method
+        assertNull(PrayerLocaleDefaults.resolve("TR", null, 36.9, 30.7));
+    }
+
+    /** A coord key is provisional: a later real country must still be allowed to win. */
+    @Test
+    public void resolve_geocodedCountryUpgradesAProvisionalCoordKey() {
+        String coordKey = PrayerLocaleDefaults.COORD_PREFIX + "UMM_AL_QURA";
+        PrayerLocaleDefaults.Resolution r =
+                PrayerLocaleDefaults.resolve(coordKey, "JO", 31.95, 35.93);
+        assertNotNull(r);
+        assertEquals("EGYPTIAN", r.defaults.method);
+        assertEquals("JO", r.key);
+    }
+
+    /** Two offline fixes in the same coarse region must only write once. */
+    @Test
+    public void resolve_offlineIsStableWithinTheSameRegion() {
+        String coordKey = PrayerLocaleDefaults.COORD_PREFIX + "KARACHI";
+        assertNull(PrayerLocaleDefaults.resolve(coordKey, null, 24.86, 67.01));
+    }
+
+    @Test
+    public void isCountryKey_distinguishesTheTwoNamespaces() {
+        assertTrue(PrayerLocaleDefaults.isCountryKey("EG"));
+        assertFalse(PrayerLocaleDefaults.isCountryKey(PrayerLocaleDefaults.COORD_PREFIX + "EGYPTIAN"));
+        assertFalse(PrayerLocaleDefaults.isCountryKey(""));
+        assertFalse(PrayerLocaleDefaults.isCountryKey(null));
     }
 }

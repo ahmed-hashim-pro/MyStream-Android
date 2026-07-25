@@ -443,7 +443,31 @@ public class AthanSettingsActivity extends AppCompatActivity {
         // one funnel for every fix; a null/empty country falls back to coarse coordinates
         LocationApplier.apply(this, lat, lng, city, countryCode);
         updateCityLabel();
+        // the fix may have re-derived the method/madhab under us - re-sync those controls or
+        // they keep showing the old pick, and the user cannot re-select what is displayed
+        syncCalculationControls();
         Toast.makeText(this, R.string.athan_location_updated, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Pull the method spinner and madhab radio back in line with the stored settings.
+     * Both listeners no-op when the incoming value already equals what is saved, so this
+     * cannot loop or spuriously reschedule.
+     */
+    private void syncCalculationControls() {
+        Spinner methodSpinner = findViewById(R.id.spinner_method);
+        String[] values = getResources().getStringArray(R.array.athan_method_values);
+        int index = indexOf(values, PrayerSettings.getCalculationMethod(this));
+        if (index >= 0 && index != methodSpinner.getSelectedItemPosition()) {
+            methodSpinner.setSelection(index);
+        }
+
+        RadioGroup madhabGroup = findViewById(R.id.radio_madhab);
+        int wanted = "HANAFI".equals(PrayerSettings.getMadhab(this))
+                ? R.id.radio_madhab_hanafi : R.id.radio_madhab_shafi;
+        if (madhabGroup.getCheckedRadioButtonId() != wanted) {
+            madhabGroup.check(wanted);
+        }
     }
 
     /** A single geocoding candidate the user can pick from. */

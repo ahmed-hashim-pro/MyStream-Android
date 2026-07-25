@@ -71,6 +71,7 @@ public class WelcomeActivity extends AppCompatActivity implements OnboardingHost
         onboardingState = OnboardingState.defaults();
         onboardingState.athanEnabled = gateway.isAthanEnabled();
         onboardingState.themeMode = gateway.currentThemeMode();
+        onboardingState.autoMethodEnabled = gateway.isAutoMethodEnabled();
         // keep the "madani" default when the pref has never been written
         String currentPageType = gateway.currentPageType();
         if (currentPageType != null) {

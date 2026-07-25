@@ -37,6 +37,7 @@ import com.google.android.material.materialswitch.MaterialSwitch;
 import com.medoapps.www.onlinequran.R;
 import com.medoapps.www.onlinequran.athan.AthanScheduler;
 import com.medoapps.www.onlinequran.athan.LocationApplier;
+import com.medoapps.www.onlinequran.athan.PrayerSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -433,8 +434,13 @@ public class OnboardingPermissionsFragment extends Fragment {
 
         MaterialSwitch toggle = new MaterialSwitch(c);
         toggle.setChecked(host.getOnboardingState().autoMethodEnabled);
-        toggle.setOnCheckedChangeListener((CompoundButton b, boolean checked) ->
-                host.getOnboardingState().autoMethodEnabled = checked);
+        toggle.setOnCheckedChangeListener((CompoundButton b, boolean checked) -> {
+            host.getOnboardingState().autoMethodEnabled = checked;
+            // Persist immediately, not just at "Enter app": the location fetch happens on
+            // THIS page and LocationApplier reads the pref, so a state-only write would let
+            // a fix land with the old value and apply a method the user just opted out of.
+            PrayerSettings.setAutoMethodEnabled(requireContext(), checked);
+        });
         row.addView(toggle);
 
         parent.addView(row);

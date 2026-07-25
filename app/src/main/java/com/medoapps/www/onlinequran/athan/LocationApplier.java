@@ -2,7 +2,6 @@ package com.medoapps.www.onlinequran.athan;
 
 import android.content.Context;
 
-import java.util.Locale;
 
 /**
  * The single place a location fix is turned into athan settings.
@@ -33,20 +32,14 @@ public final class LocationApplier {
         PrayerSettings.setLocation(c, lat, lng, city);
 
         if (PrayerSettings.isAutoMethodEnabled(c)) {
-            boolean geocoded = countryCode != null && !countryCode.trim().isEmpty();
-            PrayerLocaleDefaults.Defaults defaults = geocoded
-                    ? PrayerLocaleDefaults.forCountry(countryCode)
-                    : PrayerLocaleDefaults.forCoordinates(lat, lng);
-            // Key the did-it-change check on the country when we have one, else on the
-            // resolved method — so an offline fix also only writes once per region
-            // instead of on every single fix.
-            String key = geocoded
-                    ? countryCode.trim().toUpperCase(Locale.US)
-                    : defaults.method;
-            if (PrayerLocaleDefaults.shouldReapply(PrayerSettings.getAutoMethodCountry(c), key)) {
-                PrayerSettings.setCalculationMethod(c, defaults.method);
-                PrayerSettings.setMadhab(c, defaults.madhab);
-                PrayerSettings.setAutoMethodCountry(c, key);
+            // the whole decision lives in the pure class so it can be unit-tested; this is
+            // deliberately nothing but the read/write glue around it
+            PrayerLocaleDefaults.Resolution resolution = PrayerLocaleDefaults.resolve(
+                    PrayerSettings.getAutoMethodCountry(c), countryCode, lat, lng);
+            if (resolution != null) {
+                PrayerSettings.setCalculationMethod(c, resolution.defaults.method);
+                PrayerSettings.setMadhab(c, resolution.defaults.madhab);
+                PrayerSettings.setAutoMethodCountry(c, resolution.key);
             }
         }
 
