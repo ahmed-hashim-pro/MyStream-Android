@@ -35,6 +35,7 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.CancellationTokenSource;
 import com.medoapps.www.onlinequran.athan.AthanScheduler;
 import com.medoapps.www.onlinequran.athan.HijriDate;
+import com.medoapps.www.onlinequran.athan.LocationApplier;
 import com.medoapps.www.onlinequran.athan.PrayerSettings;
 import com.medoapps.www.onlinequran.athan.PrayerTimeEngine;
 
@@ -332,11 +333,15 @@ public class PrayerTimesActivity extends AppCompatActivity {
         final double lng = location.getLongitude();
         executor.execute(() -> {
             String city = "";
+            String country = "";
             try {
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                 List<Address> result = geocoder.getFromLocation(lat, lng, 1);
                 if (result != null && !result.isEmpty()) {
                     Address address = result.get(0);
+                    if (address.getCountryCode() != null) {
+                        country = address.getCountryCode();
+                    }
                     if (address.getLocality() != null) {
                         city = address.getLocality();
                     } else if (address.getSubAdminArea() != null) {
@@ -348,8 +353,9 @@ public class PrayerTimesActivity extends AppCompatActivity {
             } catch (Exception ignored) {
                 // Reverse geocoding is best-effort only.
             }
-            PrayerSettings.setLocation(getApplicationContext(), lat, lng, city);
-            AthanScheduler.rescheduleAll(getApplicationContext());
+            // one funnel for every fix: persists, re-derives the method on a real move,
+            // and reschedules
+            LocationApplier.apply(getApplicationContext(), lat, lng, city, country);
             runOnUiThread(() -> {
                 if (!isFinishing() && !isDestroyed()) renderAll();
             });

@@ -38,8 +38,10 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.CancellationTokenSource;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.medoapps.www.onlinequran.athan.AthanScheduler;
 import com.medoapps.www.onlinequran.athan.AthanSound;
+import com.medoapps.www.onlinequran.athan.LocationApplier;
 import com.medoapps.www.onlinequran.athan.PrayerSettings;
 import com.medoapps.www.onlinequran.athan.PrayerTimeEngine;
 
@@ -407,6 +409,11 @@ public class AthanSettingsActivity extends AppCompatActivity {
             updateLocationModeViews();
         });
 
+        MaterialSwitch autoMethod = findViewById(R.id.switch_auto_method);
+        autoMethod.setChecked(PrayerSettings.isAutoMethodEnabled(this));
+        autoMethod.setOnCheckedChangeListener((b, checked) ->
+                PrayerSettings.setAutoMethodEnabled(this, checked));
+
         btnUseCurrentLocation.setOnClickListener(v -> requestCurrentLocation());
         findViewById(R.id.btn_search_city).setOnClickListener(v -> searchCity());
         editCity.setOnEditorActionListener((v, actionId, event) -> {
@@ -432,9 +439,9 @@ public class AthanSettingsActivity extends AppCompatActivity {
         tvCurrentCity.setText(city);
     }
 
-    private void applyLocation(double lat, double lng, String city) {
-        PrayerSettings.setLocation(this, lat, lng, city);
-        AthanScheduler.rescheduleAll(this);
+    private void applyLocation(double lat, double lng, String city, String countryCode) {
+        // one funnel for every fix; a null/empty country falls back to coarse coordinates
+        LocationApplier.apply(this, lat, lng, city, countryCode);
         updateCityLabel();
         Toast.makeText(this, R.string.athan_location_updated, Toast.LENGTH_SHORT).show();
     }
@@ -444,12 +451,16 @@ public class AthanSettingsActivity extends AppCompatActivity {
         final double lat, lng;
         final String shortName;  // stored as the city label
         final String fullLabel;  // shown in the disambiguation list
+        // ISO-3166 alpha-2 when the backend supplies one; "" from Nominatim, which
+        // makes LocationApplier fall back to its coarse coordinate boxes
+        final String countryCode;
 
-        CityResult(double lat, double lng, String shortName, String fullLabel) {
+        CityResult(double lat, double lng, String shortName, String fullLabel, String countryCode) {
             this.lat = lat;
             this.lng = lng;
             this.shortName = shortName;
             this.fullLabel = fullLabel;
+            this.countryCode = countryCode;
         }
     }
 
@@ -489,7 +500,8 @@ public class AthanSettingsActivity extends AppCompatActivity {
             if (results != null) {
                 for (Address a : results) {
                     out.add(new CityResult(a.getLatitude(), a.getLongitude(),
-                            shortNameOf(a, query), fullLabelOf(a)));
+                            shortNameOf(a, query), fullLabelOf(a),
+                            a.getCountryCode() == null ? "" : a.getCountryCode()));
                 }
             }
         } catch (IOException ignored) {
@@ -562,7 +574,7 @@ public class AthanSettingsActivity extends AppCompatActivity {
                 }
                 if (shortName.isEmpty()) shortName = query;
                 out.add(new CityResult(lat, lng, shortName,
-                        display.isEmpty() ? shortName : display));
+                        display.isEmpty() ? shortName : display, ""));
             }
         } catch (Exception ignored) {
             // Network/parse failure — caller shows "city not found".
@@ -607,7 +619,7 @@ public class AthanSettingsActivity extends AppCompatActivity {
         getTheme().resolveAttribute(android.R.attr.selectableItemBackground, ripple, true);
         row.setBackgroundResource(ripple.resourceId);
         row.setOnClickListener(v -> {
-            applyLocation(c.lat, c.lng, c.shortName);
+            applyLocation(c.lat, c.lng, c.shortName, c.countryCode);
             dialog.dismiss();
         });
 
@@ -697,16 +709,20 @@ public class AthanSettingsActivity extends AppCompatActivity {
     private void reverseGeocodeAndSave(final double lat, final double lng) {
         executor.execute(() -> {
             String city = "";
+            String country = "";
             try {
                 List<Address> results = new Geocoder(this, Locale.getDefault()).getFromLocation(lat, lng, 1);
-                if (results != null && !results.isEmpty() && results.get(0).getLocality() != null) {
-                    city = results.get(0).getLocality();
+                if (results != null && !results.isEmpty()) {
+                    Address address = results.get(0);
+                    if (address.getLocality() != null) city = address.getLocality();
+                    if (address.getCountryCode() != null) country = address.getCountryCode();
                 }
             } catch (Exception ignored) {
             }
             final String cityName = city;
+            final String countryCode = country;
             runOnUiThread(() -> {
-                if (!isFinishing()) applyLocation(lat, lng, cityName);
+                if (!isFinishing()) applyLocation(lat, lng, cityName, countryCode);
             });
         });
     }
