@@ -1,12 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  More page. See design/specs/more-page.md and design/mockups/more-page.html.
+
+  The RelativeLayout root and @id/EntireLayoutCategory are LOAD-BEARING: the Live
+  Streaming entry replaces a LiveList fragment into this container, so the id must
+  survive any redesign. The AdView is likewise kept (spec Q8) - it is gone by
+  default and loadAd is not called, so it does not alter the rendered screen.
+
+  Hero is hero_static, matching all 11 other hero screens; hero_collapsing would
+  collide with MainActivity's own @+id/appbar (spec, Q2 correction).
+
+  layoutDirection is "locale", not the hardcoded "rtl" this file used to carry -
+  that forced Arabic layout onto English users.
+-->
 <RelativeLayout xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/EntireLayoutCategory"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_main"
-    android:layoutDirection="rtl"
+    android:layoutDirection="locale"
     tools:context=".OtherCategoryFragment">
 
     <LinearLayout
@@ -14,88 +28,64 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Modern gold/navy tab header (mirrors Quran/Radio tabs) -->
-        <RelativeLayout
-            style="@style/Widget.MyStream.TabHeader"
-            android:id="@+id/watchtitleCard"
-            android:layoutDirection="rtl">
+        <include
+            android:id="@+id/moreHero"
+            layout="@layout/hero_static" />
 
-            <!-- Leading avatar (gold-ring app glyph) at start -->
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/headerAvatar"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:src="@mipmap/ic_launcher_new_transparent9"
-                app:civ_border_color="@color/gold_accent"
-                app:civ_border_width="1.5dp" />
-
-            <!-- Right-side actions: settings gear + rewards trophy -->
-            <LinearLayout
-                android:id="@+id/headerActions"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_alignParentEnd="true"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <!-- Settings gear -->
-                <ImageButton
-                    android:id="@+id/headerSettingsBTN"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/action_settings"
-                    android:padding="8dp"
-                    app:srcCompat="@drawable/ic_settings_gear"
-                    app:tint="@color/gold_accent" />
-
-                <!-- Rewards trophy -->
-                <ImageButton
-                    android:id="@+id/headerRewardsBTN"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/action_rewards"
-                    android:padding="8dp"
-                    app:srcCompat="@drawable/outline_emoji_events_24"
-                    app:tint="@color/gold_accent" />
-
-            </LinearLayout>
-
-            <!-- Title "المزيد" -->
-            <TextView
-                style="@style/Widget.MyStream.TabHeader.Title"
-                android:id="@+id/recitelisttxt"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_toStartOf="@+id/headerActions"
-                android:layout_toEndOf="@+id/headerAvatar"
-                android:layout_marginStart="12dp"
-                android:text="@string/more_tab_header" />
-
-        </RelativeLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listView"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="true"
-            android:paddingStart="8dp"
-            android:paddingTop="4dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="60dp" />
+            android:layout_weight="1">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingStart="@dimen/spacing_md"
+                android:paddingTop="@dimen/spacing_md"
+                android:paddingEnd="@dimen/spacing_md"
+                android:paddingBottom="@dimen/more_list_bottom_pad"
+                android:scrollbars="none" />
+
+            <!-- Search-empty state (spec sec.5). Hero stays visible; only the
+                 list body is replaced. -->
+            <LinearLayout
+                android:id="@+id/moreEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_lg"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/moreEmptyText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textDirection="locale" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/moreEmptyClear"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:minHeight="48dp"
+                    android:text="@string/more_search_clear"
+                    android:textColor="?attr/colorPrimary" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Kept per spec Q8: gone by default, loadAd not called. -->
         <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:background="@color/colorPrimary"
             android:visibility="gone"
             ads:adSize="BANNER"

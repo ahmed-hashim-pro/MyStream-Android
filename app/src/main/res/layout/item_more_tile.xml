@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Stateless tile, one quarter span. Ripple is bounded to the whole tile: a
+     borderless ripple on the chip alone would clip the label (spec sec.6). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/moreTileRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:gravity="center_horizontal"
+    android:minHeight="48dp"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/spacing_sm"
+    android:paddingBottom="@dimen/spacing_sm">
+
+    <FrameLayout
+        android:layout_width="@dimen/more_tile_chip_size"
+        android:layout_height="@dimen/more_tile_chip_size"
+        android:background="@drawable/bg_more_chip_tile">
+
+        <ImageView
+            android:id="@+id/moreTileIcon"
+            android:layout_width="@dimen/more_tile_icon_size"
+            android:layout_height="@dimen/more_tile_icon_size"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            app:tint="@color/gold_accent" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/moreTileLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_sm"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:maxLines="2"
+        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+        android:textColor="?attr/colorOnSurface"
+        android:textDirection="locale" />
+
+    <TextView
+        android:id="@+id/moreTileState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:maxLines="1"
+        android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textDirection="locale"
+        android:visibility="gone" />
+</LinearLayout>

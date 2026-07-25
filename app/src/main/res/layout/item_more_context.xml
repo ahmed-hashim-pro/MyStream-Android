@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Context card: the next prayer, position 0. Permanently navy in BOTH themes, so
+     every text colour here is text_on_navy/hint_on_navy - never colorOnSurface and
+     never @color/white, which is black at night in this project. -->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/moreContextCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_md"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/navy_700"
+    app:cardCornerRadius="@dimen/more_corner_radius"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/more_context_card_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/spacing_md">
+
+        <FrameLayout
+            android:layout_width="@dimen/more_ring_size"
+            android:layout_height="@dimen/more_ring_size"
+            android:layout_marginEnd="@dimen/spacing_md"
+            android:background="@drawable/bg_more_ring">
+
+            <ImageView
+                android:id="@+id/moreContextIcon"
+                android:layout_width="@dimen/more_tile_icon_size"
+                android:layout_height="@dimen/more_tile_icon_size"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                app:srcCompat="@drawable/ic_prayer_times"
+                app:tint="@color/gold_light" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/moreContextTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="@color/text_on_navy"
+                android:textDirection="locale"
+                android:textStyle="bold"
+                tools:ignore="UnusedAttribute" />
+
+            <TextView
+                android:id="@+id/moreContextSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                android:textColor="@color/hint_on_navy"
+                android:textDirection="locale" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/moreContextTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_sm"
+            android:fontFeatureSettings="tnum"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            android:textColor="@color/gold_light"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/moreContextChevron"
+            android:layout_width="@dimen/more_chevron_size"
+            android:layout_height="@dimen/more_chevron_size"
+            android:layout_marginStart="@dimen/spacing_sm"
+            android:alpha="0.7"
+            android:autoMirrored="true"
+            android:importantForAccessibility="no"
+            android:visibility="gone"
+            app:srcCompat="@drawable/outline_arrow_forward_ios_20"
+            app:tint="@color/hint_on_navy" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

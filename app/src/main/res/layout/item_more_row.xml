@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Stateful row: chip + text column + state + chevron. Only tools that actually
+     have live state get this shape (spec sec.4); stateless ones get item_more_tile. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/moreRowRoot"
+    style="@style/Widget.MyStream.ListRow.Compact"
+    android:background="@drawable/bg_more_row_surface"
+    android:clickable="true"
+    android:focusable="true">
+
+    <FrameLayout
+        android:layout_width="@dimen/more_icon_chip_size"
+        android:layout_height="@dimen/more_icon_chip_size"
+        android:layout_marginEnd="@dimen/spacing_md"
+        android:background="@drawable/bg_more_chip_row">
+
+        <ImageView
+            android:id="@+id/moreRowIcon"
+            android:layout_width="@dimen/more_row_icon_size"
+            android:layout_height="@dimen/more_row_icon_size"
+            android:layout_gravity="center"
+            android:importantForAccessibility="no"
+            app:tint="@color/gold_accent" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/moreRowTitle"
+            style="@style/Widget.MyStream.ListRow.Title.Compact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textDirection="locale" />
+
+        <TextView
+            android:id="@+id/moreRowSubtitle"
+            style="@style/Widget.MyStream.ListRow.Meta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textDirection="locale"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/moreRowState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_sm"
+        android:fontFeatureSettings="tnum"
+        android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+        android:textColor="@color/gold_accent"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/moreRowChevron"
+        android:layout_width="@dimen/more_chevron_size"
+        android:layout_height="@dimen/more_chevron_size"
+        android:layout_marginStart="@dimen/spacing_sm"
+        android:alpha="0.55"
+        android:autoMirrored="true"
+        android:importantForAccessibility="no"
+        android:visibility="gone"
+        app:srcCompat="@drawable/outline_arrow_forward_ios_20"
+        app:tint="?attr/colorOnSurfaceVariant" />
+</LinearLayout>

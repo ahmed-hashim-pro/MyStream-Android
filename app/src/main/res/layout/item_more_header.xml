@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Group header + trailing hairline. Hidden entirely when its group is empty
+     (spec sec.5: never a header with nothing under it). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:layout_marginTop="@dimen/spacing_md"
+    android:layout_marginBottom="@dimen/spacing_sm"
+    android:orientation="horizontal"
+    android:paddingStart="@dimen/spacing_xs"
+    android:paddingEnd="@dimen/spacing_xs">
+
+    <TextView
+        android:id="@+id/moreHeaderLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_sm"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+        android:textColor="@color/gold_accent"
+        android:textStyle="bold"
+        android:textDirection="locale" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/more_hairline"
+        android:layout_weight="1"
+        android:background="?attr/colorOutlineVariant" />
+</LinearLayout>

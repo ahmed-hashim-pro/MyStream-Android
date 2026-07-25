@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Row leading chip: reads as a target, not an ornament. gold_accent_faint already
+     ships and resolves per-theme, so no new colour is introduced. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <corners android:radius="@dimen/more_chip_corner_row" />
+    <solid android:color="@color/gold_accent_faint" />
+</shape>

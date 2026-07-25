@@ -114,4 +114,19 @@
     <!-- Bottom-corner radius of the Mushaf index hero card (bg_header_navy_rounded);
          also used to clip the hero's children so the tab indicator can't poke past it. -->
     <dimen name="mushaf_hero_corner_radius">22dp</dimen>
+    <!-- More page (design/specs/more-page.md) -->
+    <dimen name="more_icon_chip_size">36dp</dimen>
+    <dimen name="more_tile_chip_size">52dp</dimen>
+    <dimen name="more_row_min_height">56dp</dimen>
+    <dimen name="more_context_card_height">72dp</dimen>
+    <dimen name="more_ring_size">46dp</dimen>
+    <dimen name="more_row_icon_size">20dp</dimen>
+    <dimen name="more_tile_icon_size">24dp</dimen>
+    <dimen name="more_chevron_size">15dp</dimen>
+    <dimen name="more_corner_radius">14dp</dimen>
+    <dimen name="more_chip_corner_row">10dp</dimen>
+    <dimen name="more_chip_corner_tile">16dp</dimen>
+    <dimen name="more_hairline">1dp</dimen>
+    <!-- clears MainActivity's floating bottom nav, which overlays this fragment -->
+    <dimen name="more_list_bottom_pad">104dp</dimen>
 </resources>

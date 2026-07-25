@@ -8,13 +8,30 @@
 
 | # | Question | Decision |
 |---|---|---|
-| Q1 | Search behaviour in a collapsing hero | **Search collapses with the hero**, matching the other 11 screens. Not pinned, not iconified. |
-| Q2 | Static or collapsing hero | **Collapsing** (`hero_collapsing`), not the static variant the first mockup drew. |
+| Q1 | Search behaviour | **Always visible.** Superseded by the Q2 revision — a static hero does not collapse, so the search field never scrolls away. This is what the frozen mockup draws. |
+| Q2 | Static or collapsing hero | ~~Collapsing~~ → **REVISED to `hero_static`.** See the correction note below. |
 | Q3 | Live Streaming's group | **Demoted to a tile** in Read & Listen. "Daily" stays honestly daily. |
 | Q4 | Live Streaming when offline | **Stays enabled**, subtitle reads "Offline". Never a greyed dead row. |
 | Q5 | Long-press | **Nothing in v1.** No pin, no reorder, no shortcut. |
 | Q6 | State holder | **ViewModel + LiveData.** This screen introduces the pattern (see §9). |
 | Q7 | Read & Listen's orphaned 5th tile | **Hadith of the Day promoted to a row** — it changes daily, so it satisfies the has-state rule. Yields a clean 4 rows / 4 tiles / 4 tiles. |
+| Q8 | The AdView banner, present in code but absent from the mockup | **Kept**, docked below the list, wiring untouched. It is currently `visibility="gone"` with `loadAd` commented out, so it does not alter the rendered screen. |
+
+### Correction — Q2 was decided on a false premise
+
+The question as originally put claimed collapsing would be *"consistent with the other 11 screens."*
+**That was wrong.** Verified against the repo:
+
+- All eleven hero screens (`activity_{asmaul_husna,athkar,daily_hadith,dua,hisn_al_muslim,islamic_events,fasting_tracker,qibla,reading_progress,settings_new,notification_settings}.xml`)
+  include **`hero_static`**.
+- **`hero_collapsing.xml` is included by zero layouts.** It ships in the repo unused.
+- Every one of those eleven is an **Activity** that owns its window. This screen is a **Fragment**
+  inside `MainActivity`, whose layout is already a `CoordinatorLayout` containing an `AppBarLayout`
+  with `android:id="@+id/appbar"` — the *same id* as `hero_collapsing.xml`'s root. Two views with
+  that id in one hierarchy makes `HeroController.attach(activity)`'s `findViewById` ambiguous.
+
+Collapsing was therefore both the *less* consistent option and a new-architecture change, not
+reuse. Revised to **`hero_static`**, which is what the frozen mockup already draws.
 
 ---
 
@@ -66,15 +83,15 @@ One line per node. Indentation = nesting. `[M3]` = Material component, `[custom]
 `[reuse]` = already exists in the project.
 
 ```
-CoordinatorLayout                              [M3] root, hosts hero + content
-├─ AppBarLayout                                [M3] hero container, scroll flags below
-│  └─ include @layout/hero_collapsing          [reuse] navy hero (Q2), driven by HeroController
-│     ├─ ImageView   avatar                    [reuse] HeroController.avatar()
-│     ├─ TextView    title "More/المزيد"        [reuse] HeroController.title()
-│     ├─ ImageView   action trophy             [reuse] HeroController.action()
-│     ├─ ImageView   action settings           [reuse] HeroController.action()
-│     └─ SearchView  hero search               [reuse] HeroController.search(); collapses with the hero (Q1)
-├─ RecyclerView  rv_more                       [M3] single list, GridLayoutManager(span 4)
+RelativeLayout  @id/EntireLayoutCategory       [reuse] KEPT — LiveList replaces into this container
+└─ LinearLayout (vertical)                     root content column
+   ├─ include @layout/hero_static              [reuse] navy hero (Q2 revised), via HeroController
+   │  ├─ ImageView   avatar                    [reuse] HeroController.avatar()
+   │  ├─ TextView    title "More/المزيد"        [reuse] HeroController.title()
+   │  ├─ ImageView   action trophy             [reuse] HeroController.action()
+   │  ├─ ImageView   action settings           [reuse] HeroController.action()
+   │  └─ SearchView  hero search               [reuse] HeroController.search(); always visible (Q1)
+   ├─ RecyclerView  rv_more                    [M3] single list, GridLayoutManager(span 4)
 │  │                                            SpanSizeLookup: header/context/row = 4, tile = 1
 │  ├─ VIEW_TYPE_CONTEXT   item_more_context    [custom] the next-prayer card (1, position 0)
 │  │  └─ MaterialCardView                      [M3] Widget.MyStream.Card.Feature
@@ -103,7 +120,9 @@ CoordinatorLayout                              [M3] root, hosts hero + content
 │        ├─ FrameLayout  chip                  [custom] 52dp rounded square, outlined
 │        │  └─ ImageView  icon                 24dp
 │        └─ TextView     label                 maxLines 2
-└─ BottomNavigationView                        [reuse] existing, owned by MainActivity
+   └─ AdView  @id/adView                       [reuse] KEPT (Q8), below the list, gone by default
+
+BottomNavigationView                           [reuse] owned by MainActivity, not this layout
 ```
 
 **One RecyclerView, four view types.** Not nested RecyclerViews — a single
@@ -224,7 +243,7 @@ in the hero action, not the list. That accounts for all 13 current entries plus 
 | Hero search | click | expands the `SearchView`; filters as-you-type across all groups. Headers of empty groups hide while filtering. |
 | Hero actions | click | trophy → achievements, gear → settings. |
 | Back (while searching) | system back | collapses search and restores the full list before leaving the screen. |
-| Scroll | vertical | Single RecyclerView. Hero is **collapsing** (Q2): `AppBarLayout` child gets `layout_scrollFlags="scroll|enterAlways|snap"`, RecyclerView gets `app:layout_behavior="@string/appbar_scrolling_view_behavior"`. Search collapses with it (Q1) — reaching search again requires scrolling to top, which is the accepted cost. |
+| Scroll | vertical | Single RecyclerView below a **static** hero (Q2 revised). No `CoordinatorLayout`, no scroll flags, no nested scrolling host — the hero is a fixed-height sibling in a vertical `LinearLayout`, exactly as the other 11 hero screens do it. Search is always reachable (Q1). |
 
 **Touch targets.** Row = 56dp tall × full width ✓. Tile = 52dp chip + label inside a cell of
 ~88dp × 78dp ✓. Context card = 72dp ✓. Hero icons must be padded to **48dp** minimum even though
@@ -347,7 +366,7 @@ payload update to position 0 only.
 
 | Thing | Where | Used for |
 |---|---|---|
-| `hero_collapsing.xml` + `HeroController` | `res/layout/`, `HeroController.java` | The whole hero (Q2). `.avatar() .title() .action() .action() .search()` covers every hero node. Already on 11 screens. |
+| `hero_static.xml` + `HeroController` | `res/layout/`, `HeroController.java` | The whole hero (Q2 revised). `.avatar() .title() .action() .action() .search()` covers every hero node. **This is the variant all 11 existing hero screens use.** |
 | `SearchView` in `OtherCategoryFragment` | already constructed, never shown | The hero search. It exists — this just surfaces it. |
 | `BottomNavigationView` | `MainActivity` | Unchanged; not owned by this screen. |
 | `Widget.MyStream.SectionHeader.Title` | `styles_mystream.xml` | Group headers, verbatim. |

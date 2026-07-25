@@ -3,295 +3,164 @@ package com.medoapps.www.onlinequran;
 import static com.medoapps.www.onlinequran.R.id.adView;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.material.card.MaterialCardView;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.medoapps.www.onlinequran.more.MoreAdapter;
+import com.medoapps.www.onlinequran.more.MoreItemDecoration;
+import com.medoapps.www.onlinequran.more.MoreUiState;
+import com.medoapps.www.onlinequran.more.MoreViewModel;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+/**
+ * The More page. See design/specs/more-page.md and design/mockups/more-page.html.
+ *
+ * View layer only: it renders {@link MoreUiState} and forwards events to
+ * {@link MoreViewModel}. It reads no settings and computes no state of its own.
+ */
+public class OtherCategoryFragment extends Fragment implements MoreAdapter.Listener {
 
-//import com.google.android.gms.ads.InterstitialAd;
-//import com.google.android.gms.ads.reward.RewardItem;
-//import com.google.android.gms.ads.reward.RewardedVideoAd;
-//import com.google.android.gms.ads.reward.RewardedVideoAdListener;
-
-
-public class OtherCategoryFragment extends Fragment implements AdapterView.OnItemSelectedListener {
-    //banner add
-    private static final String TAG = "RecitesName";
-    private AdView mAdView;
-    //private InterstitialAd mInterstitialAd;
-    //private RewardedVideoAd mAd;
-    static OtherCategoryFragment instance4;
-    private PreferenceManager prefManager;
     public static final String PAGE_TITLE = "Tab2";
+    static OtherCategoryFragment instance4;
 
-    TextView recitelisttxt;
-    Boolean new_ubdate =false;
-    FirebaseRemoteConfig mFirebaseRemoteConfig;
+    private AdView mAdView;
+    private MoreViewModel viewModel;
+    private MoreAdapter adapter;
+    private HeroController hero;
 
-
-    public ArrayList<OtherCategory> listCategory = new ArrayList<OtherCategory>();
-    RecyclerView lVRecites;
-
-    String RecitesName="";
-    String RecitesAYA="";
-    String Rewayat="";
-    String RealRecitesName="";
-    SearchView searchView;
-
-    // Remote Config keys
-    private static final String LOADING_PHRASE_CONFIG_KEY = "loading_phrase";
-    private static final String urlUpdate = "url";
-    private static final String chicUpdate = "new_ubdate";
-    private static final String new_ubdate2 = "new_ubdate2";
-    private static final String url2 = "url2";
-    private static final String url3 = "url3";
-    private static final String new_ubdate3 = "new_ubdate3";
-    private static final String ubdated_version = "ubdated_version";
-
+    private RecyclerView list;
+    private View empty;
+    private TextView emptyText;
 
     public static OtherCategoryFragment newInstance() {
-        OtherCategoryFragment fragment = new OtherCategoryFragment();
-        return fragment;
+        return new OtherCategoryFragment();
     }
+
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.activity_other_category_fragment, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_other_category_fragment, container, false);
 
-        // load setting informatin if we have
-        SettingSaved settingSaved=new SettingSaved(getContext());
-        settingSaved.LoadData();
+        // preserved side effects from the previous implementation
+        new SettingSaved(getContext()).LoadData();
+        instance4 = this;
+        SettingSaved.IsOpen = 1;
+        SettingSaved.SounlLoad = 1;
 
-        instance4 =this;
-        recitelisttxt = (TextView) view.findViewById(R.id.recitelisttxt);
-
-        // Header: settings gear → Settings screen
-        ImageButton headerSettingsBTN = view.findViewById(R.id.headerSettingsBTN);
-        if (headerSettingsBTN != null) {
-            headerSettingsBTN.setOnClickListener(v ->
-                    startActivity(new Intent(getContext(), Settings.class)));
-        }
-
-        // Header: rewards trophy → rewarded ad
-        ImageButton headerRewardsBTN = view.findViewById(R.id.headerRewardsBTN);
-        if (headerRewardsBTN != null) {
-            headerRewardsBTN.setOnClickListener(v -> {
-                if (getActivity() instanceof MainActivity) {
-                    ((MainActivity) getActivity()).showRewardedAd();
+        // Kept per spec Q8: the banner stays wired but is never asked to load.
+        mAdView = view.findViewById(adView);
+        if (mAdView != null) {
+            mAdView.setAdListener(new AdListener() {
+                @Override public void onAdLoaded() {
+                    mAdView.setVisibility(View.VISIBLE);
                 }
             });
         }
 
-        SettingSaved.IsOpen =  1;//App Is Opened
-        SettingSaved.SounlLoad=1;//sound load
-        //load banner ad
-        mAdView = (AdView) view.findViewById(adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        //mAdView.loadAd(adRequest);
-        mAdView.setAdListener(new AdListener() {
+        viewModel = new ViewModelProvider(this).get(MoreViewModel.class);
 
-            @Override
-            public void onAdLoaded() {
-                mAdView.setVisibility(View.VISIBLE);
-            }
+        setupHero(view);
+        setupList(view);
 
-
-
-        });
-
-        lVRecites = (RecyclerView) view.findViewById(R.id.listView);
-        lVRecites.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        lVRecites.setNestedScrollingEnabled(true);
-        loadItems();
-
-        if(SettingSaved.OnTimeAds==false) {
-            if(SettingSaved.IsRated==1){
-                SettingSaved.OnTimeAds=true;
-            }
-
-        }
-
-
-
+        viewModel.state().observe(getViewLifecycleOwner(), this::render);
         return view;
     }
 
-    private void loadItems(){
-        OtherCategoryListLanguageClass lc = new OtherCategoryListLanguageClass(
-                AppLanguage.localizedContext(requireContext()));
-        listCategory = lc.CategoryList();
-
-        lVRecites.setAdapter(new CategoryAdapter(listCategory));
-        Log.d(TAG, "loadItems: ");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        loadItems();
-    }
-
-
-    private ArrayList<String> getRewayahList(){
-        ArrayList<String> mylist = new ArrayList<String>();
-//        String[] items = new String[listCategory.size()];
-        mylist.add(getString(R.string.All));
-
-        int position = 0;
-        for (OtherCategory listCategoryitem : listCategory) {
-//            items[position] = listCategoryitem.Rewayat;
-            mylist.add(listCategoryitem.title);
-            position++;
-
-        }
-        HashSet hs = new HashSet();
-        hs.addAll(mylist);
-        mylist.clear();
-        mylist.addAll(hs);
-        return mylist;
-    }
-
-    private void laodRadio(){
-        Intent intent= new Intent( getActivity(),NewQuranPlayer.class);
-        intent.putExtra("RecitesName",RecitesName);
-        intent.putExtra("Rewayat",Rewayat);
-        intent.putExtra("RealRecitesName",Rewayat);
-        intent.putExtra("RecitesAYA",RecitesAYA);
-        intent.putExtra("IsRadio",true);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        ArrayList<OtherCategory> listCategorytemp = new ArrayList<OtherCategory>();
-        adapterView.getItemAtPosition(i);
-        String rewayah = adapterView.getItemAtPosition(i).toString();
-        for (OtherCategory listCategoryitem : listCategory) {
-            if (rewayah == getString(R.string.All)){
-                listCategorytemp.add(listCategoryitem);
-            }else if (listCategoryitem.title.contains(rewayah)) {
-                listCategorytemp.add(listCategoryitem);
-
-            }
-
-
-        }
-        lVRecites.setAdapter(new CategoryAdapter(listCategorytemp));
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
-
-
-    class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
-
-        ArrayList<OtherCategory> listCategoryLocal;
-
-        CategoryAdapter(ArrayList<OtherCategory> listCategory) {
-            listCategoryLocal = listCategory;
-        }
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.other_ticket, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            final OtherCategory temp = listCategoryLocal.get(position);
-
-            LnaguageClass lc = new LnaguageClass(getContext());
-            lc.SetTextFont(holder.itemtxt, "");
-
-            holder.itemtxt.setText(temp.title);
-            holder.icon.setImageResource(temp.ImgDrawable);
-
-            // Accessibility: announce the card as a single labelled, actionable
-            // unit (the icon is decorative; see other_ticket.xml).
-            holder.entireCard.setContentDescription(temp.title);
-
-            holder.entireCard.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (temp.fragment != null) {
-                        LiveList newFragment = new LiveList();
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.EntireLayoutCategory, newFragment, "liveListFragment")
-                                .addToBackStack("liveListFragmentBAck")
-                                .commit();
-                    } else if (temp.activity != null) {
-                        Intent intent = new Intent(getContext(), temp.activity);
-                        startActivity(intent);
+    private void setupHero(View root) {
+        // apply() is the terminal call — title()/avatar() only stage values.
+        // No back arrow: this is a bottom-nav root, not a detail screen.
+        hero = HeroController.attach(root, getActivity())
+                .avatar(R.mipmap.ic_launcher_new_transparent9)
+                .title(R.string.more_tab_header)
+                .action(R.drawable.outline_emoji_events_24, () -> {
+                    if (getActivity() instanceof MainActivity) {
+                        ((MainActivity) getActivity()).showRewardedAd();
                     }
-                }
-            });
-        }
+                })
+                .action(R.drawable.ic_settings_gear,
+                        () -> startActivity(new Intent(getContext(), Settings.class)))
+                .search(query -> viewModel.onQueryChanged(query));
+        hero.apply();
+    }
 
-        @Override
-        public int getItemCount() {
-            return listCategoryLocal.size();
-        }
+    private void setupList(View root) {
+        list = root.findViewById(R.id.listView);
+        empty = root.findViewById(R.id.moreEmpty);
+        emptyText = root.findViewById(R.id.moreEmptyText);
 
-        class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView icon;
-            TextView itemtxt;
-            MaterialCardView entireCard;
+        adapter = new MoreAdapter(this);
+        GridLayoutManager lm = new GridLayoutManager(requireContext(), MoreAdapter.SPAN_COUNT);
+        lm.setSpanSizeLookup(adapter.spanSizeLookup(requireContext()));
+        list.setLayoutManager(lm);
+        list.addItemDecoration(new MoreItemDecoration(requireContext(), adapter));
+        list.setAdapter(adapter);
 
-            ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                icon = itemView.findViewById(R.id.icon);
-                itemtxt = itemView.findViewById(R.id.itemtxt);
-                entireCard = itemView.findViewById(R.id.entireCardOtherCategory);
+        root.findViewById(R.id.moreEmptyClear).setOnClickListener(v -> {
+            // HeroController owns the SearchView; clear it directly so the field and
+            // the state holder cannot disagree about whether a query is active.
+            android.widget.SearchView search = root.findViewById(R.id.heroSearch);
+            if (search != null) {
+                search.setQuery("", false);
+                search.setIconified(true);
             }
+            viewModel.onSearchDismissed();
+        });
+    }
+
+    private void render(MoreUiState state) {
+        adapter.submit(state);
+        boolean searchEmpty = state.isSearchEmpty();
+        empty.setVisibility(searchEmpty ? View.VISIBLE : View.GONE);
+        list.setVisibility(searchEmpty ? View.GONE : View.VISIBLE);
+        if (searchEmpty) {
+            emptyText.setText(getString(R.string.more_search_empty, state.query));
         }
     }
 
-    //get access to mailbox
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+    // ------------------------------------------------------ adapter callbacks
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-    {
-        switch (requestCode)
-        {
-            case REQUEST_CODE_ASK_PERMISSIONS:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-
-                    laodRadio();
-                } else {
-                    // Permission Denied
-                    laodRadio();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    public void onEntryClicked(MoreUiState.Entry entry) {
+        if (entry.opensLiveList) {
+            // Live Streaming swaps a fragment into this screen's own container —
+            // @id/EntireLayoutCategory must survive any redesign of the layout.
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.EntireLayoutCategory, new LiveList(), "liveListFragment")
+                    .addToBackStack("liveListFragmentBAck")
+                    .commit();
+        } else if (entry.destination != null) {
+            startActivity(new Intent(getContext(), entry.destination));
         }
     }
 
+    @Override
+    public void onContextCardClicked() {
+        startActivity(new Intent(getContext(), PrayerTimesActivity.class));
+    }
 
+    // ------------------------------------------------------------- lifecycle
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.onScreenResumed();
+    }
+
+    @Override
+    public void onPause() {
+        viewModel.onScreenPaused();
+        super.onPause();
+    }
 }

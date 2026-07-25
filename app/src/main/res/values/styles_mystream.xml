@@ -197,4 +197,19 @@
         <item name="cornerSize">50%</item>
     </style>
 
+
+    <!-- More page: denser than the shipping ListRow (64dp/17sp) so the context card
+         plus four rows clear the fold. Parents are untouched - surah and reciter
+         lists depend on them. See design/specs/more-page.md sec.3. -->
+    <style name="Widget.MyStream.ListRow.Compact" parent="Widget.MyStream.ListRow">
+        <item name="android:minHeight">@dimen/more_row_min_height</item>
+        <item name="android:paddingStart">@dimen/spacing_md</item>
+        <item name="android:paddingEnd">@dimen/spacing_md</item>
+        <item name="android:paddingTop">@dimen/spacing_sm</item>
+        <item name="android:paddingBottom">@dimen/spacing_sm</item>
+    </style>
+
+    <style name="Widget.MyStream.ListRow.Title.Compact" parent="Widget.MyStream.ListRow.Title">
+        <item name="android:textSize">15sp</item>
+    </style>
 </resources>

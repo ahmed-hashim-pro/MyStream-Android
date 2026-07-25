@@ -1547,4 +1547,22 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="bubble_sound">Notification sound</string>
     <string name="bubble_sound_sub">Play a sound when the bubble appears at athkar time</string>
 
+    <!-- More page (design/specs/more-page.md) -->
+    <string name="more_group_daily">Daily</string>
+    <string name="more_group_read_listen">Read &amp; Listen</string>
+    <string name="more_group_tools">Tools</string>
+    <string name="more_search_hint">Search tools\u2026</string>
+    <string name="more_search_empty">No tool matches \u201c%1$s\u201d</string>
+    <string name="more_search_clear">Clear</string>
+    <string name="more_context_needs_location">Set your location</string>
+    <string name="more_context_needs_location_sub">Prayer times need a location</string>
+    <string name="more_context_loading">\u2026</string>
+    <string name="more_state_new">NEW</string>
+    <string name="more_state_offline">Offline</string>
+    <string name="more_athkar_not_read">Not read today</string>
+    <string name="more_athkar_read">Read today</string>
+    <string name="more_reading_streak">%1$d days</string>
+    <string name="more_countdown">in %1$s</string>
+    <string name="more_countdown_min">in %1$dm</string>
+    <string name="more_countdown_hm">in %1$dh %2$dm</string>
 </resources>
