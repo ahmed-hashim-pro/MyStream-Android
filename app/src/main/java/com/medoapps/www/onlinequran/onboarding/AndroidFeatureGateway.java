@@ -142,6 +142,16 @@ public class AndroidFeatureGateway implements FeatureGateway {
     }
 
     @Override
+    public void setAutoMethodEnabled(boolean enabled) {
+        PrayerSettings.setAutoMethodEnabled(context, enabled);
+    }
+
+    @Override
+    public boolean isAutoMethodEnabled() {
+        return PrayerSettings.isAutoMethodEnabled(context);
+    }
+
+    @Override
     public void setThemeMode(int nightMode) {
         SettingSaved.currentThemeMode = nightMode;
         new SettingSaved(context).SaveData();

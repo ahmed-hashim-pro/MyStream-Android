@@ -23,9 +23,12 @@ public class OnboardingFeatureControllerTest {
         final Set<Reminder> disabled = EnumSet.noneOf(Reminder.class);
         final List<Integer> themeModes = new ArrayList<>();
         String pageTypeSet = null;
+        Boolean autoMethodSet = null;
 
         @Override public void setAthanEnabled(boolean enabled) { athanSet = enabled; }
         @Override public void setPageType(String pageType) { pageTypeSet = pageType; }
+        @Override public void setAutoMethodEnabled(boolean enabled) { autoMethodSet = enabled; }
+        @Override public boolean isAutoMethodEnabled() { return false; }
         @Override public void setBubbleEnabled(boolean enabled) { bubbleSet = enabled; }
         @Override public void enableReminder(Reminder r) { this.enabled.add(r); }
         @Override public void disableReminder(Reminder r) { this.disabled.add(r); }
@@ -75,6 +78,20 @@ public class OnboardingFeatureControllerTest {
         assertTrue(gw.disabled.contains(Reminder.SUHOOR_FASTING));
         // every reminder is acted on exactly once (enable XOR disable)
         assertEquals(Reminder.values().length, gw.enabled.size() + gw.disabled.size());
+    }
+
+    @Test
+    public void apply_setsAutoMethodFromState() {
+        FakeGateway gw = new FakeGateway();
+        OnboardingState s = OnboardingState.defaults(); // auto-method on by default
+        new OnboardingFeatureController(gw).apply(s);
+        assertTrue(gw.autoMethodSet);
+
+        FakeGateway gw2 = new FakeGateway();
+        OnboardingState s2 = OnboardingState.defaults();
+        s2.autoMethodEnabled = false;
+        new OnboardingFeatureController(gw2).apply(s2);
+        assertFalse(gw2.autoMethodSet);
     }
 
     @Test

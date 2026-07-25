@@ -21,5 +21,6 @@ public class OnboardingFeatureController {
         }
         gateway.setThemeMode(state.themeMode);
         gateway.setPageType(state.pageType);
+        gateway.setAutoMethodEnabled(state.autoMethodEnabled);
     }
 }

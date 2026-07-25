@@ -12,6 +12,7 @@ public class OnboardingState {
     public boolean bubbleEnabled;
     public int themeMode; // an AppCompatDelegate.MODE_NIGHT_* value
     public String pageType; // mushaf print key, e.g. "madani"
+    public boolean autoMethodEnabled; // let the calculation method follow the location
     private final Map<Reminder, Boolean> reminders = new EnumMap<>(Reminder.class);
 
     private OnboardingState() {
@@ -20,7 +21,7 @@ public class OnboardingState {
         }
     }
 
-    /** App defaults: athan on, bubble on, all reminders off, theme follows system. */
+    /** App defaults: athan on, bubble on, all reminders off, theme follows system, auto-method on. */
     public static OnboardingState defaults() {
         OnboardingState s = new OnboardingState();
         s.athanEnabled = true;
@@ -31,6 +32,9 @@ public class OnboardingState {
         // Default print for new installs: the "Madinah Colored" set (red لفظ الجلالة).
         // The onboarding picker centers/pre-selects this; users can still switch.
         s.pageType = "madina_colored";
+        // Auto-update on: the point of the welcome-screen location fetch is that a new
+        // user gets the right times and method without hunting through settings.
+        s.autoMethodEnabled = true;
         return s;
     }
 

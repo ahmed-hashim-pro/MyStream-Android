@@ -27,6 +27,12 @@ public interface FeatureGateway {
      */
     void setPageType(String pageType);
 
+    /**
+     * Whether the calculation method and madhab should follow the detected location.
+     * See {@code PrayerSettings#isAutoMethodEnabled}.
+     */
+    void setAutoMethodEnabled(boolean enabled);
+
     // --- reads used to seed initial toggle positions ---
 
     boolean isAthanEnabled();
@@ -38,4 +44,6 @@ public interface FeatureGateway {
     int currentThemeMode();
 
     String currentPageType();
+
+    boolean isAutoMethodEnabled();
 }
