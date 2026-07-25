@@ -362,7 +362,7 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="telawatelharamen">Recitations of the Two Holy Mosques</string>
     <string name="telawatelharamElmakee">Makkah Haram Recitations</string>
     <string name="telawatelharamElmadany">Madinah Haram Recitations</string>
-    <string name="livestrem">live streaming</string>
+    <string name="livestrem">Live Streaming</string>
     <string name="qurankaremchannel">Holy Quran Channel</string>
     <string name="alsunnaalnbweyachannel">Sunnah Channel</string>
     <string name="makkah_live">Live — Makkah</string>
@@ -984,7 +984,7 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="asmaul_husna">Names of Allah</string>
     <string name="zakat_calculator">Zakat Calculator</string>
     <string name="fasting_tracker">Fasting Tracker</string>
-    <string name="daily_hadith">Hadith of the day</string>
+    <string name="daily_hadith">Hadith of the Day</string>
     <string name="islamic_events">Islamic Events</string>
     <string name="hisn_al_muslim">Hisn al-Muslim</string>
     <string name="daily_hadith_notification_time">Daily hadith notification time</string>

@@ -27,7 +27,7 @@ public class MoreItemDecoration extends RecyclerView.ItemDecoration {
 
     public MoreItemDecoration(Context context, MoreAdapter adapter) {
         this.adapter = adapter;
-        this.gutter = context.getResources().getDimensionPixelSize(R.dimen.spacing_xs);
+        this.gutter = context.getResources().getDimensionPixelSize(R.dimen.spacing_sm);
         this.rowGap = context.getResources().getDimensionPixelSize(R.dimen.spacing_sm);
         this.dividerHeight = context.getResources().getDimensionPixelSize(R.dimen.more_hairline);
         // inset so the rule starts under the text, not under the icon chip
