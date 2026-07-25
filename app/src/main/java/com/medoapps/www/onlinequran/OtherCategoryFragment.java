@@ -4,12 +4,16 @@ import static com.medoapps.www.onlinequran.R.id.adView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,7 +41,7 @@ public class OtherCategoryFragment extends Fragment implements MoreAdapter.Liste
     private AdView mAdView;
     private MoreViewModel viewModel;
     private MoreAdapter adapter;
-    private HeroController hero;
+    private EditText search;
 
     private RecyclerView list;
     private View empty;
@@ -71,41 +75,39 @@ public class OtherCategoryFragment extends Fragment implements MoreAdapter.Liste
 
         viewModel = new ViewModelProvider(this).get(MoreViewModel.class);
 
-        setupHero(view);
+        setupHeader(view);
         setupList(view);
 
         viewModel.state().observe(getViewLifecycleOwner(), this::render);
         return view;
     }
 
-    private void setupHero(View root) {
-        // apply() is the terminal call — title() only stages the value.
-        // compact() = variant D, a single toolbar row. Without it the controller
-        // falls through to the tall identity band, which is built for detail
-        // screens and leaves a two-tier header with dead space on a nav root.
-        // No back arrow: this is a bottom-nav root, not a detail screen.
-        hero = HeroController.attach(root, getActivity())
-                .compact()
-                .title(R.string.more_tab_header)
-                .action(R.drawable.outline_emoji_events_24, () -> {
-                    if (getActivity() instanceof MainActivity) {
-                        ((MainActivity) getActivity()).showRewardedAd();
-                    }
-                })
-                .action(R.drawable.ic_settings_gear,
-                        () -> startActivity(new Intent(getContext(), Settings.class)))
-                .search(query -> viewModel.onQueryChanged(query));
-        hero.apply();
+    /**
+     * Screen-local header — see the layout comment for why hero_static could not
+     * express the mockup. Wires the same destinations HeroController used to.
+     */
+    private void setupHeader(View root) {
+        root.findViewById(R.id.moreRewards).setOnClickListener(v -> {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).showRewardedAd();
+            }
+        });
+        root.findViewById(R.id.moreSettings).setOnClickListener(v ->
+                startActivity(new Intent(getContext(), Settings.class)));
 
-        // The iconified SearchView collapses to a lens at the start of the toolbar,
-        // which is exactly where compact()'s inline title begins — the title lands
-        // on top of it. This screen has repeatedly regressed that way, so inset the
-        // title past the lens instead of editing hero_static (shared by 11 screens).
-        View inline = root.findViewById(R.id.heroInline);
-        if (inline != null && inline.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) inline.getLayoutParams();
-            lp.setMarginStart(getResources().getDimensionPixelSize(R.dimen.more_hero_title_inset));
-            inline.setLayoutParams(lp);
+        search = root.findViewById(R.id.moreSearch);
+        search.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) { }
+            @Override public void onTextChanged(CharSequence s, int a, int b, int c) { }
+            @Override public void afterTextChanged(Editable e) {
+                viewModel.onQueryChanged(e.toString());
+            }
+        });
+
+        // the navy header is fixed in both themes, so the status bar must match it
+        if (getActivity() != null) {
+            getActivity().getWindow().setStatusBarColor(
+                    ContextCompat.getColor(requireContext(), R.color.navy_700));
         }
     }
 
@@ -122,13 +124,8 @@ public class OtherCategoryFragment extends Fragment implements MoreAdapter.Liste
         list.setAdapter(adapter);
 
         root.findViewById(R.id.moreEmptyClear).setOnClickListener(v -> {
-            // HeroController owns the SearchView; clear it directly so the field and
-            // the state holder cannot disagree about whether a query is active.
-            android.widget.SearchView search = root.findViewById(R.id.heroSearch);
-            if (search != null) {
-                search.setQuery("", false);
-                search.setIconified(true);
-            }
+            // clear the field itself so it and the state holder cannot disagree
+            if (search != null) search.setText("");
             viewModel.onSearchDismissed();
         });
     }

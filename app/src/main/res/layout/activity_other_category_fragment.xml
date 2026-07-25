@@ -15,6 +15,7 @@
 -->
 <RelativeLayout xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/EntireLayoutCategory"
     android:layout_width="match_parent"
@@ -28,9 +29,105 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include
-            android:id="@+id/moreHero"
-            layout="@layout/hero_static" />
+        <!-- Screen-local header. hero_static cannot express the mockup: its compact
+             variant is a single toolbar row with an ICONIFIED search, and its expanded
+             variant stacks avatar+title BELOW the action row. The mockup wants avatar +
+             title + actions on one row and an expanded search field beneath. Reshaping
+             hero_static would hit the 11 screens that share it. -->
+        <LinearLayout
+            android:id="@+id/moreHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_navy_hero"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_md"
+            android:paddingTop="@dimen/spacing_sm"
+            android:paddingEnd="@dimen/spacing_md"
+            android:paddingBottom="@dimen/spacing_md">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/moreAvatar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="@dimen/spacing_sm"
+                    android:src="@mipmap/ic_launcher_new_transparent9"
+                    app:civ_border_color="@color/gold_accent"
+                    app:civ_border_width="1.5dp" />
+
+                <TextView
+                    android:id="@+id/moreTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/more_tab_header"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                    android:textColor="@color/text_on_navy"
+                    android:textDirection="locale"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/moreRewards"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/action_rewards"
+                    android:padding="13dp"
+                    app:srcCompat="@drawable/outline_emoji_events_24"
+                    app:tint="@color/gold_light" />
+
+                <ImageButton
+                    android:id="@+id/moreSettings"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/action_settings"
+                    android:padding="13dp"
+                    app:srcCompat="@drawable/ic_settings_gear"
+                    app:tint="@color/gold_light" />
+            </LinearLayout>
+
+            <!-- Expanded search field, as drawn - not an iconified lens. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:background="@drawable/bg_more_search_field"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginEnd="@dimen/spacing_sm"
+                    android:importantForAccessibility="no"
+                    app:srcCompat="@android:drawable/ic_menu_search"
+                    app:tint="@color/hint_on_navy" />
+
+                <EditText
+                    android:id="@+id/moreSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:hint="@string/more_search_hint"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/text_on_navy"
+                    android:textColorHint="@color/hint_on_navy"
+                    android:textDirection="locale"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
