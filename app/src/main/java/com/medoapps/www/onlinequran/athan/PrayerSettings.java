@@ -217,6 +217,36 @@ public final class PrayerSettings {
                 .apply();
     }
 
+    // ------------------------------------------------- automatic method pick
+
+    /**
+     * Whether the calculation method and madhab should follow the detected location.
+     *
+     * Deliberately distinct from {@link #getLocationMode}: that decides whether the
+     * location is tracked from the device at all, this decides whether the method
+     * follows it. A user can track their location automatically while pinning a
+     * calculation method they trust.
+     */
+    public static boolean isAutoMethodEnabled(Context c) {
+        return prefs(c).getBoolean("auto_method", true);
+    }
+
+    public static void setAutoMethodEnabled(Context c, boolean enabled) {
+        prefs(c).edit().putBoolean("auto_method", enabled).apply();
+    }
+
+    /**
+     * The country (or, offline, the resolved method name) the automatic pick was last
+     * applied for. Used to rewrite the method only when the user actually moves.
+     */
+    public static String getAutoMethodCountry(Context c) {
+        return prefs(c).getString("auto_method_country", "");
+    }
+
+    public static void setAutoMethodCountry(Context c, String country) {
+        prefs(c).edit().putString("auto_method_country", country == null ? "" : country).apply();
+    }
+
     // ----------------------------------------------------------------- hijri
 
     /** Day offset (-2..2) applied to the computed hijri date. */
