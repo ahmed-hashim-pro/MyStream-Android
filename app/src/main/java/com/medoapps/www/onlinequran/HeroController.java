@@ -172,7 +172,10 @@ public final class HeroController {
         if (actions == null) return this;
         int gold = ContextCompat.getColor(root.getContext(), R.color.gold_accent);
         ImageButton b = new ImageButton(root.getContext());
-        int sz = (int) (40 * root.getResources().getDisplayMetrics().density);
+        // 48dp is the Material/a11y minimum touch target. The glyph stays visually
+        // small via padding below — only the tappable area grows. Measured at 40dp
+        // before this, which failed the minimum on every hero screen.
+        int sz = (int) (48 * root.getResources().getDisplayMetrics().density);
         b.setLayoutParams(new LinearLayout.LayoutParams(sz, sz));
         android.util.TypedValue tv = new android.util.TypedValue();
         root.getContext().getTheme().resolveAttribute(
@@ -180,7 +183,8 @@ public final class HeroController {
         b.setBackgroundResource(tv.resourceId);
         b.setImageResource(iconRes);
         b.setColorFilter(gold);
-        int pad = (int) (8 * root.getResources().getDisplayMetrics().density);
+        // grew with the button so the glyph itself stays ~22dp as before
+        int pad = (int) (13 * root.getResources().getDisplayMetrics().density);
         b.setPadding(pad, pad, pad, pad);
         if (onClick != null) b.setOnClickListener(v -> onClick.run());
         actions.addView(b);
