@@ -54,12 +54,58 @@ def capture(name):
     os.makedirs(BASE, exist_ok=True)
     png = os.path.join(BASE, name + ".png")
     xml = os.path.join(BASE, name + ".xml")
+
+    # Every check here compares pixels against view bounds, so the screenshot and the
+    # view tree MUST describe the same instant. Two ways that silently broke:
+    #
+    #  1. uiautomator refuses to dump a moving screen ("could not get idle state") — the
+    #     Home countdown ring blocks it indefinitely. The old code ignored the error and
+    #     cat'd the dump file anyway, which still held the PREVIOUS screen: it audited
+    #     the More page's tree against Home's pixels and reported six confident contrast
+    #     failures that did not exist.
+    #  2. Screenshot first, dump second: a list still settling after a tab switch scrolls
+    #     between the two, so the tree describes a different scroll offset than the image.
+    #
+    # Both are fixed by making the dump the synchroniser. Dumping BLOCKS until the screen
+    # is idle, so: dump (wait for idle) -> screencap -> dump again, and require the two
+    # trees to be identical. If anything moved across the screenshot, the trees differ and
+    # we retry rather than report. A checker that mixes two moments is worse than none.
+    remote = "/sdcard/_audit_%s.xml" % name
+
+    def dump():
+        sh("adb shell rm -f %s" % remote)
+        err = sh("adb shell uiautomator dump %s 2>&1" % remote)
+        got = sh("adb shell cat %s 2>/dev/null" % remote)
+        return (got, err) if got.lstrip().startswith("<") else ("", err)
+
+    shot, tree = None, ""
+    for attempt in range(4):
+        before, err = dump()
+        if not before:
+            print("  settle attempt %d/4: %s" % (attempt + 1, err.strip()[:80]))
+            continue
+        shot = subprocess.run("adb exec-out screencap -p", shell=True,
+                              capture_output=True).stdout
+        after, _ = dump()
+        if after == before:
+            tree = before
+            break
+        print("  settle attempt %d/4: screen moved during capture, retrying" % (attempt + 1))
+    sh("adb shell rm -f %s" % remote)
+
+    if not tree or not shot:
+        raise SystemExit(
+            "CAPTURE FAILED for %r: could not get a screenshot and view tree from the\n"
+            "  same instant. The screen is still animating (a countdown, a scroll, a\n"
+            "  transition). Settle it or pick a static state — auditing a stale or\n"
+            "  mismatched tree is exactly how this tool lies." % name)
+
     with open(png, "wb") as f:
-        f.write(subprocess.run("adb exec-out screencap -p", shell=True, capture_output=True).stdout)
-    sh("adb shell uiautomator dump /sdcard/_audit.xml")
+        f.write(shot)
     with open(xml, "w", encoding="utf-8") as f:
-        f.write(sh("adb shell cat /sdcard/_audit.xml"))
-    print("captured %s (%d bytes) + view tree" % (png, os.path.getsize(png)))
+        f.write(tree)
+    print("captured %s (%d bytes) + matched view tree (%d nodes)"
+          % (png, os.path.getsize(png), tree.count("<node")))
 
 
 def load(name):
@@ -67,6 +113,8 @@ def load(name):
     png = os.path.join(BASE, name + ".png")
     xml = os.path.join(BASE, name + ".xml")
     img = Image.open(png).convert("RGB")
+    # Stays tolerant: diff() only compares pixels and must keep working on a png-only
+    # capture. audit() is the caller that cannot accept a missing tree, so it checks.
     tree = ET.parse(xml).getroot() if os.path.exists(xml) else None
     return img, tree
 
@@ -199,6 +247,10 @@ def check_contrast(img, tree, findings):
 
 def audit(name):
     img, tree = load(name)
+    # Without a tree every tree-based check skips itself and this prints "clean" — a
+    # false all-clear, the one result this tool must never produce.
+    if tree is None:
+        raise SystemExit("no view tree for %r — re-run `capture %s`" % (name, name))
     dens = density()
     findings = []
     check_seams(img, findings)
