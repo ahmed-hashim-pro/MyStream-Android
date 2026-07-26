@@ -98,7 +98,7 @@
             <!-- Expanded search field, as drawn - not an iconified lens. -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="@dimen/spacing_sm"
                 android:background="@drawable/bg_more_search_field"
                 android:gravity="center_vertical"

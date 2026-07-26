@@ -54,7 +54,7 @@
         android:layout_marginStart="@dimen/spacing_sm"
         android:fontFeatureSettings="tnum"
         android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
-        android:textColor="@color/gold_accent"
+        android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
         android:visibility="gone" />
 
