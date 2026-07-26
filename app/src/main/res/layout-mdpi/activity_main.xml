@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layoutDirection="inherit"
     android:layout_height="match_parent"
-    android:background="@color/background_main">
+    android:background="@color/navy_700">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -213,7 +213,7 @@
                 android:layout_height="match_parent"
                 android:layout_above="@+id/nav_bottom_anchor"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginBottom="-2dp"
                 app:defaultNavHost="true"
                 app:navGraph="@navigation/mobile_navigation" />
