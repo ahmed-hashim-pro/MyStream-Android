@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layoutDirection="inherit"
     android:layout_height="match_parent"
-    android:background="@color/navy_700">
+    android:background="@color/background_main">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -202,7 +202,7 @@
             android:id="@+id/adLayoutMain"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginTop="1dp"
+            android:layout_marginTop="0dp"
             android:layout_gravity="bottom"
             android:layout_marginBottom="0dp">
 
