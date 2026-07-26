@@ -147,7 +147,13 @@ public class OtherCategoryFragment extends Fragment implements MoreAdapter.Liste
         if (entry.opensLiveList) {
             // Live Streaming swaps a fragment into this screen's own container —
             // @id/EntireLayoutCategory must survive any redesign of the layout.
-            getParentFragmentManager().beginTransaction()
+            //
+            // This MUST be the Activity's FragmentManager, not getParentFragmentManager().
+            // This fragment is hosted by the NavHostFragment, so its parent FragmentManager
+            // is the one Navigation owns, and FragmentNavigator throws
+            // IllegalArgumentException ("unknown to the FragmentNavigator") the moment a
+            // fragment it did not create is committed to that back stack.
+            requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.EntireLayoutCategory, new LiveList(), "liveListFragment")
                     .addToBackStack("liveListFragmentBAck")
                     .commit();
