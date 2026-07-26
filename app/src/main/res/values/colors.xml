@@ -342,4 +342,8 @@
     <color name="onb_dot_inactive">#CDBF9E</color>
     <color name="onb_chip_bg">#2AB8860B</color>
 
+    <!-- Gold that stays legible on the page background in BOTH themes. colorPrimaryDark
+         cannot be used: values-night redefines it to #121212, identical to
+         background_main, which renders text invisible. -->
+    <color name="more_accent_on_bg">#8B6508</color>
 </resources>

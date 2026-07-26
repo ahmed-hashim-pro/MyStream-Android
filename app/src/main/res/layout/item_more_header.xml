@@ -18,7 +18,7 @@
         android:layout_marginEnd="@dimen/spacing_sm"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/more_accent_on_bg"
         android:textStyle="bold"
         android:textDirection="locale" />
 
