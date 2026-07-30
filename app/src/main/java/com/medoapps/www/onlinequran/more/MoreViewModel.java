@@ -188,8 +188,11 @@ public class MoreViewModel extends AndroidViewModel {
 
     private List<MoreUiState.Entry> readListenEntries(Context c) {
         List<MoreUiState.Entry> list = new ArrayList<>();
-        list.add(new MoreUiState.Entry("live", R.string.livestrem, R.drawable.ic_live_tv,
-                MoreUiState.Shape.TILE, null, null, null, true));
+        // Live Streaming is hidden. This tile was its only entry point, so leaving it out
+        // hides the feature; LiveList, LiveStreamPlayer and the opensLiveList plumbing all
+        // stay in place, so restoring it is re-adding this one entry:
+        //   list.add(new MoreUiState.Entry("live", R.string.livestrem, R.drawable.ic_live_tv,
+        //           MoreUiState.Shape.TILE, null, null, null, true));
         list.add(new MoreUiState.Entry("dua", R.string.dua_collection, R.drawable.ic_dua,
                 MoreUiState.Shape.TILE, null, null, DuaActivity.class, false));
         list.add(new MoreUiState.Entry("names", R.string.asmaul_husna, R.drawable.ic_asmaul_husna,
