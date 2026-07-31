@@ -241,7 +241,13 @@ dependencies {
     // Navigation
     implementation "androidx.navigation:navigation-fragment:${navVersion}"
     implementation "androidx.navigation:navigation-ui:${navVersion}"
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:${navVersion}"
+    // navigation-dynamic-features-fragment is deliberately NOT here. It drags in
+    // com.google.android.play:feature-delivery:2.0.1, which Play rejects against
+    // targetSdk 34 (Android 14's non-exported broadcast-receiver change crashes it).
+    // Nothing in this app uses dynamic delivery — no dynamic-feature modules, no
+    // `dynamicFeatures` block, no SplitInstall, no <include-dynamic> in the nav graph,
+    // and the host is a plain NavHostFragment — so the dependency is dropped rather
+    // than bumped to feature-delivery 2.1.0 for a library we never call.
 
     // Firebase (BOM manages versions)
     implementation platform('com.google.firebase:firebase-bom:32.7.0')
