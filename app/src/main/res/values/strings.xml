@@ -1133,6 +1133,8 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="athan_over_apps_off">Tap to allow (otherwise shows as a notification when screen is on)</string>
     <string name="athan_over_apps_prompt">Allow "Display over other apps" so the athan can take over the screen even while you\'re using another app. Without it, the athan shows as a notification when the screen is on.</string>
     <string name="athan_test_notify_only">Test as notification</string>
+    <string name="athan_fullscreen_title">Show athan on the lock screen</string>
+    <string name="athan_fullscreen_prompt">Allow full-screen notifications so the athan can wake the screen and appear in full at prayer time. Without it the athan still plays, but only as a notification that disappears after about a minute.</string>
     <string name="athan_overlay_card">Allow the athan to appear over apps when the screen is on</string>
     <string name="athan_dua_text">اللهم رب هذه الدعوة التامة والصلاة القائمة، آت محمداً الوسيلة والفضيلة، وابعثه مقاماً محموداً الذي وعدته</string>
 
@@ -1253,6 +1255,8 @@ Press the button below to set the time for this , then you can start the app </s
     <string name="onb_perm_loc_detecting">Detecting your location…</string>
     <string name="onb_perm_exact_name">Exact alarms</string>
     <string name="onb_perm_exact_why">Athan exactly on time</string>
+    <string name="onb_perm_fullscreen_name">Full-screen athan</string>
+    <string name="onb_perm_fullscreen_why">Show the athan over the lock screen</string>
     <string name="onb_perm_batt_name">Unrestricted battery</string>
     <string name="onb_perm_batt_why">Reliable delivery in the background</string>
     <string name="onb_perm_overlay_name">Display over other apps</string>

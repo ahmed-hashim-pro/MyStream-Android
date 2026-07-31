@@ -57,6 +57,7 @@ public class OnboardingPermissionsFragment extends Fragment {
     private static final String NOTIF = "notif";
     private static final String LOC = "loc";
     private static final String EXACT = "exact";
+    private static final String FULLSCREEN = "fullscreen";
     private static final String BATT = "batt";
     private static final String OVERLAY = "overlay";
 
@@ -107,6 +108,10 @@ public class OnboardingPermissionsFragment extends Fragment {
         addRow((LinearLayout) athanRows, LOC, R.string.onb_perm_loc_name, R.string.onb_perm_loc_why);
         addAutoUpdateRow((LinearLayout) athanRows);
         addRow((LinearLayout) athanRows, EXACT, R.string.onb_perm_exact_name, R.string.onb_perm_exact_why);
+        // Android 14+ only: the row hides itself on older releases, where the permission
+        // is always effectively granted and asking for it would just be noise.
+        addRow((LinearLayout) athanRows, FULLSCREEN,
+                R.string.onb_perm_fullscreen_name, R.string.onb_perm_fullscreen_why);
         addRow((LinearLayout) athanRows, BATT, R.string.onb_perm_batt_name, R.string.onb_perm_batt_why);
         addRow((LinearLayout) bubbleRows, OVERLAY, R.string.onb_perm_overlay_name, R.string.onb_perm_overlay_why);
 
@@ -276,6 +281,8 @@ public class OnboardingPermissionsFragment extends Fragment {
                         || hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
             case EXACT:
                 return AthanScheduler.canUseExactAlarms(c);
+            case FULLSCREEN:
+                return AthanScheduler.canUseFullScreenIntent(c);
             case BATT:
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return true;
                 PowerManager pm = (PowerManager) c.getSystemService(Context.POWER_SERVICE);
@@ -298,6 +305,12 @@ public class OnboardingPermissionsFragment extends Fragment {
             case EXACT:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     openSettings(new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, packageUri()));
+                }
+                break;
+            case FULLSCREEN:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    openSettings(new Intent(
+                            Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT, packageUri()));
                 }
                 break;
             case BATT:
@@ -400,6 +413,13 @@ public class OnboardingPermissionsFragment extends Fragment {
         // keep a handle on the location row's subtitle so the detected city can replace it
         if (LOC.equals(key)) {
             locationDetail = why;
+        }
+        // Full-screen intent is a concept that only exists from Android 14. Below that the
+        // athan always takes over the screen, so showing a row the user cannot act on
+        // would be pure noise — drop it rather than render a permanently-granted line.
+        if (FULLSCREEN.equals(key)
+                && Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            row.setVisibility(View.GONE);
         }
     }
 

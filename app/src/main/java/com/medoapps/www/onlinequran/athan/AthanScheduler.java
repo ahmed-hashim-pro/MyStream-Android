@@ -172,4 +172,24 @@ public final class AthanScheduler {
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         return am != null && canUseExactAlarms(am);
     }
+
+    /**
+     * Whether a notification's full-screen intent will actually take over the screen.
+     *
+     * From Android 14, USE_FULL_SCREEN_INTENT is only pre-granted to apps whose core
+     * function is alarms or calls. This is a Quran app, so new installs may not get it,
+     * and the athan then degrades to a heads-up notification that vanishes after ~60s
+     * instead of waking the device and showing {@code AthanAlarmActivity}. Audio and the
+     * Stop action still work — but a locked phone will not light up.
+     *
+     * Existing installs keep the permission across updates; this only affects fresh ones.
+     */
+    public static boolean canUseFullScreenIntent(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            return true;
+        }
+        android.app.NotificationManager nm =
+                (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        return nm == null || nm.canUseFullScreenIntent();
+    }
 }

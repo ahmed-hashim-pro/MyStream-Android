@@ -283,7 +283,42 @@ public class AthanSettingsActivity extends AppCompatActivity {
                     .show();
             return;
         }
+        // Android 14+ may withhold USE_FULL_SCREEN_INTENT from an app like this one, whose
+        // core purpose is not alarms or calls. Without it the athan cannot wake a locked
+        // screen — it degrades to a heads-up notification that clears itself after ~60s.
+        // The test is exactly where that difference is visible, so say so here rather than
+        // letting the user discover it at Fajr.
+        if (!AthanScheduler.canUseFullScreenIntent(this)) {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle(R.string.athan_fullscreen_title)
+                    .setMessage(R.string.athan_fullscreen_prompt)
+                    .setPositiveButton(R.string.athan_exact_alarm_enable,
+                            (d, w) -> requestFullScreenIntentPermission())
+                    .setNegativeButton(R.string.athan_test_notify_only,
+                            (d, w) -> scheduleTestAthan())
+                    .show();
+            return;
+        }
         scheduleTestAthan();
+    }
+
+    /** Opens the per-app "full-screen notifications" screen added in Android 14. */
+    private void requestFullScreenIntentPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return;
+        try {
+            startActivity(new android.content.Intent(
+                    android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT,
+                    android.net.Uri.parse("package:" + getPackageName())));
+        } catch (Exception e) {
+            // Not every OEM ships the per-app screen; fall back to the app's settings page.
+            try {
+                startActivity(new android.content.Intent(
+                        android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        android.net.Uri.parse("package:" + getPackageName())));
+            } catch (Exception ignored) {
+                Toast.makeText(this, R.string.athan_fullscreen_prompt, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     /**

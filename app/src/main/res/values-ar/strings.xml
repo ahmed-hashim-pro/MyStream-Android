@@ -822,6 +822,8 @@
     <string name="athan_over_apps_off">اضغط للسماح (وإلا يظهر كإشعار عند تشغيل الشاشة)</string>
     <string name="athan_over_apps_prompt">اسمح بـ \"العرض فوق التطبيقات\" ليظهر الأذان فوق الشاشة حتى أثناء استخدامك لتطبيق آخر. بدونها يظهر الأذان كإشعار عندما تكون الشاشة مضاءة.</string>
     <string name="athan_test_notify_only">تجربة كإشعار</string>
+    <string name="athan_fullscreen_title">عرض الأذان على شاشة القفل</string>
+    <string name="athan_fullscreen_prompt">اسمح بالإشعارات بملء الشاشة ليتمكّن الأذان من إيقاظ الشاشة وعرضه كاملاً في وقت الصلاة. بدونها يعمل الأذان صوتياً، لكنه يظهر كإشعار فقط يختفي بعد دقيقة تقريباً.</string>
     <string name="athan_overlay_card">اسمح بظهور الأذان فوق التطبيقات عندما تكون الشاشة مضاءة</string>
     <string name="athan_dua_text">اللهم رب هذه الدعوة التامة والصلاة القائمة، آت محمداً الوسيلة والفضيلة، وابعثه مقاماً محموداً الذي وعدته</string>
 
@@ -925,6 +927,8 @@
     <string name="onb_perm_loc_detecting">جارٍ تحديد موقعك…</string>
     <string name="onb_perm_exact_name">المنبهات الدقيقة</string>
     <string name="onb_perm_exact_why">الأذان في وقته تماماً</string>
+    <string name="onb_perm_fullscreen_name">الأذان بملء الشاشة</string>
+    <string name="onb_perm_fullscreen_why">عرض الأذان فوق شاشة القفل</string>
     <string name="onb_perm_batt_name">بطارية بلا قيود</string>
     <string name="onb_perm_batt_why">وصول موثوق في الخلفية</string>
     <string name="onb_perm_overlay_name">العرض فوق التطبيقات</string>
