@@ -20,6 +20,11 @@ if (getGradle().getStartParameter().getTaskRequests().toString().contains("Relea
 }
 android {
     namespace "com.medoapps.www.onlinequran"
+    // Screenshot-free UI testing: androidTest's BuildConfig is generated into `testNamespace`,
+    // which defaults to namespace + ".test" — and that collides with the dead main-source
+    // class `com.medoapps.www.onlinequran.test` ("package ... clashes with class of same
+    // name"). Renaming it is what unblocks the androidTest compile.
+    testNamespace "com.medoapps.www.onlinequran.androidtest"
     compileSdk 34
     lint {
         checkReleaseBuilds true
@@ -39,6 +44,11 @@ android {
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "com.medoapps.www.onlinequran.core.QuranTestRunner"
+        // Screenshot-free UI testing: the default testApplicationId is applicationId + ".test",
+        // which collides with the dead main-source class `com.medoapps.www.onlinequran.test`
+        // ("package ... clashes with class of same name" when the androidTest BuildConfig
+        // is generated). Renaming the instrumentation package unblocks androidTest compile.
+        testApplicationId "com.medoapps.www.onlinequran.androidtest"
 
         buildConfigField "String", "ADMOB_AD_UNIT_ID", "\"ca-app-pub-9350633918697995/7533398267\""
         buildConfigField "String", "ADMOB_APP_ID", "\"ca-app-pub-9350633918697995~2524775865\""
@@ -90,7 +100,13 @@ android {
         freeCompilerArgs += [ "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi" ]
     }
 
+    // Screenshot-free UI testing: needed by Robolectric so unit tests can read merged resources.
+    testOptions.unitTests.includeAndroidResources = true
+
     testOptions.unitTests.all {
+        // Screenshot-free UI testing: let `-Droborazzi.test.record=true` reach the test JVM.
+        systemProperty 'roborazzi.test.record', System.getProperty('roborazzi.test.record', 'false')
+        systemProperty 'roborazzi.test.verify', System.getProperty('roborazzi.test.verify', 'false')
         testLogging {
             events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
             outputs.upToDateWhen { false }
@@ -260,6 +276,13 @@ dependencies {
     testImplementation "junit:junit:${junitVersion}"
     testImplementation "com.google.truth:truth:${truthVersion}"
     testImplementation "org.mockito:mockito-core:5.8.0"
+    // Screenshot-free UI testing: JVM rendering of XML layouts
+    testImplementation "org.robolectric:robolectric:4.13"
+    // 1.44.0 is the last release built on kotlin-stdlib 1.9.x; 1.46.0+ moves to 2.0.21,
+    // which this project's Kotlin 1.9.24 compiler cannot read.
+    testImplementation "io.github.takahirom.roborazzi:roborazzi:1.44.0"
+    testImplementation "androidx.test:core:1.5.0"
+    testImplementation "androidx.test.ext:junit:${androidxJunitExtVersion}"
     testImplementation "com.squareup.okhttp3:mockwebserver:${okhttpVersion}"
 
     androidTestImplementation "androidx.test.espresso:espresso-core:${espressoVersion}"
@@ -267,6 +290,9 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:${androidxJunitExtVersion}"
     androidTestImplementation "androidx.navigation:navigation-testing:${navVersion}"
     androidTestImplementation 'androidx.test:rules:1.5.0'
+    // Screenshot-free UI testing: assertion library for the layout-invariant instrumentation tests.
+    // Already on the testImplementation side and already in the Gradle cache.
+    androidTestImplementation "com.google.truth:truth:${truthVersion}"
 
     // ErrorProne
     errorprone 'com.google.errorprone:error_prone_core:2.23.0'
