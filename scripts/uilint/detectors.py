@@ -234,17 +234,19 @@ def diff_baseline(cur, base, cfg, masks):
             overlay[i * 3 + 1] = 0
             overlay[i * 3 + 2] = 255
 
-    if pct <= cfg["diff_pct_budget"]:
-        return out, overlay
-
+    # Always cluster. A whole-image percentage budget would hide exactly the
+    # regressions this exists to catch: a 40dp->48dp button resize is ~2400px,
+    # i.e. 0.09% of a 1080x2400 frame -- under any sane budget, yet fatal.
+    # The budget only decides whether the *global* line is worth printing.
     for (x0, y0, x1, y1, cnt) in _clusters(hits, w, h, cfg):
         kind = "full-width band" if (x1 - x0) > w * 0.9 else "region"
         out.append(_f("diff", CRIT,
                       "%s x=%d..%d y=%d..%d (%d px) differs from baseline"
                       % (kind, x0, x1, y0, y1, cnt), (x0, y0, x1, y1)))
-    out.insert(0, _f("diff_total", CRIT,
-                     "%.3f%% of pixels differ from baseline (budget %.3f%%)"
-                     % (pct, cfg["diff_pct_budget"])))
+    if pct > cfg["diff_pct_budget"]:
+        out.insert(0, _f("diff_total", CRIT,
+                         "%.3f%% of all pixels differ from baseline "
+                         "(budget %.3f%%)" % (pct, cfg["diff_pct_budget"])))
     return out, overlay
 
 
@@ -343,6 +345,29 @@ def check_occlusion(nodes, cfg, scale):
     return out
 
 
+def _parent_of(n, nodes, min_cover=0.6):
+    """Smallest node that *mostly* contains n. Containment must be loose, not
+    strict: an overflowing child is by definition no longer inside its parent,
+    so a strict test would never find the parent we want to compare against."""
+    best = best_area = None
+    x0, y0, x1, y1 = n["bounds"]
+    area = max(1, (x1 - x0) * (y1 - y0))
+    for c in nodes:
+        if c is n:
+            continue
+        cx0, cy0, cx1, cy1 = c["bounds"]
+        ca = (cx1 - cx0) * (cy1 - cy0)
+        if ca <= area:
+            continue
+        ox = min(x1, cx1) - max(x0, cx0)
+        oy = min(y1, cy1) - max(y0, cy0)
+        if ox <= 0 or oy <= 0 or (ox * oy) / float(area) < min_cover:
+            continue
+        if best is None or ca < best_area:
+            best, best_area = c, ca
+    return best
+
+
 def _is_ancestor(a, b):
     x0, y0, x1, y1 = a["bounds"]
     bx0, by0, bx1, by1 = b["bounds"]
@@ -363,6 +388,27 @@ def check_text_fit(nodes, cfg, scale):
             out.append(_f("text_truncated", CRIT,
                           "%r is ellipsized -- label does not fit its tile"
                           % t[:48], n["bounds"]))
+    # A wrap_content label that outgrows its tile is NOT prevented by the
+    # parent, and this is the real signature of the EN-only collision: Arabic
+    # labels are shorter, so it only ever reproduces under --locale en.
+    for n in nodes:
+        if not _is_prose(n["text"]):
+            continue
+        p = _parent_of(n, nodes)
+        if p is None:
+            continue
+        x0, y0, x1, y1 = n["bounds"]
+        px0, py0, px1, py1 = p["bounds"]
+        dx = max(px0 - x0, x1 - px1)
+        dy = max(py0 - y0, y1 - py1)
+        if max(dx, dy) > cfg["overflow_min_px"]:
+            out.append(_f("text_overflow", CRIT,
+                          "%r overflows its container %s by %dpx horizontally "
+                          "/ %dpx vertically -- label does not fit at this "
+                          "locale" % (n["text"][:32], p["rid"] or p["cls"],
+                                      max(0, dx), max(0, dy)),
+                          n["bounds"]))
+
     texts = [n for n in nodes if _is_prose(n["text"])]
     for i in range(len(texts)):
         for j in range(i + 1, len(texts)):

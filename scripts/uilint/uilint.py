@@ -70,6 +70,8 @@ CFG = {
     "cluster_min_px": 400,
     "cluster_max_report": 12,
     # --- bounds ---
+    "fingerprint_min_overlap": 0.6,
+    "overflow_min_px": 4,
     "min_touch_dp": 48,
     "bottom_nav_ids": ["bottom_nav", "bottomnav", "nav_view", "navigation_bar",
                        "bottom_navigation"],
@@ -138,6 +140,7 @@ def cmd_capture(a):
         "screen": a.screen, "theme": a.theme, "locale": a.locale,
         "width": w, "height": h, "density": dens,
         "status_bar_bottom": status_bar_bottom(xml),
+        "fingerprint": screen_fingerprint(xml),
         "commit": sh("git rev-parse --short HEAD").stdout.decode().strip(),
         "captured": time.strftime("%Y-%m-%dT%H:%M:%S"),
         # volatile regions (clock, prayer countdown) -- else every diff is noise
@@ -184,6 +187,21 @@ def parse_nodes(path):
     return out
 
 
+def screen_fingerprint(xml):
+    """Sorted set of resource-ids present. Identifies *which screen* this is;
+    MainActivity hosts every fragment so the activity name cannot tell them
+    apart, and the theme/locale switch recreates the activity -- exactly when
+    the operator is most likely to land somewhere else."""
+    return sorted({n["rid"] for n in parse_nodes(xml) if n["rid"]})
+
+
+def fingerprint_overlap(a, b):
+    sa, sb = set(a or []), set(b or [])
+    if not sa or not sb:
+        return 1.0                       # unknown -> do not block
+    return len(sa & sb) / float(len(sa | sb))
+
+
 def status_bar_bottom(xml):
     """First content row under the status bar, from the hierarchy itself."""
     for n in parse_nodes(xml):
@@ -199,6 +217,7 @@ def cmd_check(a):
     variants = ([(a.theme, a.locale)] if a.theme and a.locale
                 else [(t, l) for t in ("light", "dark") for l in ("en", "ar")])
     fail = 0
+    linted = 0
     for theme, locale in variants:
         src = WORK if not a.from_baseline else BASE
         png, xml, meta = paths(a.screen, theme, locale, src)
@@ -206,7 +225,17 @@ def cmd_check(a):
             print("-- %s/%s: no capture, skipped" % (a.screen,
                                                      variant(theme, locale)))
             continue
+        linted += 1
         fail |= run_one(a, png, xml, meta, theme, locale)
+    # A run that linted nothing must never report green -- that silent pass is
+    # the exact failure mode this tool exists to prevent.
+    if linted == 0:
+        print("ERROR: no captures found for screen %r -- nothing was checked. "
+              "Run `capture` first." % a.screen)
+        return 1
+    if linted < len(variants):
+        print("WARNING: only %d of %d variants were checked."
+              % (linted, len(variants)))
     return 1 if fail else 0
 
 
@@ -231,9 +260,20 @@ def run_one(a, png, xml, meta, theme, locale):
     bpng, _bx, bmeta = paths(a.screen, theme, locale, BASE)
     if os.path.exists(bpng) and os.path.abspath(bpng) != os.path.abspath(png):
         binfo = json.load(open(bmeta)) if os.path.exists(bmeta) else {}
-        bw, bh, bpx = load_rgb(bpng)
-        df, overlay = D.diff_baseline((w, h, px), (bw, bh, bpx), CFG,
-                                      binfo.get("masks", []))
+        ov = fingerprint_overlap(screen_fingerprint(xml),
+                                 binfo.get("fingerprint"))
+        if ov < CFG["fingerprint_min_overlap"]:
+            findings.append(D._f(
+                "screen_identity", D.CRIT,
+                "refusing to diff: capture shares only %.0f%% of its "
+                "resource-ids with the baseline -- this looks like a "
+                "different screen (did the theme/locale switch drop you "
+                "elsewhere?)" % (ov * 100)))
+            df, overlay = [], None
+        else:
+            bw, bh, bpx = load_rgb(bpng)
+            df, overlay = D.diff_baseline((w, h, px), (bw, bh, bpx), CFG,
+                                          binfo.get("masks", []))
         findings += df
         if overlay and df:
             op = png.replace(".png", "__diff.png")
@@ -252,6 +292,68 @@ def run_one(a, png, xml, meta, theme, locale):
         r = (" @ [%d,%d][%d,%d]" % f["rect"]) if f["rect"] else ""
         print("  [%s] %-16s %s%s" % (f["severity"], f["rule"], f["msg"], r))
     return 1 if errs else 0
+
+
+def cmd_selftest(_a):
+    """Synthesize the shipped defects in memory and assert each rule fires."""
+    w, h = 400, 800
+    ok = True
+
+    def mk(seam_h):
+        px = bytearray(w * h * 3)
+        for y in range(h):
+            if 63 <= y < 63 + seam_h:
+                c = (0xFF, 0xF8, 0xF0)          # cream seam
+            elif y < 300:
+                c = (0x1F, 0x2A, 0x44)          # navy status bar + header
+            else:
+                c = (0xFF, 0xF8, 0xF0)
+            for x in range(w):
+                i = (y * w + x) * 3
+                px[i], px[i + 1], px[i + 2] = c
+        return px
+
+    seam = D.find_seams(mk(8), w, h, CFG)
+    bar = D.check_status_bar_seam(mk(8), w, h, CFG, 63)
+    clean = D.find_seams(mk(0), w, h, CFG)
+    for name, got, want in (("seam fires on 8px band", len(seam), 1),
+                            ("status_bar_seam fires", len(bar), 1),
+                            ("no seam on clean frame", len(clean), 0)):
+        ok &= (got == want)
+        print("%-34s %s (got %d, want %d)"
+              % (name, "ok" if got == want else "FAIL", got, want))
+
+    # a sub-1% localised regression must still be reported
+    a = bytearray(w * h * 3)
+    b = bytearray(a)
+    rw, rh = 25, 20                       # 500px: below the 0.2% budget but
+    for y in range(400, 400 + rh):        # above cluster_min_px -- this is the
+        for x in range(100, 100 + rw):    # 40dp->48dp resize signature
+            i = (y * w + x) * 3
+            b[i] = 200
+    pct = 100.0 * rw * rh / (w * h)
+    df, _ = D.diff_baseline((w, h, b), (w, h, a), CFG, [])
+    small = [f for f in df if f["rule"] == "diff"]
+    assert pct < CFG["diff_pct_budget"], "selftest region is not sub-budget"
+    ok &= len(small) >= 1
+    print("%-34s %s (%.3f%% of frame, budget %.3f%%)"
+          % ("sub-budget diff reported", "ok" if small else "FAIL",
+             pct, CFG["diff_pct_budget"]))
+
+    # a 40dp control must be flagged; 48dp must not
+    scale = 420 / 160.0
+    n40 = {"bounds": (0, 0, int(100 * scale), int(40 * scale)), "text": "Copy",
+           "desc": "", "rid": "verse_copy", "cls": "TextView",
+           "clickable": True, "long_clickable": False}
+    n48 = dict(n40, bounds=(0, 0, int(100 * scale), int(48 * scale)),
+               rid="ok_btn")
+    got = len(D.check_touch_targets([n40, n48], CFG, scale))
+    ok &= (got == 1)
+    print("%-34s %s (got %d, want 1)"
+          % ("40dp flagged, 48dp passes", "ok" if got == 1 else "FAIL", got))
+
+    print("\nSELFTEST %s" % ("PASS" if ok else "FAIL"))
+    return 0 if ok else 1
 
 
 def main():
@@ -281,6 +383,8 @@ def main():
     k.add_argument("--from-baseline", action="store_true",
                    help="lint the stored baselines themselves (no diff)")
     k.set_defaults(fn=cmd_check)
+
+    sub.add_parser("selftest").set_defaults(fn=cmd_selftest)
 
     a = p.parse_args()
     sys.exit(a.fn(a))
