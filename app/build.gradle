@@ -72,7 +72,7 @@ android {
         applicationId "com.medoapps.www.onlinequran"
         minSdkVersion 21
         targetSdkVersion 34
-        versionCode 43
+        versionCode 45
         versionName "13.0.0"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -250,7 +250,16 @@ dependencies {
     // than bumped to feature-delivery 2.1.0 for a library we never call.
 
     // Firebase (BOM manages versions)
-    implementation platform('com.google.firebase:firebase-bom:32.7.0')
+    // 32.8.1 rather than 32.7.0 because Play flagged a critical note on
+    // com.google.android.recaptcha:recaptcha:18.1.2, which this app never declares — it
+    // arrives via firebase-auth. The BOM is what pins it:
+    //   32.7.0 -> firebase-auth 22.3.0 -> recaptcha 18.1.2  (flagged)
+    //   32.8.1 -> firebase-auth 22.3.1 -> recaptcha 18.4.0
+    // Deliberately the smallest bump that clears it: staying on the 32.x line keeps
+    // firebase-auth on 22.x, whereas 33.x moves it to 23.x — a major bump of the library
+    // behind Google Sign-In, which cannot be exercised here because the upload key's
+    // SHA-1 is not registered for OAuth.
+    implementation platform('com.google.firebase:firebase-bom:32.8.1')
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-database'
     implementation 'com.google.firebase:firebase-messaging'
