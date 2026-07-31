@@ -326,8 +326,13 @@ dependencies {
     // WorkManager
     implementation "androidx.work:work-runtime-ktx:${workManagerVersion}"
 
-    // Billing
-    implementation "com.android.billingclient:billing:6.1.0"
+    // Billing — Play requires 8.0.0 or later. Pinned to exactly 8.0.0 because it is the
+    // ONLY 8.x that still supports this app's minSdk 21: 8.1.0, 8.2.0, 8.2.1 and 8.3.0 all
+    // declare minSdk 23, which would drop Android 5.0/5.1 users. Verified by building each.
+    // Raising minSdk is a product decision, not a build one — revisit together.
+    // The jump from 6.x also removes the SkuDetails API outright, so BillingService is
+    // rewritten against ProductDetails rather than version-bumped.
+    implementation "com.android.billingclient:billing:8.0.0"
 
     // Logging
     implementation 'com.jakewharton.timber:timber:5.0.1'

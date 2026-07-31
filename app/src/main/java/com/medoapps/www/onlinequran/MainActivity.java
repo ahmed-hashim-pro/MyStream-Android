@@ -133,6 +133,8 @@ public  class  MainActivity extends BaseActivity {
 
     boolean isAllFabsVisible = false;
     static WeakReference<MainActivity> instance8Ref;
+    /** Held for the Activity's lifetime and released in onDestroy — see onResume. */
+    private BillingService billingService;
     //private RewardedVideoAd mRewardedVideoAd;
     private static final String AD_UNIT_ID = BuildConfig.ADMOB_AD_UNIT_ID;
     private static final String APP_ID = BuildConfig.ADMOB_APP_ID;
@@ -316,8 +318,11 @@ public  class  MainActivity extends BaseActivity {
         subscribeCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BillingService billingService = new BillingService(MainActivity.this,MainActivity.this);
-
+                // Reuse the Activity-scoped client rather than opening a second one that
+                // nothing would ever close.
+                if (billingService == null) {
+                    billingService = new BillingService(MainActivity.this, MainActivity.this);
+                }
                 billingService.startConnection();
             }
         });
@@ -938,8 +943,12 @@ public  class  MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        BillingService billingService = new BillingService(MainActivity.this,MainActivity.this);
-
+        // One client for the Activity's lifetime. This used to construct a new
+        // BillingService — and so a new BillingClient, which binds a Play service — on
+        // every resume, with nothing ever ending the connection.
+        if (billingService == null) {
+            billingService = new BillingService(MainActivity.this, MainActivity.this);
+        }
         billingService.FetchingPurchases();
     }
 
@@ -1348,5 +1357,9 @@ public  class  MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         instance8Ref = null;
+        if (billingService != null) {
+            billingService.release();
+            billingService = null;
+        }
     }
 }
