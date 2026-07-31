@@ -18,6 +18,39 @@ if (getGradle().getStartParameter().getTaskRequests().toString().contains("Relea
     apply plugin: 'com.google.gms.google-services'
     apply plugin: 'com.google.firebase.crashlytics'
 }
+
+// Release signing. Credentials are read from a gitignored keystore.properties and are
+// NEVER committed — the file, and any .jks/.keystore, are in .gitignore. To sign, create
+// keystore.properties next to this build file (see keystore.properties.example):
+//
+//   storeFile=/absolute/path/to/upload-keystore.jks
+//   storePassword=...
+//   keyAlias=...
+//   keyPassword=...
+//
+// CI can supply the same four values as environment variables instead
+// (MYSTREAM_STORE_FILE / _STORE_PASSWORD / _KEY_ALIAS / _KEY_PASSWORD).
+//
+// When neither source is present the release build still succeeds, but produces an
+// UNSIGNED artifact that Play will reject — `hasReleaseSigning` below is what decides,
+// so an absent keystore degrades loudly rather than silently signing with the debug key.
+def keystorePropertiesFile = file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withInputStream { keystoreProperties.load(it) }
+}
+
+def signingValue = { String key, String envVar ->
+    keystoreProperties.getProperty(key) ?: System.getenv(envVar)
+}
+def releaseStoreFile = signingValue("storeFile", "MYSTREAM_STORE_FILE")
+def hasReleaseSigning = releaseStoreFile != null && file(releaseStoreFile).exists()
+if (!hasReleaseSigning) {
+    logger.warn("WARNING: no release keystore configured — :app:bundleMadaniRelease will "
+            + "produce an UNSIGNED bundle that Google Play will reject. "
+            + "See the signing comment in app/build.gradle.")
+}
+
 android {
     namespace "com.medoapps.www.onlinequran"
     // Screenshot-free UI testing: androidTest's BuildConfig is generated into `testNamespace`,
@@ -39,8 +72,8 @@ android {
         applicationId "com.medoapps.www.onlinequran"
         minSdkVersion 21
         targetSdkVersion 34
-        versionCode 42
-        versionName "12.4.1"
+        versionCode 43
+        versionName "13.0.0"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "com.medoapps.www.onlinequran.core.QuranTestRunner"
@@ -52,6 +85,16 @@ android {
 
         buildConfigField "String", "ADMOB_AD_UNIT_ID", "\"ca-app-pub-9350633918697995/7533398267\""
         buildConfigField "String", "ADMOB_APP_ID", "\"ca-app-pub-9350633918697995~2524775865\""
+    }
+    signingConfigs {
+        release {
+            if (hasReleaseSigning) {
+                storeFile file(releaseStoreFile)
+                storePassword signingValue("storePassword", "MYSTREAM_STORE_PASSWORD")
+                keyAlias signingValue("keyAlias", "MYSTREAM_KEY_ALIAS")
+                keyPassword signingValue("keyPassword", "MYSTREAM_KEY_PASSWORD")
+            }
+        }
     }
     flavorDimensions "pageType"
     productFlavors {
@@ -78,6 +121,9 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.cfg'
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 

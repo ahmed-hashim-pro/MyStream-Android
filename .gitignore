@@ -72,6 +72,8 @@ local.properties
 *.keystore
 *.pepk
 google-services.json
+# Release signing credentials read by app/build.gradle — never commit.
+keystore.properties
 
 # IDE
 /.idea/
