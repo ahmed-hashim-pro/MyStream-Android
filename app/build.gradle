@@ -58,7 +58,7 @@ android {
     // class `com.medoapps.www.onlinequran.test` ("package ... clashes with class of same
     // name"). Renaming it is what unblocks the androidTest compile.
     testNamespace "com.medoapps.www.onlinequran.androidtest"
-    compileSdk 34
+    compileSdk 36
     lint {
         checkReleaseBuilds true
         abortOnError false
@@ -71,7 +71,7 @@ android {
     defaultConfig {
         applicationId "com.medoapps.www.onlinequran"
         minSdkVersion 21
-        targetSdkVersion 34
+        targetSdkVersion 36
         versionCode 46
         versionName "13.0.0"
         multiDexEnabled true

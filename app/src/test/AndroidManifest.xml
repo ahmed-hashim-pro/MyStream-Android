@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Unit-test manifest. The unit-test variant runs its OWN manifest merge which
+  re-merges the library manifests and does not inherit src/main's tools:replace,
+  so the AdMob/Analytics AD_SERVICES_CONFIG clash has to be resolved again here.
+  Without this, processMadaniDebugUnitTestManifest fails and no JVM test can run.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            android:resource="@xml/gma_ad_services_config"
+            tools:replace="android:resource" />
+    </application>
+</manifest>
