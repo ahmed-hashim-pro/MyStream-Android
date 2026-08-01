@@ -233,6 +233,24 @@ public  class  MainActivity extends BaseActivity {
         //Initializing the bottomNavigationView
         bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
 
+        // From targetSdk 35 the window is always edge-to-edge, so this floating dock
+        // extends under the gesture/navigation bar: its items crush against the top of a
+        // bar that now reaches the screen edge. The dock is positioned by margin, which
+        // insets never touch, so add the navigation-bar inset to its original 12dp margin.
+        // QuranApplication's global inset hook deliberately skips CoordinatorLayout roots
+        // like this one, because padding the whole layout would also shift the hero.
+        final int dockMarginPx = (int) (12 * getResources().getDisplayMetrics().density);
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(bottomNavigationView,
+                (view, windowInsets) -> {
+                    androidx.core.graphics.Insets bars = windowInsets.getInsets(
+                            androidx.core.view.WindowInsetsCompat.Type.systemBars());
+                    android.view.ViewGroup.MarginLayoutParams lp =
+                            (android.view.ViewGroup.MarginLayoutParams) view.getLayoutParams();
+                    lp.bottomMargin = dockMarginPx + bars.bottom;
+                    view.setLayoutParams(lp);
+                    return windowInsets;
+                });
+
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment);
         navController = navHostFragment.getNavController();

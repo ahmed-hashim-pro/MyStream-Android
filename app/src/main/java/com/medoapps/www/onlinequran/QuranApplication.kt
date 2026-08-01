@@ -5,6 +5,9 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
+import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -132,7 +135,45 @@ open class QuranApplication : Application(), QuranApplicationComponentProvider,A
   }
 
   /** ActivityLifecycleCallback methods. */
-  override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
+  override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+    applySystemBarInsets(activity)
+  }
+
+  /**
+   * Keep content clear of the status and navigation bars.
+   *
+   * From targetSdk 35 Android draws every activity edge-to-edge and ignores
+   * android:fitsSystemWindows on the window itself, so without this the top of each
+   * screen sits under the status bar and the bottom under the gesture bar. This app has
+   * 78 activities and no shared base class — only 8 extend BaseActivity — so the fix is
+   * applied once here for all of them rather than 78 times.
+   *
+   * Screens that lay out under the bars on purpose opt out by setting
+   * android:fitsSystemWindows="true" on their root: the collapsing navy heroes and the
+   * Home hub need the image to bleed behind the status bar, and WelcomeActivity already
+   * does its own inset maths. Padding those again would double-count the inset.
+   */
+  private fun applySystemBarInsets(activity: Activity) {
+    val content = activity.findViewById<ViewGroup>(android.R.id.content) ?: return
+    // onActivityCreated runs before the activity's setContentView, so defer one frame.
+    content.post {
+      val root = content.getChildAt(0) ?: return@post
+      if (root.fitsSystemWindows) return@post
+      // CoordinatorLayout dispatches insets to its children through their Behaviors —
+      // AppBarLayout consumes the top, the floating BottomNavigationView the bottom.
+      // Padding the whole thing as well double-counts: MainActivity's dock rendered at
+      // the correct position but with its items crushed into the top of an over-tall bar.
+      if (root is androidx.coordinatorlayout.widget.CoordinatorLayout) return@post
+      ViewCompat.setOnApplyWindowInsetsListener(root) { view, windowInsets ->
+        val bars = windowInsets.getInsets(
+          WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+        )
+        view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+        WindowInsetsCompat.CONSUMED
+      }
+      ViewCompat.requestApplyInsets(root)
+    }
+  }
 
   override fun onActivityStarted(activity: Activity) {
     // An ad activity is started when an ad is showing, which could be AdActivity class from Google
